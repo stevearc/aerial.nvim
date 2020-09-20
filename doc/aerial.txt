@@ -1,0 +1,215 @@
+*aerial.txt*
+*Aerial* *aerial* *aerial.nvim*
+===============================================================================
+ CONTENTS                                                       *aerial-contents*
+
+    1. Intro...........................................|aerial-intro|
+    2. Configure.......................................|aerial-configure|
+    3. Commands........................................|aerial-commands|
+    4. Options.........................................|aerial-options|
+
+===============================================================================
+INTRO                                                              *aerial-intro*
+
+Aerial is a table-of-contents pane next to your code for quick navigation.
+It's powered by the documentSymbols information from LSP, and uses the
+built-in Neovim |lsp| client.
+
+===============================================================================
+CONFIGURE                                                      *aerial-configure*
+
+This is a minimal configuration to get you started:
+>
+    local aerial = require'aerial'
+
+    local custom_attach = function(client)
+      aerial.on_attach(client)
+
+      -- Aerial does not set any mappings by default, so you'll want to set some up
+      local mapper = function(mode, key, result)
+        vim.fn.nvim_buf_set_keymap(0, mode, key, result, {noremap = true, silent = true})
+      end
+      -- Toggle the aerial pane with <leader>a
+      mapper('n', '<leader>a', '<cmd>lua require"aerial".toggle()<CR>')
+      -- Jump forwards/backwards with '[[' and ']]'
+      mapper('n', '[[', '<cmd>lua require"aerial".prev_item()<CR>zzzv')
+      mapper('v', '[[', '<cmd>lua require"aerial".prev_item()<CR>zzzv')
+      mapper('n', ']]', '<cmd>lua require"aerial".next_item()<CR>zzzv')
+      mapper('v', ']]', '<cmd>lua require"aerial".next_item()<CR>zzzv')
+
+      -- This is a great place to set up all your other LSP mappings
+    end
+
+    -- Set up your LSP clients here, using the custom on_attach method
+    require'nvim_lsp'.vimls.setup{
+      on_attach = custom_attach,
+    }
+
+The aerial pane itself has some sane default bindings, however you can easily
+override them. The easiest way to is to use a ftplugin. For example, you can
+create a file .vim/ftplugin/aerial.vim:
+>
+    " These are the default bindings.
+    nnoremap <buffer> <CR> <cmd>lua require'aerial'.jump_to_loc()<CR>zzzv
+    nnoremap <buffer> <C-v> <cmd>lua require'aerial'.jump_to_loc(2)<CR>zzzv
+    nnoremap <buffer> <C-s> <cmd>lua require'aerial'.jump_to_loc(2, 'belowright split')<CR>zzzv
+    nnoremap <buffer> <C-j> j<cmd>lua require'aerial'.scroll_to_loc()<CR>
+    nnoremap <buffer> <C-k> k<cmd>lua require'aerial'.scroll_to_loc()<CR>
+    nnoremap <buffer> p <cmd>lua require'aerial'.scroll_to_loc()<CR>
+    nnoremap <buffer> q <cmd>lua require"aerial".close()<CR>
+
+By default, the symbols information in the pane should stay updated, but if
+you'd like to tweak the behavior see |g:aerial_diagnostics_trigger_update| and
+you can manually call |vim.lsp.buf.document_symbol()|.
+
+As a side note you will probably want to 'set sessionoptions-=blank' to avoid
+storing aerial buffers (and other scratch buffers) when you call `:mksession`.
+See 'sessionoptions' for more info
+
+===============================================================================
+COMMANDS                                                        *aerial-commands*
+
+aerial.on_attach({client}, [{opts}]                          *aerial.on_attach()*
+    This must be called in the on_attach of your LSP client configuration. The
+    {opts} dictionary can contain the following entries:
+
+        preserve_callback    boolean. If true, will add to the
+                             textDocument/documentSymbol callback instead of
+                             replacing it.
+
+aerial.open([{focus}], [{direction}])                             *aerial.open()*
+    Open the aerial pane for the current buffer. {focus} is a boolean that, if
+    true, will also jump your cursor to the aerial buffer. {direction} can be
+    either "<" or ">", to indicate which direction of vsplit to use (default
+    will try to autodetect which to use).
+
+aerial.close()                                                   *aerial.close()*
+    Close the aerial pane for the current buffer.
+
+aerial.toggle([{focus}], [{direction}])                         *aerial.toggle()*
+    Same as |aerial.open()|, but will close the pane if it is already open.
+
+aerial.focus()                                                   *aerial.focus()*
+    Jump to the aerial pane for the current buffer if it exists.
+
+aerial.is_open()                                               *aerial.is_open()*
+    Returns true if the aerial pane is open for the current buffer.
+
+aerial.jump_to_loc([{virt_winnr}], [{split_cmd}])          *aerial.jump_to_loc()*
+    When in the aerial buffer, jump to the location under the cursor.
+    {virt_winnr} is the "virtual" winnr to jump to. 1 (the default) will be
+    the source buffer with the lowest winnr. 2 will be the second-lowest, etc.
+    If no buffer can be found with that window position, a new split will be
+    created. {split_cmd} will define the command used to create the split
+    (default is "belowright vsplit").
+
+aerial.scroll_to_loc([{virt_winnr}], [{split_cmd}])      *aerial.scroll_to_loc()*
+    Same as |aerial.jump_to_loc()| but keep the cursor in the aerial buffer.
+
+aerial.next_item()                                           *aerial.next_item()*
+    Jump to the position of the next item in the aerial list.
+
+aerial.prev_item()                                           *aerial.prev_item()*
+    Jump to the position of the previous item in the aerial list.
+
+aerial.skip_item({delta})                                    *aerial.skip_item()*
+    Jump {delta} steps in the aerial list.
+
+
+===============================================================================
+OPTIONS                                                          *aerial-options*
+
+
+g:aerial_width                                                   *g:aerial_width*
+    The width of the aerial pane. Default 40.
+
+g:aerial_update_when_errors                         *g:aerial_update_when_errors*
+    Update the aerial pane even when your file has errors. Default true.
+
+g:aerial_diagnostics_trigger_update         *g:aerial_diagnostics_trigger_update*
+    Call |vim.lsp.buf.document_symbol()| to update symbols whenenever the LSP
+    client receives diagnostics. Default true.
+
+g:aerial_highlight_on_jump                           *g:aerial_highlight_on_jump*
+    Briefly highlight the line jumped from |aerial.jump_to_loc()|. Default
+    true.
+
+g:aerial_highlight_mode                                 *g:aerial_highlight_mode*
+    Valid values are "split_width", "full_width" or "last".
+
+        split_width   Each open buffer will have its cursor location marked in
+                      the aerial buffer. Each line will only be partially
+                      highlighted to indicate which pane is at that location.
+                      This is the default.
+        full_width    Each open buffer will have its cursor location marked as
+                      a full-width highlight in the aerial buffer.
+        last          Only the most-recently focused pane will have its
+                      location marked in the aerial buffer.
+
+g:aerial_highlight_group                               *g:aerial_highlight_group*
+    The highlight group used for the active line in the aerial buffer and also
+    used for the brief highlight when jumping to a location. Default
+    |QuickFixLine|
+
+aerial.set_open_automatic({filetype}, {bool})       *aerial.set_open_automatic()*
+aerial.set_open_automatic({mapping})
+    This is used to automatically open aerial when a new buffer is loaded.
+    Disabled by default. The options are set per-filetype like so:
+>
+    aerial.set_open_automatic('vim', true)
+    aerial.set_open_automatic('rust', false)
+    -- Or you can specify the mapping
+    aerial.set_open_automatic{
+      ['_'] = true, -- use underscore to set the default behavior
+      ['vim'] = false,
+      ['lua'] = false,
+    }
+
+g:aerial_open_automatic_min_lines             *g:aerial_open_automatic_min_lines*
+    When using |aerial.set_open_automatic()|, you can set this value to only
+    automatically open aerial on files greater than a certain length.
+
+g:aerial_automatic_direction                       *g:aerial_automatic_direction*
+    When using |aerial.set_open_automatic()|, the aerial pane will be opened
+    with this {direction} (see |aerial.open()| for details).
+
+aerial.set_kind_abbr({kind}, {abbr})                     *aerial.set_kind_abbr()*
+aerial.set_kind_abbr({mapping})
+    Use these abbreviations for the SymbolKind of the items.
+    See https://microsoft.github.io/language-server-protocol/specification#textDocument_documentSymbol
+    for a complete list of the possible SymbolKind values.
+>
+    aerial.set_kind_abbr('Function', 'F')
+    aerial.set_kind_abbr{
+      ['Function'] = 'F',
+      ['Method'] = 'M',
+    }
+
+aerial.set_filter_kind({kinds})                        *aerial.set_filter_kind()*
+    Only display these SymbolKind symbols in the aerial buffer. {kinds} is a
+    list-like table.
+>
+    -- These are the default values
+    aerial.set_filter_kind{
+      'Function',
+      'Class',
+      'Constructor',
+      'Method',
+      'Struct',
+      'Enum',
+    }
+
+
+===============================================================================
+TODO
+
+* Make next_item/prev_item work in aerial buffer
+* Dynamic width
+* Show hierarchy (will require parsing the symbols result ourselves)
+* Add some vim.validate in function calls
+* Scroll summary when updating position -- blocked by https://github.com/neovim/neovim/issues/10822
+* Remove items & positions from cache when they are no longer relevant
+* Make symbols available to fuzzy finder
+
+===============================================================================
+vim:ft=help:et:ts=2:sw=2:sts=2:norl
