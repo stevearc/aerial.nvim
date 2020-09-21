@@ -48,6 +48,8 @@ M.create_aerial_buffer = function(bufnr, direction)
   mapper('n', '<C-s>', "<cmd>lua require'aerial'.jump_to_loc(2, 'belowright split')<CR>zzzv")
   mapper('n', '<C-j>', "j<cmd>lua require'aerial'.scroll_to_loc()<CR>")
   mapper('n', '<C-k>', "k<cmd>lua require'aerial'.scroll_to_loc()<CR>")
+  mapper('n', ']]', "<cmd>lua require'aerial'.next_item()<CR>")
+  mapper('n', '[[', "<cmd>lua require'aerial'.prev_item()<CR>")
   mapper('n', 'p', "<cmd>lua require'aerial'.scroll_to_loc()<CR>")
   mapper('n', 'q', '<cmd>lua require"aerial".close()<CR>')
 

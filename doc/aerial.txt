@@ -55,6 +55,8 @@ create a file .vim/ftplugin/aerial.vim:
     nnoremap <buffer> <C-s> <cmd>lua require'aerial'.jump_to_loc(2, 'belowright split')<CR>zzzv
     nnoremap <buffer> <C-j> j<cmd>lua require'aerial'.scroll_to_loc()<CR>
     nnoremap <buffer> <C-k> k<cmd>lua require'aerial'.scroll_to_loc()<CR>
+    nnoremap <buffer> [[ <cmd>lua require'aerial'.prev_item()<CR>
+    nnoremap <buffer> ]] <cmd>lua require'aerial'.next_item()<CR>
     nnoremap <buffer> p <cmd>lua require'aerial'.scroll_to_loc()<CR>
     nnoremap <buffer> q <cmd>lua require"aerial".close()<CR>
 
@@ -203,7 +205,6 @@ aerial.set_filter_kind({kinds})                        *aerial.set_filter_kind()
 ===============================================================================
 TODO
 
-* Make next_item/prev_item work in aerial buffer
 * Dynamic width
 * Show hierarchy (will require parsing the symbols result ourselves)
 * Add some vim.validate in function calls

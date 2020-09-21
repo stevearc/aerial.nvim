@@ -21,21 +21,39 @@ end
 
 M._get_current_lnum = function()
   local bufnr = vim.fn.bufnr()
-  local aer_bufnr = util.get_aerial_buffer(bufnr)
-  if aer_bufnr == -1 then
-    return nil
+  local lnum = vim.fn.getcurpos()[2]
+  if util.is_aerial_buffer(bufnr) then
+    local aer_bufnr = bufnr
+    bufnr = util.get_source_buffer()
+    local winid = M._get_virt_winid(bufnr, 1)
+    if winid == -1 then
+      return nil
+    end
+    local positions = data.positions_by_buf[bufnr]
+    if positions == nil then
+      return nil
+    end
+    local cached_lnum = positions[winid]
+    return {
+      ['lnum'] = cached_lnum,
+      ['relative'] = 'exact',
+    }
+  else
+    local aer_bufnr = util.get_aerial_buffer(bufnr)
+    if aer_bufnr == -1 then
+      return nil
+    end
   end
   local items = data.items_by_buf[bufnr]
   if items == nil then
     return nil
   end
-  local pos = vim.fn.getcurpos()
   local selected = 1
   local relative = 'above'
   for idx,item in ipairs(items) do
-    if item.lnum > pos[2] then
+    if item.lnum > lnum then
       break
-    elseif item.lnum == pos[2] then
+    elseif item.lnum == lnum then
       relative = 'exact'
     else
       relative = 'below'
@@ -95,7 +113,6 @@ M._jump_to_loc = function(item_no, virt_winnr, split_cmd)
   return item
 end
 
--- TODO: make this work in source & aerial buffers
 M.jump_to_loc = function(virt_winnr, split_cmd)
   local pos = vim.fn.getcurpos()
   local item = M._jump_to_loc(pos[2], virt_winnr, split_cmd)
@@ -104,7 +121,6 @@ M.jump_to_loc = function(virt_winnr, split_cmd)
   end
 end
 
--- TODO: make this work in source & aerial buffers
 M.scroll_to_loc = function(virt_winnr, split_cmd)
   M.jump_to_loc(virt_winnr, split_cmd)
   M._update_position()
@@ -112,7 +128,6 @@ M.scroll_to_loc = function(virt_winnr, split_cmd)
   vim.cmd('wincmd p')
 end
 
--- TODO: make this work in source & aerial buffers
 M.skip_item = function(delta)
   local pos = M._get_current_lnum()
   if pos == nil then
@@ -136,7 +151,14 @@ M.skip_item = function(delta)
     new_num = new_num - count
   end
   local item = items[new_num]
-  vim.fn.setpos('.', {0, item.lnum, item.col, 0})
+  if util.is_aerial_buffer() then
+    M._jump_to_loc(new_num, 1)
+    M._update_position()
+    vim.cmd('normal zzzv')
+    vim.cmd('wincmd p')
+  else
+    vim.fn.setpos('.', {0, item.lnum, item.col, 0})
+  end
 end
 
 
