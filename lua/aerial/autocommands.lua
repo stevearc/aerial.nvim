@@ -22,7 +22,7 @@ M.on_enter_aerial_buffer = function()
   end
 
   -- Hack to ignore winwidth
-  vim.cmd('vertical resize ' .. config.get_width())
+  vim.cmd('vertical resize ' .. util.get_width())
 
   -- Move cursor to nearest matching line
   local row = data.last_position_by_buf[bufnr]

@@ -91,8 +91,13 @@ M.get_highlight_group = function()
   if hl == nil then return 'QuickFixLine' else return hl end
 end
 
-M.get_width = function()
-  local width = vim.g.aerial_width
+M.get_min_width = function()
+  local width = vim.g.aerial_min_width
+  if width == nil then return 10 else return width end
+end
+
+M.get_max_width = function()
+  local width = vim.g.aerial_max_width
   if width == nil then return 40 else return width end
 end
 

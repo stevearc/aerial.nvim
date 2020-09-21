@@ -2,6 +2,46 @@ local config = require 'aerial.config'
 
 local M = {}
 
+M.rpad = function(str, length, padchar)
+  if string.len(str) < length then
+    return str .. string.rep(padchar or ' ', length - string.len(str))
+  end
+  return str
+end
+
+M.lpad = function(str, length, padchar)
+  if string.len(str) < length then
+    return string.rep(padchar or ' ', length - string.len(str)) .. str
+  end
+  return str
+end
+
+M.get_width = function(bufnr)
+  local status, width = pcall(vim.api.nvim_buf_get_var, bufnr or 0, 'aerial_width')
+  if status then
+    return width
+  end
+  return config.get_min_width()
+end
+
+M.set_width = function(bufnr, width)
+  if M.get_width(bufnr) == width then
+    return
+  end
+  vim.api.nvim_buf_set_var(bufnr, 'aerial_width', width)
+  -- TODO change to win_execute when available
+  -- Current implementation won't update the width in other tabs
+  local start_winid = vim.fn.win_getid()
+  local winid = vim.fn.bufwinid(bufnr)
+  if start_winid ~= winid then
+    vim.fn.win_gotoid(winid)
+    -- autocommand will do the resize
+    vim.fn.win_gotoid(start_winid)
+  else
+    vim.cmd('vertical resize ' .. width)
+  end
+end
+
 M.is_aerial_buffer = function(bufnr)
   local ft = vim.api.nvim_buf_get_option(bufnr or 0, 'filetype')
   return ft == 'aerial'

@@ -28,7 +28,7 @@ M.create_aerial_window = function(bufnr, direction)
     error("Unknown aerial window direction " .. direction)
     return
   end
-  vim.cmd('vertical resize ' .. config.get_width())
+  vim.cmd('vertical resize ' .. util.get_width())
   vim.api.nvim_win_set_option(0, 'winfixwidth', true)
   vim.api.nvim_win_set_option(0, 'number', false)
   vim.api.nvim_win_set_option(0, 'relativenumber', false)
@@ -80,13 +80,27 @@ M.update_aerial_buffer = function(bufnr)
   if items == nil then
     return
   end
+  local max_len = 1
+
+  -- Replace SymbolKind with abbreviations
+  for _,item in ipairs(items) do
+    item.text = string.gsub(item.text, item.kind, config.get_kind_abbr(item.kind), 1)
+  end
+
+  -- Calculate window width
+  for _,item in ipairs(items) do
+    local len = string.len(item.text)
+    if len > max_len then
+      max_len = len
+    end
+  end
+  local width = math.min(config.get_max_width(), math.max(config.get_min_width(), max_len))
+  util.set_width(aer_bufnr, width)
+
+  -- Insert lines into buffer
   local lines = {}
   for _,item in ipairs(items) do
-    local text = string.gsub(item.text, item.kind, config.get_kind_abbr(item.kind), 1)
-    if string.len(text) < config.get_width() then
-      text = text .. string.rep(' ', config.get_width() - string.len(text))
-    end
-    table.insert(lines, text)
+    table.insert(lines, util.rpad(item.text, width))
   end
   vim.api.nvim_buf_set_option(aer_bufnr, 'modifiable', true)
   vim.api.nvim_buf_set_lines(aer_bufnr, 0, -1, false, lines)
@@ -118,7 +132,7 @@ M.update_highlights = function(bufnr)
     return
   end
   vim.api.nvim_buf_clear_namespace(aer_bufnr, ns, 0, -1)
-  local hl_width = math.floor(config.get_width() / win_count)
+  local hl_width = math.floor(util.get_width(aer_bufnr) / win_count)
   local hl_mode = config.get_highlight_mode()
 
   if hl_mode == 'last' then
