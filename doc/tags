@@ -26,6 +26,7 @@ g:aerial_diagnostics_trigger_update	aerial.txt	/*g:aerial_diagnostics_trigger_up
 g:aerial_highlight_group	aerial.txt	/*g:aerial_highlight_group*
 g:aerial_highlight_mode	aerial.txt	/*g:aerial_highlight_mode*
 g:aerial_highlight_on_jump	aerial.txt	/*g:aerial_highlight_on_jump*
+g:aerial_max_width	aerial.txt	/*g:aerial_max_width*
+g:aerial_min_width	aerial.txt	/*g:aerial_min_width*
 g:aerial_open_automatic_min_lines	aerial.txt	/*g:aerial_open_automatic_min_lines*
 g:aerial_update_when_errors	aerial.txt	/*g:aerial_update_when_errors*
-g:aerial_width	aerial.txt	/*g:aerial_width*
