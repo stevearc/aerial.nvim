@@ -124,7 +124,7 @@ end
 M.scroll_to_loc = function(virt_winnr, split_cmd)
   M.jump_to_loc(virt_winnr, split_cmd)
   M._update_position()
-  vim.cmd('normal zzzv')
+  vim.cmd('normal zvzz')
   vim.cmd('wincmd p')
 end
 
@@ -154,7 +154,7 @@ M.skip_item = function(delta)
   if util.is_aerial_buffer() then
     M._jump_to_loc(new_num, 1)
     M._update_position()
-    vim.cmd('normal zzzv')
+    vim.cmd('normal zvzz')
     vim.cmd('wincmd p')
   else
     vim.fn.setpos('.', {0, item.lnum, item.col, 0})

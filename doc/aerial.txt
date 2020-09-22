@@ -32,10 +32,10 @@ This is a minimal configuration to get you started:
       -- Toggle the aerial pane with <leader>a
       mapper('n', '<leader>a', '<cmd>lua require"aerial".toggle()<CR>')
       -- Jump forwards/backwards with '[[' and ']]'
-      mapper('n', '[[', '<cmd>lua require"aerial".prev_item()<CR>zzzv')
-      mapper('v', '[[', '<cmd>lua require"aerial".prev_item()<CR>zzzv')
-      mapper('n', ']]', '<cmd>lua require"aerial".next_item()<CR>zzzv')
-      mapper('v', ']]', '<cmd>lua require"aerial".next_item()<CR>zzzv')
+      mapper('n', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz')
+      mapper('v', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz')
+      mapper('n', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz')
+      mapper('v', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz')
 
       -- This is a great place to set up all your other LSP mappings
     end
@@ -50,9 +50,9 @@ override them. The easiest way to is to use a ftplugin. For example, you can
 create a file .vim/ftplugin/aerial.vim:
 >
     " These are the default bindings.
-    nnoremap <buffer> <CR> <cmd>lua require'aerial'.jump_to_loc()<CR>zzzv
-    nnoremap <buffer> <C-v> <cmd>lua require'aerial'.jump_to_loc(2)<CR>zzzv
-    nnoremap <buffer> <C-s> <cmd>lua require'aerial'.jump_to_loc(2, 'belowright split')<CR>zzzv
+    nnoremap <buffer> <CR> <cmd>lua require'aerial'.jump_to_loc()<CR>zvzz
+    nnoremap <buffer> <C-v> <cmd>lua require'aerial'.jump_to_loc(2)<CR>zvzz
+    nnoremap <buffer> <C-s> <cmd>lua require'aerial'.jump_to_loc(2, 'belowright split')<CR>zvzz
     nnoremap <buffer> <C-j> j<cmd>lua require'aerial'.scroll_to_loc()<CR>
     nnoremap <buffer> <C-k> k<cmd>lua require'aerial'.scroll_to_loc()<CR>
     nnoremap <buffer> [[ <cmd>lua require'aerial'.prev_item()<CR>

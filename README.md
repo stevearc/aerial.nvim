@@ -43,10 +43,10 @@ local custom_attach = function(client)
   -- Toggle the aerial pane with <leader>a
   mapper('n', '<leader>a', '<cmd>lua require"aerial".toggle()<CR>')
   -- Jump forwards/backwards with '[[' and ']]'
-  mapper('n', '[[', '<cmd>lua require"aerial".prev_item()<CR>zzzv')
-  mapper('v', '[[', '<cmd>lua require"aerial".prev_item()<CR>zzzv')
-  mapper('n', ']]', '<cmd>lua require"aerial".next_item()<CR>zzzv')
-  mapper('v', ']]', '<cmd>lua require"aerial".next_item()<CR>zzzv')
+  mapper('n', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz')
+  mapper('v', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz')
+  mapper('n', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz')
+  mapper('v', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz')
 
   -- This is a great place to set up all your other LSP mappings
 end
