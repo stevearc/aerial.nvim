@@ -52,17 +52,14 @@ M.open = function(focus, direction)
   end
   local direction = direction or util.detect_split_direction()
   local start_winid = vim.fn.win_getid()
+  window.create_aerial_window(bufnr, aer_bufnr, direction)
   if aer_bufnr == -1 then
-    window.create_aerial_buffer(bufnr, direction)
     aer_bufnr = vim.api.nvim_get_current_buf()
-  else
-    window.create_aerial_window(bufnr, direction)
-    vim.api.nvim_set_current_buf(aer_bufnr)
   end
-  vim.api.nvim_set_current_win(start_winid)
   if data.items_by_buf[bufnr] == nil then
     vim.lsp.buf.document_symbol()
   end
+  vim.api.nvim_set_current_win(start_winid)
   nav._update_position()
   if focus then
     vim.api.nvim_set_current_win(vim.fn.bufwinid(aer_bufnr))

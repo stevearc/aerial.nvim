@@ -4,7 +4,7 @@ local config = require 'aerial.config'
 
 local M = {}
 
-M.create_aerial_window = function(bufnr, direction)
+M.create_aerial_window = function(bufnr, aer_bufnr, direction)
   if direction ~= '<' and direction ~= '>' then
     error("Expected direction to be '<' or '>'")
   end
@@ -28,20 +28,24 @@ M.create_aerial_window = function(bufnr, direction)
     error("Unknown aerial window direction " .. direction)
     return
   end
+
+  if aer_bufnr == -1 then
+    aer_bufnr = M._create_aerial_buffer(bufnr, direction)
+  end
+  vim.api.nvim_set_current_buf(aer_bufnr)
+
   vim.cmd('vertical resize ' .. util.get_width())
   vim.api.nvim_win_set_option(0, 'winfixwidth', true)
   vim.api.nvim_win_set_option(0, 'number', false)
   vim.api.nvim_win_set_option(0, 'relativenumber', false)
 end
 
-M.create_aerial_buffer = function(bufnr, direction)
-  M.create_aerial_window(bufnr, direction)
-  win = vim.api.nvim_get_current_win()
-  buf = vim.api.nvim_get_current_buf()
+M._create_aerial_buffer = function(bufnr, direction)
+  local aer_bufnr = vim.api.nvim_create_buf(false, true)
 
   -- Set up default mappings
   local mapper = function(mode, key, result)
-    vim.fn.nvim_buf_set_keymap(0, mode, key, result, {noremap = true, silent = true})
+    vim.fn.nvim_buf_set_keymap(aer_bufnr, mode, key, result, {noremap = true, silent = true})
   end
   mapper('n', '<CR>', "<cmd>lua require'aerial'.jump_to_loc()<CR>zvzz")
   mapper('n', '<C-v>', "<cmd>lua require'aerial'.jump_to_loc(2)<CR>zvzz")
@@ -54,20 +58,20 @@ M.create_aerial_buffer = function(bufnr, direction)
   mapper('n', 'q', '<cmd>lua require"aerial".close()<CR>')
 
   -- Set buffer options
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, {"Loading..."})
-  vim.api.nvim_buf_set_var(bufnr, 'aerial_buffer', buf)
-  vim.api.nvim_buf_set_var(buf, 'source_buffer', bufnr)
-  vim.api.nvim_buf_set_option(buf, 'buftype', 'nofile')
-  vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
-  vim.api.nvim_buf_set_option(buf, 'buflisted', false)
-  vim.api.nvim_buf_set_option(buf, 'swapfile', false)
-  vim.api.nvim_buf_set_option(buf, 'modifiable', false)
-  vim.api.nvim_buf_set_option(buf, 'filetype', 'aerial')
-  vim.api.nvim_win_set_option(win, 'wrap', false)
-  vim.api.nvim_win_set_option(win, 'cursorline', true)
+  vim.api.nvim_buf_set_lines(aer_bufnr, 0, -1, false, {"Loading..."})
+  vim.api.nvim_buf_set_var(bufnr, 'aerial_buffer', aer_bufnr)
+  vim.api.nvim_buf_set_var(aer_bufnr, 'source_buffer', bufnr)
+  vim.api.nvim_buf_set_option(aer_bufnr, 'buftype', 'nofile')
+  vim.api.nvim_buf_set_option(aer_bufnr, 'bufhidden', 'wipe')
+  vim.api.nvim_buf_set_option(aer_bufnr, 'buflisted', false)
+  vim.api.nvim_buf_set_option(aer_bufnr, 'swapfile', false)
+  vim.api.nvim_buf_set_option(aer_bufnr, 'modifiable', false)
+  vim.api.nvim_buf_set_option(aer_bufnr, 'filetype', 'aerial')
   M.update_aerial_buffer(bufnr)
 
-  vim.cmd("autocmd BufEnter <buffer> lua require'aerial.autocommands'.on_enter_aerial_buffer()")
+  vim.api.nvim_set_current_buf(aer_bufnr)
+  vim.cmd[[autocmd BufEnter <buffer> lua require'aerial.autocommands'.on_enter_aerial_buffer()]]
+  return aer_bufnr
 end
 
 -- Update the aerial buffer from cached symbols
