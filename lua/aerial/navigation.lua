@@ -38,11 +38,6 @@ M._get_current_lnum = function()
       ['lnum'] = cached_lnum,
       ['relative'] = 'exact',
     }
-  else
-    local aer_bufnr = util.get_aerial_buffer(bufnr)
-    if aer_bufnr == -1 then
-      return nil
-    end
   end
   local items = data.items_by_buf[bufnr]
   if items == nil then
