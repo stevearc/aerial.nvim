@@ -56,10 +56,10 @@ M.open = function(focus, direction)
   if aer_bufnr == -1 then
     aer_bufnr = vim.api.nvim_get_current_buf()
   end
+  vim.api.nvim_set_current_win(start_winid)
   if data.items_by_buf[bufnr] == nil then
     vim.lsp.buf.document_symbol()
   end
-  vim.api.nvim_set_current_win(start_winid)
   nav._update_position()
   if focus then
     vim.api.nvim_set_current_win(vim.fn.bufwinid(aer_bufnr))
