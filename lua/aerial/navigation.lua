@@ -128,6 +128,13 @@ M.skip_item = function(delta)
   if pos == nil then
     return
   end
+  local bufnr
+  if util.is_aerial_buffer(bufnr) then
+    bufnr = util.get_source_buffer()
+  else
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+
   local items = data.items_by_buf[bufnr]
   local count = 0
   for _ in pairs(items) do count = count + 1 end
