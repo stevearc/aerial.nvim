@@ -33,7 +33,7 @@ M.on_enter_aerial_buffer = function()
 end
 
 M.on_buf_leave = function()
-  bufnr = vim.api.nvim_get_current_buf()
+  local bufnr = vim.api.nvim_get_current_buf()
   local aer_bufnr = util.get_aerial_buffer(bufnr)
   if aer_bufnr == -1 then
     return
@@ -86,7 +86,9 @@ M.on_buf_win_enter = function()
   -- a buffer was already visible, we'd prefer to not change the visibility
   -- status of aerial.
   if num_bufs_in_tab == 1 then
-    pane._maybe_open_automatic()
+    -- Have to defer this because we defer the close in on_buf_leave. We don't
+    -- want to open the new pane until the old one is cleaned up
+    vim.defer_fn(pane._maybe_open_automatic, 6)
   end
 end
 
