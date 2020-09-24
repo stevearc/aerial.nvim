@@ -210,6 +210,7 @@ aerial.set_filter_kind({kinds})                        *aerial.set_filter_kind()
 ===============================================================================
 TODO
 
+* Allow configuring automatic open by minimum number of symbols
 * Add some vim.validate in function calls
 * Scroll summary when updating position -- blocked by https://github.com/neovim/neovim/issues/10822
 * Remove items & positions from cache when they are no longer relevant

@@ -1,7 +1,7 @@
 # aerial.nvim
 Show a table-of-contents pane next to your code for quick navigation
 
-TODO: screenshots
+![Demo image](https://user-images.githubusercontent.com/506791/94113785-46d26180-fdfc-11ea-84e5-0d8e5a9b3e8d.gif)
 
 ## Requirements
 Neovim 0.5 (nightly)
