@@ -66,6 +66,11 @@ M.get_open_automatic_min_lines = function()
   if min_lines == nil then return 0 else return min_lines end
 end
 
+M.get_open_automatic_min_symbols = function()
+  local min_symbols = vim.g.aerial_open_automatic_min_symbols
+  if min_symbols == nil then return 0 else return min_symbols end
+end
+
 M.get_automatic_direction = function()
   return vim.g.aerial_automatic_direction
 end

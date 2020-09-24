@@ -1,6 +1,7 @@
 -- Functions that are called in response to autocommands
 local config = require 'aerial.config'
 local data = require 'aerial.data'
+local pane = require 'aerial.pane'
 local util = require 'aerial.util'
 local window = require 'aerial.window'
 
@@ -62,6 +63,30 @@ M.request_symbols_if_diagnostics_changed = function()
   -- if no errors, refresh symbols
   if errors == 0 then
     vim.lsp.buf.document_symbol()
+  end
+end
+
+M.on_buf_win_enter = function()
+  if not config.get_open_automatic() then
+    return
+  end
+
+  vim.lsp.buf.document_symbol()
+
+  local num_bufs_in_tab = 0
+  local bufnr = vim.api.nvim_get_current_buf()
+  for i=1,vim.fn.winnr('$'),1 do
+    if vim.fn.winbufnr(i) == bufnr then
+      num_bufs_in_tab = num_bufs_in_tab + 1
+    end
+  end
+
+  -- BufWinEnter usually only triggers when the buffer isn't already visible in
+  -- an existing window, but it will if the filename was manually specified. If
+  -- a buffer was already visible, we'd prefer to not change the visibility
+  -- status of aerial.
+  if num_bufs_in_tab == 1 then
+    pane._maybe_open_automatic()
   end
 end
 

@@ -1,6 +1,7 @@
 local config = require 'aerial.config'
 local data = require 'aerial.data'
 local nav = require 'aerial.navigation'
+local pane = require 'aerial.pane'
 local protocol = require 'vim.lsp.protocol'
 local window = require 'aerial.window'
 
@@ -28,8 +29,10 @@ M.symbol_callback = function(_, _, result, _, bufnr)
     return
   end
   window.update_aerial_buffer(bufnr)
-  if not had_items and vim.api.nvim_get_current_buf() == bufnr then
-    nav._update_position()
+  if not had_items then
+    if not pane._maybe_open_automatic() then
+      nav._update_position()
+    end
   else
     window.update_highlights(bufnr)
   end
