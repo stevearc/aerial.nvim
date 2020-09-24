@@ -151,13 +151,17 @@ M.update_highlights = function(bufnr)
     return
   end
 
-  if win_count == 1 or hl_mode == 'full_width' then
-    -- Will make end_hl -1, which is the special value for "entire line"
-    hl_width = -2
-  end
   local start_hl = 0
   local end_hl = hl_width
-  for _,winid in ipairs(winids) do
+  if hl_mode == 'full_width' then
+    end_hl = -1
+  end
+  for i,winid in ipairs(winids) do
+    -- To fix rounding errors when #windows doesn't divide evenly into the
+    -- width, make sure the last highlight goes to the end
+    if i == #winids then
+      end_hl = -1
+    end
     vim.api.nvim_buf_add_highlight(
       aer_bufnr,
       ns,
