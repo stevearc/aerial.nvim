@@ -38,6 +38,7 @@ M.create_aerial_window = function(bufnr, aer_bufnr, direction)
   vim.api.nvim_win_set_option(0, 'winfixwidth', true)
   vim.api.nvim_win_set_option(0, 'number', false)
   vim.api.nvim_win_set_option(0, 'relativenumber', false)
+  vim.api.nvim_win_set_option(0, 'wrap', false)
 end
 
 M._create_aerial_buffer = function(bufnr, direction)
