@@ -17,17 +17,18 @@ end
 
 M.symbol_callback = function(_, _, result, _, bufnr)
   if not result or vim.tbl_isempty(result) then return end
+  -- Don't update if there are diagnostics errors (or override by setting)
+  local error_count = vim.lsp.diagnostic.get_count(bufnr, 'Error')
+  if not config.get_update_when_errors() and error_count > 0 then
+    return
+  end
+
   local items = M.symbols_to_items(result, bufnr)
   items = vim.tbl_filter(filter_symbol_predicate, items)
   table.sort(items, sort_symbol)
   local had_items = data.items_by_buf[bufnr] ~= nil
   data.items_by_buf[bufnr] = items
 
-  -- Don't update if there are diagnostics errors (or override by setting)
-  local error_count = M._buf_diagnostics_count(bufnr, 'Error') or 0
-  if not config.get_update_when_errors() and error_count > 0 then
-    return
-  end
   window.update_aerial_buffer(bufnr)
   if not had_items then
     if not pane._maybe_open_automatic() then
@@ -36,19 +37,6 @@ M.symbol_callback = function(_, _, result, _, bufnr)
   else
     window.update_highlights(bufnr)
   end
-end
-
--- This is mostly copied from Neovim source, but adjusted to accept a bufnr
-function M._buf_diagnostics_count(bufnr, kind)
-  local diagnostics = vim.lsp.util.diagnostics_by_buf[bufnr]
-  if not diagnostics then return end
-  local count = 0
-  for _, diagnostic in pairs(diagnostics) do
-    if vim.lsp.protocol.DiagnosticSeverity[kind] == diagnostic.severity then
-      count = count + 1
-    end
-  end
-  return count
 end
 
 -- Mostly copied from neovim source, with some tweaks for naming
