@@ -51,7 +51,7 @@ end
 M.on_attach = function(client, opts)
   local opts = opts or {}
 
-  local old_callback = vim.lsp.callbacks['textDocument/documentSymbol']
+  local old_callback = vim.lsp.handlers['textDocument/documentSymbol']
   local new_callback = callbacks.symbol_callback
   if opts.preserve_callback then
     new_callback = function(idk1, idk2, result, idk3, bufnr)
@@ -59,7 +59,7 @@ M.on_attach = function(client, opts)
       old_callback(idk1, idk2, result, idk3, bufnr)
     end
   end
-  vim.lsp.callbacks['textDocument/documentSymbol'] = new_callback
+  vim.lsp.handlers['textDocument/documentSymbol'] = new_callback
 
   if config.get_diagnostics_trigger_update() then
     vim.cmd("autocmd User LspDiagnosticsChanged lua require'aerial.autocommands'.request_symbols_if_diagnostics_changed()")
