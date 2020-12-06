@@ -52,7 +52,7 @@ local custom_attach = function(client)
 end
 
 -- Set up your LSP clients here, using the custom on_attach method
-require'nvim_lsp'.vimls.setup{
+require'lspconfig'.vimls.setup{
   on_attach = custom_attach,
 }
 ```
