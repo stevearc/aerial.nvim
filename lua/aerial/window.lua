@@ -46,7 +46,7 @@ M._create_aerial_buffer = function(bufnr, direction)
 
   -- Set up default mappings
   local mapper = function(mode, key, result)
-    vim.fn.nvim_buf_set_keymap(aer_bufnr, mode, key, result, {noremap = true, silent = true})
+    vim.api.nvim_buf_set_keymap(aer_bufnr, mode, key, result, {noremap = true, silent = true})
   end
   mapper('n', '<CR>', "<cmd>lua require'aerial'.jump_to_loc()<CR>zvzz")
   mapper('n', '<C-v>', "<cmd>lua require'aerial'.jump_to_loc(2)<CR>zvzz")

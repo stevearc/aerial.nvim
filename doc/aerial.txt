@@ -27,7 +27,7 @@ This is a minimal configuration to get you started:
 
       -- Aerial does not set any mappings by default, so you'll want to set some up
       local mapper = function(mode, key, result)
-        vim.fn.nvim_buf_set_keymap(0, mode, key, result, {noremap = true, silent = true})
+        vim.api.nvim_buf_set_keymap(0, mode, key, result, {noremap = true, silent = true})
       end
       -- Toggle the aerial pane with <leader>a
       mapper('n', '<leader>a', '<cmd>lua require"aerial".toggle()<CR>')
