@@ -59,9 +59,9 @@ M.on_buf_leave = function()
 end
 
 M.request_symbols_if_diagnostics_changed = function()
-  local errors = vim.lsp.diagnostic.get_count(bufnr, 'Error')
+  local errors = vim.lsp.diagnostic.get_count(0, 'Error')
   -- if no errors, refresh symbols
-  if errors == 0 then
+  if errors == 0 or not data.has_symbols() then
     vim.lsp.buf.document_symbol()
   end
 end

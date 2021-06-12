@@ -19,7 +19,7 @@ M.symbol_callback = function(_, _, result, _, bufnr)
   if not result or vim.tbl_isempty(result) then return end
   -- Don't update if there are diagnostics errors (or override by setting)
   local error_count = vim.lsp.diagnostic.get_count(bufnr, 'Error')
-  if not config.get_update_when_errors() and error_count > 0 then
+  if not config.get_update_when_errors() and error_count > 0 and not data.has_symbols(bufnr) then
     return
   end
 
