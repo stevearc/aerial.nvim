@@ -66,6 +66,7 @@ M.on_attach = function(client, opts)
   vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.document_symbol()")
   vim.cmd("autocmd CursorMoved <buffer> lua require'aerial.navigation'._update_position()")
   vim.cmd("autocmd BufLeave <buffer> lua require'aerial.autocommands'.on_buf_leave()")
+  vim.cmd([[autocmd BufDelete <buffer> call luaeval("require'aerial.autocommands'.on_buf_delete(_A)", expand('<abuf>'))]])
   if config.get_open_automatic() then
     vim.lsp.buf.document_symbol()
     vim.cmd("autocmd BufWinEnter <buffer> lua require'aerial.autocommands'.on_buf_win_enter()")

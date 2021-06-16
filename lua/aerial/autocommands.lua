@@ -52,6 +52,12 @@ M.on_buf_leave = function()
   vim.schedule(maybe_close_aerial)
 end
 
+M.on_buf_delete = function(bufnr)
+  data.items_by_buf[bufnr] = nil
+  data.positions_by_buf[bufnr] = nil
+  data.last_position_by_buf[bufnr] = nil
+end
+
 M.request_symbols_if_diagnostics_changed = function()
   local errors = vim.lsp.diagnostic.get_count(0, 'Error')
   -- if no errors, refresh symbols
