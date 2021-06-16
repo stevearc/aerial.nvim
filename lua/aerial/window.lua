@@ -30,7 +30,7 @@ M.create_aerial_window = function(bufnr, aer_bufnr, direction)
   end
 
   if aer_bufnr == -1 then
-    aer_bufnr = M._create_aerial_buffer(bufnr, direction)
+    aer_bufnr = M._create_aerial_buffer(bufnr)
   end
   vim.api.nvim_set_current_buf(aer_bufnr)
 
@@ -41,7 +41,7 @@ M.create_aerial_window = function(bufnr, aer_bufnr, direction)
   vim.api.nvim_win_set_option(0, 'wrap', false)
 end
 
-M._create_aerial_buffer = function(bufnr, direction)
+M._create_aerial_buffer = function(bufnr)
   local aer_bufnr = vim.api.nvim_create_buf(false, true)
 
   -- Set up default mappings

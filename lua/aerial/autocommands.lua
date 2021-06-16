@@ -14,7 +14,7 @@ M.on_enter_aerial_buffer = function()
     vim.cmd('q!')
     return
   else
-    visible_buffers = vim.fn.tabpagebuflist()
+    local visible_buffers = vim.fn.tabpagebuflist()
     -- Quit if the source buffer is no longer visible
     if not vim.tbl_contains(visible_buffers, bufnr) then
       vim.cmd('q!')
@@ -42,7 +42,7 @@ M.on_buf_leave = function()
 
   local maybe_close_aerial = function()
     local winid = vim.fn.bufwinid(bufnr)
-    -- If there are no windows left with the source buffer, 
+    -- If there are no windows left with the source buffer,
     if winid == -1 then
       local winnr = vim.fn.bufwinnr(aer_bufnr)
       -- And there is a window left for the aerial buffer

@@ -7,11 +7,11 @@ local window = require 'aerial.window'
 
 local M = {}
 
-function filter_symbol_predicate(item)
+local function filter_symbol_predicate(item)
   return config.filter_kind[item.kind]
 end
 
-function sort_symbol(a, b)
+local function sort_symbol(a, b)
   return a.lnum < b.lnum
 end
 

@@ -1,7 +1,7 @@
 *aerial.txt*
 *Aerial* *aerial* *aerial.nvim*
 ===============================================================================
- CONTENTS                                                       *aerial-contents*
+CONTENTS                                                        *aerial-contents*
 
     1. Intro...........................................|aerial-intro|
     2. Configure.......................................|aerial-configure|
@@ -214,10 +214,11 @@ aerial.set_filter_kind({kinds})                        *aerial.set_filter_kind()
 ===============================================================================
 TODO
 
-* Add some vim.validate in function calls
 * Scroll summary when updating position -- blocked by https://github.com/neovim/neovim/issues/10822
+* Built-in support for Nerd font
+* Fold the TOC hierarchy like a tree
+* Add some vim.validate in function calls
 * Remove items & positions from cache when they are no longer relevant
-* Make symbols available to fuzzy finder
 
 ===============================================================================
 vim:ft=help:et:ts=2:sw=2:sts=2:norl

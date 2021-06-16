@@ -23,7 +23,6 @@ M._get_current_lnum = function()
   local bufnr = vim.fn.bufnr()
   local lnum = vim.fn.getcurpos()[2]
   if util.is_aerial_buffer(bufnr) then
-    local aer_bufnr = bufnr
     bufnr = util.get_source_buffer()
     local winid = M._get_virt_winid(bufnr, 1)
     if winid == -1 then
@@ -67,7 +66,6 @@ M._update_position = function()
     return
   end
   local bufnr = vim.fn.bufnr()
-  local aer_bufnr = util.get_aerial_buffer(bufnr)
   local mywin = vim.fn.win_getid()
   data.positions_by_buf[bufnr] = data.positions_by_buf[bufnr] or {}
   data.positions_by_buf[bufnr][mywin] = pos.lnum
@@ -76,8 +74,8 @@ M._update_position = function()
 end
 
 M._jump_to_loc = function(item_no, virt_winnr, split_cmd)
-  local virt_winnr = virt_winnr or 1
-  local split_cmd = split_cmd or 'belowright vsplit'
+  virt_winnr = virt_winnr or 1
+  split_cmd = split_cmd or 'belowright vsplit'
   local bufnr = util.get_source_buffer()
   local items = data.items_by_buf[bufnr]
   if items == nil then
@@ -88,11 +86,11 @@ M._jump_to_loc = function(item_no, virt_winnr, split_cmd)
     error("Could not find item at position " .. item_no)
     return
   end
-  local bufnr = util.get_source_buffer()
+  bufnr = util.get_source_buffer()
   local winid = M._get_virt_winid(bufnr, virt_winnr)
   if winid == -1 then
     -- Create a new split for the source window
-    local winid = vim.fn.bufwinid(bufnr)
+    winid = vim.fn.bufwinid(bufnr)
     if winid ~= -1 then
       vim.fn.win_gotoid(winid)
       vim.cmd(split_cmd)

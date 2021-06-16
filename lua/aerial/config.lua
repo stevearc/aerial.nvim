@@ -107,7 +107,7 @@ M.get_max_width = function()
 end
 
 M.get_kind_abbr = function(kind)
-  abbr = M.kind_abbr[kind]
+  local abbr = M.kind_abbr[kind]
   if abbr == nil then
     return kind
   end

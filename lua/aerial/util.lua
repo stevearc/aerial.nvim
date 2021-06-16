@@ -64,8 +64,8 @@ M.get_buffer_from_var = function(bufnr, varname)
 end
 
 M.flash_highlight = function(bufnr, lnum, hl_group, durationMs)
-  local hl_group = hl_group or config.get_highlight_group()
-  local durationMs = durationMs or 300
+  hl_group = hl_group or config.get_highlight_group()
+  durationMs = durationMs or 300
   local ns = vim.api.nvim_buf_add_highlight(bufnr, 0, hl_group, lnum - 1, 0, -1)
   local remove_highlight = function()
     vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
@@ -74,7 +74,7 @@ M.flash_highlight = function(bufnr, lnum, hl_group, durationMs)
 end
 
 M.detect_split_direction = function()
-  bufnr = vim.api.nvim_get_current_buf()
+  local bufnr = vim.api.nvim_get_current_buf()
   -- If we are the first window default to left side
   if vim.fn.winbufnr(1) == bufnr then
     return '<'

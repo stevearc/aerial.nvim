@@ -1,10 +1,7 @@
 local callbacks = require 'aerial.callbacks'
 local config = require 'aerial.config'
-local data = require 'aerial.data'
 local nav = require 'aerial.navigation'
 local pane = require 'aerial.pane'
-local util = require 'aerial.util'
-local window = require 'aerial.window'
 
 local M = {}
 
@@ -49,7 +46,7 @@ M.skip_item = function(delta)
 end
 
 M.on_attach = function(client, opts)
-  local opts = opts or {}
+  opts = opts or {}
 
   local old_callback = vim.lsp.handlers['textDocument/documentSymbol']
   local new_callback = callbacks.symbol_callback

@@ -7,7 +7,7 @@ local window = require 'aerial.window'
 local M = {}
 
 M.is_open = function(bufnr)
-  local aer_bufnr = util.get_aerial_buffer()
+  local aer_bufnr = util.get_aerial_buffer(bufnr)
   if aer_bufnr == -1 then
     return false
   else
@@ -48,7 +48,7 @@ M.open = function(focus, direction)
     error("Cannot open aerial. No LSP clients")
     return
   end
-  bufnr = vim.api.nvim_get_current_buf()
+  local bufnr = vim.api.nvim_get_current_buf()
   local aer_bufnr = util.get_aerial_buffer(bufnr)
   if M.is_open() then
     if focus then
@@ -57,7 +57,7 @@ M.open = function(focus, direction)
     end
     return
   end
-  local direction = direction or util.detect_split_direction()
+  direction = direction or util.detect_split_direction()
   local start_winid = vim.fn.win_getid()
   window.create_aerial_window(bufnr, aer_bufnr, direction)
   if aer_bufnr == -1 then
@@ -77,7 +77,7 @@ M.focus = function()
   if not M.is_open() then
     return
   end
-  bufnr = vim.api.nvim_get_current_buf()
+  local bufnr = vim.api.nvim_get_current_buf()
   local aer_bufnr = util.get_aerial_buffer(bufnr)
   local winid = vim.fn.bufwinid(aer_bufnr)
   vim.api.nvim_set_current_win(winid)
