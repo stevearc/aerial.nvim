@@ -60,6 +60,7 @@ M._create_aerial_buffer = function(bufnr)
   mapper('n', 'p', "<cmd>lua require'aerial'.scroll_to_loc()<CR>")
   mapper('n', 'q', '<cmd>lua require"aerial".close()<CR>')
 
+  vim.api.nvim_set_current_buf(aer_bufnr)
   -- Set buffer options
   vim.api.nvim_buf_set_lines(aer_bufnr, 0, -1, false, {"Loading..."})
   vim.api.nvim_buf_set_var(bufnr, 'aerial_buffer', aer_bufnr)
@@ -72,7 +73,6 @@ M._create_aerial_buffer = function(bufnr)
   vim.api.nvim_buf_set_option(aer_bufnr, 'filetype', 'aerial')
   render.update_aerial_buffer(bufnr)
 
-  vim.api.nvim_set_current_buf(aer_bufnr)
   vim.cmd[[autocmd BufEnter <buffer> lua require'aerial.autocommands'.on_enter_aerial_buffer()]]
   return aer_bufnr
 end
