@@ -82,11 +82,7 @@ M.set_open_automatic = function(ft_or_mapping, bool)
 end
 
 M.set_kind_abbr = function(kind_or_mapping, abbr)
-  if type(kind_or_mapping) == 'table' then
-    config.kind_abbr = kind_or_mapping
-  else
-    config.kind_abbr[kind_or_mapping] = abbr
-  end
+  config.set_kind_abbr(kind_or_mapping, abbr)
 end
 
 M.set_filter_kind = function(list)

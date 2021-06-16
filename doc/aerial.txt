@@ -176,6 +176,11 @@ g:aerial_automatic_direction                       *g:aerial_automatic_direction
     When using |aerial.set_open_automatic()|, the aerial window will be opened
     with this {direction} (see |aerial.open()| for details).
 
+g:aerial_use_icons                                           *g:aerial_use_icons*
+    When true, use use icons in the display. Requires a nerd font (see
+    https://www.nerdfonts.com/). Will try to smart default by looking for
+    `nvim-web-devicons` (https://github.com/kyazdani42/nvim-web-devicons).
+
 aerial.set_kind_abbr({kind}, {abbr})                     *aerial.set_kind_abbr()*
 aerial.set_kind_abbr({mapping})
     Use these abbreviations for the SymbolKind of the items.

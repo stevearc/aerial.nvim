@@ -1,4 +1,5 @@
 local M = {}
+local has_devicons = pcall(require, 'nvim-web-devicons')
 
 M.open_automatic = {
   ['_'] = false,
@@ -9,11 +10,14 @@ M.filter_kind = {
   Constructor = true,
   Enum        = true,
   Function    = true,
+  Interface   = true,
   Method      = true,
   Struct      = true,
 }
 
-M.kind_abbr = {
+local _kind_abbr = nil
+
+local default_abbr = {
   Array         = '[arr]';
   Boolean       = '[bool]';
   Class         = '[C]';
@@ -40,6 +44,16 @@ M.kind_abbr = {
   Struct        = '[S]';
   TypeParameter = '[T]';
   Variable      = '[V]';
+}
+
+local icons_abbr = {
+  Class         = '';
+  Constructor   = '';
+  Enum          = '';
+  Function      = '';
+  Interface     = '';
+  Method        = '';
+  Struct        = '';
 }
 
 M.get_highlight_on_jump = function()
@@ -106,12 +120,35 @@ M.get_max_width = function()
   if width == nil then return 40 else return width end
 end
 
-M.get_kind_abbr = function(kind)
-  local abbr = M.kind_abbr[kind]
-  if abbr == nil then
-    return kind
+M.get_use_icons = function()
+  local use_icons = vim.g.aerial_use_icons
+  if use_icons == nil then return has_devicons else return use_icons end
+end
+
+local function get_kind_abbr()
+  if not _kind_abbr then
+    if M.get_use_icons() then
+      _kind_abbr = vim.tbl_extend('keep', icons_abbr, default_abbr)
+    else
+      _kind_abbr = default_abbr
+    end
   end
-  return abbr
+  return _kind_abbr
+end
+
+M.set_kind_abbr = function(kind_or_mapping, abbr)
+  if type(kind_or_mapping) == 'table' then
+    _kind_abbr = vim.tbl_extend('keep', kind_or_mapping, get_kind_abbr())
+  else
+    local kind_abbr = get_kind_abbr()
+    kind_abbr[kind_or_mapping] = abbr
+    _kind_abbr = kind_abbr
+  end
+end
+
+M.get_kind_abbr = function(kind)
+  local abbr = get_kind_abbr()[kind]
+  return abbr and abbr or kind
 end
 
 return M

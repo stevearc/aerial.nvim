@@ -30,3 +30,4 @@ g:aerial_min_width	aerial.txt	/*g:aerial_min_width*
 g:aerial_open_automatic_min_lines	aerial.txt	/*g:aerial_open_automatic_min_lines*
 g:aerial_open_automatic_min_symbols	aerial.txt	/*g:aerial_open_automatic_min_symbols*
 g:aerial_update_when_errors	aerial.txt	/*g:aerial_update_when_errors*
+g:aerial_use_icons	aerial.txt	/*g:aerial_use_icons*
