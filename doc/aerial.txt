@@ -21,7 +21,7 @@ This is a minimal configuration to get you started:
       local mapper = function(mode, key, result)
         vim.api.nvim_buf_set_keymap(0, mode, key, result, {noremap = true, silent = true})
       end
-      -- Toggle the aerial pane with <leader>a
+      -- Toggle the aerial window with <leader>a
       mapper('n', '<leader>a', '<cmd>lua require"aerial".toggle()<CR>')
       -- Jump forwards/backwards with '[[' and ']]'
       mapper('n', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz')
@@ -37,7 +37,7 @@ This is a minimal configuration to get you started:
       on_attach = custom_attach,
     }
 
-The aerial pane itself has some sane default bindings, however you can easily
+The aerial window itself has some sane default bindings, however you can easily
 override them. The easiest way to is to use a ftplugin. For example, you can
 create a file `.vim/ftplugin/aerial.vim`:
 >
@@ -52,7 +52,7 @@ create a file `.vim/ftplugin/aerial.vim`:
     nnoremap <buffer> p <cmd>lua require'aerial'.scroll_to_loc()<CR>
     nnoremap <buffer> q <cmd>lua require"aerial".close()<CR>
 
-By default, the symbols information in the pane should stay updated, but if
+By default, the symbols information in the buffer should stay updated, but if
 you'd like to tweak the behavior see |g:aerial_diagnostics_trigger_update| and
 you can manually call |vim.lsp.buf.document_symbol()|.
 
@@ -72,22 +72,22 @@ aerial.on_attach({client}, [{opts}]                          *aerial.on_attach()
                              replacing it.
 
 aerial.open([{focus}], [{direction}])                             *aerial.open()*
-    Open the aerial pane for the current buffer. {focus} is a boolean that, if
-    true, will also jump your cursor to the aerial buffer. {direction} can be
-    either "<" or ">", to indicate which direction of vsplit to use (default
-    will try to autodetect which to use).
+    Open the aerial window for the current buffer. {focus} is a boolean that,
+    if true, will also jump your cursor to the aerial buffer. {direction} can
+    be either "<" or ">", to indicate which direction of vsplit to use
+    (default will try to autodetect which to use).
 
 aerial.close()                                                   *aerial.close()*
-    Close the aerial pane for the current buffer.
+    Close the aerial window for the current buffer.
 
 aerial.toggle([{focus}], [{direction}])                         *aerial.toggle()*
-    Same as |aerial.open()|, but will close the pane if it is already open.
+    Same as |aerial.open()|, but will close the window if it is already open.
 
 aerial.focus()                                                   *aerial.focus()*
-    Jump to the aerial pane for the current buffer if it exists.
+    Jump to the aerial window for the current buffer if it exists.
 
 aerial.is_open()                                               *aerial.is_open()*
-    Returns true if the aerial pane is open for the current buffer.
+    Returns true if the aerial window is open for the current buffer.
 
 aerial.jump_to_loc([{virt_winnr}], [{split_cmd}])          *aerial.jump_to_loc()*
     When in the aerial buffer, jump to the location under the cursor.
@@ -115,15 +115,15 @@ OPTIONS                                                          *aerial-options
 
 
 g:aerial_min_width                                           *g:aerial_min_width*
-    The minimum width of the aerial pane. Default 10.
+    The minimum width of the aerial window. Default 10.
 
 g:aerial_max_width                                           *g:aerial_max_width*
-    The maximum width of the aerial pane. Default 40. If you want to disable
-    the dynamic resizing of the aerial pane, set this to the same value as
+    The maximum width of the aerial window. Default 40. If you want to disable
+    the dynamic resizing of the aerial window, set this to the same value as
     |g:aerial_min_width|.
 
 g:aerial_update_when_errors                         *g:aerial_update_when_errors*
-    Update the aerial pane even when your file has errors. Default true.
+    Update the aerial buffer even when your file has errors. Default true.
 
 g:aerial_diagnostics_trigger_update         *g:aerial_diagnostics_trigger_update*
     Call |vim.lsp.buf.document_symbol()| to update symbols whenenever the LSP
@@ -138,11 +138,11 @@ g:aerial_highlight_mode                                 *g:aerial_highlight_mode
 
         split_width   Each open buffer will have its cursor location marked in
                       the aerial buffer. Each line will only be partially
-                      highlighted to indicate which pane is at that location.
+                      highlighted to indicate which window is at that location.
                       This is the default.
         full_width    Each open buffer will have its cursor location marked as
                       a full-width highlight in the aerial buffer.
-        last          Only the most-recently focused pane will have its
+        last          Only the most-recently focused window will have its
                       location marked in the aerial buffer.
 
 g:aerial_highlight_group                               *g:aerial_highlight_group*
@@ -173,7 +173,7 @@ g:aerial_open_automatic_min_symbols         *g:aerial_open_automatic_min_symbols
     automatically open aerial when there are this many document symbols.
 
 g:aerial_automatic_direction                       *g:aerial_automatic_direction*
-    When using |aerial.set_open_automatic()|, the aerial pane will be opened
+    When using |aerial.set_open_automatic()|, the aerial window will be opened
     with this {direction} (see |aerial.open()| for details).
 
 aerial.set_kind_abbr({kind}, {abbr})                     *aerial.set_kind_abbr()*

@@ -1,28 +1,28 @@
 local callbacks = require 'aerial.callbacks'
 local config = require 'aerial.config'
 local nav = require 'aerial.navigation'
-local pane = require 'aerial.pane'
+local window = require 'aerial.window'
 
 local M = {}
 
 M.is_open = function(bufnr)
-  return pane.is_open(bufnr)
+  return window.is_open(bufnr)
 end
 
 M.close = function()
-  pane.close()
+  window.close()
 end
 
 M.open = function(focus, direction)
-  pane.open(focus, direction)
+  window.open(focus, direction)
 end
 
 M.focus = function()
-  pane.focus()
+  window.focus()
 end
 
 M.toggle = function(focus, direction)
-  return pane.toggle(focus, direction)
+  return window.toggle(focus, direction)
 end
 
 M.jump_to_loc = function(virt_winnr, split_cmd)

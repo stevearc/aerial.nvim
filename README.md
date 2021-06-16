@@ -40,7 +40,7 @@ local custom_attach = function(client)
   local mapper = function(mode, key, result)
     vim.api.nvim_buf_set_keymap(0, mode, key, result, {noremap = true, silent = true})
   end
-  -- Toggle the aerial pane with <leader>a
+  -- Toggle the aerial window with <leader>a
   mapper('n', '<leader>a', '<cmd>lua require"aerial".toggle()<CR>')
   -- Jump forwards/backwards with '[[' and ']]'
   mapper('n', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz')

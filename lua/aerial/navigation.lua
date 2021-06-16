@@ -1,7 +1,7 @@
-local window = require 'aerial.window'
 local data = require 'aerial.data'
 local util = require 'aerial.util'
 local config = require 'aerial.config'
+local render = require 'aerial.render'
 
 local M = {}
 
@@ -71,7 +71,7 @@ M._update_position = function()
   data.positions_by_buf[bufnr] = data.positions_by_buf[bufnr] or {}
   data.positions_by_buf[bufnr][mywin] = pos.lnum
   data.last_position_by_buf[bufnr] = pos.lnum
-  window.update_highlights(bufnr)
+  render.update_highlights(bufnr)
   local winid = vim.fn.bufwinid(aer_bufnr)
   if winid ~= -1 then
     vim.fn.win_execute(winid, string.format('normal %dgg', pos.lnum), true)
@@ -165,6 +165,5 @@ M.skip_item = function(delta)
     vim.fn.setpos('.', {0, item.lnum, item.col, 0})
   end
 end
-
 
 return M

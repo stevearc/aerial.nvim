@@ -1,8 +1,8 @@
 -- Functions that are called in response to autocommands
 local config = require 'aerial.config'
 local data = require 'aerial.data'
-local pane = require 'aerial.pane'
 local util = require 'aerial.util'
+local render = require 'aerial.render'
 local window = require 'aerial.window'
 
 local M = {}
@@ -32,7 +32,7 @@ M.on_buf_leave = function()
   if aer_bufnr == -1 then
     return
   end
-  window.update_highlights(bufnr)
+  render.update_highlights(bufnr)
 
   local maybe_close_aerial = function()
     local winid = vim.fn.bufwinid(bufnr)
@@ -87,8 +87,8 @@ M.on_buf_win_enter = function()
   -- status of aerial.
   if num_bufs_in_tab == 1 then
     -- Have to defer this because we defer the close in on_buf_leave. We don't
-    -- want to open the new pane until the old one is cleaned up
-    vim.defer_fn(pane._maybe_open_automatic, 6)
+    -- want to open the new window until the old one is cleaned up
+    vim.defer_fn(window._maybe_open_automatic, 6)
   end
 end
 
