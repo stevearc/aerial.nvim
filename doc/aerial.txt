@@ -3,17 +3,9 @@
 ===============================================================================
 CONTENTS                                                        *aerial-contents*
 
-    1. Intro...........................................|aerial-intro|
-    2. Configure.......................................|aerial-configure|
-    3. Commands........................................|aerial-commands|
-    4. Options.........................................|aerial-options|
-
-===============================================================================
-INTRO                                                              *aerial-intro*
-
-Aerial is a table-of-contents pane next to your code for quick navigation.
-It's powered by the documentSymbols information from LSP, and uses the
-built-in Neovim |lsp| client.
+    1. Configure.......................................|aerial-configure|
+    2. Commands........................................|aerial-commands|
+    3. Options.........................................|aerial-options|
 
 ===============================================================================
 CONFIGURE                                                      *aerial-configure*
@@ -47,7 +39,7 @@ This is a minimal configuration to get you started:
 
 The aerial pane itself has some sane default bindings, however you can easily
 override them. The easiest way to is to use a ftplugin. For example, you can
-create a file .vim/ftplugin/aerial.vim:
+create a file `.vim/ftplugin/aerial.vim`:
 >
     " These are the default bindings.
     nnoremap <buffer> <CR> <cmd>lua require'aerial'.jump_to_loc()<CR>zvzz

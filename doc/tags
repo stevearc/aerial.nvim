@@ -3,7 +3,6 @@ aerial	aerial.txt	/*aerial*
 aerial-commands	aerial.txt	/*aerial-commands*
 aerial-configure	aerial.txt	/*aerial-configure*
 aerial-contents	aerial.txt	/*aerial-contents*
-aerial-intro	aerial.txt	/*aerial-intro*
 aerial-options	aerial.txt	/*aerial-options*
 aerial.close()	aerial.txt	/*aerial.close()*
 aerial.focus()	aerial.txt	/*aerial.focus()*

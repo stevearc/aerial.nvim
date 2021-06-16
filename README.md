@@ -1,5 +1,5 @@
 # aerial.nvim
-Show a table-of-contents pane next to your code for quick navigation
+A code outline window for skimming and quick navigation
 
 ![Demo image](https://user-images.githubusercontent.com/506791/94113785-46d26180-fdfc-11ea-84e5-0d8e5a9b3e8d.gif)
 
