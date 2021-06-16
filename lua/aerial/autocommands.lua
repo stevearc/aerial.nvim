@@ -24,12 +24,6 @@ M.on_enter_aerial_buffer = function()
 
   -- Hack to ignore winwidth
   vim.cmd('vertical resize ' .. util.get_width())
-
-  -- Move cursor to nearest matching line
-  local row = data.last_position_by_buf[bufnr]
-  if row ~= nil then
-    vim.fn.setpos('.', {0, row, 1, 0})
-  end
 end
 
 M.on_buf_leave = function()

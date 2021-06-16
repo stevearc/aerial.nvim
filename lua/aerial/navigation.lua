@@ -66,11 +66,16 @@ M._update_position = function()
     return
   end
   local bufnr = vim.fn.bufnr()
+  local aer_bufnr = util.get_aerial_buffer(bufnr)
   local mywin = vim.fn.win_getid()
   data.positions_by_buf[bufnr] = data.positions_by_buf[bufnr] or {}
   data.positions_by_buf[bufnr][mywin] = pos.lnum
   data.last_position_by_buf[bufnr] = pos.lnum
   window.update_highlights(bufnr)
+  local winid = vim.fn.bufwinid(aer_bufnr)
+  if winid ~= -1 then
+    vim.fn.win_execute(winid, string.format('normal %dgg', pos.lnum), true)
+  end
 end
 
 M._jump_to_loc = function(item_no, virt_winnr, split_cmd)

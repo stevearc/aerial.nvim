@@ -214,7 +214,6 @@ aerial.set_filter_kind({kinds})                        *aerial.set_filter_kind()
 ===============================================================================
 TODO
 
-* Scroll summary when updating position -- blocked by https://github.com/neovim/neovim/issues/10822
 * Built-in support for Nerd font
 * Fold the TOC hierarchy like a tree
 * Add some vim.validate in function calls
