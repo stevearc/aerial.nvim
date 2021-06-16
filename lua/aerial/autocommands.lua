@@ -11,19 +11,19 @@ M.on_enter_aerial_buffer = function()
   local bufnr = util.get_source_buffer()
   if bufnr == -1 then
     -- Quit if source buffer is gone
-    vim.cmd('q!')
+    vim.api.nvim_win_close(0, true)
     return
   else
     local visible_buffers = vim.fn.tabpagebuflist()
     -- Quit if the source buffer is no longer visible
     if not vim.tbl_contains(visible_buffers, bufnr) then
-      vim.cmd('q!')
+      vim.api.nvim_win_close(0, true)
       return
     end
   end
 
   -- Hack to ignore winwidth
-  vim.cmd('vertical resize ' .. util.get_width())
+  vim.api.nvim_win_set_width(0, util.get_width())
 end
 
 M.on_buf_leave = function()
@@ -38,10 +38,10 @@ M.on_buf_leave = function()
     local winid = vim.fn.bufwinid(bufnr)
     -- If there are no windows left with the source buffer,
     if winid == -1 then
-      local winnr = vim.fn.bufwinnr(aer_bufnr)
+      local aer_winid = vim.fn.bufwinid(aer_bufnr)
       -- And there is a window left for the aerial buffer
-      if winnr ~= -1 then
-        vim.cmd(winnr .. "close")
+      if aer_winid ~= -1 then
+        vim.api.nvim_win_close(aer_winid, false)
       end
     end
   end
@@ -49,7 +49,7 @@ M.on_buf_leave = function()
   -- and we *synchronously* close the aerial buffer, it will cause the :q
   -- command to fail (presumably because it would cause vim to 'unexpectedly'
   -- exit).
-  vim.defer_fn(maybe_close_aerial, 5)
+  vim.schedule(maybe_close_aerial)
 end
 
 M.request_symbols_if_diagnostics_changed = function()
