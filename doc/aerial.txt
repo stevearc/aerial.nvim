@@ -182,10 +182,10 @@ aerial.set_kind_abbr({mapping})
     See https://microsoft.github.io/language-server-protocol/specification#textDocument_documentSymbol
     for a complete list of the possible SymbolKind values.
 >
-    aerial.set_kind_abbr('Function', 'F')
+    aerial.set_kind_abbr('Function', '[F]')
     aerial.set_kind_abbr{
-      ['Function'] = 'F',
-      ['Method'] = 'M',
+      Function = '[F]',
+      Method = '[M]',
     }
 
 aerial.set_filter_kind({kinds})                        *aerial.set_filter_kind()*

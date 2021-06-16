@@ -20,7 +20,7 @@ M._get_virt_winid = function(bufnr, virt_winnr)
 end
 
 M._get_current_lnum = function()
-  local bufnr = vim.fn.bufnr()
+  local bufnr = vim.api.nvim_get_current_buf()
   local lnum = vim.fn.getcurpos()[2]
   if util.is_aerial_buffer(bufnr) then
     bufnr = util.get_source_buffer()
@@ -28,34 +28,31 @@ M._get_current_lnum = function()
     if winid == -1 then
       return nil
     end
-    local positions = data.positions_by_buf[bufnr]
-    if positions == nil then
-      return nil
-    end
-    local cached_lnum = positions[winid]
-    return {
+    local bufdata = data[bufnr]
+    local cached_lnum = bufdata.positions[winid]
+    return cached_lnum == nil and nil or {
       ['lnum'] = cached_lnum,
       ['relative'] = 'exact',
     }
   end
-  local items = data.items_by_buf[bufnr]
-  if items == nil then
+  if not data:has_symbols(bufnr) then
     return nil
   end
-  local selected = 1
+  local bufdata = data[bufnr]
+  local selected = 0
   local relative = 'above'
-  for idx,item in ipairs(items) do
+  bufdata:visit(function(item)
     if item.lnum > lnum then
-      break
+      return true
     elseif item.lnum == lnum then
       relative = 'exact'
     else
       relative = 'below'
     end
-    selected = idx
-  end
+    selected = selected + 1
+  end)
   return {
-    ['lnum'] = selected,
+    ['lnum'] = math.max(1, selected),
     ['relative'] = relative
   }
 end
@@ -65,12 +62,12 @@ M._update_position = function()
   if pos == nil then
     return
   end
-  local bufnr = vim.fn.bufnr()
+  local bufnr = vim.api.nvim_get_current_buf()
   local aer_bufnr = util.get_aerial_buffer(bufnr)
-  local mywin = vim.fn.win_getid()
-  data.positions_by_buf[bufnr] = data.positions_by_buf[bufnr] or {}
-  data.positions_by_buf[bufnr][mywin] = pos.lnum
-  data.last_position_by_buf[bufnr] = pos.lnum
+  local mywin = vim.api.nvim_get_current_win()
+  local bufdata = data[bufnr]
+  bufdata.positions[mywin] = pos.lnum
+  bufdata.last_position = pos.lnum
   render.update_highlights(bufnr)
   local winid = vim.fn.bufwinid(aer_bufnr)
   if winid ~= -1 then
@@ -82,11 +79,10 @@ M._jump_to_loc = function(item_no, virt_winnr, split_cmd)
   virt_winnr = virt_winnr or 1
   split_cmd = split_cmd or 'belowright vsplit'
   local bufnr = util.get_source_buffer()
-  local items = data.items_by_buf[bufnr]
-  if items == nil then
+  if not data:has_symbols(bufnr) then
     return
   end
-  local item = items[item_no]
+  local item = data[bufnr]:item(item_no)
   if item == nil then
     error("Could not find item at position " .. item_no)
     return
@@ -138,9 +134,7 @@ M.skip_item = function(delta)
     bufnr = vim.api.nvim_get_current_buf()
   end
 
-  local items = data.items_by_buf[bufnr]
-  local count = 0
-  for _ in pairs(items) do count = count + 1 end
+  local count = data[bufnr]:count()
   local new_num = pos.lnum + delta
   -- If we're not *exactly* on a location, make sure we hit the nearest location
   -- first even if we're currently considered to be "on" it
@@ -155,7 +149,7 @@ M.skip_item = function(delta)
   while new_num > count do
     new_num = new_num - count
   end
-  local item = items[new_num]
+  local item = data[bufnr]:item(new_num)
   if util.is_aerial_buffer() then
     M._jump_to_loc(new_num, 1)
     M._update_position()

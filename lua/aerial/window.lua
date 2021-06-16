@@ -103,8 +103,7 @@ M._maybe_open_automatic = function()
   if not config.get_open_automatic() then
     return false
   end
-  local items = data.items_by_buf[vim.api.nvim_get_current_buf()]
-  if items == nil or #items < config.get_open_automatic_min_symbols() then
+  if data[0]:count() < config.get_open_automatic_min_symbols() then
     return false
   end
   if vim.fn.line('$') < config.get_open_automatic_min_lines() then
