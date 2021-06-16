@@ -21,9 +21,9 @@ M.create_aerial_window = function(bufnr, aer_bufnr, direction)
     vim.api.nvim_set_current_win(vim.fn.win_getid(winnr))
   end
   if direction == '<' then
-    vim.cmd('vertical leftabove new')
+    vim.cmd('vertical leftabove split')
   elseif direction == '>' then
-    vim.cmd('vertical rightbelow new')
+    vim.cmd('vertical rightbelow split')
   else
     error("Unknown aerial window direction " .. direction)
     return
