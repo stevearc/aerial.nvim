@@ -64,7 +64,7 @@ M.get_buffer_from_var = function(bufnr, varname)
 end
 
 M.flash_highlight = function(bufnr, lnum, hl_group, durationMs)
-  hl_group = hl_group or config.get_highlight_group()
+  hl_group = hl_group or 'AerialLine'
   durationMs = durationMs or 300
   local ns = vim.api.nvim_buf_add_highlight(bufnr, 0, hl_group, lnum - 1, 0, -1)
   local remove_highlight = function()

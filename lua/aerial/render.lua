@@ -12,14 +12,30 @@ M.update_aerial_buffer = function(bufnr)
   if not data:has_symbols(bufnr) then
     return
   end
+  local row = 1
   local max_len = 1
   local lines = {}
+  local highlights = {}
   data[bufnr]:visit(function(item)
     local kind = config.get_kind_abbr(item.kind)
     local spacing = string.rep('  ', item.level)
     local text = string.format("%s%s %s", spacing, kind, item.name)
-    max_len = math.max(max_len, string.len(text))
+    local strlen = string.len(text)
+    table.insert(highlights, {
+      group = 'Aerial' .. item.kind .. 'Icon',
+      row = row,
+      col_start = string.len(spacing),
+      col_end = string.len(spacing) + string.len(kind),
+    })
+    table.insert(highlights, {
+      group = 'Aerial' .. item.kind,
+      row = row,
+      col_start = strlen - string.len(item.name),
+      col_end = strlen,
+    })
+    max_len = math.max(max_len, strlen)
     table.insert(lines, text)
+    row = row + 1
   end)
 
   local width = math.min(config.get_max_width(), math.max(config.get_min_width(), max_len))
@@ -32,6 +48,19 @@ M.update_aerial_buffer = function(bufnr)
   vim.api.nvim_buf_set_option(aer_bufnr, 'modifiable', true)
   vim.api.nvim_buf_set_lines(aer_bufnr, 0, -1, false, lines)
   vim.api.nvim_buf_set_option(aer_bufnr, 'modifiable', false)
+
+  local ns = vim.api.nvim_create_namespace('aerial')
+  vim.api.nvim_buf_clear_namespace(aer_bufnr, ns, 0, -1)
+  for _, hl in ipairs(highlights) do
+    vim.api.nvim_buf_add_highlight(
+      aer_bufnr,
+      ns,
+      hl.group,
+      hl.row - 1,
+      hl.col_start,
+      hl.col_end
+    )
+  end
 end
 
 -- Update the highlighted lines in the aerial buffer
@@ -52,7 +81,7 @@ M.update_highlights = function(bufnr)
   table.sort(winids, function(a, b)
     return vim.fn.win_id2win(a) < vim.fn.win_id2win(b)
   end)
-  local ns = vim.api.nvim_create_namespace('aerial')
+  local ns = vim.api.nvim_create_namespace('aerial-line')
   local aer_bufnr = util.get_aerial_buffer(bufnr)
   if aer_bufnr == -1 then
     return
@@ -66,7 +95,7 @@ M.update_highlights = function(bufnr)
     vim.api.nvim_buf_add_highlight(
       aer_bufnr,
       ns,
-      config.get_highlight_group(),
+      'AerialLine',
       row - 1,
       0,
       -1)
@@ -84,7 +113,7 @@ M.update_highlights = function(bufnr)
     vim.api.nvim_buf_add_highlight(
       aer_bufnr,
       ns,
-      config.get_highlight_group(),
+      'AerialLine',
       bufdata.positions[winid] - 1,
       start_hl,
       end_hl)

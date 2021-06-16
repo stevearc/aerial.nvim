@@ -3,6 +3,7 @@ aerial	aerial.txt	/*aerial*
 aerial-commands	aerial.txt	/*aerial-commands*
 aerial-configure	aerial.txt	/*aerial-configure*
 aerial-contents	aerial.txt	/*aerial-contents*
+aerial-highlight	aerial.txt	/*aerial-highlight*
 aerial-options	aerial.txt	/*aerial-options*
 aerial.close()	aerial.txt	/*aerial.close()*
 aerial.focus()	aerial.txt	/*aerial.focus()*
@@ -22,7 +23,6 @@ aerial.toggle()	aerial.txt	/*aerial.toggle()*
 aerial.txt	aerial.txt	/*aerial.txt*
 g:aerial_automatic_direction	aerial.txt	/*g:aerial_automatic_direction*
 g:aerial_diagnostics_trigger_update	aerial.txt	/*g:aerial_diagnostics_trigger_update*
-g:aerial_highlight_group	aerial.txt	/*g:aerial_highlight_group*
 g:aerial_highlight_mode	aerial.txt	/*g:aerial_highlight_mode*
 g:aerial_highlight_on_jump	aerial.txt	/*g:aerial_highlight_on_jump*
 g:aerial_max_width	aerial.txt	/*g:aerial_max_width*

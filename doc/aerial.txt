@@ -6,6 +6,7 @@ CONTENTS                                                        *aerial-contents
     1. Configure.......................................|aerial-configure|
     2. Commands........................................|aerial-commands|
     3. Options.........................................|aerial-options|
+    4. Highlight.......................................|aerial-highlight|
 
 ===============================================================================
 CONFIGURE                                                      *aerial-configure*
@@ -145,11 +146,6 @@ g:aerial_highlight_mode                                 *g:aerial_highlight_mode
         last          Only the most-recently focused window will have its
                       location marked in the aerial buffer.
 
-g:aerial_highlight_group                               *g:aerial_highlight_group*
-    The highlight group used for the active line in the aerial buffer and also
-    used for the brief highlight when jumping to a location. Default
-    |QuickFixLine|
-
 aerial.set_open_automatic({filetype}, {bool})       *aerial.set_open_automatic()*
 aerial.set_open_automatic({mapping})
     This is used to automatically open aerial when a new buffer is loaded.
@@ -207,14 +203,28 @@ aerial.set_filter_kind({kinds})                        *aerial.set_filter_kind()
       'Enum',
     }
 
-
 ===============================================================================
-TODO
+HIGHLIGHT                                                      *aerial-highlight*
 
-* Built-in support for Nerd font
-* Fold the TOC hierarchy like a tree
-* Add some vim.validate in function calls
-* Remove items & positions from cache when they are no longer relevant
+Aerial creates highlight groups for the names and icons that are displayed in
+the aerial buffer. You can override the default colors by using
+|:highlight-link| or |:highlight|. Highlight groups are created per SymbolKind
+(See https://microsoft.github.io/language-server-protocol/specification#textDocument_documentSymbol
+for a complete list of the possible SymbolKind values) in the following format:
+
+    Aerial{SymbolKind}
+    Aerial{SymbolKind}Icon
+
+For example
+
+    AerialClass
+    AerialClassIcon
+    AerialFunction
+    AerialFunctionIcon
+    ...
+
+In addition, there is an `AerialLine` group that is used to indicate the
+cursor position.
 
 ===============================================================================
 vim:ft=help:et:ts=2:sw=2:sts=2:norl

@@ -105,11 +105,6 @@ M.get_highlight_mode = function()
   return 'split_width'
 end
 
-M.get_highlight_group = function()
-  local hl = vim.g.aerial_highlight_group
-  if hl == nil then return 'QuickFixLine' else return hl end
-end
-
 M.get_min_width = function()
   local width = vim.g.aerial_min_width
   if width == nil then return 10 else return width end
