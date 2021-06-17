@@ -184,6 +184,9 @@ M.update_all_positions = function(bufnr)
 end
 
 M.update_position = function(winid, update_last)
+  if config.highlight_mode == 'none' then
+    return
+  end
   if winid == 0 then
     winid = vim.api.nvim_get_current_win()
   end

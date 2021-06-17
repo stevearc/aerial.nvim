@@ -71,6 +71,9 @@ end
 
 -- Update the highlighted lines in the aerial buffer
 M.update_highlights = function(buf)
+  if config.highlight_mode == 'none' then
+    return
+  end
   local bufnr, aer_bufnr = util.get_buffers(buf)
   if not data:has_symbols(bufnr) or aer_bufnr == -1 then
     return

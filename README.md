@@ -84,7 +84,7 @@ vim.g.aerial = {
   -- Fetch document symbols when LSP diagnostics change.
   -- If you set this to false, you will need to manually fetch symbols
   diagnostics_trigger_update = true,
-  -- Enum: split_width, full_width, last
+  -- Enum: split_width, full_width, last, none
   -- Determines line highlighting mode when multiple buffers are visible
   highlight_mode = 'split_width',
   -- When jumping to a symbol, highlight the line for this many ms
