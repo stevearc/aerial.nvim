@@ -49,7 +49,10 @@ local function _get_current_lnum()
   end
 end
 
-M.next = function(step)
+M.next = function(step, opts)
+  opts = vim.tbl_extend('keep', opts or {}, {
+    same_level = false
+  })
   step = step or 1
   local pos = _get_current_lnum()
   if pos == nil then
@@ -57,20 +60,25 @@ M.next = function(step)
   end
   local bufnr, _ = util.get_buffers()
 
-  local count = data[bufnr]:count()
-  local new_num = pos.lnum + step
+  local bufdata = data[bufnr]
   -- If we're not *exactly* on a location, make sure we hit the nearest location
   -- first even if we're currently considered to be "on" it
   if step < 0 and pos.relative == 'below' then
-    new_num = new_num + 1
+    step = step + 1
   elseif step > 0 and pos.relative == 'above' then
-    new_num = new_num - 1
+    step = step - 1
   end
-  while new_num < 1 do
-    new_num = new_num + count
-  end
-  while new_num > count do
-    new_num = new_num - count
+  local new_num
+  if opts.same_level then
+    local item = bufdata:item(pos.lnum)
+    local all_items = data[bufnr]:flatten(function(candidate)
+      return candidate.level == item.level
+    end)
+    local idx = ((util.tbl_indexof(all_items, item) + step - 1) % #all_items) + 1
+    new_num = bufdata:indexof(all_items[idx])
+  else
+    local count = bufdata:count()
+    new_num = ((pos.lnum + step - 1) % count) + 1
   end
   M.select{
     index = new_num,

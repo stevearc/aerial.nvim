@@ -6,6 +6,8 @@ command! -bang -complete=customlist,<sid>OpenDirection -nargs=? AerialOpen
 command! AerialClose lua require'aerial'.close()
 command! -count=1 AerialNext call luaeval("require'aerial'.next(tonumber(_A))", expand('<count>'))
 command! -count=1 AerialPrev call luaeval("require'aerial'.next(-1*tonumber(_A))", expand('<count>'))
+command! -count=1 AerialLNext call luaeval("require'aerial'.next(tonumber(_A), {same_level=true})", expand('<count>'))
+command! -count=1 AerialLPrev call luaeval("require'aerial'.next(-1*tonumber(_A), {same_level=true})", expand('<count>'))
 command! -bang -count=1 -nargs=? AerialGo call <sid>AerialGo(<q-bang>, <count>, <q-args>)
 
 function! s:OpenDirection(ArgLead, CmdLine, CursorPos)

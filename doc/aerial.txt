@@ -33,6 +33,16 @@ COMMANDS                                                        *aerial-commands
 :[count]AerialPrev
         Jump backwards [count] symbols (default 1).
 
+                                                                   *:AerialLNext*
+:[count]AerialLNext
+        Jump forwards [count] symbols, skipping over symbols at a different
+        tree level (default 1).
+
+                                                                   *:AerialLPrev*
+:[count]AerialLPrev
+        Jump backwards [count] symbols, skipping over symbols at a different
+        tree level (default 1).
+
                                                                       *:AerialGo*
 :[count]AerialGo[!] [split]
         Jump to the [count] symbol (default 1). If with [!] and inside aerial
@@ -222,9 +232,11 @@ aerial.select([{opts}])                                         *aerial.select()
         jump     If `false` and in the aerial window, do not leave the aerial
                  window. (Default `true`)
 
-aerial.next([{step}])                                             *aerial.next()*
+aerial.next([{step}], [{opts}])                                   *aerial.next()*
     Jump forwards or backwards {step} symbols (default 1). Use negative values
-    to jump backwards.
+    to jump backwards. {opts} can be a table with the following keys:
+        same_level   If `true`, skip over symbols at a different tree level
+                     (default `false`)
 
 aerial.tree_cmd({action}, [{opts}])                           *aerial.tree_cmd()*
     Perform an action on the symbol tree {action} can be one of the following

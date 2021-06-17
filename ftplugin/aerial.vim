@@ -12,11 +12,14 @@ nnoremap <buffer> p <cmd>lua require'aerial'.select({jump=false})<CR>
 " Hold ctrl + j/k to go up and down while scrolling to the location under cursor
 nnoremap <buffer> <C-j> j<cmd>lua require'aerial'.select({jump=false})<CR>
 nnoremap <buffer> <C-k> k<cmd>lua require'aerial'.select({jump=false})<CR>
-" Use [[]] to jump to the prev/next item
-nnoremap <buffer> [[ <cmd>lua require'aerial'.next(1)<CR>
-nnoremap <buffer> ]] <cmd>lua require'aerial'.next(-1)<CR>
+" Use {} to jump to the prev/next item
+nnoremap <buffer> } <cmd>AerialNext<CR>
+nnoremap <buffer> { <cmd>AerialPrev<CR>
+" Use [[]] to jump to the prev/next item at the same tree level
+nnoremap <buffer> ]] <cmd>AerialLNext<CR>
+nnoremap <buffer> [[ <cmd>AerialLPrev<CR>
 " q closes
-nnoremap <buffer> q <cmd>lua require"aerial".close()<CR>
+nnoremap <buffer> q <cmd>AerialClose<CR>
 
 """" Tree commands
 " o toggles the tree

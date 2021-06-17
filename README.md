@@ -40,9 +40,12 @@ local custom_attach = function(client)
   -- Aerial does not set any mappings by default, so you'll want to set some up
   -- Toggle the aerial window with <leader>a
   vim.api.nvim_buf_set_keymap(0, 'n', '<leader>a', '<cmd>AerialToggle!<CR>', {})
-  -- Jump forwards/backwards with '[[' and ']]'
-  vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>AerialPrev<CR>', {})
-  vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>AerialNext<CR>', {})
+  -- Jump forwards/backwards with '{' and '}'
+  vim.api.nvim_buf_set_keymap(0, 'n', '{', '<cmd>AerialPrev<CR>', {})
+  vim.api.nvim_buf_set_keymap(0, 'n', '}', '<cmd>AerialNext<CR>', {})
+  -- Jump forwards/backwards at the same tree level with '[[' and ']]'
+  vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>AerialLPrev<CR>', {})
+  vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>AerialLNext<CR>', {})
 
   -- This is a great place to set up all your other LSP mappings
 end
@@ -64,6 +67,8 @@ Command         | arg            | description
 `AerialClose`   |                | Close the aerial window
 `AerialPrev`    | N=1            | Jump backwards N symbols
 `AerialNext`    | N=1            | Jump forwards N symbols
+`AerialLPrev`   | N=1            | Jump backwards N symbols, skip symbols at a diffent tree level
+`AerialLNext`   | N=1            | Jump forwards N symbols, skip symbols at a diffent tree level
 `AerialGo`      | N=1, `v`/`h`   | Jump to the Nth symbol
 
 ## Options
@@ -172,8 +177,10 @@ Key     | Command
 `<p>`   | Scroll to the symbol (stay in aerial buffer)
 `<C-j>` | Go down one line and scroll to that symbol
 `<C-k>` | Go up one line and scroll to that symbol
-`[[`    | Jump to the previous symbol
-`]]`    | Jump to the next symbol
+`{`     | Jump to the previous symbol
+`}`     | Jump to the next symbol
+`[[`    | Jump to the previous symbol at the same tree level
+`]]`    | Jump to the next symbol at the same tree level
 `q`     | Close the aerial window
 `o`     | Toggle the tree
 `O`     | Toggle the tree recursively

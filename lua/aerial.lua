@@ -49,8 +49,8 @@ M.select = function(opts)
   nav.select(opts)
 end
 
-M.next = function(step)
-  nav.next(step)
+M.next = function(step, opts)
+  nav.next(step, opts)
 end
 
 M.on_attach = function(client, opts)

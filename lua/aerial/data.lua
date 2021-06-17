@@ -125,6 +125,16 @@ local BufData = {
     end
   end,
 
+  flatten = function(self, filter, opts)
+    local items = {}
+    self:visit(function(item)
+      if filter(item) then
+        table.insert(items, item)
+      end
+    end, opts)
+    return items
+  end,
+
   count = function(self, incl_hidden)
     local count = 0
     self:visit(function(_)
