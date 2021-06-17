@@ -107,8 +107,8 @@ M.open_automatic = function()
 end
 
 local plain_icons = {
-  Array         = '[arr]';
-  Boolean       = '[bool]';
+  Array         = '[a]';
+  Boolean       = '[b]';
   Class         = '[C]';
   Constant      = '[const]';
   Constructor   = '[Co]';
@@ -123,10 +123,10 @@ local plain_icons = {
   Method        = '[M]';
   Module        = '[Mod]';
   Namespace     = '[NS]';
-  Null          = '[null]';
-  Number        = '[num]';
-  Object        = '[obj]';
-  Operator      = '[Op]';
+  Null          = '[-]';
+  Number        = '[n]';
+  Object        = '[o]';
+  Operator      = '[+]';
   Package       = '[Pkg]';
   Property      = '[P]';
   String        = '[str]';
@@ -139,11 +139,19 @@ local plain_icons = {
 local nerd_icons = {
   Class         = '';
   Constructor   = '';
+  Constant      = '[c]';
   Enum          = '';
+  EnumMember    = '[e]';
+  Event         = '[E]';
+  Field         = '[F]';
+  File          = '';
   Function      = '';
   Interface     = '';
   Method        = '';
-  Struct        = '';
+  Module        = '[M]';
+  Package       = '';
+  String        = '[s]';
+  Struct        = '';
   Collapsed     = '';
 }
 
