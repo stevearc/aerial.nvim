@@ -96,7 +96,8 @@ local function get_table_opt(opt, key, default_key, default)
 end
 
 M.include_kind = function(kind)
-  return vim.tbl_contains(M.filter_kind, kind)
+  local fk = M.filter_kind
+  return not fk or vim.tbl_contains(M.filter_kind, kind)
 end
 
 M.open_automatic = function()

@@ -114,7 +114,7 @@ vim.g.aerial = {
   post_jump_cmd = 'normal! zvzz',
   -- Set to false to not update the symbols when there are LSP errors
   update_when_errors = true,
-  -- A list of all symbols to display
+  -- A list of all symbols to display. Set to false to show all symbols.
   filter_kind = {
     "Class",
     "Constructor",

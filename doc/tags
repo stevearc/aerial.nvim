@@ -28,6 +28,7 @@ g:aerial_close_behavior	aerial.txt	/*g:aerial_close_behavior*
 g:aerial_default_bindings	aerial.txt	/*g:aerial_default_bindings*
 g:aerial_default_direction	aerial.txt	/*g:aerial_default_direction*
 g:aerial_diagnostics_trigger_update	aerial.txt	/*g:aerial_diagnostics_trigger_update*
+g:aerial_filter_kind	aerial.txt	/*g:aerial_filter_kind*
 g:aerial_highlight_mode	aerial.txt	/*g:aerial_highlight_mode*
 g:aerial_highlight_on_jump	aerial.txt	/*g:aerial_highlight_on_jump*
 g:aerial_icons	aerial.txt	/*g:aerial_icons*
