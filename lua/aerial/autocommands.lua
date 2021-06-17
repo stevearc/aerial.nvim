@@ -56,10 +56,12 @@ M.on_buf_delete = function(bufnr)
   data[bufnr] = nil
 end
 
-M.request_symbols_if_diagnostics_changed = function()
+M.on_diagnostics_changed = function()
   local errors = vim.lsp.diagnostic.get_count(0, 'Error')
   -- if no errors, refresh symbols
-  if errors == 0 or not data:has_symbols() then
+  if config.get_update_when_errors()
+    or errors == 0
+    or not data:has_symbols() then
     vim.lsp.buf.document_symbol()
   end
 end

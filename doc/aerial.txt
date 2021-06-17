@@ -102,7 +102,7 @@ g:aerial_update_when_errors                         *g:aerial_update_when_errors
 
 g:aerial_diagnostics_trigger_update         *g:aerial_diagnostics_trigger_update*
     Call |vim.lsp.buf.document_symbol()| to update symbols whenenever the LSP
-    client receives diagnostics. Default true.
+    client receives diagnostics. Default `true`.
 
 g:aerial_highlight_on_jump                           *g:aerial_highlight_on_jump*
     Briefly highlight the line jumped from |aerial.jump_to_loc()|. Default

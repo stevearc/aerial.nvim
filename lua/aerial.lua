@@ -49,11 +49,9 @@ M.on_attach = function(client, opts)
   vim.lsp.handlers['textDocument/documentSymbol'] = new_callback
 
   if config.get_diagnostics_trigger_update() then
-    vim.cmd("autocmd User LspDiagnosticsChanged lua require'aerial.autocommands'.request_symbols_if_diagnostics_changed()")
+    vim.cmd("autocmd User LspDiagnosticsChanged lua require'aerial.autocommands'.on_diagnostics_changed()")
   end
 
-  vim.cmd("autocmd InsertLeave <buffer> lua vim.lsp.buf.document_symbol()")
-  vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.document_symbol()")
   vim.cmd("autocmd CursorMoved <buffer> lua require'aerial.autocommands'.on_cursor_move()")
   vim.cmd("autocmd BufLeave <buffer> lua require'aerial.autocommands'.on_buf_leave()")
   vim.cmd([[autocmd BufDelete <buffer> call luaeval("require'aerial.autocommands'.on_buf_delete(_A)", expand('<abuf>'))]])
