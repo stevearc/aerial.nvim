@@ -58,5 +58,35 @@ require'lspconfig'.vimls.setup{
 A full list of commands and options can be found [in the
 docs](https://github.com/stevearc/aerial.nvim/blob/master/doc/aerial.txt)
 
+## Default Keybindings
 The default keybindings in the aerial window are [in the
 ftplugin](https://github.com/stevearc/aerial.nvim/blob/master/ftplugin/aerial.vim)
+
+Key     | Command
+---     | -------
+`<CR>`  | Jump to the symbol under the cursor
+`<C-v>` | Jump to the symbol in a vertical split
+`<C-s>` | Jump to the symbol in a horizontal split
+`<p>`   | Scroll to the symbol (stay in aerial buffer)
+`<C-j>` | Go down one line and scroll to that symbol
+`<C-k>` | Go up one line and scroll to that symbol
+`[[`    | Jump to the previous symbol
+`]]`    | Jump to the next symbol
+`q`     | Close the aerial window
+`o`     | Toggle the tree
+`O`     | Toggle the tree recursively
+
+## Highlight
+
+There are highlight groups created for each `SymbolKind`. There will be one for
+the name of the symbol (`Aerial<SymbolKind>`, and one for the icon
+(`Aerial<SymbolKind>Icon`). For example:
+
+`AerialClass` \
+`AerialClassIcon` \
+`AerialFunction` \
+`AerialFunctionIcon`
+
+The [LSP spec](https://microsoft.github.io/language-server-protocol/specification#textDocument_documentSymbol) has the authoritative list of valid `SymbolKind`s.
+
+Additionally, there is an `AerialLine` group that is used to indicate cursor position.
