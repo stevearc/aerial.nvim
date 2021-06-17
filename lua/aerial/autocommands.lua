@@ -71,8 +71,6 @@ M.on_buf_win_enter = function()
     return
   end
 
-  vim.lsp.buf.document_symbol()
-
   local num_bufs_in_tab = 0
   local bufnr = vim.api.nvim_get_current_buf()
   for i=1,vim.fn.winnr('$'),1 do
