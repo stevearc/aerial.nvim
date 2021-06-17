@@ -17,8 +17,8 @@ M.lpad = function(str, length, padchar)
 end
 
 M.get_width = function(bufnr)
-  local status, width = pcall(vim.api.nvim_buf_get_var, bufnr or 0, 'aerial_width')
-  if status then
+  local ok, width = pcall(vim.api.nvim_buf_get_var, bufnr or 0, 'aerial_width')
+  if ok then
     return width
   end
   return config.get_min_width()
@@ -29,16 +29,9 @@ M.set_width = function(bufnr, width)
     return
   end
   vim.api.nvim_buf_set_var(bufnr, 'aerial_width', width)
-  -- TODO change to win_execute when available
-  -- Current implementation won't update the width in other tabs
-  local start_winid = vim.fn.win_getid()
-  local winid = vim.fn.bufwinid(bufnr)
-  if start_winid ~= winid then
-    vim.fn.win_gotoid(winid)
-    -- autocommand will do the resize
-    vim.fn.win_gotoid(start_winid)
-  else
-    vim.cmd('vertical resize ' .. width)
+
+  for _,winid in ipairs(vim.fn.win_findbuf(bufnr)) do
+    vim.fn.win_execute(winid, 'vertical resize ' .. width, true)
   end
 end
 
