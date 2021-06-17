@@ -17,7 +17,7 @@ M.on_enter_aerial_buffer = function()
     local visible_buffers = vim.fn.tabpagebuflist()
     -- Quit if the source buffer is no longer visible
     if not vim.tbl_contains(visible_buffers, bufnr) then
-      vim.api.nvim_win_close(0, true)
+      vim.cmd('quit')
       return
     end
   end
@@ -49,7 +49,7 @@ M.on_buf_leave = function()
   -- and we *synchronously* close the aerial buffer, it will cause the :q
   -- command to fail (presumably because it would cause vim to 'unexpectedly'
   -- exit).
-  vim.schedule(maybe_close_aerial)
+  vim.defer_fn(maybe_close_aerial, 5)
 end
 
 M.on_buf_delete = function(bufnr)
