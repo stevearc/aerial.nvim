@@ -4,9 +4,9 @@ endif
 " Use <CR> to jump to the location, just like with the quickfix
 nnoremap <buffer> <CR> <cmd>lua require'aerial'.select()<CR>
 " Jump to location in a vertical split
-nnoremap <buffer> <C-v> <cmd>lua require'aerial'.select({vwin=2})<CR>
+nnoremap <buffer> <C-v> <cmd>lua require'aerial'.select({split='v'})<CR>
 " Jump to location in a horizontal split
-nnoremap <buffer> <C-s> <cmd>lua require'aerial'.select({vwin=2, split='belowright split'})<CR>
+nnoremap <buffer> <C-s> <cmd>lua require'aerial'.select({split='h'})<CR>
 " Use p to scroll to the location under cursor but stay in the aerial window
 nnoremap <buffer> p <cmd>lua require'aerial'.select({jump=false})<CR>
 " Hold ctrl + j/k to go up and down while scrolling to the location under cursor

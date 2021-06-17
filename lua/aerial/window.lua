@@ -108,15 +108,6 @@ M.open = function(focus, direction, opts)
   opts = vim.tbl_extend('keep', opts or {}, {
     winid = nil,
   })
-  -- We get empty strings from the vim command
-  if focus == '' then
-    focus = true
-  elseif focus == '!' then
-    focus = false
-  end
-  if direction == '' then
-    direction = nil
-  end
   if vim.tbl_isempty(vim.lsp.buf_get_clients()) then
     error("Cannot open aerial. No LSP clients")
     return

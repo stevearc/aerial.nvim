@@ -112,11 +112,6 @@ M.flash_highlight = function(bufnr, lnum, durationMs, hl_group)
   vim.defer_fn(remove_highlight, durationMs)
 end
 
-M.get_virt_winid = function(vwin, bufnr)
-  local wins = M.get_fixed_wins(bufnr)
-  return wins[math.min(vwin, #wins)]
-end
-
 M.get_fixed_wins = function(bufnr)
   local wins = {}
   for _,winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do

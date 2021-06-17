@@ -64,6 +64,7 @@ Command         | arg            | description
 `AerialClose`   |                | Close the aerial window
 `AerialPrev`    | N=1            | Jump backwards N symbols
 `AerialNext`    | N=1            | Jump forwards N symbols
+`AerialGo`      | N=1, `v`/`h`   | Jump to the Nth symbol
 
 ## Options
 

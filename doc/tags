@@ -1,4 +1,5 @@
 :AerialClose	aerial.txt	/*:AerialClose*
+:AerialGo	aerial.txt	/*:AerialGo*
 :AerialNext	aerial.txt	/*:AerialNext*
 :AerialOpen	aerial.txt	/*:AerialOpen*
 :AerialPrev	aerial.txt	/*:AerialPrev*

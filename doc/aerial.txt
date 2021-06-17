@@ -33,6 +33,14 @@ COMMANDS                                                        *aerial-commands
 :[count]AerialPrev
         Jump backwards [count] symbols (default 1).
 
+                                                                      *:AerialGo*
+:[count]AerialGo[!] [split]
+        Jump to the [count] symbol (default 1). If with [!] and inside aerial
+        window, the cursor will stay in the aerial window. [split] can be 'v'
+        to open a new vertical split, or 'h' to open a horizontal split.
+        [split] can also be a raw vim command, such as 'belowright split'.
+        This command respects |switchbuf|=uselast
+
 ===============================================================================
 OPTIONS                                                          *aerial-options*
 
@@ -199,10 +207,19 @@ aerial.is_open()                                               *aerial.is_open()
     Returns true if the aerial window is open for the current buffer.
 
 aerial.select([{opts}])                                         *aerial.select()*
-    TODO
+    Jump to a specific symbol. {opts} is a table with the following optional
+    keys:
+        index    The symbol to jump to. If nil, will jump to the symbol under
+                 the cursor (in the aerial buffer)
+        split    Jump to the symbol in a new split. Can be 'v' for vertical or
+                 'h' for horizontal. Can also be a raw command to execute (e.g.
+                 'belowright split')
+        jump     If `false` and in the aerial window, do not leave the aerial
+                 window. Default `true`.
 
-aerial.next({step}, [{opts}])                                     *aerial.next()*
-    TODO
+aerial.next([{step}])                                             *aerial.next()*
+    Jump forwards or backwards {step} symbols (default 1). Use negative values
+    to jump backwards.
 
 aerial.tree_cmd({action}, [{opts}])                           *aerial.tree_cmd()*
     TODO

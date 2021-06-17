@@ -6,10 +6,20 @@ command! -bang -complete=customlist,<sid>OpenDirection -nargs=? AerialOpen
 command! AerialClose lua require'aerial'.close()
 command! -count=1 AerialNext call luaeval("require'aerial'.next(tonumber(_A))", expand('<count>'))
 command! -count=1 AerialPrev call luaeval("require'aerial'.next(-1*tonumber(_A))", expand('<count>'))
+command! -bang -count=1 -nargs=? AerialGo call <sid>AerialGo(<q-bang>, <count>, <q-args>)
 
 function! s:OpenDirection(ArgLead, CmdLine, CursorPos)
   let l:opts = ['right', 'left']
   return filter(l:opts, 'v:val =~ "^'. a:ArgLead .'"')
+endfunction
+
+function! s:AerialGo(bang, count, split) abort
+  let l:args = {
+        \ 'jump': a:bang == '' ? v:true : v:false,
+        \ 'index': a:count,
+        \ 'split': a:split,
+        \}
+  call luaeval("require'aerial'.select(_A)", args)
 endfunction
 
 " The line that shows where your cursor(s) are

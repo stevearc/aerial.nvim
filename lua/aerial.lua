@@ -16,6 +16,15 @@ M.close = function()
 end
 
 M.open = function(focus, direction)
+  -- We get empty strings from the vim command
+  if focus == '' then
+    focus = true
+  elseif focus == '!' then
+    focus = false
+  end
+  if direction == '' then
+    direction = nil
+  end
   window.open(focus, direction)
 end
 
@@ -24,6 +33,15 @@ M.focus = function()
 end
 
 M.toggle = function(focus, direction)
+  -- We get empty strings from the vim command
+  if focus == '' then
+    focus = true
+  elseif focus == '!' then
+    focus = false
+  end
+  if direction == '' then
+    direction = nil
+  end
   return window.toggle(focus, direction)
 end
 
@@ -31,8 +49,8 @@ M.select = function(opts)
   nav.select(opts)
 end
 
-M.next = function(step, opts)
-  nav.next(step, opts)
+M.next = function(step)
+  nav.next(step)
 end
 
 M.on_attach = function(client, opts)
@@ -112,16 +130,14 @@ end
 -- @deprecated. Use select()
 M.jump_to_loc = function(virt_winnr, split_cmd)
   nav.select{
-    vwin = virt_winnr,
-    split = split_cmd,
+    split = virt_winnr > 1 and split_cmd or nil,
   }
 end
 
 -- @deprecated. Use select()
 M.scroll_to_loc = function(virt_winnr, split_cmd)
   nav.select{
-    vwin = virt_winnr,
-    split = split_cmd,
+    split = virt_winnr > 1 and split_cmd or nil,
     jump = false,
   }
 end
