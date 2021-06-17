@@ -16,12 +16,13 @@ aerial.open()	aerial.txt	/*aerial.open()*
 aerial.prev_item()	aerial.txt	/*aerial.prev_item()*
 aerial.scroll_to_loc()	aerial.txt	/*aerial.scroll_to_loc()*
 aerial.set_filter_kind()	aerial.txt	/*aerial.set_filter_kind()*
-aerial.set_kind_abbr()	aerial.txt	/*aerial.set_kind_abbr()*
+aerial.set_icon()	aerial.txt	/*aerial.set_icon()*
 aerial.set_open_automatic()	aerial.txt	/*aerial.set_open_automatic()*
 aerial.skip_item()	aerial.txt	/*aerial.skip_item()*
 aerial.toggle()	aerial.txt	/*aerial.toggle()*
 aerial.txt	aerial.txt	/*aerial.txt*
 g:aerial_automatic_direction	aerial.txt	/*g:aerial_automatic_direction*
+g:aerial_default_bindings	aerial.txt	/*g:aerial_default_bindings*
 g:aerial_diagnostics_trigger_update	aerial.txt	/*g:aerial_diagnostics_trigger_update*
 g:aerial_highlight_mode	aerial.txt	/*g:aerial_highlight_mode*
 g:aerial_highlight_on_jump	aerial.txt	/*g:aerial_highlight_on_jump*

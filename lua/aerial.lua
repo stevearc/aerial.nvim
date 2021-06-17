@@ -1,6 +1,8 @@
 local callbacks = require 'aerial.callbacks'
 local config = require 'aerial.config'
+local data = require 'aerial.data'
 local nav = require 'aerial.navigation'
+local render = require 'aerial.render'
 local window = require 'aerial.window'
 
 local M = {}
@@ -73,16 +75,29 @@ M.on_attach = function(client, opts)
   end
 end
 
-M.set_open_automatic = function(ft_or_mapping, bool)
-  if type(ft_or_mapping) == 'table' then
-    config.open_automatic = ft_or_mapping
-  else
-    config.open_automatic[ft_or_mapping] = bool
+M.tree_cmd = function(action, opts)
+  local did_update, row = data[0]:action(action, opts)
+  if did_update then
+    render.update_aerial_buffer()
+    nav.update_all_positions()
+    print(row)
+    if row then
+      vim.api.nvim_win_set_cursor(0, {row, 0})
+    end
   end
 end
 
+M.set_open_automatic = function(ft_or_mapping, bool)
+  config.set_open_automatic(ft_or_mapping, bool)
+end
+
+-- @deprecated. use set_icon() instead
 M.set_kind_abbr = function(kind_or_mapping, abbr)
-  config.set_kind_abbr(kind_or_mapping, abbr)
+  config.set_icon(kind_or_mapping, abbr)
+end
+
+M.set_icon = function(kind_or_mapping, icon)
+  config.set_icon(kind_or_mapping, icon)
 end
 
 M.set_filter_kind = function(list)

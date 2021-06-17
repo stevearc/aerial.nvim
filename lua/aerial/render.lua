@@ -4,8 +4,8 @@ local config = require 'aerial.config'
 local M = {}
 
 -- Update the aerial buffer from cached symbols
-M.update_aerial_buffer = function(bufnr)
-  local aer_bufnr = util.get_aerial_buffer(bufnr)
+M.update_aerial_buffer = function(buf)
+  local bufnr, aer_bufnr = util.get_buffers(buf)
   if aer_bufnr == -1 then
     return
   end
@@ -16,8 +16,8 @@ M.update_aerial_buffer = function(bufnr)
   local max_len = 1
   local lines = {}
   local highlights = {}
-  data[bufnr]:visit(function(item)
-    local kind = config.get_kind_abbr(item.kind)
+  data[bufnr]:visit(function(item, conf)
+    local kind = config.get_icon(item.kind, conf.collapsed)
     local spacing = string.rep('  ', item.level)
     local text = string.format("%s%s %s", spacing, kind, item.name)
     local strlen = string.len(text)
@@ -64,8 +64,9 @@ M.update_aerial_buffer = function(bufnr)
 end
 
 -- Update the highlighted lines in the aerial buffer
-M.update_highlights = function(bufnr)
-  if not data:has_symbols(bufnr) then
+M.update_highlights = function(buf)
+  local bufnr, aer_bufnr = util.get_buffers(buf)
+  if not data:has_symbols(bufnr) or aer_bufnr == -1 then
     return
   end
   local winids = {}
@@ -82,10 +83,6 @@ M.update_highlights = function(bufnr)
     return vim.fn.win_id2win(a) < vim.fn.win_id2win(b)
   end)
   local ns = vim.api.nvim_create_namespace('aerial-line')
-  local aer_bufnr = util.get_aerial_buffer(bufnr)
-  if aer_bufnr == -1 then
-    return
-  end
   vim.api.nvim_buf_clear_namespace(aer_bufnr, ns, 0, -1)
   local hl_width = math.floor(util.get_width(aer_bufnr) / win_count)
   local hl_mode = config.get_highlight_mode()

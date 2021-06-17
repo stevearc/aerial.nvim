@@ -46,20 +46,6 @@ end
 M._create_aerial_buffer = function(bufnr)
   local aer_bufnr = vim.api.nvim_create_buf(false, true)
 
-  -- Set up default mappings
-  local mapper = function(mode, key, result)
-    vim.api.nvim_buf_set_keymap(aer_bufnr, mode, key, result, {noremap = true, silent = true})
-  end
-  mapper('n', '<CR>', "<cmd>lua require'aerial'.jump_to_loc()<CR>zvzz")
-  mapper('n', '<C-v>', "<cmd>lua require'aerial'.jump_to_loc(2)<CR>zvzz")
-  mapper('n', '<C-s>', "<cmd>lua require'aerial'.jump_to_loc(2, 'belowright split')<CR>zvzz")
-  mapper('n', '<C-j>', "j<cmd>lua require'aerial'.scroll_to_loc()<CR>")
-  mapper('n', '<C-k>', "k<cmd>lua require'aerial'.scroll_to_loc()<CR>")
-  mapper('n', ']]', "<cmd>lua require'aerial'.next_item()<CR>")
-  mapper('n', '[[', "<cmd>lua require'aerial'.prev_item()<CR>")
-  mapper('n', 'p', "<cmd>lua require'aerial'.scroll_to_loc()<CR>")
-  mapper('n', 'q', '<cmd>lua require"aerial".close()<CR>')
-
   vim.api.nvim_set_current_buf(aer_bufnr)
   -- Set buffer options
   vim.api.nvim_buf_set_lines(aer_bufnr, 0, -1, false, {"Loading..."})

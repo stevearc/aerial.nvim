@@ -59,3 +59,6 @@ require'lspconfig'.vimls.setup{
 
 A full list of commands and options can be found [in the
 docs](https://github.com/stevearc/aerial.nvim/blob/master/doc/aerial.txt)
+
+The default keybindings in the aerial window are [in the
+ftplugin](https://github.com/stevearc/aerial.nvim/blob/master/ftplugin/aerial.vim)

@@ -12,7 +12,7 @@ local function get_symbol_kind_name(kind_number)
 end
 
 local function process_symbols(symbols)
-  local function _process_symbols(_symbols, list, level)
+  local function _process_symbols(_symbols, parent, list, level)
     for _, symbol in ipairs(_symbols) do
       local kind = get_symbol_kind_name(symbol.kind)
       local range
@@ -28,15 +28,16 @@ local function process_symbols(symbols)
           kind = kind,
           name = symbol.name,
           level = level,
+          parent = parent,
           lnum = range.start.line + 1,
           col = range.start.character + 1,
         }
         if symbol.children then
-          item.children = _process_symbols(symbol.children, {}, level + 1)
+          item.children = _process_symbols(symbol.children, item, {}, level + 1)
         end
         table.insert(list, item)
       elseif symbol.children then
-        _process_symbols(symbol.children, list, level)
+        _process_symbols(symbol.children, parent, list, level)
       end
     end
     table.sort(list, function(a, b)
@@ -49,7 +50,7 @@ local function process_symbols(symbols)
     return list
   end
 
-  return _process_symbols(symbols, {}, 0)
+  return _process_symbols(symbols, nil, {}, 0)
 end
 
 M.symbol_callback = function(_, _, result, _, bufnr)

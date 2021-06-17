@@ -1,7 +1,7 @@
 local M = {}
 local has_devicons = pcall(require, 'nvim-web-devicons')
 
-M.open_automatic = {
+local open_automatic = {
   ['_'] = false,
 }
 
@@ -15,9 +15,9 @@ M.filter_kind = {
   Struct      = true,
 }
 
-local _kind_abbr = nil
+local icons = nil
 
-local default_abbr = {
+local plain_icons = {
   Array         = '[arr]';
   Boolean       = '[bool]';
   Class         = '[C]';
@@ -44,9 +44,10 @@ local default_abbr = {
   Struct        = '[S]';
   TypeParameter = '[T]';
   Variable      = '[V]';
+  Collapsed     = '▶';
 }
 
-local icons_abbr = {
+local nerd_icons = {
   Class         = '';
   Constructor   = '';
   Enum          = '';
@@ -54,6 +55,7 @@ local icons_abbr = {
   Interface     = '';
   Method        = '';
   Struct        = '';
+  Collapsed     = '';
 }
 
 M.get_highlight_on_jump = function()
@@ -66,13 +68,18 @@ M.get_update_when_errors = function()
   if val == nil then return true else return val end
 end
 
+M.set_open_automatic = function(ft_or_mapping, bool)
+  if type(ft_or_mapping) == 'table' then
+    open_automatic = ft_or_mapping
+  else
+    open_automatic[ft_or_mapping] = bool
+  end
+end
+
 M.get_open_automatic = function(bufnr)
   local ft = vim.api.nvim_buf_get_option(bufnr or 0, 'filetype')
-  local ret = M.open_automatic[ft]
-  if ret == nil then
-    return M.open_automatic['_']
-  end
-  return ret
+  local ret = open_automatic[ft]
+  return ret == nil and open_automatic['_'] or ret
 end
 
 M.get_open_automatic_min_lines = function()
@@ -120,29 +127,33 @@ M.get_use_icons = function()
   if use_icons == nil then return has_devicons else return use_icons end
 end
 
-local function get_kind_abbr()
-  if not _kind_abbr then
+local function get_icons()
+  if not icons then
     if M.get_use_icons() then
-      _kind_abbr = vim.tbl_extend('keep', icons_abbr, default_abbr)
+      icons = vim.tbl_extend('keep', nerd_icons, plain_icons)
     else
-      _kind_abbr = default_abbr
+      icons = plain_icons
     end
   end
-  return _kind_abbr
+  return icons
 end
 
-M.set_kind_abbr = function(kind_or_mapping, abbr)
+M.set_icon = function(kind_or_mapping, icon)
   if type(kind_or_mapping) == 'table' then
-    _kind_abbr = vim.tbl_extend('keep', kind_or_mapping, get_kind_abbr())
+    icons = vim.tbl_extend('keep', kind_or_mapping, get_icons())
   else
-    local kind_abbr = get_kind_abbr()
-    kind_abbr[kind_or_mapping] = abbr
-    _kind_abbr = kind_abbr
+    get_icons()[kind_or_mapping] = icon
   end
 end
 
-M.get_kind_abbr = function(kind)
-  local abbr = get_kind_abbr()[kind]
+M.get_icon = function(kind, collapsed)
+  local abbrs = get_icons()
+  local abbr
+  if collapsed then
+    abbr = abbrs[kind .. 'Collapsed'] or abbrs['Collapsed']
+  else
+    abbr = abbrs[kind]
+  end
   return abbr and abbr or kind
 end
 

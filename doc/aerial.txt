@@ -39,19 +39,7 @@ This is a minimal configuration to get you started:
     }
 
 The aerial window itself has some sane default bindings, however you can easily
-override them. The easiest way to is to use a ftplugin. For example, you can
-create a file `.vim/ftplugin/aerial.vim`:
->
-    " These are the default bindings.
-    nnoremap <buffer> <CR> <cmd>lua require'aerial'.jump_to_loc()<CR>zvzz
-    nnoremap <buffer> <C-v> <cmd>lua require'aerial'.jump_to_loc(2)<CR>zvzz
-    nnoremap <buffer> <C-s> <cmd>lua require'aerial'.jump_to_loc(2, 'belowright split')<CR>zvzz
-    nnoremap <buffer> <C-j> j<cmd>lua require'aerial'.scroll_to_loc()<CR>
-    nnoremap <buffer> <C-k> k<cmd>lua require'aerial'.scroll_to_loc()<CR>
-    nnoremap <buffer> [[ <cmd>lua require'aerial'.prev_item()<CR>
-    nnoremap <buffer> ]] <cmd>lua require'aerial'.next_item()<CR>
-    nnoremap <buffer> p <cmd>lua require'aerial'.scroll_to_loc()<CR>
-    nnoremap <buffer> q <cmd>lua require"aerial".close()<CR>
+override them. The easiest way to is to use a ftplugin (e.g. `.vim/ftplugin/aerial.vim`). You can find the default bindings in this plugin's `ftplugin` dir.
 
 By default, the symbols information in the buffer should stay updated, but if
 you'd like to tweak the behavior see |g:aerial_diagnostics_trigger_update| and
@@ -114,6 +102,8 @@ aerial.skip_item({delta})                                    *aerial.skip_item()
 ===============================================================================
 OPTIONS                                                          *aerial-options*
 
+g:aerial_default_bindings                             *g:aerial_default_bindings*
+    If false, don't set up the default keybindings in the aerial buffer.
 
 g:aerial_min_width                                           *g:aerial_min_width*
     The minimum width of the aerial window. Default 10.
@@ -177,17 +167,26 @@ g:aerial_use_icons                                           *g:aerial_use_icons
     https://www.nerdfonts.com/). Will try to smart default by looking for
     `nvim-web-devicons` (https://github.com/kyazdani42/nvim-web-devicons).
 
-aerial.set_kind_abbr({kind}, {abbr})                     *aerial.set_kind_abbr()*
-aerial.set_kind_abbr({mapping})
-    Use these abbreviations for the SymbolKind of the items.
+aerial.set_icon({kind}, {icon})                               *aerial.set_icon()*
+aerial.set_icon({mapping})
+    Configures the icons for each of the symbols.
     See https://microsoft.github.io/language-server-protocol/specification#textDocument_documentSymbol
     for a complete list of the possible SymbolKind values.
->
-    aerial.set_kind_abbr('Function', '[F]')
-    aerial.set_kind_abbr{
-      Function = '[F]',
-      Method = '[M]',
-    }
+
+        aerial.set_icon('Function', '[F]')
+        aerial.set_icon{
+          Function = '[F]',
+          Method = '[M]',
+        }
+
+    You can set a different value to display when the line is collapsed
+
+        aerial.set_icon('FunctionCollapsed', '-F-')
+
+    The special value of `Collapsed` will be used as the default for any
+    collapsed symbols that have not been defined
+
+        aerial.set_icon('Collapsed', '---')
 
 aerial.set_filter_kind({kinds})                        *aerial.set_filter_kind()*
     Only display these SymbolKind symbols in the aerial buffer. {kinds} is a

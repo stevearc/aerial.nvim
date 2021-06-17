@@ -51,6 +51,17 @@ M.get_aerial_buffer = function(bufnr)
   return M.get_buffer_from_var(bufnr or 0, 'aerial_buffer')
 end
 
+M.get_buffers = function(bufnr)
+  if bufnr == nil or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  if M.is_aerial_buffer(bufnr) then
+    return M.get_source_buffer(bufnr), bufnr
+  else
+    return bufnr, M.get_aerial_buffer(bufnr)
+  end
+end
+
 M.get_source_buffer = function(bufnr)
   return M.get_buffer_from_var(bufnr or 0, 'source_buffer')
 end

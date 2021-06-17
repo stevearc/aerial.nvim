@@ -5,7 +5,7 @@ local render = require 'aerial.render'
 
 local M = {}
 
-M._get_virt_winid = function(bufnr, virt_winnr)
+local function _get_virt_winid(bufnr, virt_winnr)
   local vwin = 1
   for i=1,vim.fn.winnr('$'),1 do
     if vim.fn.winbufnr(i) == bufnr then
@@ -19,25 +19,8 @@ M._get_virt_winid = function(bufnr, virt_winnr)
   return -1
 end
 
-M._get_current_lnum = function()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local lnum = vim.fn.getcurpos()[2]
-  if util.is_aerial_buffer(bufnr) then
-    bufnr = util.get_source_buffer()
-    local winid = M._get_virt_winid(bufnr, 1)
-    if winid == -1 then
-      return nil
-    end
-    local bufdata = data[bufnr]
-    local cached_lnum = bufdata.positions[winid]
-    return cached_lnum == nil and nil or {
-      ['lnum'] = cached_lnum,
-      ['relative'] = 'exact',
-    }
-  end
-  if not data:has_symbols(bufnr) then
-    return nil
-  end
+local function _get_pos_in_win(bufnr, winid)
+  local lnum = vim.api.nvim_win_get_cursor(winid or 0)[1]
   local bufdata = data[bufnr]
   local selected = 0
   local relative = 'above'
@@ -57,13 +40,51 @@ M._get_current_lnum = function()
   }
 end
 
+local function _get_current_lnum()
+  local bufnr = vim.api.nvim_get_current_buf()
+  if util.is_aerial_buffer(bufnr) then
+    bufnr = util.get_source_buffer()
+    local winid = _get_virt_winid(bufnr, 1)
+    if winid == -1 then
+      return nil
+    end
+    local bufdata = data[bufnr]
+    local cached_lnum = bufdata.positions[winid]
+    return cached_lnum == nil and nil or {
+      ['lnum'] = cached_lnum,
+      ['relative'] = 'exact',
+    }
+  end
+  if data:has_symbols(bufnr) then
+    return _get_pos_in_win(bufnr)
+  else
+    return nil
+  end
+end
+
+M.update_all_positions = function()
+  local bufnr, _ = util.get_buffers()
+  local bufdata = data[bufnr]
+  local tabwins = {}
+  for _,winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    tabwins[winid] = true
+  end
+  for _,winid in ipairs(vim.fn.win_findbuf(bufnr)) do
+    if tabwins[winid] then
+      local pos = _get_pos_in_win(bufnr, winid)
+      bufdata.positions[winid] = pos.lnum
+      bufdata.last_position = pos.lnum
+    end
+  end
+  render.update_highlights(bufnr)
+end
+
 M._update_position = function()
-  local pos = M._get_current_lnum()
+  local pos = _get_current_lnum()
   if pos == nil then
     return
   end
-  local bufnr = vim.api.nvim_get_current_buf()
-  local aer_bufnr = util.get_aerial_buffer(bufnr)
+  local bufnr, aer_bufnr = util.get_buffers()
   local mywin = vim.api.nvim_get_current_win()
   local bufdata = data[bufnr]
   bufdata.positions[mywin] = pos.lnum
@@ -88,7 +109,7 @@ M._jump_to_loc = function(item_no, virt_winnr, split_cmd)
     return
   end
   bufnr = util.get_source_buffer()
-  local winid = M._get_virt_winid(bufnr, virt_winnr)
+  local winid = _get_virt_winid(bufnr, virt_winnr)
   if winid == -1 then
     -- Create a new split for the source window
     winid = vim.fn.bufwinid(bufnr)
@@ -123,16 +144,11 @@ M.scroll_to_loc = function(virt_winnr, split_cmd)
 end
 
 M.skip_item = function(delta)
-  local pos = M._get_current_lnum()
+  local pos = _get_current_lnum()
   if pos == nil then
     return
   end
-  local bufnr
-  if util.is_aerial_buffer(bufnr) then
-    bufnr = util.get_source_buffer()
-  else
-    bufnr = vim.api.nvim_get_current_buf()
-  end
+  local bufnr, _ = util.get_buffers()
 
   local count = data[bufnr]:count()
   local new_num = pos.lnum + delta
