@@ -53,6 +53,19 @@ local function process_symbols(symbols)
   return _process_symbols(symbols, nil, {}, 0)
 end
 
+local function handle_symbols(result, bufnr)
+  local had_symbols = data:has_symbols(bufnr)
+  local items = process_symbols(result)
+  data[bufnr].items = items
+
+  render.update_aerial_buffer(bufnr)
+  window.update_all_positions(bufnr)
+  if not had_symbols and bufnr == vim.api.nvim_get_current_buf() then
+    window.maybe_open_automatic()
+  end
+end
+
+local results = {}
 M.symbol_callback = function(_, _, result, _, bufnr)
   if not result or vim.tbl_isempty(result) then return end
   -- Don't update if there are diagnostics errors (or override by setting)
@@ -62,11 +75,15 @@ M.symbol_callback = function(_, _, result, _, bufnr)
     return
   end
 
-  local items = process_symbols(result)
-  data[bufnr].items = items
-
-  render.update_aerial_buffer(bufnr)
-  window.update_all_positions(bufnr)
+  -- Debounce this callback to avoid unnecessary re-rendering
+  if results[bufnr] == nil then
+    vim.defer_fn(function()
+      local r = results[bufnr]
+      results[bufnr] = nil
+      handle_symbols(r, bufnr)
+    end, 100)
+  end
+  results[bufnr] = result
 end
 
 return M
