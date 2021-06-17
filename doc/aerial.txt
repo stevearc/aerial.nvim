@@ -215,14 +215,26 @@ aerial.select([{opts}])                                         *aerial.select()
                  'h' for horizontal. Can also be a raw command to execute (e.g.
                  'belowright split')
         jump     If `false` and in the aerial window, do not leave the aerial
-                 window. Default `true`.
+                 window. (Default `true`)
 
 aerial.next([{step}])                                             *aerial.next()*
     Jump forwards or backwards {step} symbols (default 1). Use negative values
     to jump backwards.
 
 aerial.tree_cmd({action}, [{opts}])                           *aerial.tree_cmd()*
-    TODO
+    Perform an action on the symbol tree {action} can be one of the following
+    values:
+
+        open     Open the tree at the selected location
+        close    Collapse the tree at the selected location
+        toggle   Toggle the collapsed state at the selected location
+
+    {opts} can be a table with the following optional keys:
+
+        recurse  If `true`, perform the action recursively on all children
+                 (default `false`)
+        bubble   If `true` and current symbol has no children, perform the
+                 action on the nearest parent (default `true`)
 
 ===============================================================================
 vim:ft=help:et:ts=2:sw=2:sts=2:norl
