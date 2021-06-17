@@ -87,8 +87,7 @@ M.tree_cmd = function(action, opts)
   local did_update, row = data[0]:action(action, opts)
   if did_update then
     render.update_aerial_buffer()
-    nav.update_all_positions()
-    print(row)
+    window.update_all_positions()
     if row then
       vim.api.nvim_win_set_cursor(0, {row, 0})
     end
