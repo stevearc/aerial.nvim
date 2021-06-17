@@ -93,7 +93,7 @@ M.maybe_open_automatic = function()
   if data[0]:count() < config.open_automatic_min_symbols then
     return false
   end
-  if vim.fn.line('$') < config.open_automatic_min_lines then
+  if vim.api.nvim_buf_line_count(0) < config.open_automatic_min_lines then
     return false
   end
   M.open(false)
@@ -124,7 +124,7 @@ M.open = function(focus, direction)
   end
   direction = direction or util.detect_split_direction()
   local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction)
-  if data.items_by_buf[bufnr] == nil then
+  if not data:has_symbols(bufnr) then
     vim.lsp.buf.document_symbol()
   end
   local my_winid = vim.api.nvim_get_current_win()
