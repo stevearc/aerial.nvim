@@ -1,7 +1,8 @@
 # aerial.nvim
 A code outline window for skimming and quick navigation
 
-![Demo image](https://user-images.githubusercontent.com/506791/94113785-46d26180-fdfc-11ea-84e5-0d8e5a9b3e8d.gif)
+![Screenshot from 2021-06-16 19-05-43](https://user-images.githubusercontent.com/506791/122320750-9cddbc80-ced7-11eb-937e-90eed107f94e.png)
+![Screenshot from 2021-06-16 19-17-00](https://user-images.githubusercontent.com/506791/122320760-9ea78000-ced7-11eb-8982-3d051992e91f.png)
 
 ## Requirements
 Neovim 0.5 (nightly)
@@ -37,16 +38,13 @@ local custom_attach = function(client)
   aerial.on_attach(client)
 
   -- Aerial does not set any mappings by default, so you'll want to set some up
-  local mapper = function(mode, key, result)
-    vim.api.nvim_buf_set_keymap(0, mode, key, result, {noremap = true, silent = true})
-  end
   -- Toggle the aerial window with <leader>a
-  mapper('n', '<leader>a', '<cmd>lua require"aerial".toggle()<CR>')
+  vim.api.nvim_buf_set_keymap(0, 'n', '<leader>a', '<cmd>lua require"aerial".toggle()<CR>', {})
   -- Jump forwards/backwards with '[[' and ']]'
-  mapper('n', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz')
-  mapper('v', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz')
-  mapper('n', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz')
-  mapper('v', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz')
+  vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz', {})
+  vim.api.nvim_buf_set_keymap(0, 'v', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz', {})
+  vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz', {})
+  vim.api.nvim_buf_set_keymap(0, 'v', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz', {})
 
   -- This is a great place to set up all your other LSP mappings
 end

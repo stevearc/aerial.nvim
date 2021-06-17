@@ -19,16 +19,13 @@ This is a minimal configuration to get you started:
       aerial.on_attach(client)
 
       -- Aerial does not set any mappings by default, so you'll want to set some up
-      local mapper = function(mode, key, result)
-        vim.api.nvim_buf_set_keymap(0, mode, key, result, {noremap = true, silent = true})
-      end
       -- Toggle the aerial window with <leader>a
-      mapper('n', '<leader>a', '<cmd>lua require"aerial".toggle()<CR>')
+      vim.api.nvim_buf_set_keymap(0, 'n', '<leader>a', '<cmd>lua require"aerial".toggle()<CR>', {})
       -- Jump forwards/backwards with '[[' and ']]'
-      mapper('n', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz')
-      mapper('v', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz')
-      mapper('n', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz')
-      mapper('v', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz')
+      vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz', {})
+      vim.api.nvim_buf_set_keymap(0, 'v', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz', {})
+      vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz', {})
+      vim.api.nvim_buf_set_keymap(0, 'v', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz', {})
 
       -- This is a great place to set up all your other LSP mappings
     end
@@ -39,7 +36,9 @@ This is a minimal configuration to get you started:
     }
 
 The aerial window itself has some sane default bindings, however you can easily
-override them. The easiest way to is to use a ftplugin (e.g. `.vim/ftplugin/aerial.vim`). You can find the default bindings in this plugin's `ftplugin` dir.
+override them. The easiest way to is to use a ftplugin (e.g.
+`.vim/ftplugin/aerial.vim`). You can find the default bindings in this
+plugin's `ftplugin` dir.
 
 By default, the symbols information in the buffer should stay updated, but if
 you'd like to tweak the behavior see |g:aerial_diagnostics_trigger_update| and
