@@ -77,20 +77,42 @@ M.flash_highlight = function(bufnr, lnum, hl_group, durationMs)
   vim.defer_fn(remove_highlight, durationMs)
 end
 
+M.get_fixed_wins = function()
+  local wins = {}
+  for _,winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if not M.is_floating_win(winid) then
+      table.insert(wins, winid)
+    end
+  end
+  return wins
+end
+
+M.is_floating_win = function(winid)
+  return vim.api.nvim_win_get_config(winid).relative ~= ""
+end
+
 M.detect_split_direction = function()
   local bufnr = vim.api.nvim_get_current_buf()
-  -- If we are the first window default to left side
-  if vim.fn.winbufnr(1) == bufnr then
-    return '<'
+  local wins = M.get_fixed_wins()
+  local first_window = vim.fn.winbufnr(wins[1]) == bufnr
+  local last_window = vim.fn.winbufnr(wins[#wins]) == bufnr
+  local default = config.get_default_direction()
+
+  if default == 'left' then
+    if first_window then
+      return 'left'
+    elseif last_window then
+      return 'right'
+    end
+  else
+    if last_window then
+      return 'right'
+    elseif first_window then
+      return 'left'
+    end
   end
 
-  -- If we are the last window default to right side
-  local lastwin = vim.fn.winnr('$')
-  if vim.fn.winbufnr(lastwin) == bufnr then
-    return '>'
-  end
-
-  return '<'
+  return default
 end
 
 return M

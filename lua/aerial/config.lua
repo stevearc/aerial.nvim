@@ -82,6 +82,11 @@ M.get_open_automatic = function(bufnr)
   return ret == nil and open_automatic['_'] or ret
 end
 
+M.get_default_direction = function()
+  local dir = vim.g.aerial_default_direction
+  return dir == nil and 'right' or dir
+end
+
 M.get_open_automatic_min_lines = function()
   local min_lines = vim.g.aerial_open_automatic_min_lines
   if min_lines == nil then return 0 else return min_lines end

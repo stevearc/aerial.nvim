@@ -7,14 +7,17 @@ local util = require 'aerial.util'
 local M = {}
 
 M.create_aerial_window = function(bufnr, aer_bufnr, direction)
-  if direction ~= '<' and direction ~= '>' then
-    error("Expected direction to be '<' or '>'")
+  if direction == '<' then direction = 'left' end
+  if direction == '>' then direction = 'right' end
+  if direction ~= 'left' and direction ~= 'right' then
+    error("Expected direction to be 'left' or 'right'")
+    return
   end
   local winnr
   for i=1,vim.fn.winnr('$'),1 do
     if vim.fn.winbufnr(i) == bufnr then
       winnr = i
-      if direction == '<' then
+      if direction == 'left' then
         break
       end
     end
@@ -22,13 +25,10 @@ M.create_aerial_window = function(bufnr, aer_bufnr, direction)
   if winnr ~= vim.fn.winnr() then
     vim.api.nvim_set_current_win(vim.fn.win_getid(winnr))
   end
-  if direction == '<' then
+  if direction == 'left' then
     vim.cmd('vertical leftabove split')
-  elseif direction == '>' then
-    vim.cmd('vertical rightbelow split')
   else
-    error("Unknown aerial window direction " .. direction)
-    return
+    vim.cmd('vertical rightbelow split')
   end
 
   if aer_bufnr == -1 then

@@ -62,7 +62,7 @@ aerial.on_attach({client}, [{opts}]                          *aerial.on_attach()
 aerial.open([{focus}], [{direction}])                             *aerial.open()*
     Open the aerial window for the current buffer. {focus} is a boolean that,
     if true, will also jump your cursor to the aerial buffer. {direction} can
-    be either "<" or ">", to indicate which direction of vsplit to use
+    be either "left" or "right", to indicate which direction of vsplit to use
     (default will try to autodetect which to use).
 
 aerial.close()                                                   *aerial.close()*
@@ -101,8 +101,8 @@ aerial.skip_item({delta})                                    *aerial.skip_item()
 ===============================================================================
 OPTIONS                                                          *aerial-options*
 
-g:aerial_default_bindings                             *g:aerial_default_bindings*
-    If false, don't set up the default keybindings in the aerial buffer.
+g:aerial_default_direction                           *g:aerial_default_direction*
+    The default direction to open the window. Default `right`.
 
 g:aerial_min_width                                           *g:aerial_min_width*
     The minimum width of the aerial window. Default 10.
@@ -134,6 +134,9 @@ g:aerial_highlight_mode                                 *g:aerial_highlight_mode
                       a full-width highlight in the aerial buffer.
         last          Only the most-recently focused window will have its
                       location marked in the aerial buffer.
+
+g:aerial_default_bindings                             *g:aerial_default_bindings*
+    If false, don't set up the default keybindings in the aerial buffer.
 
 aerial.set_open_automatic({filetype}, {bool})       *aerial.set_open_automatic()*
 aerial.set_open_automatic({mapping})

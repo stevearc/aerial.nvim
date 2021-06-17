@@ -8,9 +8,10 @@ local M = {}
 local function _get_virt_winid(bufnr, virt_winnr)
   local vwin = 1
   for i=1,vim.fn.winnr('$'),1 do
-    if vim.fn.winbufnr(i) == bufnr then
+    local winid = vim.fn.win_getid(i)
+    if vim.fn.winbufnr(i) == bufnr and not util.is_floating_win(winid) then
       if vwin == virt_winnr then
-        return vim.fn.win_getid(i)
+        return winid
       end
       vwin = vwin + 1
     end
