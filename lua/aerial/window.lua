@@ -60,9 +60,7 @@ local function create_aerial_window(bufnr, aer_bufnr, direction)
   vim.api.nvim_win_set_option(0, 'relativenumber', false)
   vim.api.nvim_win_set_option(0, 'wrap', false)
   local aer_winid = vim.api.nvim_get_current_win()
-  if my_winid ~= split_target then
-    vim.api.nvim_set_current_win(my_winid)
-  end
+  vim.api.nvim_set_current_win(my_winid)
   return aer_winid
 end
 
@@ -103,6 +101,15 @@ M.maybe_open_automatic = function()
 end
 
 M.open = function(focus, direction)
+  -- We get empty strings from the vim command
+  if focus == '' then
+    focus = true
+  elseif focus == '!' then
+    focus = false
+  end
+  if direction == '' then
+    direction = nil
+  end
   if vim.lsp.buf_get_clients() == 0 then
     error("Cannot open aerial. No LSP clients")
     return

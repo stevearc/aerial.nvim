@@ -39,12 +39,10 @@ local custom_attach = function(client)
 
   -- Aerial does not set any mappings by default, so you'll want to set some up
   -- Toggle the aerial window with <leader>a
-  vim.api.nvim_buf_set_keymap(0, 'n', '<leader>a', '<cmd>lua require"aerial".toggle()<CR>', {})
+  vim.api.nvim_buf_set_keymap(0, 'n', '<leader>a', '<cmd>AerialToggle!<CR>', {})
   -- Jump forwards/backwards with '[[' and ']]'
-  vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz', {})
-  vim.api.nvim_buf_set_keymap(0, 'v', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz', {})
-  vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz', {})
-  vim.api.nvim_buf_set_keymap(0, 'v', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz', {})
+  vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>AerialPrev<CR>', {})
+  vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>AerialNext<CR>', {})
 
   -- This is a great place to set up all your other LSP mappings
 end
@@ -54,6 +52,18 @@ require'lspconfig'.vimls.setup{
   on_attach = custom_attach,
 }
 ```
+
+## Commands
+
+Command         | arg            | description
+-------         | ---            | -----------
+`AerialToggle`  | `left`/`right` | Open (and enter) or close the aerial window
+`AerialToggle!` | `left`/`right` | Open or close the aerial window
+`AerialOpen`    | `left`/`right` | Open (and enter) the aerial window
+`AerialOpen!`   | `left`/`right` | Open the aerial window
+`AerialClose`   |                | Close the aerial window
+`AerialPrev`    | N=1            | Jump backwards N symbols
+`AerialNext`    | N=1            | Jump forwards N symbols
 
 ## Options
 
@@ -116,13 +126,13 @@ vim.g.aerial = {
 -- You can also override the default icons.
 vim.g.aerial = {
   icons = {
-    Class = '';
+    Class          = '';
     -- The icon to use when a class has been collapsed in the tree
     ClassCollapsed = '喇';
-    Function = '';
-    Constant = '[c]'
+    Function       = '';
+    Constant       = '[c]'
     -- The default icon to use when any symbol is collapsed in the tree
-    Collapsed = '▶';
+    Collapsed      = '▶';
   }
 }
 ```

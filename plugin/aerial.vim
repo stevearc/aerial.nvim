@@ -1,3 +1,17 @@
+
+command! -bang -complete=customlist,<sid>OpenDirection -nargs=? AerialToggle
+  \ call luaeval("require'aerial'.toggle(_A[1], _A[2])", [expand('<bang>'), expand('<args>')])
+command! -bang -complete=customlist,<sid>OpenDirection -nargs=? AerialOpen
+  \ call luaeval("require'aerial'.open(_A[1], _A[2])", [expand('<bang>'), expand('<args>')])
+command! AerialClose lua require'aerial'.close()
+command! -count=1 AerialNext call luaeval("require'aerial'.next(tonumber(_A))", expand('<count>'))
+command! -count=1 AerialPrev call luaeval("require'aerial'.next(-1*tonumber(_A))", expand('<count>'))
+
+function! s:OpenDirection(ArgLead, CmdLine, CursorPos)
+  let l:opts = ['right', 'left']
+  return filter(l:opts, 'v:val =~ "^'. a:ArgLead .'"')
+endfunction
+
 " The line that shows where your cursor(s) are
 highlight default link AerialLine QuickFixLine
 

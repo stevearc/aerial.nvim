@@ -3,82 +3,46 @@
 ===============================================================================
 CONTENTS                                                        *aerial-contents*
 
-    1. Configure.......................................|aerial-configure|
-    2. Commands........................................|aerial-commands|
-    3. Options.........................................|aerial-options|
-
-===============================================================================
-CONFIGURE                                                      *aerial-configure*
-
-This is a minimal configuration to get you started:
->
-    local aerial = require'aerial'
-
-    local custom_attach = function(client)
-      aerial.on_attach(client)
-
-      -- Aerial does not set any mappings by default, so you'll want to set some up
-      -- Toggle the aerial window with <leader>a
-      vim.api.nvim_buf_set_keymap(0, 'n', '<leader>a', '<cmd>lua require"aerial".toggle()<CR>', {})
-      -- Jump forwards/backwards with '[[' and ']]'
-      vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz', {})
-      vim.api.nvim_buf_set_keymap(0, 'v', '[[', '<cmd>lua require"aerial".prev_item()<CR>zvzz', {})
-      vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz', {})
-      vim.api.nvim_buf_set_keymap(0, 'v', ']]', '<cmd>lua require"aerial".next_item()<CR>zvzz', {})
-
-      -- This is a great place to set up all your other LSP mappings
-    end
-
-    -- Set up your LSP clients here, using the custom on_attach method
-    require'nvim_lsp'.vimls.setup{
-      on_attach = custom_attach,
-    }
-
-The aerial window itself has some sane default bindings, however you can easily
-override them. The easiest way to is to use a ftplugin (e.g.
-`.vim/ftplugin/aerial.vim`). You can find the default bindings in this
-plugin's `ftplugin` dir.
-
-By default, the symbols information in the buffer should stay updated, but if
-you'd like to tweak the behavior see |g:aerial_diagnostics_trigger_update| and
-you can manually call |vim.lsp.buf.document_symbol()|.
-
-As a side note you will probably want to 'set sessionoptions-=blank' to avoid
-storing aerial buffers (and other scratch buffers) when you call `:mksession`.
-See 'sessionoptions' for more info
+    1. Commands........................................|aerial-commands|
+    2. Options.........................................|aerial-options|
+    3. Functions.......................................|aerial-functions|
 
 ===============================================================================
 COMMANDS                                                        *aerial-commands*
 
-aerial.on_attach({client}, [{opts}]                          *aerial.on_attach()*
-    This must be called in the on_attach of your LSP client configuration. The
-    {opts} dictionary can contain the following entries:
+                                                                  *:AerialToggle*
+:AerialToggle[!] [direction]
+        Open or close the aerial window. [direction] can be either `left` or
+        `right`. If without [!] the cursor will jump to the aerial window if
+        it was opened.
 
-        preserve_callback    boolean. If true, will add to the
-                             textDocument/documentSymbol callback instead of
-                             replacing it.
+                                                                    *:AerialOpen*
+:AerialOpen[!] [direction]
+        Open the aerial window. [direction] can be either `left` or `right`.
+        If without [!] the cursor will jump to the aerial window.
 
-aerial.open([{focus}], [{direction}])                             *aerial.open()*
-    Open the aerial window for the current buffer. {focus} is a boolean that,
-    if true, will also jump your cursor to the aerial buffer. {direction} can
-    be either "left" or "right", to indicate which direction of vsplit to use
-    (default will try to autodetect which to use).
+                                                                   *:AerialClose*
+:AerialClose
+        Close the aerial window.
 
-aerial.close()                                                   *aerial.close()*
-    Close the aerial window for the current buffer.
+                                                                    *:AerialNext*
+:[count]AerialNext
+        Jump forwards [count] symbols (default 1).
 
-aerial.toggle([{focus}], [{direction}])                         *aerial.toggle()*
-    Same as |aerial.open()|, but will close the window if it is already open.
-
-aerial.focus()                                                   *aerial.focus()*
-    Jump to the aerial window for the current buffer if it exists.
-
-aerial.is_open()                                               *aerial.is_open()*
-    Returns true if the aerial window is open for the current buffer.
-
+                                                                    *:AerialPrev*
+:[count]AerialPrev
+        Jump backwards [count] symbols (default 1).
 
 ===============================================================================
 OPTIONS                                                          *aerial-options*
+
+Note that the options can be specified individually as listed below, or in a
+single dict. If using a single dict, remove the "aerial_" prefix.
+>
+    let g:aerial = {
+        \ 'default_direction': 'left',
+        \ 'min_width': 20,
+    \}
 
 g:aerial_default_direction                           *g:aerial_default_direction*
     The default direction to open the window. Valid values are:
@@ -89,24 +53,9 @@ g:aerial_default_direction                           *g:aerial_default_direction
         prefer_right  Open to the right unless there are other windows right
                       and none to the left (default)
 
-g:aerial_min_width                                           *g:aerial_min_width*
-    The minimum width of the aerial window. Default 10.
-
-g:aerial_max_width                                           *g:aerial_max_width*
-    The maximum width of the aerial window. Default 40. If you want to disable
-    the dynamic resizing of the aerial window, set this to the same value as
-    |g:aerial_min_width|.
-
-g:aerial_update_when_errors                         *g:aerial_update_when_errors*
-    Update the aerial buffer even when your file has errors. Default true.
-
 g:aerial_diagnostics_trigger_update         *g:aerial_diagnostics_trigger_update*
     Call |vim.lsp.buf.document_symbol()| to update symbols whenenever the LSP
     client receives diagnostics. Default `true`.
-
-g:aerial_highlight_on_jump                           *g:aerial_highlight_on_jump*
-    Briefly highlight the line jumped from |aerial.jump_to_loc()|. Default
-    true.
 
 g:aerial_highlight_mode                                 *g:aerial_highlight_mode*
     Valid values are "split_width", "full_width" or "last".
@@ -120,42 +69,135 @@ g:aerial_highlight_mode                                 *g:aerial_highlight_mode
         last          Only the most-recently focused window will have its
                       location marked in the aerial buffer.
 
-g:aerial_default_bindings                             *g:aerial_default_bindings*
-    If false, don't set up the default keybindings in the aerial buffer.
+g:aerial_highlight_on_jump                           *g:aerial_highlight_on_jump*
+    Briefly highlight the line jumped from |aerial.jump_to_loc()|. This value
+    is the number of milliseconds the highlight remains active for (default
+    300). It can also be set to `v:true` for the default, or `v:false` to
+    disable the highlight.
+
+g:aerial_max_width                                           *g:aerial_max_width*
+    The maximum width of the aerial window. Default 40.
+
+g:aerial_min_width                                           *g:aerial_min_width*
+    The minimum width of the aerial window. Default 10. If you want to disable
+    the dynamic resizing of the aerial window, set this to the same value as
+    |g:aerial_man_width|.
+
+g:aerial_nerd_font                                           *g:aerial_nerd_font*
+    If true the default icons will use Nerd Font icons. Valid values are:
+        `true`    Use Nerd Font icons
+        `false`   Do not use Nerd Font icons
+        'auto'  Use Nerd Font icons if nvim-web-devicons is installed (default)
+
+g:aerial_open_automatic                                 *g:aerial_open_automatic*
+    If `true`, open aerial automatically when entering a new buffer. This can
+    be a boolean or a |dict| mapping of filetypes. A key of '_' will be used
+    as the default if the filetype is not present.
+>
+        let g:aerial_open_automatic = {
+            \ '_': v:true,
+            \ 'python': v:false,
+            \ 'rust': v:false,
+        \}
 
 g:aerial_open_automatic_min_lines             *g:aerial_open_automatic_min_lines*
-    When using |aerial.set_open_automatic()|, you can set this value to only
+    When |g:aerial_open_automatic| = `true`, you can set this value to only
     automatically open aerial on files greater than a certain length.
 
 g:aerial_open_automatic_min_symbols         *g:aerial_open_automatic_min_symbols*
-    When using |aerial.set_open_automatic()|, you can set this value to only
-    automatically open aerial when there are this many document symbols.
+    When |g:aerial_open_automatic| = `true`, you can set this value to only
+    automatically open aerial when there are at least this many document
+    symbols.
 
-g:aerial_use_icons                                           *g:aerial_use_icons*
-    When true, use use icons in the display. Requires a nerd font (see
-    https://www.nerdfonts.com/). Will try to smart default by looking for
-    `nvim-web-devicons` (https://github.com/kyazdani42/nvim-web-devicons).
+g:aerial_update_when_errors                         *g:aerial_update_when_errors*
+    Update the aerial buffer even when your file has LSP errors. Default `true`.
 
-aerial.set_icon({kind}, {icon})                               *aerial.set_icon()*
-aerial.set_icon({mapping})
-    Configures the icons for each of the symbols.
-    See https://microsoft.github.io/language-server-protocol/specification#textDocument_documentSymbol
-    for a complete list of the possible SymbolKind values.
+g:aerial_default_bindings                             *g:aerial_default_bindings*
+    If `false`, don't set up the default keybindings in the aerial buffer.
 
-        aerial.set_icon('Function', '[F]')
-        aerial.set_icon{
-          Function = '[F]',
-          Method = '[M]',
-        }
+g:aerial_icons                                                   *g:aerial_icons*
+    A map of |SymbolKind| to icons. You can also specify '<Symbol>Collapsed'
+    to change the icon when the tree is collapsed at this symbol, or
+    'Collapsed' to specify a default collapsed icon.
+>
+        let g:aerial_icons = {
+            \ 'Class'          : '';
+            \ 'ClassCollapsed' : '喇';
+            \ 'Function'       : '';
+            \ 'Constant'       : '[c]'
+            \ 'Collapsed'      : '▶';
+        \}
+<
+                                                              *SymbolKind* *symbol*
+A quick note on SymbolKind. An authoritative list of valid SymbolKinds can be
+found in the LSP spec:
+https://microsoft.github.io/language-server-protocol/specifications/specification-3-17/#symbolKind
+A current list is below.
 
-    You can set a different value to display when the line is collapsed
+Array
+Boolean
+Class
+Constant
+Constructor
+Enum
+EnumMember
+Event
+Field
+File
+Function
+Interface
+Key
+Method
+Module
+Namespace
+Null
+Number
+Object
+Operator
+Package
+Property
+String
+Struct
+TypeParameter
+Variable
 
-        aerial.set_icon('FunctionCollapsed', '-F-')
+===============================================================================
+FUNCTIONS                                                      *aerial-functions*
 
-    The special value of `Collapsed` will be used as the default for any
-    collapsed symbols that have not been defined
+aerial.on_attach({client}, [{opts}]                          *aerial.on_attach()*
+    This must be called in the on_attach of your LSP client configuration. The
+    {opts} dictionary can contain the following entries:
 
-        aerial.set_icon('Collapsed', '---')
+        preserve_callback    boolean. If true, will add to the
+                             textDocument/documentSymbol callback instead of
+                             replacing it.
+
+aerial.open([{focus}], [{direction}])                             *aerial.open()*
+    Open the aerial window for the current buffer. {focus} is a boolean that,
+    if true, will also jump your cursor to the aerial buffer. {direction} can
+    be either "left" or "right", to indicate which direction of vsplit to use
+    (defaults to |g:aerial_default_direction|).
+
+aerial.close()                                                   *aerial.close()*
+    Close the aerial window for the current buffer.
+
+aerial.toggle([{focus}], [{direction}])                         *aerial.toggle()*
+    Same as |aerial.open()|, but will close the window if it is already open.
+
+aerial.focus()                                                   *aerial.focus()*
+    Jump to the aerial window for the current buffer if it exists.
+
+aerial.is_open()                                               *aerial.is_open()*
+    Returns true if the aerial window is open for the current buffer.
+
+aerial.select([{opts}])                                         *aerial.select()*
+    TODO
+
+aerial.next({step}, [{opts}])                                     *aerial.next()*
+    TODO
+
+aerial.tree_cmd({action}, [{opts}])                           *aerial.tree_cmd()*
+    TODO
 
 ===============================================================================
 vim:ft=help:et:ts=2:sw=2:sts=2:norl
