@@ -98,7 +98,7 @@ M.maybe_open_automatic = function()
   if vim.fn.line('$') < config.get_open_automatic_min_lines() then
     return false
   end
-  M.open(false, config.get_automatic_direction())
+  M.open(false)
   return true
 end
 

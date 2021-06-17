@@ -81,7 +81,13 @@ aerial.is_open()                                               *aerial.is_open()
 OPTIONS                                                          *aerial-options*
 
 g:aerial_default_direction                           *g:aerial_default_direction*
-    The default direction to open the window. Default `right`.
+    The default direction to open the window. Valid values are:
+        left          Open the split to the left
+        right         Open the split to the right
+        prefer_left   Open to the left unless there are other windows left and
+                      none to the right
+        prefer_right  Open to the right unless there are other windows right
+                      and none to the left (default)
 
 g:aerial_min_width                                           *g:aerial_min_width*
     The minimum width of the aerial window. Default 10.
@@ -138,10 +144,6 @@ g:aerial_open_automatic_min_lines             *g:aerial_open_automatic_min_lines
 g:aerial_open_automatic_min_symbols         *g:aerial_open_automatic_min_symbols*
     When using |aerial.set_open_automatic()|, you can set this value to only
     automatically open aerial when there are this many document symbols.
-
-g:aerial_automatic_direction                       *g:aerial_automatic_direction*
-    When using |aerial.set_open_automatic()|, the aerial window will be opened
-    with this {direction} (see |aerial.open()| for details).
 
 g:aerial_use_icons                                           *g:aerial_use_icons*
     When true, use use icons in the display. Requires a nerd font (see

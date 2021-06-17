@@ -98,25 +98,34 @@ M.is_floating_win = function(winid)
 end
 
 M.detect_split_direction = function(bufnr)
+  local default = config.get_default_direction()
+  if default == 'left' then
+    return 'left'
+  elseif default == 'right' then
+    return 'right'
+  end
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
   local wins = M.get_fixed_wins()
   local first_window = vim.fn.winbufnr(wins[1]) == bufnr
   local last_window = vim.fn.winbufnr(wins[#wins]) == bufnr
-  local default = config.get_default_direction()
 
-  if default == 'left' then
+  if default == 'prefer_left' then
     if first_window then
       return 'left'
     elseif last_window then
       return 'right'
+    else
+      return 'left'
     end
   else
     if last_window then
       return 'right'
     elseif first_window then
       return 'left'
+    else
+      return 'right'
     end
   end
 
