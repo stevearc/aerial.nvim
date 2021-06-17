@@ -2,19 +2,19 @@ if !get(g:, 'aerial_default_bindings', 1)
   finish
 endif
 " Use <CR> to jump to the location, just like with the quickfix
-nnoremap <buffer> <CR> <cmd>lua require'aerial'.jump_to_loc()<CR>zvzz
+nnoremap <buffer> <CR> <cmd>lua require'aerial'.select()<CR>
 " Jump to location in a vertical split
-nnoremap <buffer> <C-v> <cmd>lua require'aerial'.jump_to_loc(2)<CR>zvzz
+nnoremap <buffer> <C-v> <cmd>lua require'aerial'.select({vwin=2})<CR>
 " Jump to location in a horizontal split
-nnoremap <buffer> <C-s> <cmd>lua require'aerial'.jump_to_loc(2, 'belowright split')<CR>zvzz
+nnoremap <buffer> <C-s> <cmd>lua require'aerial'.select({vwin=2, split='belowright split'})<CR>
 " Use p to scroll to the location under cursor but stay in the aerial window
-nnoremap <buffer> p <cmd>lua require'aerial'.scroll_to_loc()<CR>
+nnoremap <buffer> p <cmd>lua require'aerial'.select({jump=false})<CR>
 " Hold ctrl + j/k to go up and down while scrolling to the location under cursor
-nnoremap <buffer> <C-j> j<cmd>lua require'aerial'.scroll_to_loc()<CR>
-nnoremap <buffer> <C-k> k<cmd>lua require'aerial'.scroll_to_loc()<CR>
+nnoremap <buffer> <C-j> j<cmd>lua require'aerial'.select({jump=false})<CR>
+nnoremap <buffer> <C-k> k<cmd>lua require'aerial'.select({jump=false})<CR>
 " Use [[]] to jump to the prev/next item
-nnoremap <buffer> [[ <cmd>lua require'aerial'.prev_item()<CR>
-nnoremap <buffer> ]] <cmd>lua require'aerial'.next_item()<CR>
+nnoremap <buffer> [[ <cmd>lua require'aerial'.next(1)<CR>
+nnoremap <buffer> ]] <cmd>lua require'aerial'.next(-1)<CR>
 " q closes
 nnoremap <buffer> q <cmd>lua require"aerial".close()<CR>
 

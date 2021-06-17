@@ -86,8 +86,12 @@ M.on_buf_win_enter = function()
   if num_bufs_in_tab == 1 then
     -- Have to defer this because we defer the close in on_buf_leave. We don't
     -- want to open the new window until the old one is cleaned up
-    vim.defer_fn(window._maybe_open_automatic, 6)
+    vim.defer_fn(window.maybe_open_automatic, 6)
   end
+end
+
+M.on_cursor_move = function()
+  window.update_position(0, true)
 end
 
 return M

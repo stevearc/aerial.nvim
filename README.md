@@ -31,6 +31,9 @@ See [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) for instructions.
 After you have a functioning LSP setup, you will need to customize the
 `on_attach` callback.
 
+XXX Update all docs to remove prev_item/scroll_to_loc/jump_to_loc
+XXX Remove the code too
+
 ```lua
 local aerial = require'aerial'
 

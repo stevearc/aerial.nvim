@@ -1,49 +1,11 @@
 local config = require 'aerial.config'
 local data = require 'aerial.data'
-local nav = require 'aerial.navigation'
 local render = require 'aerial.render'
 local util = require 'aerial.util'
 
 local M = {}
 
-M.create_aerial_window = function(bufnr, aer_bufnr, direction)
-  if direction == '<' then direction = 'left' end
-  if direction == '>' then direction = 'right' end
-  if direction ~= 'left' and direction ~= 'right' then
-    error("Expected direction to be 'left' or 'right'")
-    return
-  end
-  local winnr
-  for i=1,vim.fn.winnr('$'),1 do
-    if vim.fn.winbufnr(i) == bufnr then
-      winnr = i
-      if direction == 'left' then
-        break
-      end
-    end
-  end
-  if winnr ~= vim.fn.winnr() then
-    vim.api.nvim_set_current_win(vim.fn.win_getid(winnr))
-  end
-  if direction == 'left' then
-    vim.cmd('vertical leftabove split')
-  else
-    vim.cmd('vertical rightbelow split')
-  end
-
-  if aer_bufnr == -1 then
-    aer_bufnr = M._create_aerial_buffer(bufnr)
-  end
-  vim.api.nvim_set_current_buf(aer_bufnr)
-
-  vim.cmd('vertical resize ' .. util.get_width())
-  vim.api.nvim_win_set_option(0, 'winfixwidth', true)
-  vim.api.nvim_win_set_option(0, 'number', false)
-  vim.api.nvim_win_set_option(0, 'relativenumber', false)
-  vim.api.nvim_win_set_option(0, 'wrap', false)
-end
-
-M._create_aerial_buffer = function(bufnr)
+local function create_aerial_buffer(bufnr)
   local aer_bufnr = vim.api.nvim_create_buf(false, true)
 
   vim.api.nvim_set_current_buf(aer_bufnr)
@@ -61,6 +23,47 @@ M._create_aerial_buffer = function(bufnr)
 
   vim.cmd[[autocmd BufEnter <buffer> lua require'aerial.autocommands'.on_enter_aerial_buffer()]]
   return aer_bufnr
+end
+
+local function create_aerial_window(bufnr, aer_bufnr, direction)
+  if direction == '<' then direction = 'left' end
+  if direction == '>' then direction = 'right' end
+  if direction ~= 'left' and direction ~= 'right' then
+    error("Expected direction to be 'left' or 'right'")
+    return
+  end
+  local winids = util.get_fixed_wins(bufnr)
+  local split_target
+  if direction == 'left' then
+    split_target = winids[1]
+  else
+    split_target = winids[#winids]
+  end
+  local my_winid = vim.api.nvim_get_current_win()
+  if my_winid ~= split_target then
+    vim.api.nvim_set_current_win(split_target)
+  end
+  if direction == 'left' then
+    vim.cmd('vertical leftabove split')
+  else
+    vim.cmd('vertical rightbelow split')
+  end
+
+  if aer_bufnr == -1 then
+    aer_bufnr = create_aerial_buffer(bufnr)
+  end
+  vim.api.nvim_set_current_buf(aer_bufnr)
+
+  vim.cmd('vertical resize ' .. util.get_width())
+  vim.api.nvim_win_set_option(0, 'winfixwidth', true)
+  vim.api.nvim_win_set_option(0, 'number', false)
+  vim.api.nvim_win_set_option(0, 'relativenumber', false)
+  vim.api.nvim_win_set_option(0, 'wrap', false)
+  local aer_winid = vim.api.nvim_get_current_win()
+  if my_winid ~= split_target then
+    vim.api.nvim_set_current_win(my_winid)
+  end
+  return aer_winid
 end
 
 M.is_open = function(bufnr)
@@ -85,7 +88,7 @@ M.close = function()
   end
 end
 
-M._maybe_open_automatic = function()
+M.maybe_open_automatic = function()
   if not config.get_open_automatic() then
     return false
   end
@@ -104,8 +107,7 @@ M.open = function(focus, direction)
     error("Cannot open aerial. No LSP clients")
     return
   end
-  local bufnr = vim.api.nvim_get_current_buf()
-  local aer_bufnr = util.get_aerial_buffer(bufnr)
+  local bufnr, aer_bufnr = util.get_buffers()
   if M.is_open() then
     if focus then
       local winid = vim.fn.bufwinid(aer_bufnr)
@@ -114,18 +116,14 @@ M.open = function(focus, direction)
     return
   end
   direction = direction or util.detect_split_direction()
-  local start_winid = vim.fn.win_getid()
-  M.create_aerial_window(bufnr, aer_bufnr, direction)
-  if aer_bufnr == -1 then
-    aer_bufnr = vim.api.nvim_get_current_buf()
-  end
-  vim.api.nvim_set_current_win(start_winid)
+  local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction)
   if data.items_by_buf[bufnr] == nil then
     vim.lsp.buf.document_symbol()
   end
-  nav._update_position()
+  local my_winid = vim.api.nvim_get_current_win()
+  M.update_position(nil, my_winid)
   if focus then
-    vim.api.nvim_set_current_win(vim.fn.bufwinid(aer_bufnr))
+    vim.api.nvim_set_current_win(aer_winid)
   end
 end
 
@@ -151,6 +149,68 @@ M.toggle = function(focus, direction)
   else
     M.open(focus, direction)
     return true
+  end
+end
+
+local function get_position_in_win(bufnr, winid)
+  local lnum = vim.api.nvim_win_get_cursor(winid or 0)[1]
+  local bufdata = data[bufnr]
+  local selected = 0
+  local relative = 'above'
+  bufdata:visit(function(item)
+    if item.lnum > lnum then
+      return true
+    elseif item.lnum == lnum then
+      relative = 'exact'
+    else
+      relative = 'below'
+    end
+    selected = selected + 1
+  end)
+  return {
+    lnum = math.max(1, selected),
+    relative = relative
+  }
+end
+
+M.update_all_positions = function(bufnr)
+  local winids = vim.fn.win_findbuf(bufnr)
+  M.update_position(winids, false)
+end
+
+M.update_position = function(winid, update_last)
+  if winid == 0 then
+    winid = vim.api.nvim_get_current_win()
+  end
+  local win_bufnr = vim.api.nvim_win_get_buf(winid)
+  local bufnr, aer_bufnr = util.get_buffers(win_bufnr)
+  local winids
+  if not winid or util.is_aerial_buffer(win_bufnr) then
+    winids = util.get_fixed_wins(bufnr)
+  elseif type(winid) == 'table' then
+    winids = winid
+  else
+    winids = {winid}
+  end
+
+
+  local bufdata = data[bufnr]
+  for _,target_win in ipairs(winids) do
+    local pos = get_position_in_win(bufnr, target_win)
+    if pos ~= nil then
+      bufdata.positions[target_win] = pos.lnum
+      if update_last and (update_last == true or update_last == target_win) then
+        bufdata.last_position = pos.lnum
+      end
+    end
+  end
+
+  render.update_highlights(bufnr)
+  if update_last then
+    local aer_winid = vim.fn.bufwinid(aer_bufnr)
+    if aer_winid ~= -1 then
+      vim.api.nvim_win_set_cursor(aer_winid, {bufdata.last_position, 0})
+    end
   end
 end
 

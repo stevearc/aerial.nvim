@@ -66,13 +66,7 @@ M.symbol_callback = function(_, _, result, _, bufnr)
   data[bufnr].items = items
 
   render.update_aerial_buffer(bufnr)
-  if not has_symbols then
-    if not window._maybe_open_automatic() then
-      nav._update_position()
-    end
-  else
-    render.update_highlights(bufnr)
-  end
+  window.update_all_positions(bufnr)
 end
 
 return M

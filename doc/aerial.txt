@@ -76,26 +76,6 @@ aerial.focus()                                                   *aerial.focus()
 aerial.is_open()                                               *aerial.is_open()*
     Returns true if the aerial window is open for the current buffer.
 
-aerial.jump_to_loc([{virt_winnr}], [{split_cmd}])          *aerial.jump_to_loc()*
-    When in the aerial buffer, jump to the location under the cursor.
-    {virt_winnr} is the "virtual" winnr to jump to. 1 (the default) will be
-    the source buffer with the lowest winnr. 2 will be the second-lowest, etc.
-    If no buffer can be found with that window position, a new split will be
-    created. {split_cmd} will define the command used to create the split
-    (default is "belowright vsplit").
-
-aerial.scroll_to_loc([{virt_winnr}], [{split_cmd}])      *aerial.scroll_to_loc()*
-    Same as |aerial.jump_to_loc()| but keep the cursor in the aerial buffer.
-
-aerial.next_item()                                           *aerial.next_item()*
-    Jump to the position of the next item in the aerial list.
-
-aerial.prev_item()                                           *aerial.prev_item()*
-    Jump to the position of the previous item in the aerial list.
-
-aerial.skip_item({delta})                                    *aerial.skip_item()*
-    Jump {delta} steps in the aerial list.
-
 
 ===============================================================================
 OPTIONS                                                          *aerial-options*

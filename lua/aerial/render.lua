@@ -69,22 +69,14 @@ M.update_highlights = function(buf)
   if not data:has_symbols(bufnr) or aer_bufnr == -1 then
     return
   end
-  local winids = {}
-  local win_count = 0
   local bufdata = data[bufnr]
-  for k in pairs(bufdata.positions) do
-    local winnr = vim.fn.win_id2win(k)
-    if winnr ~= 0 and vim.fn.winbufnr(k) == bufnr then
-      win_count = win_count + 1
-      table.insert(winids, k)
-    end
-  end
-  table.sort(winids, function(a, b)
-    return vim.fn.win_id2win(a) < vim.fn.win_id2win(b)
-  end)
+  local winids = util.get_fixed_wins(bufnr)
   local ns = vim.api.nvim_create_namespace('aerial-line')
   vim.api.nvim_buf_clear_namespace(aer_bufnr, ns, 0, -1)
-  local hl_width = math.floor(util.get_width(aer_bufnr) / win_count)
+  if vim.tbl_isempty(winids) then
+    return
+  end
+  local hl_width = math.floor(util.get_width(aer_bufnr) / #winids)
   local hl_mode = config.get_highlight_mode()
 
   if hl_mode == 'last' then

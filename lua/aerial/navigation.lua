@@ -1,24 +1,9 @@
 local data = require 'aerial.data'
 local util = require 'aerial.util'
 local config = require 'aerial.config'
-local render = require 'aerial.render'
+local window = require 'aerial.window'
 
 local M = {}
-
-local function _get_virt_winid(bufnr, virt_winnr)
-  local vwin = 1
-  for i=1,vim.fn.winnr('$'),1 do
-    local winid = vim.fn.win_getid(i)
-    if vim.fn.winbufnr(i) == bufnr and not util.is_floating_win(winid) then
-      if vwin == virt_winnr then
-        return winid
-      end
-      vwin = vwin + 1
-    end
-  end
-
-  return -1
-end
 
 local function _get_pos_in_win(bufnr, winid)
   local lnum = vim.api.nvim_win_get_cursor(winid or 0)[1]
@@ -36,8 +21,8 @@ local function _get_pos_in_win(bufnr, winid)
     selected = selected + 1
   end)
   return {
-    ['lnum'] = math.max(1, selected),
-    ['relative'] = relative
+    lnum = math.max(1, selected),
+    relative = relative
   }
 end
 
@@ -45,7 +30,7 @@ local function _get_current_lnum()
   local bufnr = vim.api.nvim_get_current_buf()
   if util.is_aerial_buffer(bufnr) then
     bufnr = util.get_source_buffer()
-    local winid = _get_virt_winid(bufnr, 1)
+    local winid = vim.fn.bufwinid(bufnr)
     if winid == -1 then
       return nil
     end
@@ -55,96 +40,21 @@ local function _get_current_lnum()
       ['lnum'] = cached_lnum,
       ['relative'] = 'exact',
     }
-  end
-  if data:has_symbols(bufnr) then
-    return _get_pos_in_win(bufnr)
   else
-    return nil
-  end
-end
-
-M.update_all_positions = function()
-  local bufnr, _ = util.get_buffers()
-  local bufdata = data[bufnr]
-  local tabwins = {}
-  for _,winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-    tabwins[winid] = true
-  end
-  for _,winid in ipairs(vim.fn.win_findbuf(bufnr)) do
-    if tabwins[winid] then
-      local pos = _get_pos_in_win(bufnr, winid)
-      bufdata.positions[winid] = pos.lnum
-      bufdata.last_position = pos.lnum
-    end
-  end
-  render.update_highlights(bufnr)
-end
-
-M._update_position = function()
-  local pos = _get_current_lnum()
-  if pos == nil then
-    return
-  end
-  local bufnr, aer_bufnr = util.get_buffers()
-  local mywin = vim.api.nvim_get_current_win()
-  local bufdata = data[bufnr]
-  bufdata.positions[mywin] = pos.lnum
-  bufdata.last_position = pos.lnum
-  render.update_highlights(bufnr)
-  local winid = vim.fn.bufwinid(aer_bufnr)
-  if winid ~= -1 then
-    vim.fn.win_execute(winid, string.format('normal %dgg', pos.lnum), true)
-  end
-end
-
-M._jump_to_loc = function(item_no, virt_winnr, split_cmd)
-  virt_winnr = virt_winnr or 1
-  split_cmd = split_cmd or 'belowright vsplit'
-  local bufnr = util.get_source_buffer()
-  if not data:has_symbols(bufnr) then
-    return
-  end
-  local item = data[bufnr]:item(item_no)
-  if item == nil then
-    error("Could not find item at position " .. item_no)
-    return
-  end
-  bufnr = util.get_source_buffer()
-  local winid = _get_virt_winid(bufnr, virt_winnr)
-  if winid == -1 then
-    -- Create a new split for the source window
-    winid = vim.fn.bufwinid(bufnr)
-    if winid ~= -1 then
-      vim.fn.win_gotoid(winid)
-      vim.cmd(split_cmd)
+    if data:has_symbols(bufnr) then
+      return _get_pos_in_win(bufnr)
     else
-      vim.cmd(split_cmd)
-      vim.api.nvim_set_current_buf(bufnr)
+      return nil
     end
-    vim.fn.setpos('.', {bufnr, item.lnum, item.col, 0})
-  else
-    vim.fn.win_gotoid(winid)
-    vim.fn.setpos('.', {bufnr, item.lnum, item.col, 0})
-  end
-  return item
-end
-
-M.jump_to_loc = function(virt_winnr, split_cmd)
-  local pos = vim.fn.getcurpos()
-  local item = M._jump_to_loc(pos[2], virt_winnr, split_cmd)
-  if config.get_highlight_on_jump() then
-    util.flash_highlight(vim.api.nvim_get_current_buf(), item.lnum)
   end
 end
 
-M.scroll_to_loc = function(virt_winnr, split_cmd)
-  M.jump_to_loc(virt_winnr, split_cmd)
-  M._update_position()
-  vim.cmd('normal zvzz')
-  vim.cmd('wincmd p')
-end
-
-M.skip_item = function(delta)
+M.next = function(step, opts)
+  step = step or 1
+  opts = vim.tbl_extend('keep', opts or {}, {
+    vwin = 1,
+    split = 'belowright vsplit',
+  })
   local pos = _get_current_lnum()
   if pos == nil then
     return
@@ -152,12 +62,12 @@ M.skip_item = function(delta)
   local bufnr, _ = util.get_buffers()
 
   local count = data[bufnr]:count()
-  local new_num = pos.lnum + delta
+  local new_num = pos.lnum + step
   -- If we're not *exactly* on a location, make sure we hit the nearest location
   -- first even if we're currently considered to be "on" it
-  if delta < 0 and pos.relative == 'below' then
+  if step < 0 and pos.relative == 'below' then
     new_num = new_num + 1
-  elseif delta > 0 and pos.relative == 'above' then
+  elseif step > 0 and pos.relative == 'above' then
     new_num = new_num - 1
   end
   while new_num < 1 do
@@ -166,14 +76,65 @@ M.skip_item = function(delta)
   while new_num > count do
     new_num = new_num - count
   end
-  local item = data[bufnr]:item(new_num)
+  M.select{
+    index = new_num,
+    jump = false,
+  }
   if util.is_aerial_buffer() then
-    M._jump_to_loc(new_num, 1)
-    M._update_position()
-    vim.cmd('normal zvzz')
-    vim.cmd('wincmd p')
+    vim.api.nvim_win_set_cursor(0, {new_num, 0})
+  end
+end
+
+M.select = function(opts)
+  opts = vim.tbl_extend('keep', opts or {}, {
+    index = nil,
+    vwin = 1,
+    split = 'belowright vsplit',
+    jump = true,
+  })
+  local bufnr, _ = util.get_buffers()
+  local winid
+  if util.is_aerial_buffer() then
+    winid = util.get_virt_winid(opts.vwin, bufnr)
   else
-    vim.fn.setpos('.', {0, item.lnum, item.col, 0})
+    winid = vim.api.nvim_get_current_win()
+  end
+  if opts.index == nil then
+    if util.is_aerial_buffer() then
+      opts.index = vim.api.nvim_win_get_cursor(0)[1]
+    elseif winid ~= -1 then
+      local bufdata = data[0]
+      opts.index = bufdata.positions[winid]
+    end
+    opts.index = opts.index or 1
+  end
+
+  local item = data[0]:item(opts.index)
+  if not item then
+    error(string.format("Symbol %s is outside the bounds", opts.index))
+    return
+  end
+
+  local target_win = winid
+  if winid == -1 then
+    local wins = util.get_fixed_wins(bufnr)
+    target_win = wins[math.min(#wins, opts.vwin)]
+    -- Create a new split for the source window
+    vim.fn.win_execute(target_win, opts.split, true)
+    wins = util.get_fixed_wins(bufnr)
+    target_win = wins[math.min(#wins, opts.vwin)]
+    vim.api.nvim_win_set_buf(target_win, bufnr)
+  end
+  vim.api.nvim_win_set_cursor(target_win, {item.lnum, item.col})
+  vim.fn.win_execute(target_win, 'normal! zvzz', true)
+
+  if opts.jump then
+    vim.api.nvim_set_current_win(target_win)
+  else
+    window.update_position(target_win)
+  end
+  if config.get_highlight_on_jump() then
+    util.flash_highlight(bufnr, item.lnum)
   end
 end
 

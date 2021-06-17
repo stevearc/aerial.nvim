@@ -77,10 +77,16 @@ M.flash_highlight = function(bufnr, lnum, hl_group, durationMs)
   vim.defer_fn(remove_highlight, durationMs)
 end
 
-M.get_fixed_wins = function()
+M.get_virt_winid = function(vwin, bufnr)
+  local wins = M.get_fixed_wins(bufnr)
+  return wins[math.min(vwin, #wins)]
+end
+
+M.get_fixed_wins = function(bufnr)
   local wins = {}
   for _,winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-    if not M.is_floating_win(winid) then
+    if not M.is_floating_win(winid)
+      and (not bufnr or vim.api.nvim_win_get_buf(winid) == bufnr) then
       table.insert(wins, winid)
     end
   end
@@ -91,8 +97,10 @@ M.is_floating_win = function(winid)
   return vim.api.nvim_win_get_config(winid).relative ~= ""
 end
 
-M.detect_split_direction = function()
-  local bufnr = vim.api.nvim_get_current_buf()
+M.detect_split_direction = function(bufnr)
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
   local wins = M.get_fixed_wins()
   local first_window = vim.fn.winbufnr(wins[1]) == bufnr
   local last_window = vim.fn.winbufnr(wins[#wins]) == bufnr

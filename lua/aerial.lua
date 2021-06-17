@@ -27,24 +27,12 @@ M.toggle = function(focus, direction)
   return window.toggle(focus, direction)
 end
 
-M.jump_to_loc = function(virt_winnr, split_cmd)
-  nav.jump_to_loc(virt_winnr, split_cmd)
+M.select = function(opts)
+  nav.select(opts)
 end
 
-M.scroll_to_loc = function(virt_winnr, split_cmd)
-  nav.scroll_to_loc(virt_winnr, split_cmd)
-end
-
-M.next_item = function()
-  nav.skip_item(1)
-end
-
-M.prev_item = function()
-  nav.skip_item(-1)
-end
-
-M.skip_item = function(delta)
-  nav.skip_item(delta)
+M.next = function(step, opts)
+  nav.next(step, opts)
 end
 
 M.on_attach = function(client, opts)
@@ -66,7 +54,7 @@ M.on_attach = function(client, opts)
 
   vim.cmd("autocmd InsertLeave <buffer> lua vim.lsp.buf.document_symbol()")
   vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.document_symbol()")
-  vim.cmd("autocmd CursorMoved <buffer> lua require'aerial.navigation'._update_position()")
+  vim.cmd("autocmd CursorMoved <buffer> lua require'aerial.autocommands'.on_cursor_move()")
   vim.cmd("autocmd BufLeave <buffer> lua require'aerial.autocommands'.on_buf_leave()")
   vim.cmd([[autocmd BufDelete <buffer> call luaeval("require'aerial.autocommands'.on_buf_delete(_A)", expand('<abuf>'))]])
   if config.get_open_automatic() then
@@ -91,11 +79,6 @@ M.set_open_automatic = function(ft_or_mapping, bool)
   config.set_open_automatic(ft_or_mapping, bool)
 end
 
--- @deprecated. use set_icon() instead
-M.set_kind_abbr = function(kind_or_mapping, abbr)
-  config.set_icon(kind_or_mapping, abbr)
-end
-
 M.set_icon = function(kind_or_mapping, icon)
   config.set_icon(kind_or_mapping, icon)
 end
@@ -105,6 +88,43 @@ M.set_filter_kind = function(list)
   for _,kind in pairs(list) do
     config.filter_kind[kind] = true
   end
+end
+
+-- @deprecated. use set_icon() instead
+M.set_kind_abbr = function(kind_or_mapping, abbr)
+  config.set_icon(kind_or_mapping, abbr)
+end
+
+-- @deprecated. Use select()
+M.jump_to_loc = function(virt_winnr, split_cmd)
+  nav.select{
+    vwin = virt_winnr,
+    split = split_cmd,
+  }
+end
+
+-- @deprecated. Use select()
+M.scroll_to_loc = function(virt_winnr, split_cmd)
+  nav.select{
+    vwin = virt_winnr,
+    split = split_cmd,
+    jump = false,
+  }
+end
+
+-- @deprecated. Use next()
+M.next_item = function()
+  nav.next(1)
+end
+
+-- @deprecated. Use next()
+M.prev_item = function()
+  nav.next(-1)
+end
+
+-- @deprecated. Use next()
+M.skip_item = function(delta)
+  nav.next(delta)
 end
 
 return M
