@@ -135,7 +135,9 @@ M.select = function(opts)
   end
   vim.api.nvim_win_set_buf(winid, bufnr)
   vim.api.nvim_win_set_cursor(winid, {item.lnum, item.col})
-  vim.fn.win_execute(winid, 'normal! zvzz', true)
+  if config.post_jump_cmd ~= '' then
+    vim.fn.win_execute(winid, config.post_jump_cmd, true)
+  end
 
   if opts.jump then
     vim.api.nvim_set_current_win(winid)

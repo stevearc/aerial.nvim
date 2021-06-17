@@ -125,6 +125,10 @@ g:aerial_open_automatic_min_symbols         *g:aerial_open_automatic_min_symbols
     automatically open aerial when there are at least this many document
     symbols.
 
+g:aerial_post_jump_cmd                                   *g:aerial_post_jump_cmd*
+    Run this command after jumping to a symbol. Set to '' to disable.
+    Default 'zvzz'
+
 g:aerial_update_when_errors                         *g:aerial_update_when_errors*
     Update the aerial buffer even when your file has LSP errors. Default `true`.
 

@@ -38,6 +38,8 @@ local default_options = {
   open_automatic_min_lines = 0,
   -- If open_automatic is true, only open aerial if there are at least this many symbols
   open_automatic_min_symbols = 0,
+  -- Run this command after jumping to a symbol ('' will disable)
+  post_jump_cmd = 'normal! zvzz',
   -- Set to false to not update the symbols when there are LSP errors
   update_when_errors = true,
   -- A list of all symbols to display
