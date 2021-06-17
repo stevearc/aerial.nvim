@@ -21,7 +21,7 @@ local function process_symbols(symbols)
       elseif symbol.range then -- DocumentSymbol type
         range = symbol.range
       end
-      local include_item = range and config.filter_kind[kind]
+      local include_item = range and config.include_kind(kind)
 
       if include_item then
         local item = {
@@ -58,7 +58,7 @@ M.symbol_callback = function(_, _, result, _, bufnr)
   -- Don't update if there are diagnostics errors (or override by setting)
   local error_count = vim.lsp.diagnostic.get_count(bufnr, 'Error')
   local has_symbols = data:has_symbols(bufnr)
-  if not config.get_update_when_errors() and error_count > 0 and has_symbols then
+  if not config.update_when_errors and error_count > 0 and has_symbols then
     return
   end
 

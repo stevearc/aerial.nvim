@@ -48,14 +48,14 @@ M.on_attach = function(client, opts)
   end
   vim.lsp.handlers['textDocument/documentSymbol'] = new_callback
 
-  if config.get_diagnostics_trigger_update() then
+  if config.diagnostics_trigger_update then
     vim.cmd("autocmd User LspDiagnosticsChanged lua require'aerial.autocommands'.on_diagnostics_changed()")
   end
 
   vim.cmd("autocmd CursorMoved <buffer> lua require'aerial.autocommands'.on_cursor_move()")
   vim.cmd("autocmd BufLeave <buffer> lua require'aerial.autocommands'.on_buf_leave()")
   vim.cmd([[autocmd BufDelete <buffer> call luaeval("require'aerial.autocommands'.on_buf_delete(_A)", expand('<abuf>'))]])
-  if config.get_open_automatic() then
+  if config.open_automatic() then
     vim.lsp.buf.document_symbol()
     vim.cmd("autocmd BufWinEnter <buffer> lua require'aerial.autocommands'.on_buf_win_enter()")
   end
@@ -73,24 +73,36 @@ M.tree_cmd = function(action, opts)
   end
 end
 
+-- @deprecated
 M.set_open_automatic = function(ft_or_mapping, bool)
-  config.set_open_automatic(ft_or_mapping, bool)
-end
-
-M.set_icon = function(kind_or_mapping, icon)
-  config.set_icon(kind_or_mapping, icon)
-end
-
-M.set_filter_kind = function(list)
-  config.filter_kind = {}
-  for _,kind in pairs(list) do
-    config.filter_kind[kind] = true
+  local opts = vim.g.aerial or {}
+  if type(ft_or_mapping) == 'table' then
+    opts.open_automatic = ft_or_mapping
+  else
+    opts.open_automatic[ft_or_mapping] = bool
   end
+  vim.g.aerial = opts
 end
 
--- @deprecated. use set_icon() instead
+-- @deprecated.
+M.set_filter_kind = function(list)
+  local opts = vim.g.aerial or {}
+  opts.filter_kind = list
+  vim.g.aerial = opts
+end
+
+-- @deprecated.
 M.set_kind_abbr = function(kind_or_mapping, abbr)
-  config.set_icon(kind_or_mapping, abbr)
+  local opts = vim.g.aerial or {}
+  if type(kind_or_mapping) == 'table' then
+    opts.icons = kind_or_mapping
+  else
+    if not opts.icons then
+      opts.icons = {}
+    end
+    opts.icons[kind_or_mapping] = abbr
+  end
+  vim.g.aerial = opts
 end
 
 -- @deprecated. Use select()

@@ -10,9 +10,7 @@ aerial.is_open()	aerial.txt	/*aerial.is_open()*
 aerial.nvim	aerial.txt	/*aerial.nvim*
 aerial.on_attach()	aerial.txt	/*aerial.on_attach()*
 aerial.open()	aerial.txt	/*aerial.open()*
-aerial.set_filter_kind()	aerial.txt	/*aerial.set_filter_kind()*
 aerial.set_icon()	aerial.txt	/*aerial.set_icon()*
-aerial.set_open_automatic()	aerial.txt	/*aerial.set_open_automatic()*
 aerial.toggle()	aerial.txt	/*aerial.toggle()*
 aerial.txt	aerial.txt	/*aerial.txt*
 g:aerial_default_bindings	aerial.txt	/*g:aerial_default_bindings*

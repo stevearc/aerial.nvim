@@ -21,7 +21,7 @@ M.get_width = function(bufnr)
   if ok then
     return width
   end
-  return config.get_min_width()
+  return config.min_width
 end
 
 M.set_width = function(bufnr, width)
@@ -67,9 +67,11 @@ M.get_buffer_from_var = function(bufnr, varname)
   return vim.fn.bufnr(result_bufnr)
 end
 
-M.flash_highlight = function(bufnr, lnum, hl_group, durationMs)
+M.flash_highlight = function(bufnr, lnum, durationMs, hl_group)
   hl_group = hl_group or 'AerialLine'
-  durationMs = durationMs or 300
+  if durationMs == true or durationMs == 1 then
+    durationMs = 300
+  end
   local ns = vim.api.nvim_buf_add_highlight(bufnr, 0, hl_group, lnum - 1, 0, -1)
   local remove_highlight = function()
     vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
@@ -98,7 +100,7 @@ M.is_floating_win = function(winid)
 end
 
 M.detect_split_direction = function(bufnr)
-  local default = config.get_default_direction()
+  local default = config.default_direction
   if default == 'left' then
     return 'left'
   elseif default == 'right' then

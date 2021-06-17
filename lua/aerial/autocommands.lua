@@ -59,7 +59,7 @@ end
 M.on_diagnostics_changed = function()
   local errors = vim.lsp.diagnostic.get_count(0, 'Error')
   -- if no errors, refresh symbols
-  if config.get_update_when_errors()
+  if config.update_when_errors
     or errors == 0
     or not data:has_symbols() then
     vim.lsp.buf.document_symbol()
@@ -67,7 +67,7 @@ M.on_diagnostics_changed = function()
 end
 
 M.on_buf_win_enter = function()
-  if not config.get_open_automatic() then
+  if not config.open_automatic() then
     return
   end
 

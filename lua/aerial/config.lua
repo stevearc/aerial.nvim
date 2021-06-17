@@ -1,21 +1,102 @@
 local M = {}
 local has_devicons = pcall(require, 'nvim-web-devicons')
 
-local open_automatic = {
-  ['_'] = false,
+-- Copy this to the README after modification
+local default_options = {
+  -- Enum: prefer_right, prefer_left, right, left
+  -- Determines the default direction to open the aerial window. The 'prefer'
+  -- options will open the window in the other direction *if* there is a
+  -- different buffer in the way of the preferred direction
+  default_direction = 'prefer_right',
+  -- Fetch document symbols when LSP diagnostics change.
+  -- If you set this to false, you will need to manually fetch symbols
+  diagnostics_trigger_update = true,
+  -- Enum: split_width, full_width, last
+  -- Determines line highlighting mode when multiple buffers are visible
+  highlight_mode = 'split_width',
+  -- When jumping to a symbol, highlight the line for this many ms
+  -- Set to 0 or false to disable
+  highlight_on_jump = 300,
+  -- The maximum width of the aerial window
+  max_width = 40,
+  -- The minimum width of the aerial window.
+  -- To disable dynamic resizing, set this to be equal to max_width
+  min_width = 10,
+  -- Set default symbol icons to use Nerd Font icons (see https://www.nerdfonts.com/)
+  nerd_font = 'auto',
+  -- Whether to open aerial automatically when entering a buffer.
+  -- Can also be specified per-filetype as a map (see below)
+  open_automatic = false,
+  -- If open_automatic is true, only open aerial if the source buffer is at
+  -- least this long
+  open_automatic_min_lines = 0,
+  -- If open_automatic is true, only open aerial if there are at least this many symbols
+  open_automatic_min_symbols = 0,
+  -- Set to false to not update the symbols when there are LSP errors
+  update_when_errors = true,
+  -- A list of all symbols to display
+  filter_kind = {
+    "Class",
+    "Constructor",
+    "Enum",
+    "Function",
+    "Interface",
+    "Method",
+    "Struct",
+  },
 }
 
-M.filter_kind = {
-  Class       = true,
-  Constructor = true,
-  Enum        = true,
-  Function    = true,
-  Interface   = true,
-  Method      = true,
-  Struct      = true,
-}
+local function get_option(opt)
+  local ret = vim.g[string.format('aerial_%s', opt)]
+  if ret == nil then
+    ret = (vim.g.aerial or {})[opt]
+  end
+  -- People are used to using 0 for v:false in vimscript
+  if ret == 0 and (default_options[opt] == true or default_options[opt] == false) then
+    ret = false
+  end
+  if ret == nil then
+    return default_options[opt]
+  else
+    return ret
+  end
+end
 
-local icons = nil
+setmetatable(M, {
+  __index = function(_, opt)
+    return get_option(opt)
+  end
+})
+
+local function get_table_default(table, key, default_key, default)
+  if type(table) ~= 'table' then
+    return table
+  end
+  local ret = table[key]
+  if ret == nil and default_key then
+    ret = table[default_key]
+  end
+  if ret == nil then
+    return default
+  else
+    return ret
+  end
+end
+
+local function get_table_opt(opt, key, default_key, default)
+  return get_table_default(get_option(opt) or {}, key, default_key, default)
+end
+
+M.include_kind = function(kind)
+  return vim.tbl_contains(M.filter_kind, kind)
+end
+
+M.open_automatic = function()
+  local ft = vim.api.nvim_buf_get_option(0, 'filetype')
+  local ret = get_table_opt('open_automatic', ft, '_', false)
+  -- People are used to using 0 for v:false in vimscript
+  return ret and ret ~= 0
+end
 
 local plain_icons = {
   Array         = '[arr]';
@@ -58,104 +139,31 @@ local nerd_icons = {
   Collapsed     = '';
 }
 
-M.get_highlight_on_jump = function()
-  local value = vim.g.aerial_highlight_on_jump
-  if value == nil then return true else return value end
-end
-
-M.get_update_when_errors = function()
-  local val = vim.g.aerial_update_when_errors
-  if val == nil then return true else return val end
-end
-
-M.set_open_automatic = function(ft_or_mapping, bool)
-  if type(ft_or_mapping) == 'table' then
-    open_automatic = ft_or_mapping
-  else
-    open_automatic[ft_or_mapping] = bool
-  end
-end
-
-M.get_open_automatic = function(bufnr)
-  local ft = vim.api.nvim_buf_get_option(bufnr or 0, 'filetype')
-  local ret = open_automatic[ft]
-  return ret == nil and open_automatic['_'] or ret
-end
-
-M.get_default_direction = function()
-  local dir = vim.g.aerial_default_direction
-  return dir == nil and 'prefer_right' or dir
-end
-
-M.get_open_automatic_min_lines = function()
-  local min_lines = vim.g.aerial_open_automatic_min_lines
-  if min_lines == nil then return 0 else return min_lines end
-end
-
-M.get_open_automatic_min_symbols = function()
-  local min_symbols = vim.g.aerial_open_automatic_min_symbols
-  if min_symbols == nil then return 0 else return min_symbols end
-end
-
-M.get_diagnostics_trigger_update = function()
-  local update = vim.g.aerial_diagnostics_trigger_update
-  if update == nil then return true else return update end
-end
-
-M.get_highlight_mode = function()
-  local mode = vim.g.aerial_highlight_mode
-  if mode == nil then
-    return 'split_width'
-  elseif mode == 'last' or mode == 'full_width' or mode == 'split_width' then
-    return mode
-  end
-  error("Unrecognized highlight mode '" .. mode .. "'")
-  return 'split_width'
-end
-
-M.get_min_width = function()
-  local width = vim.g.aerial_min_width
-  if width == nil then return 10 else return width end
-end
-
-M.get_max_width = function()
-  local width = vim.g.aerial_max_width
-  if width == nil then return 40 else return width end
-end
-
-M.get_use_icons = function()
-  local use_icons = vim.g.aerial_use_icons
-  if use_icons == nil then return has_devicons else return use_icons end
-end
-
-local function get_icons()
-  if not icons then
-    if M.get_use_icons() then
-      icons = vim.tbl_extend('keep', nerd_icons, plain_icons)
-    else
-      icons = plain_icons
-    end
-  end
-  return icons
-end
-
-M.set_icon = function(kind_or_mapping, icon)
-  if type(kind_or_mapping) == 'table' then
-    icons = vim.tbl_extend('keep', kind_or_mapping, get_icons())
-  else
-    get_icons()[kind_or_mapping] = icon
-  end
-end
-
+local _last_checked = 0
+local _last_icons = {}
 M.get_icon = function(kind, collapsed)
-  local abbrs = get_icons()
-  local abbr
-  if collapsed then
-    abbr = abbrs[kind .. 'Collapsed'] or abbrs['Collapsed']
-  else
-    abbr = abbrs[kind]
+  local icons = _last_icons
+  if vim.fn.localtime() - _last_checked > 5 then
+    local default
+    local nerd_font = get_option('nerd_font')
+    if nerd_font == 'auto' then
+      nerd_font = has_devicons
+    end
+    if nerd_font then
+      default = vim.tbl_extend('keep', nerd_icons, plain_icons)
+    else
+      default = plain_icons
+    end
+    icons = vim.tbl_extend('keep', M.icons or {}, default)
+    _last_icons = icons
+    _last_checked = vim.fn.localtime()
   end
-  return abbr and abbr or kind
+
+  if collapsed then
+    return get_table_default(icons, kind..'Collapsed', 'Collapsed', kind)
+  else
+    return get_table_default(icons, kind, nil, kind)
+  end
 end
 
 return M

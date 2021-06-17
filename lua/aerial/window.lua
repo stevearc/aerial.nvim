@@ -89,13 +89,13 @@ M.close = function()
 end
 
 M.maybe_open_automatic = function()
-  if not config.get_open_automatic() then
+  if not config.open_automatic() then
     return false
   end
-  if data[0]:count() < config.get_open_automatic_min_symbols() then
+  if data[0]:count() < config.open_automatic_min_symbols then
     return false
   end
-  if vim.fn.line('$') < config.get_open_automatic_min_lines() then
+  if vim.fn.line('$') < config.open_automatic_min_lines then
     return false
   end
   M.open(false)

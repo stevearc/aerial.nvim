@@ -133,8 +133,8 @@ M.select = function(opts)
   else
     window.update_position(target_win)
   end
-  if config.get_highlight_on_jump() then
-    util.flash_highlight(bufnr, item.lnum)
+  if config.highlight_on_jump then
+    util.flash_highlight(bufnr, item.lnum, config.highlight_on_jump)
   end
 end
 
