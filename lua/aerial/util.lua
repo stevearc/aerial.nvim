@@ -40,6 +40,39 @@ M.is_aerial_buffer = function(bufnr)
   return ft == 'aerial'
 end
 
+M.go_win_no_au = function(winid)
+  local winnr = vim.fn.win_id2win(winid)
+  vim.cmd(string.format("noau %dwincmd w", winnr))
+end
+
+M.go_buf_no_au = function(bufnr)
+  vim.cmd(string.format("noau b %d", bufnr))
+end
+
+M.get_aerial_orphans = function()
+  local orphans = {}
+  for _,winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    local winbuf = vim.api.nvim_win_get_buf(winid)
+    if M.is_aerial_buffer(winbuf) and M.is_aerial_buffer_orphaned(winbuf) then
+      table.insert(orphans, winid)
+    end
+  end
+  return orphans
+end
+
+M.is_aerial_buffer_orphaned = function(bufnr)
+  local sourcebuf = M.get_source_buffer(bufnr)
+  if sourcebuf == -1 then
+    return true
+  end
+  for _,winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if vim.api.nvim_win_get_buf(winid) == sourcebuf then
+      return false
+    end
+  end
+  return true
+end
+
 M.get_aerial_buffer = function(bufnr)
   return M.get_buffer_from_var(bufnr or 0, 'aerial_buffer')
 end
@@ -61,10 +94,10 @@ end
 
 M.get_buffer_from_var = function(bufnr, varname)
   local status, result_bufnr = pcall(vim.api.nvim_buf_get_var, bufnr, varname)
-  if not status or result_bufnr == nil then
+  if not status or result_bufnr == nil or vim.fn.bufexists(result_bufnr) == 0 then
     return -1
   end
-  return vim.fn.bufnr(result_bufnr)
+  return result_bufnr
 end
 
 M.flash_highlight = function(bufnr, lnum, durationMs, hl_group)

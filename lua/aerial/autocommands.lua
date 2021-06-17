@@ -7,49 +7,54 @@ local window = require 'aerial.window'
 
 local M = {}
 
-M.on_enter_aerial_buffer = function()
-  local bufnr = util.get_source_buffer()
-  if bufnr == -1 then
-    -- Quit if source buffer is gone
-    vim.api.nvim_win_close(0, true)
-    return
-  else
-    local visible_buffers = vim.fn.tabpagebuflist()
-    -- Quit if the source buffer is no longer visible
-    if not vim.tbl_contains(visible_buffers, bufnr) then
-      vim.cmd('quit')
-      return
+local function close_orphans()
+  local orphans = util.get_aerial_orphans()
+  for _,winid in ipairs(orphans) do
+    if config.close_behavior == 'persist' then
+      render.clear_buffer(vim.api.nvim_win_get_buf(winid))
+    else
+      vim.api.nvim_win_close(winid, true)
     end
   end
-
-  -- Hack to ignore winwidth
-  vim.api.nvim_win_set_width(0, util.get_width())
 end
 
-M.on_buf_leave = function()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local aer_bufnr = util.get_aerial_buffer(bufnr)
-  if aer_bufnr == -1 then
+M.on_enter_buffer = function()
+  local mybuf = vim.api.nvim_get_current_buf()
+
+  if config.close_behavior == 'close' and not util.is_aerial_buffer(mybuf) then
+    close_orphans()
+  end
+
+  -- We only care if we enter an LSP-enabled buffer or an aerial buffer
+  if vim.tbl_isempty(vim.lsp.buf_get_clients()) and not util.is_aerial_buffer(mybuf) then
+    close_orphans()
     return
   end
-  render.update_highlights(bufnr)
 
-  local maybe_close_aerial = function()
-    local winid = vim.fn.bufwinid(bufnr)
-    -- If there are no windows left with the source buffer,
-    if winid == -1 then
-      local aer_winid = vim.fn.bufwinid(aer_bufnr)
-      -- And there is a window left for the aerial buffer
-      if aer_winid ~= -1 then
-        vim.api.nvim_win_close(aer_winid, false)
-      end
+  if util.is_aerial_buffer(mybuf) then
+    if (config.close_behavior ~= 'persist' and util.is_aerial_buffer_orphaned(mybuf))
+      or vim.tbl_count(vim.api.nvim_list_wins()) == 1 then
+      vim.cmd('quit')
+    else
+      -- Hack to ignore winwidth
+      vim.api.nvim_win_set_width(0, util.get_width())
+    end
+  elseif window.is_open() then
+    close_orphans()
+    render.update_aerial_buffer()
+  else
+    local orphans = util.get_aerial_orphans()
+    if not vim.tbl_isempty(orphans) then
+      -- open our symbols in that window
+      vim.defer_fn(function()
+        window.open(false, nil, {winid = orphans[1]})
+      end, 5)
+    else
+      vim.defer_fn(function()
+        window.maybe_open_automatic()
+      end, 5)
     end
   end
-  -- We have to defer this because if we :q out of a buffer with a aerial open,
-  -- and we *synchronously* close the aerial buffer, it will cause the :q
-  -- command to fail (presumably because it would cause vim to 'unexpectedly'
-  -- exit).
-  vim.defer_fn(maybe_close_aerial, 5)
 end
 
 M.on_buf_delete = function(bufnr)
@@ -63,30 +68,6 @@ M.on_diagnostics_changed = function()
     or errors == 0
     or not data:has_symbols() then
     vim.lsp.buf.document_symbol()
-  end
-end
-
-M.on_buf_win_enter = function()
-  if not config.open_automatic() then
-    return
-  end
-
-  local num_bufs_in_tab = 0
-  local bufnr = vim.api.nvim_get_current_buf()
-  for i=1,vim.fn.winnr('$'),1 do
-    if vim.fn.winbufnr(i) == bufnr then
-      num_bufs_in_tab = num_bufs_in_tab + 1
-    end
-  end
-
-  -- BufWinEnter usually only triggers when the buffer isn't already visible in
-  -- an existing window, but it will if the filename was manually specified. If
-  -- a buffer was already visible, we'd prefer to not change the visibility
-  -- status of aerial.
-  if num_bufs_in_tab == 1 then
-    -- Have to defer this because we defer the close in on_buf_leave. We don't
-    -- want to open the new window until the old one is cleaned up
-    vim.defer_fn(window.maybe_open_automatic, 6)
   end
 end
 

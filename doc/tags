@@ -21,6 +21,7 @@ aerial.select()	aerial.txt	/*aerial.select()*
 aerial.toggle()	aerial.txt	/*aerial.toggle()*
 aerial.tree_cmd()	aerial.txt	/*aerial.tree_cmd()*
 aerial.txt	aerial.txt	/*aerial.txt*
+g:aerial_close_behavior	aerial.txt	/*g:aerial_close_behavior*
 g:aerial_default_bindings	aerial.txt	/*g:aerial_default_bindings*
 g:aerial_default_direction	aerial.txt	/*g:aerial_default_direction*
 g:aerial_diagnostics_trigger_update	aerial.txt	/*g:aerial_diagnostics_trigger_update*

@@ -3,6 +3,12 @@ local util = require 'aerial.util'
 local config = require 'aerial.config'
 local M = {}
 
+M.clear_buffer = function(bufnr)
+  vim.api.nvim_buf_set_option(bufnr, 'modifiable', true)
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, {})
+  vim.api.nvim_buf_set_option(bufnr, 'modifiable', false)
+end
+
 -- Update the aerial buffer from cached symbols
 M.update_aerial_buffer = function(buf)
   local bufnr, aer_bufnr = util.get_buffers(buf)

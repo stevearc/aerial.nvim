@@ -44,6 +44,14 @@ single dict. If using a single dict, remove the "aerial_" prefix.
         \ 'min_width': 20,
     \}
 
+g:aerial_close_behavior                                 *g:aerial_close_behavior*
+    How to decide when to close the aerial window. Valid values are:
+        persist       Remain open until manually closed
+        close         Close once the original source file is no longer visible
+                      in the tabpage
+        auto          Stay open as long as there is a visible buffer to attach
+                      to (default)
+
 g:aerial_default_direction                           *g:aerial_default_direction*
     The default direction to open the window. Valid values are:
         left          Open the split to the left

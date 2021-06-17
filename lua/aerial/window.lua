@@ -20,47 +20,51 @@ local function create_aerial_buffer(bufnr)
   vim.api.nvim_buf_set_option(aer_bufnr, 'modifiable', false)
   vim.api.nvim_buf_set_option(aer_bufnr, 'filetype', 'aerial')
   render.update_aerial_buffer(bufnr)
-
-  vim.cmd[[autocmd BufEnter <buffer> lua require'aerial.autocommands'.on_enter_aerial_buffer()]]
   return aer_bufnr
 end
 
-local function create_aerial_window(bufnr, aer_bufnr, direction)
+local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   if direction == '<' then direction = 'left' end
   if direction == '>' then direction = 'right' end
   if direction ~= 'left' and direction ~= 'right' then
     error("Expected direction to be 'left' or 'right'")
     return
   end
-  local winids = util.get_fixed_wins(bufnr)
-  local split_target
-  if direction == 'left' then
-    split_target = winids[1]
-  else
-    split_target = winids[#winids]
-  end
   local my_winid = vim.api.nvim_get_current_win()
-  if my_winid ~= split_target then
-    vim.api.nvim_set_current_win(split_target)
-  end
-  if direction == 'left' then
-    vim.cmd('vertical leftabove split')
+  if not existing_win then
+    local winids = util.get_fixed_wins(bufnr)
+    local split_target
+    if direction == 'left' then
+      split_target = winids[1]
+    else
+      split_target = winids[#winids]
+    end
+    if my_winid ~= split_target then
+      util.go_win_no_au(split_target)
+    end
+    if direction == 'left' then
+      vim.cmd('noau vertical leftabove split')
+    else
+      vim.cmd('noau vertical rightbelow split')
+    end
   else
-    vim.cmd('vertical rightbelow split')
+    util.go_win_no_au(existing_win)
   end
 
   if aer_bufnr == -1 then
     aer_bufnr = create_aerial_buffer(bufnr)
   end
-  vim.api.nvim_set_current_buf(aer_bufnr)
+  util.go_buf_no_au(aer_bufnr)
 
-  vim.cmd('vertical resize ' .. util.get_width())
+  if not existing_win then
+    vim.api.nvim_win_set_width(0, util.get_width())
+  end
   vim.api.nvim_win_set_option(0, 'winfixwidth', true)
   vim.api.nvim_win_set_option(0, 'number', false)
   vim.api.nvim_win_set_option(0, 'relativenumber', false)
   vim.api.nvim_win_set_option(0, 'wrap', false)
   local aer_winid = vim.api.nvim_get_current_win()
-  vim.api.nvim_set_current_win(my_winid)
+  util.go_win_no_au(my_winid)
   return aer_winid
 end
 
@@ -100,7 +104,10 @@ M.maybe_open_automatic = function()
   return true
 end
 
-M.open = function(focus, direction)
+M.open = function(focus, direction, opts)
+  opts = vim.tbl_extend('keep', opts or {}, {
+    winid = nil,
+  })
   -- We get empty strings from the vim command
   if focus == '' then
     focus = true
@@ -110,7 +117,7 @@ M.open = function(focus, direction)
   if direction == '' then
     direction = nil
   end
-  if vim.lsp.buf_get_clients() == 0 then
+  if vim.tbl_isempty(vim.lsp.buf_get_clients()) then
     error("Cannot open aerial. No LSP clients")
     return
   end
@@ -123,7 +130,7 @@ M.open = function(focus, direction)
     return
   end
   direction = direction or util.detect_split_direction()
-  local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction)
+  local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction, opts.winid)
   if not data:has_symbols(bufnr) then
     vim.lsp.buf.document_symbol()
   end

@@ -51,15 +51,17 @@ M.on_attach = function(client, opts)
   if config.diagnostics_trigger_update then
     vim.cmd("autocmd User LspDiagnosticsChanged lua require'aerial.autocommands'.on_diagnostics_changed()")
   end
+  vim.cmd([[augroup aerial
+    au!
+    au BufEnter * lua require'aerial.autocommands'.on_enter_buffer()
+  augroup END]])
 
   vim.cmd("autocmd CursorMoved <buffer> lua require'aerial.autocommands'.on_cursor_move()")
-  vim.cmd("autocmd BufLeave <buffer> lua require'aerial.autocommands'.on_buf_leave()")
   vim.cmd([[autocmd BufDelete <buffer> call luaeval("require'aerial.autocommands'.on_buf_delete(_A)", expand('<abuf>'))]])
   if config.open_automatic() then
     if not config.diagnostics_trigger_update then
       vim.lsp.buf.document_symbol()
     end
-    vim.cmd("autocmd BufWinEnter <buffer> lua require'aerial.autocommands'.on_buf_win_enter()")
   end
 end
 

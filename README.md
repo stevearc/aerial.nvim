@@ -69,6 +69,12 @@ Command         | arg            | description
 
 ```lua
 vim.g.aerial = {
+  -- Enum: persist, close, auto
+  --   persist - aerial window will stay open until closed
+  --   close   - aerial window will close when original file is no longer visible
+  --   auto    - aerial window will stay open as long as there is a visible
+  --             buffer to attach to
+  close_behavior = 'auto',
   -- Enum: prefer_right, prefer_left, right, left
   -- Determines the default direction to open the aerial window. The 'prefer'
   -- options will open the window in the other direction *if* there is a
