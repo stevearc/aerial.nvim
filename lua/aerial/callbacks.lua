@@ -59,7 +59,7 @@ local function handle_symbols(result, bufnr)
   data[bufnr].items = items
 
   render.update_aerial_buffer(bufnr)
-  window.update_all_positions(bufnr)
+  window.update_all_positions(bufnr, vim.api.nvim_get_current_win())
   if not had_symbols then
     fold.maybe_set_foldmethod(bufnr)
     if bufnr == vim.api.nvim_get_current_buf() then

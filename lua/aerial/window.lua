@@ -190,9 +190,9 @@ M.get_position_in_win = function(bufnr, winid)
   }
 end
 
-M.update_all_positions = function(bufnr)
+M.update_all_positions = function(bufnr, update_last)
   local winids = vim.fn.win_findbuf(bufnr)
-  M.update_position(winids, false)
+  M.update_position(winids, update_last)
 end
 
 M.update_position = function(winid, update_last)
