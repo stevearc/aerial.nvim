@@ -30,7 +30,7 @@ local function process_symbols(symbols)
           level = level,
           parent = parent,
           lnum = range.start.line + 1,
-          col = range.start.character + 1,
+          col = range.start.character,
         }
         if symbol.children then
           item.children = _process_symbols(symbol.children, item, {}, level + 1)

@@ -5,48 +5,45 @@ local window = require 'aerial.window'
 
 local M = {}
 
-local function _get_pos_in_win(bufnr, winid)
-  local lnum = vim.api.nvim_win_get_cursor(winid or 0)[1]
-  local bufdata = data[bufnr]
-  local selected = 0
-  local relative = 'above'
-  bufdata:visit(function(item)
-    if item.lnum > lnum then
-      return true
-    elseif item.lnum == lnum then
-      relative = 'exact'
-    else
-      relative = 'below'
-    end
-    selected = selected + 1
-  end)
-  return {
-    lnum = math.max(1, selected),
-    relative = relative
-  }
-end
-
-local function _get_current_lnum()
+local function _get_current_lnum(winid)
   local bufnr = vim.api.nvim_get_current_buf()
-  if util.is_aerial_buffer(bufnr) then
-    bufnr = util.get_source_buffer()
-    local winid = vim.fn.bufwinid(bufnr)
-    if winid == -1 then
-      return nil
-    end
+  if data:has_symbols(bufnr) then
     local bufdata = data[bufnr]
     local cached_lnum = bufdata.positions[winid]
-    return cached_lnum == nil and nil or {
-      ['lnum'] = cached_lnum,
-      ['relative'] = 'exact',
-    }
-  else
-    if data:has_symbols(bufnr) then
-      return _get_pos_in_win(bufnr)
-    else
-      return nil
+    if cached_lnum then
+      return cached_lnum
     end
   end
+
+  if util.is_aerial_buffer(bufnr) then
+    bufnr = util.get_source_buffer()
+  end
+  if data:has_symbols(bufnr) then
+    return window.get_position_in_win(bufnr, winid)
+  else
+    return nil
+  end
+end
+
+local function get_target_win()
+  local bufnr, _ = util.get_buffers()
+  local my_winid = vim.api.nvim_get_current_win()
+  local winid
+  if util.is_aerial_buffer() then
+    if string.find(vim.o.switchbuf, "uselast") then
+      vim.cmd("noau wincmd p")
+      winid = vim.api.nvim_get_current_win()
+      util.go_win_no_au(my_winid)
+    else
+      winid = vim.fn.win_findbuf(bufnr)[1]
+    end
+  else
+    winid = vim.api.nvim_get_current_win()
+  end
+  if winid == -1 then
+    return nil
+  end
+  return winid
 end
 
 M.next = function(step, opts)
@@ -54,7 +51,12 @@ M.next = function(step, opts)
     same_level = false
   })
   step = step or 1
-  local pos = _get_current_lnum()
+  local winid = get_target_win()
+  if not winid then
+    error("Could not find destination window")
+    return
+  end
+  local pos = _get_current_lnum(winid)
   if pos == nil then
     return
   end
@@ -83,6 +85,7 @@ M.next = function(step, opts)
   M.select{
     index = new_num,
     jump = false,
+    winid = winid,
   }
   if util.is_aerial_buffer() then
     vim.api.nvim_win_set_cursor(0, {new_num, 0})
@@ -95,21 +98,11 @@ M.select = function(opts)
     split = nil,
     jump = true,
   })
-  local bufnr, _ = util.get_buffers()
-  local my_winid = vim.api.nvim_get_current_win()
-  local winid
-  if util.is_aerial_buffer() then
-    if string.find(vim.o.switchbuf, "uselast") then
-      vim.cmd("noau wincmd p")
-      winid = vim.api.nvim_get_current_win()
-      util.go_win_no_au(my_winid)
-    else
-      winid = vim.fn.win_findbuf(bufnr)[1]
-    end
-  else
-    winid = vim.api.nvim_get_current_win()
+  local winid = opts.winid
+  if not winid then
+    winid = get_target_win()
   end
-  if not winid or winid == -1 then
+  if not winid then
     error("Could not find destination window")
     return
   end
@@ -136,11 +129,13 @@ M.select = function(opts)
     elseif split == 'horizontal' or split == 'h' or split == 's' then
       split = 'belowright split'
     end
+    local my_winid = vim.api.nvim_get_current_win()
     util.go_win_no_au(winid)
     vim.cmd(split)
     winid = vim.api.nvim_get_current_win()
     util.go_win_no_au(my_winid)
   end
+  local bufnr, _ = util.get_buffers()
   vim.api.nvim_win_set_buf(winid, bufnr)
   vim.api.nvim_win_set_cursor(winid, {item.lnum, item.col})
   if config.post_jump_cmd ~= '' then

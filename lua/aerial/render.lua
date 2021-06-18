@@ -112,7 +112,7 @@ M.update_highlights = function(buf)
       aer_bufnr,
       ns,
       'AerialLine',
-      bufdata.positions[winid] - 1,
+      bufdata.positions[winid].lnum - 1,
       start_hl,
       end_hl)
     if hl_mode ~= 'full_width' then

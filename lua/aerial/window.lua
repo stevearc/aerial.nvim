@@ -157,8 +157,10 @@ M.toggle = function(focus, direction)
   end
 end
 
-local function get_position_in_win(bufnr, winid)
-  local lnum = vim.api.nvim_win_get_cursor(winid or 0)[1]
+M.get_position_in_win = function(bufnr, winid)
+  local cursor = vim.api.nvim_win_get_cursor(winid or 0)
+  local lnum = cursor[1]
+  local col = cursor[2]
   local bufdata = data[bufnr]
   local selected = 0
   local relative = 'above'
@@ -166,7 +168,15 @@ local function get_position_in_win(bufnr, winid)
     if item.lnum > lnum then
       return true
     elseif item.lnum == lnum then
-      relative = 'exact'
+      if item.col > col then
+        return true
+      elseif item.col == col then
+        selected = selected + 1
+        relative = 'exact'
+        return true
+      else
+        relative = 'below'
+      end
     else
       relative = 'below'
     end
@@ -204,9 +214,9 @@ M.update_position = function(winid, update_last)
 
   local bufdata = data[bufnr]
   for _,target_win in ipairs(winids) do
-    local pos = get_position_in_win(bufnr, target_win)
+    local pos = M.get_position_in_win(bufnr, target_win)
     if pos ~= nil then
-      bufdata.positions[target_win] = pos.lnum
+      bufdata.positions[target_win] = pos
       if update_last and (update_last == true or update_last == target_win) then
         bufdata.last_position = pos.lnum
       end
