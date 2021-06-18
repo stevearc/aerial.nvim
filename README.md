@@ -103,6 +103,16 @@ vim.g.aerial = {
   -- Set to 0 or false to disable
   highlight_on_jump = 300,
 
+  -- Fold code when folding the tree. Only works when manage_folds is enabled
+  link_tree_to_folds = true,
+
+  -- Fold the tree when folding code. Only works when manage_folds is enabled
+  link_folds_to_tree = false,
+
+  -- Use symbol tree for folding. Set to true or false to enable/disable
+  -- 'auto' will manage folds if your previous foldmethod was 'manual'
+  manage_folds = 'auto',
+
   -- The maximum width of the aerial window
   max_width = 40,
 
@@ -124,13 +134,13 @@ vim.g.aerial = {
   -- If open_automatic is true, only open aerial if there are at least this many symbols
   open_automatic_min_symbols = 0,
 
-  -- Run this command after jumping to a symbol ('' will disable)
-  post_jump_cmd = 'normal! zvzz',
+  -- Run this command after jumping to a symbol (false will disable)
+  post_jump_cmd = 'normal! zz',
 
   -- Set to false to not update the symbols when there are LSP errors
   update_when_errors = true,
 
-  -- A list of all symbols to display. Set to false to show all symbols.
+  -- A list of all symbols to display. Set to false to display all symbols.
   filter_kind = {
     "Class",
     "Constructor",
@@ -199,8 +209,15 @@ Key     | Command
 `[[`    | Jump to the previous symbol at the same tree level
 `]]`    | Jump to the next symbol at the same tree level
 `q`     | Close the aerial window
-`o`     | Toggle the tree
-`O`     | Toggle the tree recursively
+`o`     | Toggle the symbol under the cursor open/closed
+`O`     | Recursive toggle the symbol under the cursor open/closed
+`zx`    | Sync code folding to the tree (useful if they get out of sync)
+`za`    | Toggle the symbol under the cursor open/closed
+`zA`    | Recursive toggle the symbol under the cursor open/closed
+`zo`    | Open the symbol under the cursor
+`zO`    | Recursive open the symbol under the cursor
+`zc`    | Close the symbol under the cursor
+`zC`    | Recursive close the symbol under the cursor
 
 ## Highlight
 

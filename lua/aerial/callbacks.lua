@@ -1,6 +1,6 @@
 local config = require 'aerial.config'
 local data = require 'aerial.data'
-local nav = require 'aerial.navigation'
+local fold = require 'aerial.fold'
 local protocol = require 'vim.lsp.protocol'
 local render = require 'aerial.render'
 local window = require 'aerial.window'
@@ -60,8 +60,11 @@ local function handle_symbols(result, bufnr)
 
   render.update_aerial_buffer(bufnr)
   window.update_all_positions(bufnr)
-  if not had_symbols and bufnr == vim.api.nvim_get_current_buf() then
-    window.maybe_open_automatic()
+  if not had_symbols then
+    fold.maybe_set_foldmethod(bufnr)
+    if bufnr == vim.api.nvim_get_current_buf() then
+      window.maybe_open_automatic()
+    end
   end
 end
 

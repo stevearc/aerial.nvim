@@ -109,6 +109,22 @@ g:aerial_highlight_on_jump                           *g:aerial_highlight_on_jump
     300). It can also be set to `v:true` for the default, or `v:false` to
     disable the highlight.
 
+g:aerial_link_folds_to_tree                         *g:aerial_link_folds_to_tree*
+    When you fold code with |za|, |zo|, or |zc|, update the tree as well.
+    Requires |g:aerial_manage_folds| to be enabled. Default `false`.
+
+g:aerial_link_tree_to_folds                         *g:aerial_link_tree_to_folds*
+    Update your code folds when you open/collapse symbols in the tree.
+    Requires |g:aerial_manage_folds| to be enabled. Default `true`.
+
+g:aerial_manage_folds                                     *g:aerial_manage_folds*
+    If `true`, will automatically configure your windows to use the symbols
+    tree for code folding. This is equivalent to setting 'foldmethod'=expr and
+    'foldexpr'=aerial#foldexpr() (which you can set manually if you prefer).
+        `true`    Use aerial's foldexpr
+        `false`   Do not modify fold settings
+        "auto"  Manage folds if your previous 'foldmethod' was "manual" (default)
+
 g:aerial_max_width                                           *g:aerial_max_width*
     The maximum width of the aerial window. Default 40.
 
@@ -252,6 +268,11 @@ aerial.tree_cmd({action}, [{opts}])                           *aerial.tree_cmd()
 
     {opts} can be a table with the following optional keys:
 
+        index    The index of the tree to perform the action on. Defaults to
+                 cursor location.
+        fold     If `false`, do not modify folds regardless of
+                 |g:aerial_link_tree_to_folds| setting. If "other", will only update
+                 folds in other windows. (default `true`)
         recurse  If `true`, perform the action recursively on all children
                  (default `false`)
         bubble   If `true` and current symbol has no children, perform the

@@ -26,6 +26,14 @@ nnoremap <buffer> q <cmd>AerialClose<CR>
 nnoremap <buffer> o <cmd>lua require"aerial".tree_cmd('toggle')<CR>
 " O toggles the tree recursively
 nnoremap <buffer> O <cmd>lua require"aerial".tree_cmd('toggle', {recurse=true})<CR>
-
 " l opens the tree and moves the cursor
 nnoremap <buffer> l l<cmd>lua require"aerial".tree_cmd('open', {bubble=false})<CR>
+" zx will sync the folds for all open windows
+nnoremap <buffer> zx <cmd>lua require"aerial".sync_folds()<CR>
+" make za/o/c function the same as for code folds
+nnoremap <buffer> za <cmd>lua require"aerial".tree_cmd('toggle')<CR>
+nnoremap <buffer> zA <cmd>lua require"aerial".tree_cmd('toggle', {recurse=true})<CR>
+nnoremap <buffer> zo <cmd>lua require"aerial".tree_cmd('open')<CR>
+nnoremap <buffer> zO <cmd>lua require"aerial".tree_cmd('open', {recurse=true})<CR>
+nnoremap <buffer> zc <cmd>lua require"aerial".tree_cmd('close')<CR>
+nnoremap <buffer> zC <cmd>lua require"aerial".tree_cmd('close', {recurse=true})<CR>

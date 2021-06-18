@@ -138,8 +138,9 @@ M.select = function(opts)
   local bufnr, _ = util.get_buffers()
   vim.api.nvim_win_set_buf(winid, bufnr)
   vim.api.nvim_win_set_cursor(winid, {item.lnum, item.col})
-  if config.post_jump_cmd ~= '' then
-    vim.fn.win_execute(winid, config.post_jump_cmd, true)
+  local cmd = config.post_jump_cmd
+  if cmd and cmd ~= '' then
+    vim.fn.win_execute(winid, cmd, true)
   end
 
   if opts.jump then

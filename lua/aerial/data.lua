@@ -44,35 +44,43 @@ local BufData = {
     return key
   end,
 
-  _is_collapsed = function(self, item)
+  is_collapsed = function(self, item)
     local key = self:_get_item_key(item)
     return self.collapsed[key]
   end,
 
-  _is_collapsable = function(_, item)
-      return item.children and not vim.tbl_isempty(item.children)
+  is_collapsable = function(_, item)
+      return item.level == 0 or (item.children and not vim.tbl_isempty(item.children))
   end,
 
   _get_config = function(self, item)
     return {
-      collapsed = self:_is_collapsed(item),
-      has_children = self:_is_collapsable(item),
+      collapsed = self:is_collapsed(item),
+      has_children = self:is_collapsable(item),
     }
   end,
 
-  action = function(self, action, opts)
+  _get_target = function(self, action, item, bubble)
+    if not bubble then
+      return item
+    end
+    while item and
+      (not self:is_collapsable(item)
+       or (action == 'close' and self:is_collapsed(item))) do
+      item = item.parent
+    end
+    return item
+  end,
+
+  action = function(self, index, action, opts)
     opts = vim.tbl_extend('keep', opts or {}, {
-      recurse = false,
       bubble = true,
+      recurse = false,
     })
     local did_update = false
     local function do_action(item, bubble)
-      if bubble then
-        while item and not self:_is_collapsable(item) do
-          item = item.parent
-        end
-      end
-      if not item or not self:_is_collapsable(item) then
+      item = self:_get_target(action, item, bubble)
+      if not item or not self:is_collapsable(item) then
         return
       end
       local key = self:_get_item_key(item)
@@ -98,8 +106,7 @@ local BufData = {
         error(string.format("Unknown action '%s'", action))
       end
     end
-    local cursor = vim.api.nvim_win_get_cursor(0)
-    local current_item = self:item(cursor[1])
+    local current_item = self:item(index)
     local item = do_action(current_item, opts.bubble)
     return did_update, self:indexof(item)
   end,
@@ -112,7 +119,7 @@ local BufData = {
       local ret = callback(item, self:_get_config(item))
       if ret then return ret end
       if item.children
-        and (opts.incl_hidden or not self:_is_collapsed(item)) then
+        and (opts.incl_hidden or not self:is_collapsed(item)) then
         for _,child in ipairs(item.children) do
           ret = visit_item(child)
           if ret then return ret end
@@ -128,7 +135,7 @@ local BufData = {
   flatten = function(self, filter, opts)
     local items = {}
     self:visit(function(item)
-      if filter(item) then
+      if not filter or filter(item) then
         table.insert(items, item)
       end
     end, opts)
@@ -160,7 +167,8 @@ function Data:has_symbols(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  return rawget(self, bufnr) ~= nil
+  local bufdata = rawget(self, bufnr)
+  return bufdata ~= nil and not vim.tbl_isempty(bufdata.items)
 end
 
 return Data

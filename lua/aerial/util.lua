@@ -135,6 +135,10 @@ M.is_floating_win = function(winid)
   return vim.api.nvim_win_get_config(winid).relative ~= ""
 end
 
+M.is_managing_folds = function(winid)
+  return vim.api.nvim_win_get_option(winid or 0, 'foldexpr') == 'aerial#foldexpr()'
+end
+
 M.detect_split_direction = function(bufnr)
   local default = config.default_direction
   if default == 'left' then

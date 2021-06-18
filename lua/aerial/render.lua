@@ -71,7 +71,8 @@ end
 
 -- Update the highlighted lines in the aerial buffer
 M.update_highlights = function(buf)
-  if config.highlight_mode == 'none' then
+  local hl_mode = config.highlight_mode
+  if not hl_mode or hl_mode == 'none' then
     return
   end
   local bufnr, aer_bufnr = util.get_buffers(buf)
@@ -86,7 +87,6 @@ M.update_highlights = function(buf)
     return
   end
   local hl_width = math.floor(util.get_width(aer_bufnr) / #winids)
-  local hl_mode = config.highlight_mode
 
   if hl_mode == 'last' then
     local row = data[bufnr].last_position

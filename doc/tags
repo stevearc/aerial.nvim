@@ -32,6 +32,9 @@ g:aerial_filter_kind	aerial.txt	/*g:aerial_filter_kind*
 g:aerial_highlight_mode	aerial.txt	/*g:aerial_highlight_mode*
 g:aerial_highlight_on_jump	aerial.txt	/*g:aerial_highlight_on_jump*
 g:aerial_icons	aerial.txt	/*g:aerial_icons*
+g:aerial_link_folds_to_tree	aerial.txt	/*g:aerial_link_folds_to_tree*
+g:aerial_link_tree_to_folds	aerial.txt	/*g:aerial_link_tree_to_folds*
+g:aerial_manage_folds	aerial.txt	/*g:aerial_manage_folds*
 g:aerial_max_width	aerial.txt	/*g:aerial_max_width*
 g:aerial_min_width	aerial.txt	/*g:aerial_min_width*
 g:aerial_nerd_font	aerial.txt	/*g:aerial_nerd_font*

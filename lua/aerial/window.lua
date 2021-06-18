@@ -196,7 +196,7 @@ M.update_all_positions = function(bufnr)
 end
 
 M.update_position = function(winid, update_last)
-  if config.highlight_mode == 'none' then
+  if not config.highlight_mode or config.highlight_mode == 'none' then
     return
   end
   if winid == 0 then

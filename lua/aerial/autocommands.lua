@@ -1,6 +1,7 @@
 -- Functions that are called in response to autocommands
 local config = require 'aerial.config'
 local data = require 'aerial.data'
+local fold = require 'aerial.fold'
 local util = require 'aerial.util'
 local render = require 'aerial.render'
 local window = require 'aerial.window'
@@ -27,10 +28,12 @@ M.on_enter_buffer = function()
 
   -- We only care if we enter an LSP-enabled buffer or an aerial buffer
   if vim.tbl_isempty(vim.lsp.buf_get_clients()) and not util.is_aerial_buffer(mybuf) then
+    fold.restore_foldmethod()
     close_orphans()
     return
   end
 
+  fold.maybe_set_foldmethod()
   if util.is_aerial_buffer(mybuf) then
     if (config.close_behavior ~= 'persist' and util.is_aerial_buffer_orphaned(mybuf))
       or vim.tbl_count(vim.api.nvim_list_wins()) == 1 then
