@@ -1,4 +1,4 @@
-if !get(g:, 'aerial_default_bindings', 1)
+if !get(g:, 'aerial_default_bindings', 1) || !get(get(g:, 'aerial', {}), 'default_bindings', 1)
   finish
 endif
 " Use <CR> to jump to the location, just like with the quickfix

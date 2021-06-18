@@ -70,6 +70,9 @@ g:aerial_close_behavior                                 *g:aerial_close_behavior
         auto          Stay open as long as there is a visible buffer to attach
                       to (default)
 
+g:aerial_default_bindings                             *g:aerial_default_bindings*
+    If `false`, don't set up the default keybindings in the aerial buffer.
+
 g:aerial_default_direction                           *g:aerial_default_direction*
     The default direction to open the window. Valid values are:
         left          Open the split to the left
@@ -146,9 +149,6 @@ g:aerial_post_jump_cmd                                   *g:aerial_post_jump_cmd
 
 g:aerial_update_when_errors                         *g:aerial_update_when_errors*
     Update the aerial buffer even when your file has LSP errors. Default `true`.
-
-g:aerial_default_bindings                             *g:aerial_default_bindings*
-    If `false`, don't set up the default keybindings in the aerial buffer.
 
 g:aerial_icons                                                   *g:aerial_icons*
     A map of |SymbolKind| to icons. You can also specify "<Symbol>Collapsed"
