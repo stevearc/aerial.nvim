@@ -1,10 +1,10 @@
 :AerialClose	aerial.txt	/*:AerialClose*
 :AerialGo	aerial.txt	/*:AerialGo*
-:AerialLNext	aerial.txt	/*:AerialLNext*
-:AerialLPrev	aerial.txt	/*:AerialLPrev*
 :AerialNext	aerial.txt	/*:AerialNext*
+:AerialNextUp	aerial.txt	/*:AerialNextUp*
 :AerialOpen	aerial.txt	/*:AerialOpen*
 :AerialPrev	aerial.txt	/*:AerialPrev*
+:AerialPrevUp	aerial.txt	/*:AerialPrevUp*
 :AerialToggle	aerial.txt	/*:AerialToggle*
 Aerial	aerial.txt	/*Aerial*
 SymbolKind	aerial.txt	/*SymbolKind*
@@ -24,6 +24,7 @@ aerial.select()	aerial.txt	/*aerial.select()*
 aerial.toggle()	aerial.txt	/*aerial.toggle()*
 aerial.tree_cmd()	aerial.txt	/*aerial.tree_cmd()*
 aerial.txt	aerial.txt	/*aerial.txt*
+aerial.up()	aerial.txt	/*aerial.up()*
 g:aerial_close_behavior	aerial.txt	/*g:aerial_close_behavior*
 g:aerial_default_bindings	aerial.txt	/*g:aerial_default_bindings*
 g:aerial_default_direction	aerial.txt	/*g:aerial_default_direction*

@@ -33,15 +33,15 @@ COMMANDS                                                        *aerial-commands
 :[count]AerialPrev
         Jump backwards [count] symbols (default 1).
 
-                                                                   *:AerialLNext*
-:[count]AerialLNext
-        Jump forwards [count] symbols, skipping over symbols at a different
-        tree level (default 1).
+                                                                  *:AerialNextUp*
+:[count]AerialNextUp
+        Jump up the tree [count] levels, moving forwards in the file
+        (default 1).
 
-                                                                   *:AerialLPrev*
-:[count]AerialLPrev
-        Jump backwards [count] symbols, skipping over symbols at a different
-        tree level (default 1).
+                                                                  *:AerialPrevUp*
+:[count]AerialPrevUp
+        Jump up the tree [count] levels, moving backwards in the file
+        (default 1).
 
                                                                       *:AerialGo*
 :[count]AerialGo[!] [split]
@@ -252,11 +252,13 @@ aerial.select([{opts}])                                         *aerial.select()
         jump     If `false` and in the aerial window, do not leave the aerial
                  window. (Default `true`)
 
-aerial.next([{step}], [{opts}])                                   *aerial.next()*
+aerial.next([{step}])                                             *aerial.next()*
     Jump forwards or backwards {step} symbols (default 1). Use negative values
-    to jump backwards. {opts} can be a table with the following keys:
-        same_level   If `true`, skip over symbols at a different tree level
-                     (default `false`)
+    to jump backwards.
+
+aerial.up({direction}, [{count}])                                   *aerial.up()*
+    Jump up the tree {count} levels (default 1). Direction should be -1 to
+    move backwards, or 1 to move forwards.
 
 aerial.tree_cmd({action}, [{opts}])                           *aerial.tree_cmd()*
     Perform an action on the symbol tree {action} can be one of the following

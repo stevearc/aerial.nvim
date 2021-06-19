@@ -15,9 +15,9 @@ nnoremap <buffer> <C-k> k<cmd>lua require'aerial'.select({jump=false})<CR>
 " Use {} to jump to the prev/next item
 nnoremap <buffer> } <cmd>AerialNext<CR>
 nnoremap <buffer> { <cmd>AerialPrev<CR>
-" Use [[]] to jump to the prev/next item at the same tree level
-nnoremap <buffer> ]] <cmd>AerialLNext<CR>
-nnoremap <buffer> [[ <cmd>AerialLPrev<CR>
+" Use [[]] to jump up the tree
+nnoremap <buffer> ]] <cmd>AerialNextUp<CR>
+nnoremap <buffer> [[ <cmd>AerialPrevUp<CR>
 " q closes
 nnoremap <buffer> q <cmd>AerialClose<CR>
 

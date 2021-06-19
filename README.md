@@ -43,8 +43,8 @@ local custom_attach = function(client)
   vim.api.nvim_buf_set_keymap(0, 'n', '{', '<cmd>AerialPrev<CR>', {})
   vim.api.nvim_buf_set_keymap(0, 'n', '}', '<cmd>AerialNext<CR>', {})
   -- Jump forwards/backwards at the same tree level with '[[' and ']]'
-  vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>AerialLPrev<CR>', {})
-  vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>AerialLNext<CR>', {})
+  vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>AerialPrevUp<CR>', {})
+  vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>AerialNextUp<CR>', {})
 
   -- This is a great place to set up all your other LSP mappings
 end
@@ -66,8 +66,8 @@ Command         | arg            | description
 `AerialClose`   |                | Close the aerial window
 `AerialPrev`    | N=1            | Jump backwards N symbols
 `AerialNext`    | N=1            | Jump forwards N symbols
-`AerialLPrev`   | N=1            | Jump backwards N symbols, skip symbols at a diffent tree level
-`AerialLNext`   | N=1            | Jump forwards N symbols, skip symbols at a diffent tree level
+`AerialPrevUp`  | N=1            | Jump up the tree N levels, moving backwards
+`AerialNextUp`  | N=1            | Jump up the tree N levels, moving forwards
 `AerialGo`      | N=1, `v`/`h`   | Jump to the Nth symbol
 
 ## Options
