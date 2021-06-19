@@ -3,8 +3,9 @@ local config = require 'aerial.config'
 local M = {}
 
 M.rpad = function(str, length, padchar)
-  if string.len(str) < length then
-    return str .. string.rep(padchar or ' ', length - string.len(str))
+  local strlen = vim.fn.strdisplaywidth(str)
+  if strlen < length then
+    return str .. string.rep(padchar or ' ', length - strlen)
   end
   return str
 end
@@ -31,7 +32,7 @@ M.set_width = function(bufnr, width)
   vim.api.nvim_buf_set_var(bufnr, 'aerial_width', width)
 
   for _,winid in ipairs(vim.fn.win_findbuf(bufnr)) do
-    vim.fn.win_execute(winid, 'vertical resize ' .. width, true)
+    vim.api.nvim_win_set_width(winid, width)
   end
 end
 
@@ -41,6 +42,9 @@ M.is_aerial_buffer = function(bufnr)
 end
 
 M.go_win_no_au = function(winid)
+  if winid == vim.api.nvim_get_current_win() then
+    return
+  end
   local winnr = vim.fn.win_id2win(winid)
   vim.cmd(string.format("noau %dwincmd w", winnr))
 end

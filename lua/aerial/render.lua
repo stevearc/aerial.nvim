@@ -26,7 +26,7 @@ M.update_aerial_buffer = function(buf)
     local kind = config.get_icon(item.kind, conf.collapsed)
     local spacing = string.rep('  ', item.level)
     local text = string.format("%s%s %s", spacing, kind, item.name)
-    local strlen = string.len(text)
+    local strlen = vim.fn.strdisplaywidth(text)
     table.insert(highlights, {
       group = 'Aerial' .. item.kind .. 'Icon',
       row = row,
