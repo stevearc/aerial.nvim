@@ -1,8 +1,7 @@
 # aerial.nvim
 A code outline window for skimming and quick navigation
 
-![Screenshot from 2021-06-16 19-05-43](https://user-images.githubusercontent.com/506791/122320750-9cddbc80-ced7-11eb-937e-90eed107f94e.png)
-![Screenshot from 2021-06-16 19-17-00](https://user-images.githubusercontent.com/506791/122320760-9ea78000-ced7-11eb-8982-3d051992e91f.png)
+https://user-images.githubusercontent.com/506791/122652728-18688500-d0f5-11eb-80aa-910f7e6a5f46.mp4
 
 ## Requirements
 Neovim 0.5 (nightly)
