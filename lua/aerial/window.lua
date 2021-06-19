@@ -1,5 +1,6 @@
 local config = require 'aerial.config'
 local data = require 'aerial.data'
+local loading = require 'aerial.loading'
 local render = require 'aerial.render'
 local util = require 'aerial.util'
 
@@ -10,9 +11,9 @@ local function create_aerial_buffer(bufnr)
 
   vim.api.nvim_set_current_buf(aer_bufnr)
   -- Set buffer options
-  vim.api.nvim_buf_set_lines(aer_bufnr, 0, -1, false, {"Loading..."})
   vim.api.nvim_buf_set_var(bufnr, 'aerial_buffer', aer_bufnr)
   vim.api.nvim_buf_set_var(aer_bufnr, 'source_buffer', bufnr)
+  vim.api.nvim_buf_set_var(aer_bufnr, 'loading', true)
   vim.api.nvim_buf_set_option(aer_bufnr, 'buftype', 'nofile')
   vim.api.nvim_buf_set_option(aer_bufnr, 'bufhidden', 'wipe')
   vim.api.nvim_buf_set_option(aer_bufnr, 'buflisted', false)
@@ -20,6 +21,7 @@ local function create_aerial_buffer(bufnr)
   vim.api.nvim_buf_set_option(aer_bufnr, 'modifiable', false)
   vim.api.nvim_buf_set_option(aer_bufnr, 'filetype', 'aerial')
   render.update_aerial_buffer(bufnr)
+  loading.add_loading_animation(aer_bufnr)
   return aer_bufnr
 end
 
@@ -204,6 +206,9 @@ M.update_position = function(winid, update_last)
   end
   local win_bufnr = vim.api.nvim_win_get_buf(winid)
   local bufnr, aer_bufnr = util.get_buffers(win_bufnr)
+  if not data:has_symbols(bufnr) then
+    return
+  end
   local winids
   if not winid or util.is_aerial_buffer(win_bufnr) then
     winids = util.get_fixed_wins(bufnr)

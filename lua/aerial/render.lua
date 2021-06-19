@@ -18,6 +18,10 @@ M.update_aerial_buffer = function(buf)
   if not data:has_symbols(bufnr) then
     return
   end
+  local ok, loading = pcall(vim.api.nvim_buf_get_var, aer_bufnr, 'loading')
+  if ok and loading then
+    vim.api.nvim_buf_del_var(aer_bufnr, 'loading')
+  end
   local row = 1
   local max_len = 1
   local lines = {}
