@@ -1,8 +1,10 @@
 local config = require 'aerial.config'
 local data = require 'aerial.data'
 local fold = require 'aerial.fold'
+local loading = require 'aerial.loading'
 local protocol = require 'vim.lsp.protocol'
 local render = require 'aerial.render'
+local util = require 'aerial.util'
 local window = require 'aerial.window'
 
 local M = {}
@@ -57,6 +59,7 @@ local function handle_symbols(result, bufnr)
   local had_symbols = data:has_symbols(bufnr)
   local items = process_symbols(result)
   data[bufnr].items = items
+  loading.set_loading(util.get_aerial_buffer(bufnr), false)
 
   render.update_aerial_buffer(bufnr)
   window.update_all_positions(bufnr, vim.api.nvim_get_current_win())

@@ -1,39 +1,29 @@
 local util = require 'aerial.util'
 local M = {}
 
-M.add_loading_animation = function(bufnr)
-  local timer = vim.loop.new_timer()
-  local i = 0
-  local running = true
-  timer:start(0, 80, vim.schedule_wrap(function()
-    if not running then
-      return
+local timers = {}
+
+M.is_loading = function(aer_bufnr)
+  return timers[aer_bufnr] ~= nil
+end
+
+M.set_loading = function(aer_bufnr, is_loading)
+  if is_loading then
+    if timers[aer_bufnr] == nil then
+      timers[aer_bufnr] = vim.loop.new_timer()
+      local i = 0
+      timers[aer_bufnr]:start(0, 80, vim.schedule_wrap(function()
+        local line = M.spinner_frames[i+1] .. ' Loading'
+        util.render_centered_text(aer_bufnr, line)
+        i = (i + 1) % #M.spinner_frames
+      end))
     end
-    local ok, loading = pcall(vim.api.nvim_buf_get_var, bufnr, 'loading')
-    if not ok or not loading then
-      timer:close()
-      running = false
-      return
+  else
+    if timers[aer_bufnr] then
+      timers[aer_bufnr]:close()
+      timers[aer_bufnr] = nil
     end
-    local winid = vim.fn.bufwinid(bufnr)
-    local height = 40
-    local width = util.get_width(bufnr)
-    if winid ~= -1 then
-      height = vim.api.nvim_win_get_height(winid)
-      width = vim.api.nvim_win_get_width(winid)
-    end
-    local lines = {}
-    for _=1,(height/2)-1 do
-      table.insert(lines, '')
-    end
-    local line = M.spinner_frames[i+1] .. ' Loading'
-    line = string.rep(' ', (width - vim.fn.strdisplaywidth(line)) / 2) .. line
-    table.insert(lines, line)
-    vim.api.nvim_buf_set_option(bufnr, 'modifiable', true)
-    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
-    vim.api.nvim_buf_set_option(bufnr, 'modifiable', false)
-    i = (i + 1) % #M.spinner_frames
-  end))
+  end
 end
 
 -- Dots spinner is from https://github.com/sindresorhus/cli-spinners

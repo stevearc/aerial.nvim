@@ -1,6 +1,7 @@
-local data = require 'aerial.data'
-local util = require 'aerial.util'
 local config = require 'aerial.config'
+local data = require 'aerial.data'
+local loading = require 'aerial.loading'
+local util = require 'aerial.util'
 local M = {}
 
 M.clear_buffer = function(bufnr)
@@ -12,15 +13,12 @@ end
 -- Update the aerial buffer from cached symbols
 M.update_aerial_buffer = function(buf)
   local bufnr, aer_bufnr = util.get_buffers(buf)
-  if aer_bufnr == -1 then
+  if aer_bufnr == -1 or loading.is_loading(aer_bufnr) then
     return
   end
   if not data:has_symbols(bufnr) then
+    util.render_centered_text(aer_bufnr, "No symbols")
     return
-  end
-  local ok, loading = pcall(vim.api.nvim_buf_get_var, aer_bufnr, 'loading')
-  if ok and loading then
-    vim.api.nvim_buf_del_var(aer_bufnr, 'loading')
   end
   local row = 1
   local max_len = 1

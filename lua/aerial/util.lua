@@ -98,7 +98,7 @@ end
 
 M.get_buffer_from_var = function(bufnr, varname)
   local status, result_bufnr = pcall(vim.api.nvim_buf_get_var, bufnr, varname)
-  if not status or result_bufnr == nil or vim.fn.bufexists(result_bufnr) == 0 then
+  if not status or result_bufnr == nil or not vim.api.nvim_buf_is_valid(result_bufnr) then
     return -1
   end
   return result_bufnr
@@ -176,6 +176,29 @@ M.detect_split_direction = function(bufnr)
   end
 
   return default
+end
+
+M.render_centered_text = function(bufnr, text)
+    if not vim.api.nvim_buf_is_valid(bufnr) then
+      return
+    end
+    local winid = vim.fn.bufwinid(bufnr)
+    local height = 40
+    local width = M.get_width(bufnr)
+    if winid ~= -1 then
+      height = vim.api.nvim_win_get_height(winid)
+      width = vim.api.nvim_win_get_width(winid)
+    end
+    local lines = {}
+    for _=1,(height/2)-1 do
+      table.insert(lines, '')
+    end
+    local line = text
+    line = string.rep(' ', (width - vim.fn.strdisplaywidth(line)) / 2) .. line
+    table.insert(lines, line)
+    vim.api.nvim_buf_set_option(bufnr, 'modifiable', true)
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+    vim.api.nvim_buf_set_option(bufnr, 'modifiable', false)
 end
 
 return M

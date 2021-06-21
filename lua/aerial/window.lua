@@ -13,7 +13,7 @@ local function create_aerial_buffer(bufnr)
   -- Set buffer options
   vim.api.nvim_buf_set_var(bufnr, 'aerial_buffer', aer_bufnr)
   vim.api.nvim_buf_set_var(aer_bufnr, 'source_buffer', bufnr)
-  vim.api.nvim_buf_set_var(aer_bufnr, 'loading', true)
+  loading.set_loading(aer_bufnr, not data:has_symbols(bufnr))
   vim.api.nvim_buf_set_option(aer_bufnr, 'buftype', 'nofile')
   vim.api.nvim_buf_set_option(aer_bufnr, 'bufhidden', 'wipe')
   vim.api.nvim_buf_set_option(aer_bufnr, 'buflisted', false)
@@ -21,7 +21,6 @@ local function create_aerial_buffer(bufnr)
   vim.api.nvim_buf_set_option(aer_bufnr, 'modifiable', false)
   vim.api.nvim_buf_set_option(aer_bufnr, 'filetype', 'aerial')
   render.update_aerial_buffer(bufnr)
-  loading.add_loading_animation(aer_bufnr)
   return aer_bufnr
 end
 
