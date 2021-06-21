@@ -4,10 +4,15 @@ local M = {}
 M.add_loading_animation = function(bufnr)
   local timer = vim.loop.new_timer()
   local i = 0
+  local running = true
   timer:start(0, 80, vim.schedule_wrap(function()
+    if not running then
+      return
+    end
     local ok, loading = pcall(vim.api.nvim_buf_get_var, bufnr, 'loading')
     if not ok or not loading then
       timer:close()
+      running = false
       return
     end
     local winid = vim.fn.bufwinid(bufnr)
