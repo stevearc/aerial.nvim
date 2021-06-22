@@ -42,7 +42,7 @@ local custom_attach = function(client)
   -- Jump forwards/backwards with '{' and '}'
   vim.api.nvim_buf_set_keymap(0, 'n', '{', '<cmd>AerialPrev<CR>', {})
   vim.api.nvim_buf_set_keymap(0, 'n', '}', '<cmd>AerialNext<CR>', {})
-  -- Jump forwards/backwards at the same tree level with '[[' and ']]'
+  -- Jump up the tree with '[[' or ']]'
   vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>AerialPrevUp<CR>', {})
   vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>AerialNextUp<CR>', {})
 
