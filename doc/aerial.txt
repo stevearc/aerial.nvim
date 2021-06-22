@@ -51,6 +51,34 @@ COMMANDS                                                        *aerial-commands
         [split] can also be a raw vim command, such as "belowright split".
         This command respects |switchbuf|=uselast
 
+                                                                *:AerialTreeOpen*
+:AerialTreeOpen[!]
+        Expand the tree at the current location. If with [!] then will expand
+        recursively.
+
+                                                               *:AerialTreeClose*
+:AerialTreeClose
+        Collapse the tree at the current location. If with [!] then will
+        collapse recursively.
+
+                                                              *:AerialTreeToggle*
+:AerialTreeToggle
+        Toggle the tree at the current location. If with [!] then will toggle
+        recursively.
+
+                                                             *:AerialTreeOpenAll*
+:AerialTreeOpenAll
+        Expand all the tree nodes.
+
+                                                            *:AerialTreeCloseAll*
+:AerialTreeCloseAll
+        Collapse all the tree nodes.
+
+                                                           *:AerialTreeSyncFolds*
+:AerialTreeSyncFolds
+        Sync code folding with current tree state. This ignores the
+        |g:aerial_link_tree_to_folds| setting.
+
 ===============================================================================
 OPTIONS                                                          *aerial-options*
 
@@ -273,12 +301,21 @@ aerial.tree_cmd({action}, [{opts}])                           *aerial.tree_cmd()
         index    The index of the tree to perform the action on. Defaults to
                  cursor location.
         fold     If `false`, do not modify folds regardless of
-                 |g:aerial_link_tree_to_folds| setting. If "other", will only update
-                 folds in other windows. (default `true`)
+                 |g:aerial_link_tree_to_folds| setting. (default `true`)
         recurse  If `true`, perform the action recursively on all children
                  (default `false`)
         bubble   If `true` and current symbol has no children, perform the
                  action on the nearest parent (default `true`)
+
+aerial.tree_open_all()                                   *aerial.tree_open_all()*
+    Expand all the tree nodes.
+
+aerial.tree_close_all()                                 *aerial.tree_close_all()*
+    Collapse all the tree nodes.
+
+aerial.sync_folds()                                         *aerial.sync_folds()*
+    Sync code folding with current tree state. This ignores the
+    |g:aerial_link_tree_to_folds| setting.
 
 ===============================================================================
 vim:ft=help:et:ts=2:sw=2:sts=2:norl

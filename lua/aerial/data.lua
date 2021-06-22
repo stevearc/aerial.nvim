@@ -49,8 +49,24 @@ local BufData = {
     return self.collapsed[key]
   end,
 
+  set_collapsed = function(self, item, collapsed)
+    local key = self:_get_item_key(item)
+    if collapsed then
+      self.collapsed[key] = true
+    else
+      self.collapsed[key] = nil
+    end
+  end,
+
   is_collapsable = function(_, item)
       return item.level == 0 or (item.children and not vim.tbl_isempty(item.children))
+  end,
+
+  get_root_of = function(_, item)
+    while item.parent do
+      item = item.parent
+    end
+    return item
   end,
 
   _get_config = function(self, item)
@@ -58,57 +74,6 @@ local BufData = {
       collapsed = self:is_collapsed(item),
       has_children = self:is_collapsable(item),
     }
-  end,
-
-  _get_target = function(self, action, item, bubble)
-    if not bubble then
-      return item
-    end
-    while item and
-      (not self:is_collapsable(item)
-       or (action == 'close' and self:is_collapsed(item))) do
-      item = item.parent
-    end
-    return item
-  end,
-
-  action = function(self, index, action, opts)
-    opts = vim.tbl_extend('keep', opts or {}, {
-      bubble = true,
-      recurse = false,
-    })
-    local did_update = false
-    local function do_action(item, bubble)
-      item = self:_get_target(action, item, bubble)
-      if not item or not self:is_collapsable(item) then
-        return
-      end
-      local key = self:_get_item_key(item)
-      if action == 'toggle' then
-        action = self.collapsed[key] and 'open' or 'close'
-      end
-      if action == 'open' then
-        did_update = did_update or self.collapsed[key]
-        self.collapsed[key] = nil
-        if opts.recurse then
-          for _,child in ipairs(item.children) do
-            do_action(child, false)
-          end
-        end
-      elseif action == 'close' then
-        did_update = did_update or not self.collapsed[key]
-        self.collapsed[key] = true
-        if opts.recurse and item.parent then
-          return do_action(item.parent, false)
-        end
-        return item
-      else
-        error(string.format("Unknown action '%s'", action))
-      end
-    end
-    local current_item = self:item(index)
-    local item = do_action(current_item, opts.bubble)
-    return did_update, self:indexof(item)
   end,
 
   visit = function(self, callback, opts)

@@ -9,6 +9,12 @@ command! -count=1 AerialPrev call luaeval("require'aerial'.next(-1*tonumber(_A))
 command! -count=1 AerialNextUp call luaeval("require'aerial'.up(1, tonumber(_A))", expand('<count>'))
 command! -count=1 AerialPrevUp call luaeval("require'aerial'.up(-1, tonumber(_A))", expand('<count>'))
 command! -bang -count=1 -nargs=? AerialGo call <sid>AerialGo(<q-bang>, <count>, <q-args>)
+command! -bang AerialTreeOpen call <sid>AerialTreeCmd('open', <q-bang>)
+command! -bang AerialTreeClose call <sid>AerialTreeCmd('close', <q-bang>)
+command! -bang AerialTreeToggle call <sid>AerialTreeCmd('toggle', <q-bang>)
+command! AerialTreeOpenAll lua require'aerial'.tree_open_all()
+command! AerialTreeCloseAll lua require'aerial'.tree_close_all()
+command! AerialTreeSyncFolds lua require'aerial'.sync_folds()
 
 function! s:CompleteOpenDirection(ArgLead, CmdLine, CursorPos)
   let l:opts = ['right', 'left']
@@ -22,6 +28,13 @@ function! s:AerialGo(bang, count, split) abort
         \ 'split': a:split,
         \}
   call luaeval("require'aerial'.select(_A)", args)
+endfunction
+
+function! s:AerialTreeCmd(cmd, bang) abort
+  let l:opts = {
+        \ 'recurse': a:bang == '!' ? v:true : v:false,
+        \}
+  call luaeval("require'aerial'.tree_cmd(_A[1], _A[2])", [a:cmd, l:opts])
 endfunction
 
 " The line that shows where your cursor(s) are

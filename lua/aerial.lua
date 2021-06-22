@@ -4,6 +4,7 @@ local data = require 'aerial.data'
 local fold = require 'aerial.fold'
 local nav = require 'aerial.navigation'
 local render = require 'aerial.render'
+local tree = require 'aerial.tree'
 local util = require 'aerial.util'
 local window = require 'aerial.window'
 
@@ -74,15 +75,19 @@ M.on_attach = function(client, opts)
 
   if config.link_folds_to_tree then
     local function map(key, cmd)
-      vim.api.nvim_buf_set_keymap(0, 'n', key, cmd, {noremap=true})
+      vim.api.nvim_buf_set_keymap(0, 'n', key, cmd, {silent=true, noremap=true})
     end
 
-    map('za', [[<cmd>lua require'aerial'.tree_cmd('toggle', {fold='other'})<CR>za]])
-    map('zA', [[<cmd>lua require'aerial'.tree_cmd('toggle', {fold='other'})<CR>zA]])
-    map('zo', [[<cmd>lua require'aerial'.tree_cmd('open', {fold='other'})<CR>zo]])
-    map('zO', [[<cmd>lua require'aerial'.tree_cmd('open', {fold='other'})<CR>zO]])
-    map('zc', [[<cmd>lua require'aerial'.tree_cmd('close', {fold='other'})<CR>zc]])
-    map('zC', [[<cmd>lua require'aerial'.tree_cmd('close', {fold='other'})<CR>zC]])
+    map('za', [[<cmd>AerialTreeToggle<CR>]])
+    map('zA', [[<cmd>AerialTreeToggle!<CR>]])
+    map('zo', [[<cmd>AerialTreeOpen<CR>]])
+    map('zO', [[<cmd>AerialTreeOpen!<CR>]])
+    map('zc', [[<cmd>AerialTreeClose<CR>]])
+    map('zC', [[<cmd>AerialTreeClose!<CR>]])
+    map('zM', [[<cmd>AerialTreeCloseAll<CR>]])
+    map('zR', [[<cmd>AerialTreeOpenAll<CR>]])
+    map('zx', [[<cmd>AerialTreeSyncFolds<CR>]])
+    map('zX', [[<cmd>AerialTreeSyncFolds<CR>]])
   end
 
 
@@ -103,6 +108,43 @@ M.on_attach = function(client, opts)
   end
 end
 
+local function _post_tree_mutate(new_cursor_pos)
+  render.update_aerial_buffer()
+  window.update_all_positions()
+  if util.is_aerial_buffer() then
+    if new_cursor_pos then
+      vim.api.nvim_win_set_cursor(0, {new_cursor_pos, 0})
+    end
+  else
+    window.update_position(0, true)
+  end
+end
+
+M.tree_close_all = function()
+  local new_cursor_pos
+  local bufdata = data[0]
+  if util.is_aerial_buffer() then
+    local lnum = vim.api.nvim_win_get_cursor(0)[1]
+    local root = bufdata:get_root_of(bufdata:item(lnum))
+    tree.close_all(bufdata)
+    new_cursor_pos = bufdata:indexof(root)
+  else
+    tree.close_all(bufdata)
+  end
+  if config.link_tree_to_folds then
+    M.sync_folds()
+  end
+  _post_tree_mutate(new_cursor_pos)
+end
+
+M.tree_open_all = function()
+  tree.open_all(data[0])
+  if config.link_tree_to_folds then
+    M.sync_folds()
+  end
+  _post_tree_mutate()
+end
+
 M.tree_cmd = function(action, opts)
   opts = vim.tbl_extend('keep', opts or {}, {
     index = nil,
@@ -117,23 +159,14 @@ M.tree_cmd = function(action, opts)
     index = window.get_position_in_win().lnum
   end
   local lnum = data[0]:item(index).lnum
-  local did_update, row = data[0]:action(index, action, opts)
+  local did_update, new_cursor_pos = tree.edit_tree_node(data[0], action, index, opts)
   if did_update then
     if config.link_tree_to_folds and opts.fold then
       fold.fold_action(action, lnum, {
         recurse = opts.recurse,
-        exclude_self = opts.fold == 'other',
       })
     end
-    render.update_aerial_buffer()
-    window.update_all_positions()
-    if util.is_aerial_buffer() then
-      if row then
-        vim.api.nvim_win_set_cursor(0, {row, 0})
-      end
-    else
-      window.update_position(0, true)
-    end
+    _post_tree_mutate(new_cursor_pos)
   end
 end
 
@@ -145,7 +178,10 @@ M.sync_folds = function()
       fold.sync_tree_folds(winid)
     end
   else
-    fold.sync_tree_folds(mywin)
+    local bufnr = vim.api.nvim_get_current_buf()
+    for _,winid in ipairs(util.get_fixed_wins(bufnr)) do
+      fold.sync_tree_folds(winid)
+    end
   end
   util.go_win_no_au(mywin)
 end

@@ -82,7 +82,7 @@ M.sync_tree_folds = function(winid)
   end
   util.go_win_no_au(winid)
   local view = vim.fn.winsaveview()
-  vim.cmd('normal! zx')
+  vim.cmd('normal! zxzR')
   local bufdata = data[0]
   local items = bufdata:flatten(nil, {incl_hidden = true})
   table.sort(items, function(a, b)
@@ -127,7 +127,6 @@ end
 
 M.fold_action = function(action, lnum, opts)
   opts = vim.tbl_extend('keep', opts or {}, {
-    exclude_self = false,
     recurse = false,
   })
   local my_winid = vim.api.nvim_get_current_win()
@@ -135,8 +134,7 @@ M.fold_action = function(action, lnum, opts)
   local bufnr, _ = util.get_buffers()
   wins = util.get_fixed_wins(bufnr)
   for _,winid in ipairs(wins) do
-    if util.is_managing_folds(winid)
-      and (not opts.exclude_self or winid ~= my_winid) then
+    if util.is_managing_folds(winid) then
       win_do_action(winid, action, lnum, opts.recurse)
     end
   end

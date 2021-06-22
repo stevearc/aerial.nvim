@@ -57,18 +57,22 @@ require'lspconfig'.vimls.setup{
 
 ## Commands
 
-Command         | arg            | description
--------         | ---            | -----------
-`AerialToggle`  | `left`/`right` | Open (and enter) or close the aerial window
-`AerialToggle!` | `left`/`right` | Open or close the aerial window
-`AerialOpen`    | `left`/`right` | Open (and enter) the aerial window
-`AerialOpen!`   | `left`/`right` | Open the aerial window
-`AerialClose`   |                | Close the aerial window
-`AerialPrev`    | N=1            | Jump backwards N symbols
-`AerialNext`    | N=1            | Jump forwards N symbols
-`AerialPrevUp`  | N=1            | Jump up the tree N levels, moving backwards
-`AerialNextUp`  | N=1            | Jump up the tree N levels, moving forwards
-`AerialGo`      | N=1, `v`/`h`   | Jump to the Nth symbol
+Command               | arg            | description
+-------               | ---            | -----------
+`AerialToggle[!]`     | `left`/`right` | Open or close the aerial window. With `[!]` cursor stays in current window
+`AerialOpen[!]`       | `left`/`right` | Open the aerial window. With `[!]` cursor stays in current window
+`AerialClose`         |                | Close the aerial window
+`AerialPrev`          | N=1            | Jump backwards N symbols
+`AerialNext`          | N=1            | Jump forwards N symbols
+`AerialPrevUp`        | N=1            | Jump up the tree N levels, moving backwards
+`AerialNextUp`        | N=1            | Jump up the tree N levels, moving forwards
+`AerialGo`            | N=1, `v`/`h`   | Jump to the Nth symbol
+`AerialTreeOpen[!]`   |                | Expand tree at current location. `[!]` makes it recursive.
+`AerialTreeClose[!]`  |                | Collapse tree at current location. `[!]` makes it recursive.
+`AerialTreeToggle[!]` |                | Toggle tree at current location. `[!]` makes it recursive.
+`AerialTreeOpenAll`   |                | Open all tree nodes
+`AerialTreeCloseAll`  |                | Collapse all tree nodes
+`AerialTreeSyncFolds` |                | Sync code folding with current tree state
 
 ## Options
 
@@ -196,26 +200,28 @@ The default keybindings in the aerial window. You can add your own in
 `ftplugin/aerial.vim`, and remove these by setting `g:aerial_default_bindings =
 0`.
 
-Key     | Command
----     | -------
-`<CR>`  | Jump to the symbol under the cursor
-`<C-v>` | Jump to the symbol in a vertical split
-`<C-s>` | Jump to the symbol in a horizontal split
-`<p>`   | Scroll to the symbol (stay in aerial buffer)
-`<C-j>` | Go down one line and scroll to that symbol
-`<C-k>` | Go up one line and scroll to that symbol
-`{`     | Jump to the previous symbol
-`}`     | Jump to the next symbol
-`[[`    | Jump up the tree, moving backwards
-`]]`    | Jump up the tree, moving forwards
-`q`     | Close the aerial window
-`o`/`za`| Toggle the symbol under the cursor open/closed
-`O`/`zA`| Recursive toggle the symbol under the cursor open/closed
-`l`/`zo`| Open the symbol under the cursor
-`L`/`zO`| Recursive open the symbol under the cursor
-`h`/`zc`| Close the symbol under the cursor
-`H`/`zC`| Recursive close the symbol under the cursor
-`zx`    | Sync code folding to the tree (useful if they get out of sync)
+Key       | Command
+---       | -------
+`<CR>`    | Jump to the symbol under the cursor
+`<C-v>`   | Jump to the symbol in a vertical split
+`<C-s>`   | Jump to the symbol in a horizontal split
+`<p>`     | Scroll to the symbol (stay in aerial buffer)
+`<C-j>`   | Go down one line and scroll to that symbol
+`<C-k>`   | Go up one line and scroll to that symbol
+`{`       | Jump to the previous symbol
+`}`       | Jump to the next symbol
+`[[`      | Jump up the tree, moving backwards
+`]]`      | Jump up the tree, moving forwards
+`q`       | Close the aerial window
+`o`/`za`  | Toggle the symbol under the cursor open/closed
+`O`/`zA`  | Recursive toggle the symbol under the cursor open/closed
+`l`/`zo`  | Expand the symbol under the cursor
+`L`/`zO`  | Recursive expand the symbol under the cursor
+`h`/`zc`  | Collapse the symbol under the cursor
+`H`/`zC`  | Recursive collapse the symbol under the cursor
+`zM`      | Collapse all nodes in the tree
+`zR`      | Expand all nodes in the tree
+`zx`/`zX` | Sync code folding to the tree (useful if they get out of sync)
 
 ## Highlight
 
