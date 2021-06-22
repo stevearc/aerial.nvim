@@ -94,6 +94,7 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   vim.api.nvim_win_set_option(0, 'foldcolumn', '0')
   vim.api.nvim_win_set_option(0, 'relativenumber', false)
   vim.api.nvim_win_set_option(0, 'wrap', false)
+  vim.api.nvim_win_set_var(0, 'is_aerial_win', true)
   local aer_winid = vim.api.nvim_get_current_win()
   util.go_win_no_au(my_winid)
   return aer_winid
