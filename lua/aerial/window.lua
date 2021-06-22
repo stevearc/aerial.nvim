@@ -161,6 +161,7 @@ M.open = function(focus, direction, opts)
   if focus then
     vim.api.nvim_set_current_win(aer_winid)
   end
+  vim.cmd('wincmd =')
 end
 
 M.focus = function()
