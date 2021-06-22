@@ -206,8 +206,8 @@ Key     | Command
 `<C-k>` | Go up one line and scroll to that symbol
 `{`     | Jump to the previous symbol
 `}`     | Jump to the next symbol
-`[[`    | Jump to the previous symbol at the same tree level
-`]]`    | Jump to the next symbol at the same tree level
+`[[`    | Jump up the tree, moving backwards
+`]]`    | Jump up the tree, moving forwards
 `q`     | Close the aerial window
 `o`/`za`| Toggle the symbol under the cursor open/closed
 `O`/`zA`| Recursive toggle the symbol under the cursor open/closed
