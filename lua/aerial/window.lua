@@ -10,6 +10,34 @@ local function create_aerial_buffer(bufnr)
   local aer_bufnr = vim.api.nvim_create_buf(false, true)
 
   vim.api.nvim_set_current_buf(aer_bufnr)
+  if config.default_bindings then
+    local map = function(keys, cmd)
+      if type(keys) == 'string' then
+        keys = {keys}
+      end
+      for _,key in ipairs(keys) do
+        vim.api.nvim_buf_set_keymap(aer_bufnr, 'n', key, cmd, {silent = true, noremap = true})
+      end
+    end
+    map('<CR>', "<cmd>lua require'aerial'.select()<CR>")
+    map('<C-v>', "<cmd>lua require'aerial'.select({split='v'})<CR>")
+    map('<C-s>', "<cmd>lua require'aerial'.select({split='h'})<CR>")
+    map('p', "<cmd>lua require'aerial'.select({jump=false})<CR>")
+    map('<C-j>', "j<cmd>lua require'aerial'.select({jump=false})<CR>")
+    map('<C-k>', "k<cmd>lua require'aerial'.select({jump=false})<CR>")
+    map('}', "<cmd>AerialNext<CR>")
+    map('{', "<cmd>AerialPrev<CR>")
+    map(']]', "<cmd>AerialNextUp<CR>")
+    map('[[', "<cmd>AerialPrevUp<CR>")
+    map('q', "<cmd>AerialClose<CR>")
+    map({'o', 'za'}, "<cmd>lua require'aerial'.tree_cmd('toggle')<CR>")
+    map({'O', 'zA'}, "<cmd>lua require'aerial'.tree_cmd('toggle', {recurse=true})<CR>")
+    map({'l', 'zo'}, "<cmd>lua require'aerial'.tree_cmd('open')<CR>")
+    map({'L', 'zO'}, "<cmd>lua require'aerial'.tree_cmd('open', {recurse=true})<CR>")
+    map({'h', 'zc'}, "<cmd>lua require'aerial'.tree_cmd('close')<CR>")
+    map({'H', 'zC'}, "<cmd>lua require'aerial'.tree_cmd('close', {recurse=true})<CR>")
+    map('zx', "<cmd>lua require'aerial'.sync_folds()<CR>")
+  end
   -- Set buffer options
   vim.api.nvim_buf_set_var(bufnr, 'aerial_buffer', aer_bufnr)
   vim.api.nvim_buf_set_var(aer_bufnr, 'source_buffer', bufnr)

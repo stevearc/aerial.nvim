@@ -192,8 +192,9 @@ These are the values used for configuring icons, highlight groups, and
 filtering.
 
 ## Default Keybindings
-The default keybindings in the aerial window. You can remove these by setting
-`g:aerial_default_bindings = 0`, and add your own in `.vim/ftplugin/aerial.vim`
+The default keybindings in the aerial window. You can add your own in
+`ftplugin/aerial.vim`, and remove these by setting `g:aerial_default_bindings =
+0`.
 
 Key     | Command
 ---     | -------
@@ -208,15 +209,13 @@ Key     | Command
 `[[`    | Jump to the previous symbol at the same tree level
 `]]`    | Jump to the next symbol at the same tree level
 `q`     | Close the aerial window
-`o`     | Toggle the symbol under the cursor open/closed
-`O`     | Recursive toggle the symbol under the cursor open/closed
+`o`/`za`| Toggle the symbol under the cursor open/closed
+`O`/`zA`| Recursive toggle the symbol under the cursor open/closed
+`l`/`zo`| Open the symbol under the cursor
+`L`/`zO`| Recursive open the symbol under the cursor
+`h`/`zc`| Close the symbol under the cursor
+`H`/`zC`| Recursive close the symbol under the cursor
 `zx`    | Sync code folding to the tree (useful if they get out of sync)
-`za`    | Toggle the symbol under the cursor open/closed
-`zA`    | Recursive toggle the symbol under the cursor open/closed
-`zo`    | Open the symbol under the cursor
-`zO`    | Recursive open the symbol under the cursor
-`zc`    | Close the symbol under the cursor
-`zC`    | Recursive close the symbol under the cursor
 
 ## Highlight
 
