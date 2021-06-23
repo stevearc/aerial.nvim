@@ -60,18 +60,27 @@ M.up = function(direction, count)
   nav.up(direction, count)
 end
 
-M.on_attach = function(client, opts)
-  opts = opts or {}
-
+local has_hook = false
+local function add_handler(preserve_callback)
+  if has_hook then
+    return
+  end
+  has_hook = true
   local old_callback = vim.lsp.handlers['textDocument/documentSymbol']
   local new_callback = callbacks.symbol_callback
-  if opts.preserve_callback then
-    new_callback = function(idk1, idk2, result, idk3, bufnr)
-      callbacks.symbol_callback(idk1, idk2, result, idk3, bufnr)
-      old_callback(idk1, idk2, result, idk3, bufnr)
+  if preserve_callback then
+    new_callback = function(...)
+      callbacks.symbol_callback(...)
+      old_callback(...)
     end
   end
   vim.lsp.handlers['textDocument/documentSymbol'] = new_callback
+end
+
+M.on_attach = function(client, opts)
+  opts = opts or {}
+
+  add_handler(opts.preserve_callback)
 
   if config.link_folds_to_tree then
     local function map(key, cmd)
