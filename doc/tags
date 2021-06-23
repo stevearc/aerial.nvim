@@ -6,6 +6,12 @@
 :AerialPrev	aerial.txt	/*:AerialPrev*
 :AerialPrevUp	aerial.txt	/*:AerialPrevUp*
 :AerialToggle	aerial.txt	/*:AerialToggle*
+:AerialTreeClose	aerial.txt	/*:AerialTreeClose*
+:AerialTreeCloseAll	aerial.txt	/*:AerialTreeCloseAll*
+:AerialTreeOpen	aerial.txt	/*:AerialTreeOpen*
+:AerialTreeOpenAll	aerial.txt	/*:AerialTreeOpenAll*
+:AerialTreeSyncFolds	aerial.txt	/*:AerialTreeSyncFolds*
+:AerialTreeToggle	aerial.txt	/*:AerialTreeToggle*
 Aerial	aerial.txt	/*Aerial*
 SymbolKind	aerial.txt	/*SymbolKind*
 aerial	aerial.txt	/*aerial*
@@ -21,8 +27,11 @@ aerial.nvim	aerial.txt	/*aerial.nvim*
 aerial.on_attach()	aerial.txt	/*aerial.on_attach()*
 aerial.open()	aerial.txt	/*aerial.open()*
 aerial.select()	aerial.txt	/*aerial.select()*
+aerial.sync_folds()	aerial.txt	/*aerial.sync_folds()*
 aerial.toggle()	aerial.txt	/*aerial.toggle()*
+aerial.tree_close_all()	aerial.txt	/*aerial.tree_close_all()*
 aerial.tree_cmd()	aerial.txt	/*aerial.tree_cmd()*
+aerial.tree_open_all()	aerial.txt	/*aerial.tree_open_all()*
 aerial.txt	aerial.txt	/*aerial.txt*
 aerial.up()	aerial.txt	/*aerial.up()*
 g:aerial_close_behavior	aerial.txt	/*g:aerial_close_behavior*

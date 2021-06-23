@@ -182,6 +182,9 @@ M.render_centered_text = function(bufnr, text)
     if not vim.api.nvim_buf_is_valid(bufnr) then
       return
     end
+    if type(text) == 'string' then
+      text = {text}
+    end
     local winid = vim.fn.bufwinid(bufnr)
     local height = 40
     local width = M.get_width(bufnr)
@@ -190,12 +193,13 @@ M.render_centered_text = function(bufnr, text)
       width = vim.api.nvim_win_get_width(winid)
     end
     local lines = {}
-    for _=1,(height/2)-1 do
+    for _=1,(height/2)-#text do
       table.insert(lines, '')
     end
-    local line = text
-    line = string.rep(' ', (width - vim.fn.strdisplaywidth(line)) / 2) .. line
-    table.insert(lines, line)
+    for _,line in ipairs(text) do
+      line = string.rep(' ', (width - vim.fn.strdisplaywidth(line)) / 2) .. line
+      table.insert(lines, line)
+    end
     vim.api.nvim_buf_set_option(bufnr, 'modifiable', true)
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
     vim.api.nvim_buf_set_option(bufnr, 'modifiable', false)

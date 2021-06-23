@@ -116,7 +116,8 @@ g:aerial_diagnostics_trigger_update         *g:aerial_diagnostics_trigger_update
 
 g:aerial_filter_kind                                       *g:aerial_filter_kind*
     A list of all |SymbolKind| values to display. Set to `false` to show all
-    symbols.
+    symbols. Default is "Class", "Constructor", "Enum", "Function",
+    "Interface", "Method", and "Struct".
 
 g:aerial_highlight_mode                                 *g:aerial_highlight_mode*
     Valid values are "split_width", "full_width", "last", or "none".

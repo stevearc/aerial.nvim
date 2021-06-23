@@ -17,7 +17,11 @@ M.update_aerial_buffer = function(buf)
     return
   end
   if not data:has_symbols(bufnr) then
-    util.render_centered_text(aer_bufnr, "No symbols")
+    local lines = {"No symbols"}
+    if config.filter_kind ~= false then
+      table.insert(lines, ":help filter_kind")
+    end
+    util.render_centered_text(aer_bufnr, lines)
     return
   end
   local row = 1
