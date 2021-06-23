@@ -23,11 +23,15 @@ M.on_enter_buffer = function()
   local mybuf = vim.api.nvim_get_current_buf()
 
   -- If the user tried to open a non-aerial buffer inside the aerial window,
-  -- close the window and re-open the buffer
-  if vim.w.is_aerial_win and not util.is_aerial_buffer(mybuf) then
-    vim.api.nvim_win_close(0, false)
-    vim.api.nvim_set_current_buf(mybuf)
-  end
+  -- close the window and re-open the buffer.
+  -- The defer is to let the other autocmds and potential window switching settle.
+  vim.defer_fn(function()
+    mybuf = vim.api.nvim_get_current_buf()
+    if vim.w.is_aerial_win and not util.is_aerial_buffer(mybuf) then
+      vim.api.nvim_win_close(0, false)
+      vim.api.nvim_set_current_buf(mybuf)
+    end
+  end, 1)
 
   if config.close_behavior == 'close' and not util.is_aerial_buffer(mybuf) then
     close_orphans()
