@@ -202,7 +202,7 @@ M.render_centered_text = function(bufnr, text)
       width = vim.api.nvim_win_get_width(winid)
     end
     local lines = {}
-    for _=1,(height/2)-#text do
+    for _=1,(height/2)-(#text/2) do
       table.insert(lines, '')
     end
     for _,line in ipairs(text) do

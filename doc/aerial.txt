@@ -6,6 +6,7 @@ CONTENTS                                                        *aerial-contents
     1. Commands........................................|aerial-commands|
     2. Options.........................................|aerial-options|
     3. Functions.......................................|aerial-functions|
+    4. FAQ.............................................|aerial-faq|
 
 ===============================================================================
 COMMANDS                                                        *aerial-commands*
@@ -324,6 +325,14 @@ aerial.tree_close_all()                                 *aerial.tree_close_all()
 aerial.sync_folds()                                         *aerial.sync_folds()*
     Sync code folding with current tree state. This ignores the
     |g:aerial_link_tree_to_folds| setting.
+
+===============================================================================
+FAQ                                                                  *aerial-faq*
+
+Q: When I open the aerial window, it's stuck loading forever     *aerial-loading*
+
+A: See https://github.com/stevearc/aerial.nvim/issues/4 for discussion of
+potential causes and debugging steps.
 
 ===============================================================================
 vim:ft=help:et:ts=2:sw=2:sts=2:norl
