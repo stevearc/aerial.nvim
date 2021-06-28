@@ -63,7 +63,12 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   end
   local my_winid = vim.api.nvim_get_current_win()
   if not existing_win then
-    local winids = util.get_fixed_wins(bufnr)
+    local winids
+    if config.placement_editor_edge then
+      winids = util.get_fixed_wins()
+    else
+      winids = util.get_fixed_wins(bufnr)
+    end
     local split_target
     if direction == 'left' then
       split_target = winids[1]

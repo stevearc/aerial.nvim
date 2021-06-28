@@ -153,25 +153,31 @@ M.detect_split_direction = function(bufnr)
   elseif default == 'right' then
     return 'right'
   end
-  if not bufnr or bufnr == 0 then
-    bufnr = vim.api.nvim_get_current_buf()
-  end
   local wins = M.get_fixed_wins()
-  local first_window = vim.fn.winbufnr(wins[1]) == bufnr
-  local last_window = vim.fn.winbufnr(wins[#wins]) == bufnr
+  local left_available, right_available
+  if config.placement_editor_edge then
+    left_available = not M.is_aerial_buffer(vim.api.nvim_win_get_buf(wins[1]))
+    right_available = not M.is_aerial_buffer(vim.api.nvim_win_get_buf(wins[#wins]))
+  else
+    if not bufnr or bufnr == 0 then
+      bufnr = vim.api.nvim_get_current_buf()
+    end
+    left_available = vim.api.nvim_win_get_buf(wins[1]) == bufnr
+    right_available = vim.api.nvim_win_get_buf(wins[#wins]) == bufnr
+  end
 
   if default == 'prefer_left' then
-    if first_window then
+    if left_available then
       return 'left'
-    elseif last_window then
+    elseif right_available then
       return 'right'
     else
       return 'left'
     end
   else
-    if last_window then
+    if right_available then
       return 'right'
-    elseif first_window then
+    elseif left_available then
       return 'left'
     else
       return 'right'

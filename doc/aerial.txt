@@ -112,6 +112,11 @@ g:aerial_default_direction                           *g:aerial_default_direction
         prefer_right  Open to the right unless there are other windows right
                       and none to the left (default)
 
+g:aerial_placement_editor_edge                   *g:aerial_placement_editor_edge*
+    If `true`, only open aerial at the far right/left of the editor. Default
+    behavior will open aerial as far right/left as possible while remaining
+    adjacent to a window containing the source buffer.
+
 g:aerial_diagnostics_trigger_update         *g:aerial_diagnostics_trigger_update*
     Call |vim.lsp.buf.document_symbol()| to update symbols whenenever the LSP
     client receives diagnostics. Default `true`.

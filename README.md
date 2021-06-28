@@ -95,6 +95,10 @@ vim.g.aerial = {
   -- different buffer in the way of the preferred direction
   default_direction = 'prefer_right',
 
+  -- Set to true to only open aerial at the far right/left of the editor
+  -- Default behavior opens aerial relative to current window
+  placement_editor_edge = false,
+
   -- Fetch document symbols when LSP diagnostics change.
   -- If you set this to false, you will need to manually fetch symbols
   diagnostics_trigger_update = true,

@@ -51,6 +51,7 @@ g:aerial_nerd_font	aerial.txt	/*g:aerial_nerd_font*
 g:aerial_open_automatic	aerial.txt	/*g:aerial_open_automatic*
 g:aerial_open_automatic_min_lines	aerial.txt	/*g:aerial_open_automatic_min_lines*
 g:aerial_open_automatic_min_symbols	aerial.txt	/*g:aerial_open_automatic_min_symbols*
+g:aerial_placement_editor_edge	aerial.txt	/*g:aerial_placement_editor_edge*
 g:aerial_post_jump_cmd	aerial.txt	/*g:aerial_post_jump_cmd*
 g:aerial_update_when_errors	aerial.txt	/*g:aerial_update_when_errors*
 symbol	aerial.txt	/*symbol*
