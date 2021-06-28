@@ -9,7 +9,7 @@ local M = {}
 local function create_aerial_buffer(bufnr)
   local aer_bufnr = vim.api.nvim_create_buf(false, true)
 
-  vim.api.nvim_set_current_buf(aer_bufnr)
+  util.go_buf_no_au(aer_bufnr)
   if config.default_bindings then
     local map = function(keys, cmd)
       if type(keys) == 'string' then

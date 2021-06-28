@@ -8,10 +8,14 @@ local window = require 'aerial.window'
 
 local M = {}
 
+local function is_sticky(behavior)
+  return behavior == 'persist' or behavior == 'global'
+end
+
 local function close_orphans()
   local orphans = util.get_aerial_orphans()
   for _,winid in ipairs(orphans) do
-    if config.close_behavior == 'persist' then
+    if is_sticky(config.close_behavior) then
       render.clear_buffer(vim.api.nvim_win_get_buf(winid))
     else
       vim.api.nvim_win_close(winid, true)
@@ -24,29 +28,29 @@ M.on_enter_buffer = function()
 
   -- If the user tried to open a non-aerial buffer inside the aerial window,
   -- close the window and re-open the buffer.
-  -- The defer is to let the other autocmds and potential window switching settle.
-  vim.defer_fn(function()
     mybuf = vim.api.nvim_get_current_buf()
     if vim.w.is_aerial_win and not util.is_aerial_buffer(mybuf) then
       vim.api.nvim_win_close(0, false)
       vim.api.nvim_set_current_buf(mybuf)
     end
-  end, 1)
 
-  if config.close_behavior == 'close' and not util.is_aerial_buffer(mybuf) then
-    close_orphans()
+  if not util.is_aerial_buffer(mybuf) then
+    if config.close_behavior == 'close' then
+      close_orphans()
+    end
+
+    -- If we're not in an LSP-enabled buffer
+    if vim.tbl_isempty(vim.lsp.buf_get_clients()) then
+      fold.restore_foldmethod()
+      close_orphans()
+      return
+    end
+
+    fold.maybe_set_foldmethod()
   end
 
-  -- We only care if we enter an LSP-enabled buffer or an aerial buffer
-  if vim.tbl_isempty(vim.lsp.buf_get_clients()) and not util.is_aerial_buffer(mybuf) then
-    fold.restore_foldmethod()
-    close_orphans()
-    return
-  end
-
-  fold.maybe_set_foldmethod()
   if util.is_aerial_buffer(mybuf) then
-    if (config.close_behavior ~= 'persist' and util.is_aerial_buffer_orphaned(mybuf))
+    if (not is_sticky(config.close_behavior) and util.is_aerial_buffer_orphaned(mybuf))
       or vim.tbl_count(vim.api.nvim_list_wins()) == 1 then
       vim.cmd('quit')
     else

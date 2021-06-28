@@ -69,6 +69,9 @@ M.is_aerial_buffer_orphaned = function(bufnr)
   if sourcebuf == -1 then
     return true
   end
+  if config.close_behavior == 'global' and not M.is_aerial_buffer() then
+    return sourcebuf ~= vim.api.nvim_get_current_buf();
+  end
   for _,winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
     if vim.api.nvim_win_get_buf(winid) == sourcebuf then
       return false

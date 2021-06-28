@@ -97,6 +97,8 @@ g:aerial_close_behavior                                 *g:aerial_close_behavior
                       in the tabpage
         auto          Stay open as long as there is a visible buffer to attach
                       to (default)
+        global        Same as "persist", and will always show symbols for the
+                      current buffer
 
 g:aerial_default_bindings                             *g:aerial_default_bindings*
     If `false`, don't set up the default keybindings in the aerial buffer.
