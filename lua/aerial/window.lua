@@ -4,10 +4,13 @@ local loading = require 'aerial.loading'
 local render = require 'aerial.render'
 local util = require 'aerial.util'
 
+local api = vim.api
+local fn = vim.fn
+
 local M = {}
 
 local function create_aerial_buffer(bufnr)
-  local aer_bufnr = vim.api.nvim_create_buf(false, true)
+  local aer_bufnr = api.nvim_create_buf(false, true)
 
   util.go_buf_no_au(aer_bufnr)
   if config.default_bindings then
@@ -16,7 +19,7 @@ local function create_aerial_buffer(bufnr)
         keys = {keys}
       end
       for _,key in ipairs(keys) do
-        vim.api.nvim_buf_set_keymap(aer_bufnr, 'n', key, cmd, {silent = true, noremap = true})
+        api.nvim_buf_set_keymap(aer_bufnr, 'n', key, cmd, {silent = true, noremap = true})
       end
     end
     map('<CR>', "<cmd>lua require'aerial'.select()<CR>")
@@ -41,15 +44,15 @@ local function create_aerial_buffer(bufnr)
     map({'zx', 'zX'}, "<cmd>AerialTreeSyncFolds<CR>")
   end
   -- Set buffer options
-  vim.api.nvim_buf_set_var(bufnr, 'aerial_buffer', aer_bufnr)
-  vim.api.nvim_buf_set_var(aer_bufnr, 'source_buffer', bufnr)
+  api.nvim_buf_set_var(bufnr, 'aerial_buffer', aer_bufnr)
+  api.nvim_buf_set_var(aer_bufnr, 'source_buffer', bufnr)
   loading.set_loading(aer_bufnr, not data:has_symbols(bufnr))
-  vim.api.nvim_buf_set_option(aer_bufnr, 'buftype', 'nofile')
-  vim.api.nvim_buf_set_option(aer_bufnr, 'bufhidden', 'wipe')
-  vim.api.nvim_buf_set_option(aer_bufnr, 'buflisted', false)
-  vim.api.nvim_buf_set_option(aer_bufnr, 'swapfile', false)
-  vim.api.nvim_buf_set_option(aer_bufnr, 'modifiable', false)
-  vim.api.nvim_buf_set_option(aer_bufnr, 'filetype', 'aerial')
+  api.nvim_buf_set_option(aer_bufnr, 'buftype', 'nofile')
+  api.nvim_buf_set_option(aer_bufnr, 'bufhidden', 'wipe')
+  api.nvim_buf_set_option(aer_bufnr, 'buflisted', false)
+  api.nvim_buf_set_option(aer_bufnr, 'swapfile', false)
+  api.nvim_buf_set_option(aer_bufnr, 'modifiable', false)
+  api.nvim_buf_set_option(aer_bufnr, 'filetype', 'aerial')
   render.update_aerial_buffer(bufnr)
   return aer_bufnr
 end
@@ -61,7 +64,7 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
     error("Expected direction to be 'left' or 'right'")
     return
   end
-  local my_winid = vim.api.nvim_get_current_win()
+  local my_winid = api.nvim_get_current_win()
   if not existing_win then
     local winids
     if config.placement_editor_edge then
@@ -93,16 +96,16 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   util.go_buf_no_au(aer_bufnr)
 
   if not existing_win then
-    vim.api.nvim_win_set_width(0, util.get_width())
+    api.nvim_win_set_width(0, util.get_width())
   end
-  vim.api.nvim_win_set_option(0, 'winfixwidth', true)
-  vim.api.nvim_win_set_option(0, 'number', false)
-  vim.api.nvim_win_set_option(0, 'signcolumn', 'no')
-  vim.api.nvim_win_set_option(0, 'foldcolumn', '0')
-  vim.api.nvim_win_set_option(0, 'relativenumber', false)
-  vim.api.nvim_win_set_option(0, 'wrap', false)
-  vim.api.nvim_win_set_var(0, 'is_aerial_win', true)
-  local aer_winid = vim.api.nvim_get_current_win()
+  api.nvim_win_set_option(0, 'winfixwidth', true)
+  api.nvim_win_set_option(0, 'number', false)
+  api.nvim_win_set_option(0, 'signcolumn', 'no')
+  api.nvim_win_set_option(0, 'foldcolumn', '0')
+  api.nvim_win_set_option(0, 'relativenumber', false)
+  api.nvim_win_set_option(0, 'wrap', false)
+  api.nvim_win_set_var(0, 'is_aerial_win', true)
+  local aer_winid = api.nvim_get_current_win()
   util.go_win_no_au(my_winid)
   return aer_winid
 end
@@ -112,7 +115,7 @@ M.is_open = function(bufnr)
   if aer_bufnr == -1 then
     return false
   else
-    local winid = vim.fn.bufwinid(aer_bufnr)
+    local winid = fn.bufwinid(aer_bufnr)
     return winid ~= -1
   end
 end
@@ -123,7 +126,7 @@ M.close = function()
     return
   end
   local aer_bufnr = util.get_aerial_buffer()
-  local winnr = vim.fn.bufwinnr(aer_bufnr)
+  local winnr = fn.bufwinnr(aer_bufnr)
   if winnr ~= -1 then
     vim.cmd(winnr .. "close")
   end
@@ -136,7 +139,7 @@ M.maybe_open_automatic = function()
   if data[0]:count() < config.open_automatic_min_symbols then
     return false
   end
-  if vim.api.nvim_buf_line_count(0) < config.open_automatic_min_lines then
+  if api.nvim_buf_line_count(0) < config.open_automatic_min_lines then
     return false
   end
   M.open(false)
@@ -154,8 +157,8 @@ M.open = function(focus, direction, opts)
   local bufnr, aer_bufnr = util.get_buffers()
   if M.is_open() then
     if focus then
-      local winid = vim.fn.bufwinid(aer_bufnr)
-      vim.api.nvim_set_current_win(winid)
+      local winid = fn.bufwinid(aer_bufnr)
+      api.nvim_set_current_win(winid)
     end
     return
   end
@@ -164,10 +167,10 @@ M.open = function(focus, direction, opts)
   if not data:has_symbols(bufnr) then
     vim.lsp.buf.document_symbol()
   end
-  local my_winid = vim.api.nvim_get_current_win()
+  local my_winid = api.nvim_get_current_win()
   M.update_position(nil, my_winid)
   if focus then
-    vim.api.nvim_set_current_win(aer_winid)
+    api.nvim_set_current_win(aer_winid)
   end
   vim.cmd('wincmd =')
 end
@@ -176,10 +179,10 @@ M.focus = function()
   if not M.is_open() then
     return
   end
-  local bufnr = vim.api.nvim_get_current_buf()
+  local bufnr = api.nvim_get_current_buf()
   local aer_bufnr = util.get_aerial_buffer(bufnr)
-  local winid = vim.fn.bufwinid(aer_bufnr)
-  vim.api.nvim_set_current_win(winid)
+  local winid = fn.bufwinid(aer_bufnr)
+  api.nvim_set_current_win(winid)
 end
 
 M.toggle = function(focus, direction)
@@ -198,7 +201,7 @@ M.toggle = function(focus, direction)
 end
 
 M.get_position_in_win = function(bufnr, winid)
-  local cursor = vim.api.nvim_win_get_cursor(winid or 0)
+  local cursor = api.nvim_win_get_cursor(winid or 0)
   local lnum = cursor[1]
   local col = cursor[2]
   local bufdata = data[bufnr]
@@ -229,7 +232,7 @@ M.get_position_in_win = function(bufnr, winid)
 end
 
 M.update_all_positions = function(bufnr, update_last)
-  local winids = vim.fn.win_findbuf(bufnr)
+  local winids = fn.win_findbuf(bufnr)
   M.update_position(winids, update_last)
 end
 
@@ -238,9 +241,9 @@ M.update_position = function(winid, update_last)
     return
   end
   if winid == 0 then
-    winid = vim.api.nvim_get_current_win()
+    winid = api.nvim_get_current_win()
   end
-  local win_bufnr = vim.api.nvim_win_get_buf(winid)
+  local win_bufnr = api.nvim_win_get_buf(winid)
   local bufnr, aer_bufnr = util.get_buffers(win_bufnr)
   if not data:has_symbols(bufnr) then
     return
@@ -268,9 +271,20 @@ M.update_position = function(winid, update_last)
 
   render.update_highlights(bufnr)
   if update_last then
-    local aer_winid = vim.fn.bufwinid(aer_bufnr)
-    if aer_winid ~= -1 then
-      vim.api.nvim_win_set_cursor(aer_winid, {bufdata.last_position, 0})
+    print(aer_bufnr)
+    local aer_winid = fn.bufwinid(aer_bufnr)
+
+
+    if aer_winid ~= -1  then
+      local last_position = bufdata.last_position
+      local lines = api.nvim_buf_line_count(aer_bufnr)
+
+      -- When aerial window is global, the items can change and cursor will move
+      -- before the symbols are published, which causes the line number to be
+      -- invalid.
+      if lines >= last_position then
+        api.nvim_win_set_cursor(aer_winid, {bufdata.last_position, 0})
+      end
     end
   end
 end
