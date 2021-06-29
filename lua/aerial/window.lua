@@ -271,9 +271,7 @@ M.update_position = function(winid, update_last)
 
   render.update_highlights(bufnr)
   if update_last then
-    print(aer_bufnr)
     local aer_winid = fn.bufwinid(aer_bufnr)
-
 
     if aer_winid ~= -1  then
       local last_position = bufdata.last_position
