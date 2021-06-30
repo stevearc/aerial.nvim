@@ -25,6 +25,9 @@ end
 
 M.on_enter_buffer = function()
   local mybuf = vim.api.nvim_get_current_buf()
+  if util.is_floating_win() then
+    return
+  end
 
   -- If the user tried to open a non-aerial buffer inside the aerial window,
   -- close the window and re-open the buffer.

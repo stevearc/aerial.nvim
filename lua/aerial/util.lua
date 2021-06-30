@@ -139,7 +139,7 @@ M.get_fixed_wins = function(bufnr)
 end
 
 M.is_floating_win = function(winid)
-  return vim.api.nvim_win_get_config(winid).relative ~= ""
+  return vim.api.nvim_win_get_config(winid or 0).relative ~= ""
 end
 
 M.is_managing_folds = function(winid)
