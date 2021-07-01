@@ -79,6 +79,9 @@ end
 
 M.on_attach = function(client, opts)
   opts = opts or {}
+  if not client.supports_method('textDocument/documentSymbol') then
+    return
+  end
 
   add_handler(opts.preserve_callback)
 

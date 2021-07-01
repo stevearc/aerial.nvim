@@ -43,7 +43,7 @@ M.on_enter_buffer = function()
     end
 
     -- If we're not in an LSP-enabled buffer
-    if vim.tbl_isempty(vim.lsp.buf_get_clients()) then
+    if not util.can_show_symbols() then
       fold.restore_foldmethod()
       close_orphans()
       return

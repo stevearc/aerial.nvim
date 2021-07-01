@@ -150,8 +150,8 @@ M.open = function(focus, direction, opts)
   opts = vim.tbl_extend('keep', opts or {}, {
     winid = nil,
   })
-  if vim.tbl_isempty(vim.lsp.buf_get_clients()) then
-    error("Cannot open aerial. No LSP clients")
+  if not util.can_show_symbols() then
+    error("Cannot open aerial. No LSP clients support documentSymbol")
     return
   end
   local bufnr, aer_bufnr = util.get_buffers()

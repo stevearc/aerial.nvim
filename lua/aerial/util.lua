@@ -214,4 +214,13 @@ M.render_centered_text = function(bufnr, text)
     vim.api.nvim_buf_set_option(bufnr, 'modifiable', false)
 end
 
+M.can_show_symbols = function(bufnr)
+  for _,client in ipairs(vim.lsp.buf_get_clients(bufnr)) do
+    if client.supports_method('textDocument/documentSymbol') then
+      return true
+    end
+  end
+  return false
+end
+
 return M
