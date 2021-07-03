@@ -4,7 +4,7 @@ A code outline window for skimming and quick navigation
 https://user-images.githubusercontent.com/506791/122652728-18688500-d0f5-11eb-80aa-910f7e6a5f46.mp4
 
 ## Requirements
-Neovim 0.5 (nightly)
+Neovim 0.5
 
 It's powered by LSP, so you'll need to have that already set up and working.
 
