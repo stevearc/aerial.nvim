@@ -103,13 +103,19 @@ M.on_attach = function(client, opts)
   end
 
 
-  if config.diagnostics_trigger_update then
-    vim.cmd("autocmd User LspDiagnosticsChanged lua require'aerial.autocommands'.on_diagnostics_changed()")
-  end
-  vim.cmd([[augroup aerial
+  local autocmd = [[augroup aerial
     au!
     au BufEnter * lua require'aerial.autocommands'.on_enter_buffer()
-  augroup END]])
+  ]]
+  if config.diagnostics_trigger_update then
+    autocmd = autocmd .. [[
+    au User LspDiagnosticsChanged lua require'aerial.autocommands'.on_diagnostics_changed()
+    ]]
+  end
+  autocmd = autocmd .. [[
+  augroup END
+  ]]
+  vim.cmd(autocmd)
 
   vim.cmd("autocmd CursorMoved <buffer> lua require'aerial.autocommands'.on_cursor_move()")
   vim.cmd([[autocmd BufDelete <buffer> call luaeval("require'aerial.autocommands'.on_buf_delete(_A)", expand('<abuf>'))]])

@@ -83,6 +83,9 @@ M.on_buf_delete = function(bufnr)
 end
 
 M.on_diagnostics_changed = function()
+  if not util.can_show_symbols() then
+    return
+  end
   local errors = vim.lsp.diagnostic.get_count(0, 'Error')
   -- if no errors, refresh symbols
   if config.update_when_errors
