@@ -1,12 +1,12 @@
-local callbacks = require 'aerial.callbacks'
-local config = require 'aerial.config'
-local data = require 'aerial.data'
-local fold = require 'aerial.fold'
-local nav = require 'aerial.navigation'
-local render = require 'aerial.render'
-local tree = require 'aerial.tree'
-local util = require 'aerial.util'
-local window = require 'aerial.window'
+local callbacks = require("aerial.callbacks")
+local config = require("aerial.config")
+local data = require("aerial.data")
+local fold = require("aerial.fold")
+local nav = require("aerial.navigation")
+local render = require("aerial.render")
+local tree = require("aerial.tree")
+local util = require("aerial.util")
+local window = require("aerial.window")
 
 local M = {}
 
@@ -20,12 +20,12 @@ end
 
 M.open = function(focus, direction)
   -- We get empty strings from the vim command
-  if focus == '' then
+  if focus == "" then
     focus = true
-  elseif focus == '!' then
+  elseif focus == "!" then
     focus = false
   end
-  if direction == '' then
+  if direction == "" then
     direction = nil
   end
   window.open(focus, direction)
@@ -37,12 +37,12 @@ end
 
 M.toggle = function(focus, direction)
   -- We get empty strings from the vim command
-  if focus == '' then
+  if focus == "" then
     focus = true
-  elseif focus == '!' then
+  elseif focus == "!" then
     focus = false
   end
-  if direction == '' then
+  if direction == "" then
     direction = nil
   end
   return window.toggle(focus, direction)
@@ -66,7 +66,7 @@ local function add_handler(preserve_callback)
     return
   end
   has_hook = true
-  local old_callback = vim.lsp.handlers['textDocument/documentSymbol']
+  local old_callback = vim.lsp.handlers["textDocument/documentSymbol"]
   local new_callback = callbacks.symbol_callback
   if preserve_callback then
     new_callback = function(...)
@@ -74,12 +74,12 @@ local function add_handler(preserve_callback)
       old_callback(...)
     end
   end
-  vim.lsp.handlers['textDocument/documentSymbol'] = new_callback
+  vim.lsp.handlers["textDocument/documentSymbol"] = new_callback
 end
 
 M.on_attach = function(client, opts)
   opts = opts or {}
-  if not client.supports_method('textDocument/documentSymbol') then
+  if not client.supports_method("textDocument/documentSymbol") then
     return
   end
 
@@ -87,28 +87,28 @@ M.on_attach = function(client, opts)
 
   if config.link_folds_to_tree then
     local function map(key, cmd)
-      vim.api.nvim_buf_set_keymap(0, 'n', key, cmd, {silent=true, noremap=true})
+      vim.api.nvim_buf_set_keymap(0, "n", key, cmd, { silent = true, noremap = true })
     end
 
-    map('za', [[<cmd>AerialTreeToggle<CR>]])
-    map('zA', [[<cmd>AerialTreeToggle!<CR>]])
-    map('zo', [[<cmd>AerialTreeOpen<CR>]])
-    map('zO', [[<cmd>AerialTreeOpen!<CR>]])
-    map('zc', [[<cmd>AerialTreeClose<CR>]])
-    map('zC', [[<cmd>AerialTreeClose!<CR>]])
-    map('zM', [[<cmd>AerialTreeCloseAll<CR>]])
-    map('zR', [[<cmd>AerialTreeOpenAll<CR>]])
-    map('zx', [[<cmd>AerialTreeSyncFolds<CR>]])
-    map('zX', [[<cmd>AerialTreeSyncFolds<CR>]])
+    map("za", [[<cmd>AerialTreeToggle<CR>]])
+    map("zA", [[<cmd>AerialTreeToggle!<CR>]])
+    map("zo", [[<cmd>AerialTreeOpen<CR>]])
+    map("zO", [[<cmd>AerialTreeOpen!<CR>]])
+    map("zc", [[<cmd>AerialTreeClose<CR>]])
+    map("zC", [[<cmd>AerialTreeClose!<CR>]])
+    map("zM", [[<cmd>AerialTreeCloseAll<CR>]])
+    map("zR", [[<cmd>AerialTreeOpenAll<CR>]])
+    map("zx", [[<cmd>AerialTreeSyncFolds<CR>]])
+    map("zX", [[<cmd>AerialTreeSyncFolds<CR>]])
   end
-
 
   local autocmd = [[augroup aerial
     au!
     au BufEnter * lua require'aerial.autocommands'.on_enter_buffer()
   ]]
   if config.diagnostics_trigger_update then
-    autocmd = autocmd .. [[
+    autocmd = autocmd
+      .. [[
     au User LspDiagnosticsChanged lua require'aerial.autocommands'.on_diagnostics_changed()
     ]]
   end
@@ -118,7 +118,9 @@ M.on_attach = function(client, opts)
   vim.cmd(autocmd)
 
   vim.cmd("autocmd CursorMoved <buffer> lua require'aerial.autocommands'.on_cursor_move()")
-  vim.cmd([[autocmd BufDelete <buffer> call luaeval("require'aerial.autocommands'.on_buf_delete(_A)", expand('<abuf>'))]])
+  vim.cmd(
+    [[autocmd BufDelete <buffer> call luaeval("require'aerial.autocommands'.on_buf_delete(_A)", expand('<abuf>'))]]
+  )
   if config.open_automatic() then
     if not config.diagnostics_trigger_update then
       vim.lsp.buf.document_symbol()
@@ -131,7 +133,7 @@ local function _post_tree_mutate(new_cursor_pos)
   window.update_all_positions()
   if util.is_aerial_buffer() then
     if new_cursor_pos then
-      vim.api.nvim_win_set_cursor(0, {new_cursor_pos, 0})
+      vim.api.nvim_win_set_cursor(0, { new_cursor_pos, 0 })
     end
   else
     window.update_position(0, true)
@@ -164,7 +166,7 @@ M.tree_open_all = function()
 end
 
 M.tree_cmd = function(action, opts)
-  opts = vim.tbl_extend('keep', opts or {}, {
+  opts = vim.tbl_extend("keep", opts or {}, {
     index = nil,
     fold = true,
   })
@@ -192,12 +194,12 @@ M.sync_folds = function()
   local mywin = vim.api.nvim_get_current_win()
   if util.is_aerial_buffer() then
     local bufnr = util.get_source_buffer()
-    for _,winid in ipairs(util.get_fixed_wins(bufnr)) do
+    for _, winid in ipairs(util.get_fixed_wins(bufnr)) do
       fold.sync_tree_folds(winid)
     end
   else
     local bufnr = vim.api.nvim_get_current_buf()
-    for _,winid in ipairs(util.get_fixed_wins(bufnr)) do
+    for _, winid in ipairs(util.get_fixed_wins(bufnr)) do
       fold.sync_tree_folds(winid)
     end
   end
@@ -207,7 +209,7 @@ end
 -- @deprecated
 M.set_open_automatic = function(ft_or_mapping, bool)
   local opts = vim.g.aerial or {}
-  if type(ft_or_mapping) == 'table' then
+  if type(ft_or_mapping) == "table" then
     opts.open_automatic = ft_or_mapping
   else
     opts.open_automatic[ft_or_mapping] = bool
@@ -225,7 +227,7 @@ end
 -- @deprecated.
 M.set_kind_abbr = function(kind_or_mapping, abbr)
   local opts = vim.g.aerial or {}
-  if type(kind_or_mapping) == 'table' then
+  if type(kind_or_mapping) == "table" then
     opts.icons = kind_or_mapping
   else
     if not opts.icons then
@@ -238,17 +240,17 @@ end
 
 -- @deprecated. Use select()
 M.jump_to_loc = function(virt_winnr, split_cmd)
-  nav.select{
+  nav.select({
     split = virt_winnr > 1 and split_cmd or nil,
-  }
+  })
 end
 
 -- @deprecated. Use select()
 M.scroll_to_loc = function(virt_winnr, split_cmd)
-  nav.select{
+  nav.select({
     split = virt_winnr > 1 and split_cmd or nil,
     jump = false,
-  }
+  })
 end
 
 -- @deprecated. Use next()

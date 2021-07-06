@@ -1,11 +1,11 @@
-local config = require 'aerial.config'
-local data = require 'aerial.data'
-local fold = require 'aerial.fold'
-local loading = require 'aerial.loading'
-local protocol = require 'vim.lsp.protocol'
-local render = require 'aerial.render'
-local util = require 'aerial.util'
-local window = require 'aerial.window'
+local config = require("aerial.config")
+local data = require("aerial.data")
+local fold = require("aerial.fold")
+local loading = require("aerial.loading")
+local protocol = require("vim.lsp.protocol")
+local render = require("aerial.render")
+local util = require("aerial.util")
+local window = require("aerial.window")
 
 local M = {}
 
@@ -73,9 +73,11 @@ end
 
 local results = {}
 M.symbol_callback = function(_, _, result, _, bufnr)
-  if not result or vim.tbl_isempty(result) then return end
+  if not result or vim.tbl_isempty(result) then
+    return
+  end
   -- Don't update if there are diagnostics errors (or override by setting)
-  local error_count = vim.lsp.diagnostic.get_count(bufnr, 'Error')
+  local error_count = vim.lsp.diagnostic.get_count(bufnr, "Error")
   local has_symbols = data:has_symbols(bufnr)
   if not config.update_when_errors and error_count > 0 and has_symbols then
     return

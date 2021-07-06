@@ -1,8 +1,8 @@
-local config = require 'aerial.config'
-local data = require 'aerial.data'
-local loading = require 'aerial.loading'
-local render = require 'aerial.render'
-local util = require 'aerial.util'
+local config = require("aerial.config")
+local data = require("aerial.data")
+local loading = require("aerial.loading")
+local render = require("aerial.render")
+local util = require("aerial.util")
 
 local api = vim.api
 local fn = vim.fn
@@ -15,52 +15,56 @@ local function create_aerial_buffer(bufnr)
   util.go_buf_no_au(aer_bufnr)
   if config.default_bindings then
     local map = function(keys, cmd)
-      if type(keys) == 'string' then
-        keys = {keys}
+      if type(keys) == "string" then
+        keys = { keys }
       end
-      for _,key in ipairs(keys) do
-        api.nvim_buf_set_keymap(aer_bufnr, 'n', key, cmd, {silent = true, noremap = true})
+      for _, key in ipairs(keys) do
+        api.nvim_buf_set_keymap(aer_bufnr, "n", key, cmd, { silent = true, noremap = true })
       end
     end
-    map('<CR>', "<cmd>lua require'aerial'.select()<CR>")
-    map('<C-v>', "<cmd>lua require'aerial'.select({split='v'})<CR>")
-    map('<C-s>', "<cmd>lua require'aerial'.select({split='h'})<CR>")
-    map('p', "<cmd>lua require'aerial'.select({jump=false})<CR>")
-    map('<C-j>', "j<cmd>lua require'aerial'.select({jump=false})<CR>")
-    map('<C-k>', "k<cmd>lua require'aerial'.select({jump=false})<CR>")
-    map('}', "<cmd>AerialNext<CR>")
-    map('{', "<cmd>AerialPrev<CR>")
-    map(']]', "<cmd>AerialNextUp<CR>")
-    map('[[', "<cmd>AerialPrevUp<CR>")
-    map('q', "<cmd>AerialClose<CR>")
-    map({'o', 'za'}, "<cmd>AerialTreeToggle<CR>")
-    map({'O', 'zA'}, "<cmd>AerialTreeToggle!<CR>")
-    map({'l', 'zo'}, "<cmd>AerialTreeOpen<CR>")
-    map({'L', 'zO'}, "<cmd>AerialTreeOpen!<CR>")
-    map({'h', 'zc'}, "<cmd>AerialTreeClose<CR>")
-    map({'H', 'zC'}, "<cmd>AerialTreeClose!<CR>")
-    map('zR', "<cmd>AerialTreeOpenAll<CR>")
-    map('zM', "<cmd>AerialTreeCloseAll<CR>")
-    map({'zx', 'zX'}, "<cmd>AerialTreeSyncFolds<CR>")
+    map("<CR>", "<cmd>lua require'aerial'.select()<CR>")
+    map("<C-v>", "<cmd>lua require'aerial'.select({split='v'})<CR>")
+    map("<C-s>", "<cmd>lua require'aerial'.select({split='h'})<CR>")
+    map("p", "<cmd>lua require'aerial'.select({jump=false})<CR>")
+    map("<C-j>", "j<cmd>lua require'aerial'.select({jump=false})<CR>")
+    map("<C-k>", "k<cmd>lua require'aerial'.select({jump=false})<CR>")
+    map("}", "<cmd>AerialNext<CR>")
+    map("{", "<cmd>AerialPrev<CR>")
+    map("]]", "<cmd>AerialNextUp<CR>")
+    map("[[", "<cmd>AerialPrevUp<CR>")
+    map("q", "<cmd>AerialClose<CR>")
+    map({ "o", "za" }, "<cmd>AerialTreeToggle<CR>")
+    map({ "O", "zA" }, "<cmd>AerialTreeToggle!<CR>")
+    map({ "l", "zo" }, "<cmd>AerialTreeOpen<CR>")
+    map({ "L", "zO" }, "<cmd>AerialTreeOpen!<CR>")
+    map({ "h", "zc" }, "<cmd>AerialTreeClose<CR>")
+    map({ "H", "zC" }, "<cmd>AerialTreeClose!<CR>")
+    map("zR", "<cmd>AerialTreeOpenAll<CR>")
+    map("zM", "<cmd>AerialTreeCloseAll<CR>")
+    map({ "zx", "zX" }, "<cmd>AerialTreeSyncFolds<CR>")
   end
   -- Set buffer options
-  api.nvim_buf_set_var(bufnr, 'aerial_buffer', aer_bufnr)
-  api.nvim_buf_set_var(aer_bufnr, 'source_buffer', bufnr)
+  api.nvim_buf_set_var(bufnr, "aerial_buffer", aer_bufnr)
+  api.nvim_buf_set_var(aer_bufnr, "source_buffer", bufnr)
   loading.set_loading(aer_bufnr, not data:has_symbols(bufnr))
-  api.nvim_buf_set_option(aer_bufnr, 'buftype', 'nofile')
-  api.nvim_buf_set_option(aer_bufnr, 'bufhidden', 'wipe')
-  api.nvim_buf_set_option(aer_bufnr, 'buflisted', false)
-  api.nvim_buf_set_option(aer_bufnr, 'swapfile', false)
-  api.nvim_buf_set_option(aer_bufnr, 'modifiable', false)
-  api.nvim_buf_set_option(aer_bufnr, 'filetype', 'aerial')
+  api.nvim_buf_set_option(aer_bufnr, "buftype", "nofile")
+  api.nvim_buf_set_option(aer_bufnr, "bufhidden", "wipe")
+  api.nvim_buf_set_option(aer_bufnr, "buflisted", false)
+  api.nvim_buf_set_option(aer_bufnr, "swapfile", false)
+  api.nvim_buf_set_option(aer_bufnr, "modifiable", false)
+  api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
   render.update_aerial_buffer(bufnr)
   return aer_bufnr
 end
 
 local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
-  if direction == '<' then direction = 'left' end
-  if direction == '>' then direction = 'right' end
-  if direction ~= 'left' and direction ~= 'right' then
+  if direction == "<" then
+    direction = "left"
+  end
+  if direction == ">" then
+    direction = "right"
+  end
+  if direction ~= "left" and direction ~= "right" then
     error("Expected direction to be 'left' or 'right'")
     return
   end
@@ -73,7 +77,7 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
       winids = util.get_fixed_wins(bufnr)
     end
     local split_target
-    if direction == 'left' then
+    if direction == "left" then
       split_target = winids[1]
     else
       split_target = winids[#winids]
@@ -81,10 +85,10 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
     if my_winid ~= split_target then
       util.go_win_no_au(split_target)
     end
-    if direction == 'left' then
-      vim.cmd('noau vertical leftabove split')
+    if direction == "left" then
+      vim.cmd("noau vertical leftabove split")
     else
-      vim.cmd('noau vertical rightbelow split')
+      vim.cmd("noau vertical rightbelow split")
     end
   else
     util.go_win_no_au(existing_win)
@@ -98,13 +102,13 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   if not existing_win then
     api.nvim_win_set_width(0, util.get_width())
   end
-  api.nvim_win_set_option(0, 'winfixwidth', true)
-  api.nvim_win_set_option(0, 'number', false)
-  api.nvim_win_set_option(0, 'signcolumn', 'no')
-  api.nvim_win_set_option(0, 'foldcolumn', '0')
-  api.nvim_win_set_option(0, 'relativenumber', false)
-  api.nvim_win_set_option(0, 'wrap', false)
-  api.nvim_win_set_var(0, 'is_aerial_win', true)
+  api.nvim_win_set_option(0, "winfixwidth", true)
+  api.nvim_win_set_option(0, "number", false)
+  api.nvim_win_set_option(0, "signcolumn", "no")
+  api.nvim_win_set_option(0, "foldcolumn", "0")
+  api.nvim_win_set_option(0, "relativenumber", false)
+  api.nvim_win_set_option(0, "wrap", false)
+  api.nvim_win_set_var(0, "is_aerial_win", true)
   local aer_winid = api.nvim_get_current_win()
   util.go_win_no_au(my_winid)
   return aer_winid
@@ -122,7 +126,7 @@ end
 
 M.close = function()
   if util.is_aerial_buffer() then
-    vim.cmd('close')
+    vim.cmd("close")
     return
   end
   local aer_bufnr = util.get_aerial_buffer()
@@ -147,7 +151,7 @@ M.maybe_open_automatic = function()
 end
 
 M.open = function(focus, direction, opts)
-  opts = vim.tbl_extend('keep', opts or {}, {
+  opts = vim.tbl_extend("keep", opts or {}, {
     winid = nil,
   })
   if not util.can_show_symbols() then
@@ -172,7 +176,7 @@ M.open = function(focus, direction, opts)
   if focus then
     api.nvim_set_current_win(aer_winid)
   end
-  vim.cmd('wincmd =')
+  vim.cmd("wincmd =")
 end
 
 M.focus = function()
@@ -187,7 +191,7 @@ end
 
 M.toggle = function(focus, direction)
   if util.is_aerial_buffer() then
-    vim.cmd('close')
+    vim.cmd("close")
     return false
   end
 
@@ -206,7 +210,7 @@ M.get_position_in_win = function(bufnr, winid)
   local col = cursor[2]
   local bufdata = data[bufnr]
   local selected = 0
-  local relative = 'above'
+  local relative = "above"
   bufdata:visit(function(item)
     if item.lnum > lnum then
       return true
@@ -215,19 +219,19 @@ M.get_position_in_win = function(bufnr, winid)
         return true
       elseif item.col == col then
         selected = selected + 1
-        relative = 'exact'
+        relative = "exact"
         return true
       else
-        relative = 'below'
+        relative = "below"
       end
     else
-      relative = 'below'
+      relative = "below"
     end
     selected = selected + 1
   end)
   return {
     lnum = math.max(1, selected),
-    relative = relative
+    relative = relative,
   }
 end
 
@@ -237,7 +241,7 @@ M.update_all_positions = function(bufnr, update_last)
 end
 
 M.update_position = function(winid, update_last)
-  if not config.highlight_mode or config.highlight_mode == 'none' then
+  if not config.highlight_mode or config.highlight_mode == "none" then
     return
   end
   if winid == 0 then
@@ -251,15 +255,14 @@ M.update_position = function(winid, update_last)
   local winids
   if not winid or util.is_aerial_buffer(win_bufnr) then
     winids = util.get_fixed_wins(bufnr)
-  elseif type(winid) == 'table' then
+  elseif type(winid) == "table" then
     winids = winid
   else
-    winids = {winid}
+    winids = { winid }
   end
 
-
   local bufdata = data[bufnr]
-  for _,target_win in ipairs(winids) do
+  for _, target_win in ipairs(winids) do
     local pos = M.get_position_in_win(bufnr, target_win)
     if pos ~= nil then
       bufdata.positions[target_win] = pos
@@ -273,7 +276,7 @@ M.update_position = function(winid, update_last)
   if update_last then
     local aer_winid = fn.bufwinid(aer_bufnr)
 
-    if aer_winid ~= -1  then
+    if aer_winid ~= -1 then
       local last_position = bufdata.last_position
       local lines = api.nvim_buf_line_count(aer_bufnr)
 
@@ -281,7 +284,7 @@ M.update_position = function(winid, update_last)
       -- before the symbols are published, which causes the line number to be
       -- invalid.
       if lines >= last_position then
-        api.nvim_win_set_cursor(aer_winid, {bufdata.last_position, 0})
+        api.nvim_win_set_cursor(aer_winid, { bufdata.last_position, 0 })
       end
     end
   end

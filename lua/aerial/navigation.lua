@@ -1,7 +1,7 @@
-local data = require 'aerial.data'
-local util = require 'aerial.util'
-local config = require 'aerial.config'
-local window = require 'aerial.window'
+local data = require("aerial.data")
+local util = require("aerial.util")
+local config = require("aerial.config")
+local window = require("aerial.window")
 
 local M = {}
 
@@ -62,7 +62,7 @@ M.up = function(direction, count)
   local bufdata = data[bufnr]
 
   local index = 1
-    -- We're going up and BACKWARDS
+  -- We're going up and BACKWARDS
   if direction < 0 then
     local prev_root_index
     local last_root_index
@@ -86,7 +86,7 @@ M.up = function(direction, count)
       index = prev_root_index or last_root_index
     else
       -- Otherwise, it's a simple tree traversal
-      for _=1,count do
+      for _ = 1, count do
         if not item.parent then
           break
         end
@@ -114,13 +114,13 @@ M.up = function(direction, count)
       index = 1
     end
   end
-  M.select{
+  M.select({
     index = index,
     jump = false,
     winid = winid,
-  }
+  })
   if util.is_aerial_buffer() then
-    vim.api.nvim_win_set_cursor(0, {index, 0})
+    vim.api.nvim_win_set_cursor(0, { index, 0 })
   end
 end
 
@@ -140,24 +140,24 @@ M.next = function(step)
   local count = data[bufnr]:count()
   -- If we're not *exactly* on a location, make sure we hit the nearest location
   -- first even if we're currently considered to be "on" it
-  if step < 0 and pos.relative == 'below' then
+  if step < 0 and pos.relative == "below" then
     step = step + 1
-  elseif step > 0 and pos.relative == 'above' then
+  elseif step > 0 and pos.relative == "above" then
     step = step - 1
   end
   local new_num = ((pos.lnum + step - 1) % count) + 1
-  M.select{
+  M.select({
     index = new_num,
     jump = false,
     winid = winid,
-  }
+  })
   if util.is_aerial_buffer() then
-    vim.api.nvim_win_set_cursor(0, {new_num, 0})
+    vim.api.nvim_win_set_cursor(0, { new_num, 0 })
   end
 end
 
 M.select = function(opts)
-  opts = vim.tbl_extend('keep', opts or {}, {
+  opts = vim.tbl_extend("keep", opts or {}, {
     index = nil,
     split = nil,
     jump = true,
@@ -188,10 +188,10 @@ M.select = function(opts)
 
   if opts.split then
     local split = opts.split
-    if split == 'vertical' or split == 'v' then
-      split = 'belowright vsplit'
-    elseif split == 'horizontal' or split == 'h' or split == 's' then
-      split = 'belowright split'
+    if split == "vertical" or split == "v" then
+      split = "belowright vsplit"
+    elseif split == "horizontal" or split == "h" or split == "s" then
+      split = "belowright split"
     end
     local my_winid = vim.api.nvim_get_current_win()
     util.go_win_no_au(winid)
@@ -201,9 +201,9 @@ M.select = function(opts)
   end
   local bufnr, _ = util.get_buffers()
   vim.api.nvim_win_set_buf(winid, bufnr)
-  vim.api.nvim_win_set_cursor(winid, {item.lnum, item.col})
+  vim.api.nvim_win_set_cursor(winid, { item.lnum, item.col })
   local cmd = config.post_jump_cmd
-  if cmd and cmd ~= '' then
+  if cmd and cmd ~= "" then
     vim.fn.win_execute(winid, cmd, true)
   end
 

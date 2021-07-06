@@ -1,13 +1,10 @@
 local M = {}
 
-
 local function _get_target(bufdata, action, item, bubble)
   if not bubble then
     return item
   end
-  while item and
-    (not bufdata:is_collapsable(item)
-     or (action == 'close' and bufdata:is_collapsed(item))) do
+  while item and (not bufdata:is_collapsable(item) or (action == "close" and bufdata:is_collapsed(item))) do
     item = item.parent
   end
   return item
@@ -26,7 +23,7 @@ M.open_all = function(bufdata)
 end
 
 M.edit_tree_node = function(bufdata, action, index, opts)
-  opts = vim.tbl_extend('keep', opts or {}, {
+  opts = vim.tbl_extend("keep", opts or {}, {
     bubble = true,
     recurse = false,
   })
@@ -36,18 +33,18 @@ M.edit_tree_node = function(bufdata, action, index, opts)
       return
     end
     local is_collapsed = bufdata:is_collapsed(item)
-    if action == 'toggle' then
-      action = is_collapsed and 'open' or 'close'
+    if action == "toggle" then
+      action = is_collapsed and "open" or "close"
     end
-    if action == 'open' then
+    if action == "open" then
       did_update = did_update or is_collapsed
       bufdata:set_collapsed(item, false)
       if opts.recurse then
-        for _,child in ipairs(item.children) do
+        for _, child in ipairs(item.children) do
           do_action(child)
         end
       end
-    elseif action == 'close' then
+    elseif action == "close" then
       did_update = did_update or not is_collapsed
       bufdata:set_collapsed(item, true)
       if opts.recurse and item.parent then
@@ -63,6 +60,5 @@ M.edit_tree_node = function(bufdata, action, index, opts)
   local item = do_action(target)
   return did_update, bufdata:indexof(item)
 end
-
 
 return M

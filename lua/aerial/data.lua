@@ -1,4 +1,4 @@
-local util = require 'aerial.util'
+local util = require("aerial.util")
 
 local BufData = {
   new = function(t)
@@ -8,7 +8,7 @@ local BufData = {
       last_position = 1,
       collapsed = {},
     }
-    setmetatable(new, {__index = t})
+    setmetatable(new, { __index = t })
     return new
   end,
 
@@ -59,7 +59,7 @@ local BufData = {
   end,
 
   is_collapsable = function(_, item)
-      return item.level == 0 or (item.children and not vim.tbl_isempty(item.children))
+    return item.level == 0 or (item.children and not vim.tbl_isempty(item.children))
   end,
 
   get_root_of = function(_, item)
@@ -77,23 +77,28 @@ local BufData = {
   end,
 
   visit = function(self, callback, opts)
-    opts = vim.tbl_extend('keep', opts or {}, {
+    opts = vim.tbl_extend("keep", opts or {}, {
       incl_hidden = false,
     })
     local function visit_item(item)
       local ret = callback(item, self:_get_config(item))
-      if ret then return ret end
-      if item.children
-        and (opts.incl_hidden or not self:is_collapsed(item)) then
-        for _,child in ipairs(item.children) do
+      if ret then
+        return ret
+      end
+      if item.children and (opts.incl_hidden or not self:is_collapsed(item)) then
+        for _, child in ipairs(item.children) do
           ret = visit_item(child)
-          if ret then return ret end
+          if ret then
+            return ret
+          end
         end
       end
     end
-    for _,item in ipairs(self.items) do
+    for _, item in ipairs(self.items) do
       local ret = visit_item(item)
-      if ret then return ret end
+      if ret then
+        return ret
+      end
     end
   end,
 
@@ -111,7 +116,7 @@ local BufData = {
     local count = 0
     self:visit(function(_)
       count = count + 1
-    end, {incl_hidden = incl_hidden})
+    end, { incl_hidden = incl_hidden })
     return count
   end,
 }
@@ -125,7 +130,7 @@ local Data = setmetatable({}, {
       t[bufnr] = bufdata
     end
     return bufdata
-  end
+  end,
 })
 
 function Data:has_symbols(bufnr)
