@@ -24,19 +24,11 @@ local function close_orphans()
 end
 
 M.on_enter_buffer = function()
-  local mybuf = vim.api.nvim_get_current_buf()
   if util.is_floating_win() then
     return
   end
 
-  -- If the user tried to open a non-aerial buffer inside the aerial window,
-  -- close the window and re-open the buffer.
-  mybuf = vim.api.nvim_get_current_buf()
-  if vim.w.is_aerial_win and not util.is_aerial_buffer(mybuf) then
-    vim.api.nvim_win_close(0, false)
-    vim.api.nvim_set_current_buf(mybuf)
-  end
-
+  local mybuf = vim.api.nvim_get_current_buf()
   if not util.is_aerial_buffer(mybuf) then
     if config.close_behavior == "close" then
       close_orphans()

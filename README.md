@@ -243,3 +243,9 @@ hi AerialFunctionIcon guifg=#cb4b16 guibg=NONE guisp=NONE gui=NONE cterm=NONE
 " There's also this group for the cursor position
 hi link AerialLine QuickFixLine
 ```
+
+## FAQ
+
+**Q: I accidentally opened a file into the aerial window and it looks bad. How can I prevent this from happening?**
+
+Try installing [stickybuf](https://github.com/stevearc/stickybuf.nvim). It was designed to prevent exactly this problem.
