@@ -213,7 +213,7 @@ end
 
 M.can_show_symbols = function(bufnr)
   for _, client in ipairs(vim.lsp.buf_get_clients(bufnr)) do
-    if client.supports_method("textDocument/documentSymbol") then
+    if client.resolved_capabilities.document_symbol then
       return true
     end
   end

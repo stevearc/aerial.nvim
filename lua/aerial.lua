@@ -79,7 +79,7 @@ end
 
 M.on_attach = function(client, opts)
   opts = opts or {}
-  if not client.supports_method("textDocument/documentSymbol") then
+  if not client.resolved_capabilities.document_symbol then
     return
   end
 
