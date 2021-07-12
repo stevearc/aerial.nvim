@@ -212,7 +212,7 @@ M.render_centered_text = function(bufnr, text)
 end
 
 M.can_show_symbols = function(bufnr)
-  for _, client in ipairs(vim.lsp.buf_get_clients(bufnr)) do
+  for _, client in pairs(vim.lsp.buf_get_clients(bufnr)) do
     if client.resolved_capabilities.document_symbol then
       return true
     end
