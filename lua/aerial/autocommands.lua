@@ -1,4 +1,5 @@
 -- Functions that are called in response to autocommands
+local backend = require("aerial.backend")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local fold = require("aerial.fold")
@@ -35,7 +36,7 @@ M.on_enter_buffer = function()
     end
 
     -- If we're not in an LSP-enabled buffer
-    if not util.can_show_symbols() then
+    if not backend.is_supported() then
       fold.restore_foldmethod()
       close_orphans()
       return
@@ -77,13 +78,13 @@ M.on_buf_delete = function(bufnr)
 end
 
 M.on_diagnostics_changed = function()
-  if not util.can_show_symbols() then
+  if not backend.is_supported() then
     return
   end
   local errors = vim.lsp.diagnostic.get_count(0, "Error")
   -- if no errors, refresh symbols
   if config.update_when_errors or errors == 0 or not data:has_symbols() then
-    vim.lsp.buf.document_symbol()
+    backend.fetch_symbols()
   end
 end
 

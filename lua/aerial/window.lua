@@ -1,3 +1,4 @@
+local backend = require("aerial.backend")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local loading = require("aerial.loading")
@@ -154,8 +155,8 @@ M.open = function(focus, direction, opts)
   opts = vim.tbl_extend("keep", opts or {}, {
     winid = nil,
   })
-  if not util.can_show_symbols() then
-    error("Cannot open aerial. No LSP clients support documentSymbol")
+  if not backend.is_supported() then
+    backend.log_support_err()
     return
   end
   local bufnr, aer_bufnr = util.get_buffers()
@@ -169,7 +170,7 @@ M.open = function(focus, direction, opts)
   direction = direction or util.detect_split_direction()
   local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction, opts.winid)
   if not data:has_symbols(bufnr) then
-    vim.lsp.buf.document_symbol()
+    backend.fetch_symbols()
   end
   local my_winid = api.nvim_get_current_win()
   M.update_position(nil, my_winid)

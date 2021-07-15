@@ -1,3 +1,4 @@
+local backend = require("aerial.backend")
 local callbacks = require("aerial.callbacks")
 local config = require("aerial.config")
 local data = require("aerial.data")
@@ -60,30 +61,13 @@ M.up = function(direction, count)
   nav.up(direction, count)
 end
 
-local has_hook = false
-local function add_handler(preserve_callback)
-  if has_hook then
-    return
-  end
-  has_hook = true
-  local old_callback = vim.lsp.handlers["textDocument/documentSymbol"]
-  local new_callback = callbacks.symbol_callback
-  if preserve_callback then
-    new_callback = function(...)
-      callbacks.symbol_callback(...)
-      old_callback(...)
-    end
-  end
-  vim.lsp.handlers["textDocument/documentSymbol"] = new_callback
-end
-
 M.on_attach = function(client, opts)
   opts = opts or {}
   if not client.resolved_capabilities.document_symbol then
     return
   end
 
-  add_handler(opts.preserve_callback)
+  backend.add_handler(opts.preserve_callback)
 
   if config.link_folds_to_tree then
     local function map(key, cmd)
@@ -123,7 +107,7 @@ M.on_attach = function(client, opts)
   )
   if config.open_automatic() then
     if not config.diagnostics_trigger_update then
-      vim.lsp.buf.document_symbol()
+      backend.fetch_symbols()
     end
   end
 end

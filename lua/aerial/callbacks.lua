@@ -55,7 +55,7 @@ local function process_symbols(symbols)
   return _process_symbols(symbols, nil, {}, 0)
 end
 
-local function handle_symbols(result, bufnr)
+M.handle_symbols = function(result, bufnr)
   local had_symbols = data:has_symbols(bufnr)
   local items = process_symbols(result)
   data[bufnr].items = items
@@ -88,7 +88,7 @@ M.symbol_callback = function(_, _, result, _, bufnr)
     vim.defer_fn(function()
       local r = results[bufnr]
       results[bufnr] = nil
-      handle_symbols(r, bufnr)
+      M.handle_symbols(r, bufnr)
     end, 100)
   end
   results[bufnr] = result
