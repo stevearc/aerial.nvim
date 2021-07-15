@@ -228,6 +228,19 @@ Key       | Command
 `zR`      | Expand all nodes in the tree
 `zx`/`zX` | Sync code folding to the tree (useful if they get out of sync)
 
+## Fuzzy Finding
+
+There is a telescope extension for fuzzy finding and jumping to symbols. It
+functions similarly to the builtin `lsp_document_symbols` picker, the main
+difference being that the aerial only includes the types of symbols in the
+`filter_kind` configuration option. Load the extension with:
+
+```lua
+require('telescope').load_extension('aerial')
+```
+
+You can then begin fuzzy finding with `:Telescope aerial`
+
 ## Highlight
 
 There are highlight groups created for each `SymbolKind`. There will be one for
