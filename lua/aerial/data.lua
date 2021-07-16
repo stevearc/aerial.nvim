@@ -1,4 +1,5 @@
 local util = require("aerial.util")
+local config = require("aerial.config")
 
 local BufData = {
   new = function(t)
@@ -59,7 +60,7 @@ local BufData = {
   end,
 
   is_collapsable = function(_, item)
-    return item.level == 0 or (item.children and not vim.tbl_isempty(item.children))
+    return (item.level == 0 and config.manage_folds) or (item.children and not vim.tbl_isempty(item.children))
   end,
 
   get_root_of = function(_, item)
