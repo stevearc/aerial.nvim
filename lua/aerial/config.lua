@@ -100,9 +100,13 @@ local function get_option(opt)
   if ret == nil then
     ret = (vim.g.aerial or {})[opt]
   end
-  -- People are used to using 0 for v:false in vimscript
-  if ret == 0 and (type(default_options[opt]) == "boolean" or addl_bool_opts[opt]) then
-    ret = false
+  -- People are used to using 1/0 for v:true/v:false in vimscript
+  if type(default_options[opt]) == "boolean" or addl_bool_opts[opt] then
+    if ret == 0 then
+      ret = false
+    elseif ret == 1 then
+      return true
+    end
   end
   if ret == nil then
     return default_options[opt]

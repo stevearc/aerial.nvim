@@ -68,11 +68,17 @@ M.maybe_set_foldmethod = function(bufnr)
   for _, winid in ipairs(winids) do
     local fdm = vim.api.nvim_win_get_option(winid, "foldmethod")
     local fde = vim.api.nvim_win_get_option(winid, "foldexpr")
-    if manage_folds == true or manage_folds == 1 or (manage_folds == "auto" and fdm == "manual") then
+    if
+      not util.is_managing_folds(winid)
+      and (manage_folds == true or (manage_folds == "auto" and fdm == "manual"))
+    then
       vim.api.nvim_win_set_var(winid, prev_fdm, fdm)
       vim.api.nvim_win_set_var(winid, prev_fde, fde)
       vim.api.nvim_win_set_option(winid, "foldmethod", "expr")
       vim.api.nvim_win_set_option(winid, "foldexpr", "aerial#foldexpr()")
+      if config.link_tree_to_folds then
+        vim.api.nvim_win_set_option(winid, "foldlevel", 99)
+      end
     end
   end
 end
