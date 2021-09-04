@@ -72,10 +72,11 @@ M.handle_symbols = function(result, bufnr)
 end
 
 local results = {}
-M.symbol_callback = function(_, _, result, _, bufnr)
+M.symbol_callback = function(_err, result, context, _config)
   if not result or vim.tbl_isempty(result) then
     return
   end
+  local bufnr = context.bufnr
   -- Don't update if there are diagnostics errors (or override by setting)
   local error_count = vim.lsp.diagnostic.get_count(bufnr, "Error")
   local has_symbols = data:has_symbols(bufnr)
