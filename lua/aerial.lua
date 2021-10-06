@@ -61,7 +61,13 @@ M.up = function(direction, count)
   nav.up(direction, count)
 end
 
-M.on_attach = function(client, opts)
+M.on_attach = function(client, bufnr, opts)
+  if type(bufnr) == "table" then
+    opts = bufnr
+    bufnr = 0
+  elseif not bufnr then
+    bufnr = 0
+  end
   opts = opts or {}
   if not client.resolved_capabilities.document_symbol then
     return
@@ -71,7 +77,7 @@ M.on_attach = function(client, opts)
 
   if config.link_folds_to_tree then
     local function map(key, cmd)
-      vim.api.nvim_buf_set_keymap(0, "n", key, cmd, { silent = true, noremap = true })
+      vim.api.nvim_buf_set_keymap(bufnr, "n", key, cmd, { silent = true, noremap = true })
     end
 
     map("za", [[<cmd>AerialTreeToggle<CR>]])
