@@ -34,10 +34,25 @@ local function process_symbols(symbols)
           lnum = range.start.line + 1,
           col = range.start.character,
         }
-        if symbol.children then
-          item.children = _process_symbols(symbol.children, item, {}, level + 1)
+
+        -- Skip this symbol if it's in the same location as the last one.
+        -- This can happen on C++ macros
+        -- (see https://github.com/stevearc/aerial.nvim/issues/13)
+        local last_item = vim.tbl_isempty(list) and {} or list[#list]
+        if last_item.lnum ~= item.lnum or last_item.col ~= item.col then
+          if symbol.children then
+            item.children = _process_symbols(symbol.children, item, {}, level + 1)
+          end
+          table.insert(list, item)
+        elseif symbol.children then
+          -- If this duplicate symbol has children (unlikely), make sure those get
+          -- merged into the previous symbol's children
+          last_item.children = last_item.children or {}
+          vim.list_extend(
+            last_item.children,
+            _process_symbols(symbol.children, last_item, {}, level + 1)
+          )
         end
-        table.insert(list, item)
       elseif symbol.children then
         _process_symbols(symbol.children, parent, list, level)
       end
