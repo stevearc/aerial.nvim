@@ -203,11 +203,13 @@ local nerd_icons = {
   Collapsed     = '';
 }
 
+local HAS_LSPKIND, lspkind = pcall(require, "lspkind")
+
 local _last_checked = 0
 local _last_icons = {}
 M.get_icon = function(kind, collapsed)
   local icons = _last_icons
-  if vim.fn.localtime() - _last_checked > 5 then
+  if os.time() - _last_checked > 5 then
     local default
     local nerd_font = get_option("nerd_font")
     if nerd_font == "auto" then
@@ -220,13 +222,17 @@ M.get_icon = function(kind, collapsed)
     end
     icons = vim.tbl_extend("keep", M.icons or {}, default)
     _last_icons = icons
-    _last_checked = vim.fn.localtime()
+    _last_checked = os.time()
   end
 
   if collapsed then
     return get_table_default(icons, kind .. "Collapsed", "Collapsed", kind)
   else
-    return get_table_default(icons, kind, nil, kind)
+    if HAS_LSPKIND then
+      return lspkind.symbolic(kind, { with_text = false })
+    else
+      return get_table_default(icons, kind, nil, kind)
+    end
   end
 end
 
