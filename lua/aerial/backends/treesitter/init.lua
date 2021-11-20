@@ -1,57 +1,11 @@
 local backends = require("aerial.backends")
 local config = require("aerial.config")
+local language_kind_map = require("aerial.backends.treesitter.language_kind_map")
 local parsers = require("nvim-treesitter.parsers")
 local query = require("nvim-treesitter.query")
 local ts_utils = require("nvim-treesitter.ts_utils")
 local utils = require("nvim-treesitter.utils")
 local M = {}
-
-local language_kind_map = {
-  c = {
-    enum_specifier = "Enum",
-    function_declarator = "Function",
-    struct_specifier = "Struct",
-  },
-  c_sharp = {
-    interface_declaration = "Interface",
-    class_declaration = "Class",
-    method_declaration = "Method",
-    struct_declaration = "Struct",
-    enum_declaration = "Enum",
-    constructor_declaration = "Constructor",
-  },
-  go = {
-    function_declaration = "Function",
-    method_declaration = "Method",
-    struct_type = "Struct",
-  },
-  json = {
-    object = "Class",
-  },
-  lua = {
-    function_definition = "Function",
-    local_function = "Function",
-    ["function"] = "Function",
-  },
-  python = {
-    function_definition = "Function",
-    class_definition = "Class",
-  },
-  rst = {
-    section = "Namespace",
-  },
-  typescript = {
-    class_declaration = "Class",
-    function_signature = "Function",
-    function_declaration = "Function",
-    interface_declaration = "Interface",
-    method_definition = "Method",
-    type_alias_declaration = "Type",
-  },
-  vim = {
-    function_definition = "Function",
-  },
-}
 
 M.is_supported = function(bufnr)
   local lang = parsers.get_buf_lang(bufnr)
