@@ -4,7 +4,10 @@ local function _get_target(bufdata, action, item, bubble)
   if not bubble then
     return item
   end
-  while item and (not bufdata:is_collapsable(item) or (action == "close" and bufdata:is_collapsed(item))) do
+  while
+    item
+    and (not bufdata:is_collapsable(item) or (action == "close" and bufdata:is_collapsed(item)))
+  do
     item = item.parent
   end
   return item
