@@ -1,0 +1,22 @@
+local util = require("tests.test_util")
+
+describe("treesitter vim", function()
+  it("parses all symbols correctly", function()
+    util.test_file_symbols("./tests/treesitter/vim_test.vim", {
+      {
+        kind = "Function",
+        name = "Fn_1",
+        level = 0,
+        lnum = 1,
+        col = 0,
+      },
+      {
+        kind = "Function",
+        name = "s:fn_2",
+        level = 0,
+        lnum = 4,
+        col = 0,
+      },
+    })
+  end)
+end)

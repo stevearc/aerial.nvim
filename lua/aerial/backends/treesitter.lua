@@ -19,6 +19,9 @@ local language_kind_map = {
   rst = {
     section = "Namespace",
   },
+  vim = {
+    function_definition = "Function",
+  },
 }
 
 M.is_supported = function(bufnr)
