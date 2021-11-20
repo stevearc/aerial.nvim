@@ -7,6 +7,11 @@ local utils = require("nvim-treesitter.utils")
 local M = {}
 
 local language_kind_map = {
+  c = {
+    enum_specifier = "Enum",
+    function_declarator = "Function",
+    struct_specifier = "Struct",
+  },
   c_sharp = {
     interface_declaration = "Interface",
     class_declaration = "Class",
