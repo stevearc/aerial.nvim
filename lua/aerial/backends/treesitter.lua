@@ -6,11 +6,19 @@ local ts_utils = require("nvim-treesitter.ts_utils")
 local utils = require("nvim-treesitter.utils")
 local M = {}
 
-local kind_map = {
-  local_function = "Function",
-  function_definition = "Function",
-  ["function"] = "Function",
-  class_definition = "Class",
+local language_kind_map = {
+  lua = {
+    function_definition = "Function",
+    local_function = "Function",
+    ["function"] = "Function",
+  },
+  python = {
+    function_definition = "Function",
+    class_definition = "Class",
+  },
+  rst = {
+    section = "Namespace",
+  },
 }
 
 M.is_supported = function(bufnr)
@@ -40,6 +48,7 @@ M.fetch_symbols_sync = function(timeout)
 
     parser:for_each_tree(function(tree, lang_tree)
       local lang = lang_tree:lang()
+      local kind_map = language_kind_map[lang]
       if query.has_query_files(lang, "aerial") then
         for match in query.iter_group_results(bufnr, "aerial", tree:root(), lang) do
           local name_node = (utils.get_at_path(match, "name") or {}).node
@@ -49,7 +58,7 @@ M.fetch_symbols_sync = function(timeout)
             local row, col = type_node:start()
             local kind = kind_map[type_node:type()]
             if not kind then
-              vim.nvim_err_writeln(
+              vim.api.nvim_err_writeln(
                 string.format("Missing entry in aerial treesitter kind_map: %s", type_node:type())
               )
               break

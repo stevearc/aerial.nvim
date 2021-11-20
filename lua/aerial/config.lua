@@ -280,6 +280,7 @@ M.get_icon = function(kind, collapsed)
   else
     if HAS_LSPKIND then
       return lspkind.symbolic(kind, { with_text = false })
+        or get_table_default(icons, kind, nil, kind)
     else
       return get_table_default(icons, kind, nil, kind)
     end
