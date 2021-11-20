@@ -1,12 +1,8 @@
-local data = require("aerial.data")
-local ts = require("aerial.backends.treesitter")
 local util = require("tests.test_util")
 
 describe("treesitter lua", function()
   it("parses all symbols correctly", function()
-    vim.cmd([[edit ./tests/treesitter/lua_test.lua]])
-    ts.fetch_symbols()
-    util.assert_tree_equals(data[0].items, {
+    util.test_file_symbols("./tests/treesitter/lua_test.lua", {
       {
         kind = "Function",
         name = "fn_1",
