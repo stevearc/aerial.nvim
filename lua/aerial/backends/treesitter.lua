@@ -7,6 +7,9 @@ local utils = require("nvim-treesitter.utils")
 local M = {}
 
 local language_kind_map = {
+  json = {
+    object = "Class",
+  },
   lua = {
     function_definition = "Function",
     local_function = "Function",
@@ -56,9 +59,15 @@ M.fetch_symbols_sync = function(timeout)
         for match in query.iter_group_results(bufnr, "aerial", tree:root(), lang) do
           local name_node = (utils.get_at_path(match, "name") or {}).node
           local type_node = (utils.get_at_path(match, "type") or {}).node
+          local loc_node = (utils.get_at_path(match, "location") or {}).node
           local parent, parent_node, level = get_parent(type_node)
           if type_node and type_node ~= parent_node then
-            local row, col = type_node:start()
+            local row, col
+            if loc_node then
+              row, col = loc_node:start()
+            else
+              row, col = type_node:start()
+            end
             local kind = kind_map[type_node:type()]
             if not kind then
               vim.api.nvim_err_writeln(
