@@ -1,4 +1,4 @@
-local backend = require("aerial.backend")
+local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local loading = require("aerial.loading")
@@ -155,8 +155,9 @@ M.open = function(focus, direction, opts)
   opts = vim.tbl_extend("keep", opts or {}, {
     winid = nil,
   })
-  if not backend.is_supported() then
-    backend.log_support_err()
+  local backend = backends.get()
+  if not backend then
+    backends.log_support_err()
     return
   end
   local bufnr, aer_bufnr = util.get_buffers()

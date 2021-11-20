@@ -1,12 +1,13 @@
-local backend = require("aerial.backend")
+local backends = require("aerial.backends")
 local data = require("aerial.data")
 local navigation = require("aerial.navigation")
 local M = {}
 
 M.get_labels = function(opts)
   opts = opts or {}
-  if not backend.is_supported() then
-    backend.log_support_err()
+  local backend = backends.get()
+  if not backend then
+    backends.log_support_err()
     return nil
   elseif not data:has_symbols(0) then
     backend.fetch_symbols_sync(opts.timeout)

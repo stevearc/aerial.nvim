@@ -37,6 +37,11 @@ function! s:AerialTreeCmd(cmd, bang) abort
   call luaeval("require'aerial'.tree_cmd(_A[1], _A[2])", [a:cmd, l:opts])
 endfunction
 
+aug AerialEnterBuffer
+  au!
+  au BufEnter * lua require'aerial.autocommands'.on_enter_buffer()
+aug END
+
 " The line that shows where your cursor(s) are
 highlight default link AerialLine QuickFixLine
 
