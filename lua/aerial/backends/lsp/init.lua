@@ -101,6 +101,10 @@ M.attach = function(bufnr)
   end
 end
 
+M.detach = function(bufnr)
+  -- pass
+end
+
 M._on_diagnostics_changed = function()
   if not backends.is_backend_attached(0, "lsp") then
     return
