@@ -1,3 +1,4 @@
+local config = require("aerial.config")
 local M = {}
 
 local function get_backend(name)
@@ -8,8 +9,7 @@ M.get = function(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  -- TODO this should be a config option
-  local candidates = { "lsp", "treesitter" }
+  local candidates = config.get_backends(bufnr)
   for _, name in ipairs(candidates) do
     local backend = get_backend(name)
     if backend.is_supported(bufnr) then

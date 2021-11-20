@@ -1,12 +1,11 @@
 local backends = require("aerial.backends")
+local config = require("aerial.config")
 local parsers = require("nvim-treesitter.parsers")
 local query = require("nvim-treesitter.query")
 local ts_utils = require("nvim-treesitter.ts_utils")
 local utils = require("nvim-treesitter.utils")
 local M = {}
 
--- TODO this should be a config option
-local CHANGE_DELAY = 1000
 local kind_map = {
   local_function = "Function",
   function_definition = "Function",
@@ -123,7 +122,7 @@ local function throttle_update()
   end
   timer = vim.loop.new_timer()
   timer:start(
-    CHANGE_DELAY,
+    config["treesitter.update_delay"],
     0,
     vim.schedule_wrap(function()
       timer:close()

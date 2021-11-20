@@ -88,7 +88,7 @@ M.on_attach = function(client, bufnr, opts)
 end
 
 M.attach = function(bufnr)
-  if config.diagnostics_trigger_update then
+  if config["lsp.diagnostics_trigger_update"] then
     vim.cmd([[augroup AerialDiagnostics
       au!
       au User LspDiagnosticsChanged lua require'aerial.backends.lsp'._on_diagnostics_changed()
@@ -96,7 +96,7 @@ M.attach = function(bufnr)
     augroup END
     ]])
   end
-  if config.open_automatic() and not config.diagnostics_trigger_update then
+  if config.open_automatic() and not config["lsp.diagnostics_trigger_update"] then
     M.fetch_symbols()
   end
 end
@@ -111,7 +111,7 @@ M._on_diagnostics_changed = function()
   end
   local errors = vim.lsp.diagnostic.get_count(0, "Error")
   -- if no errors, refresh symbols
-  if config.update_when_errors or errors == 0 or not data:has_symbols() then
+  if config["lsp.update_when_errors"] or errors == 0 or not data:has_symbols() then
     M.fetch_symbols()
   end
 end

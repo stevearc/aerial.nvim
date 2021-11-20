@@ -78,6 +78,9 @@ Command               | arg            | description
 
 ```lua
 vim.g.aerial = {
+  -- Priority list of preferred backends for aerial
+  backends = { "lsp", "treesitter" },
+
   -- Enum: persist, close, auto, global
   --   persist - aerial window will stay open until closed
   --   close   - aerial window will close when original file is no longer visible
@@ -98,10 +101,6 @@ vim.g.aerial = {
   -- Set to true to only open aerial at the far right/left of the editor
   -- Default behavior opens aerial relative to current window
   placement_editor_edge = false,
-
-  -- Fetch document symbols when LSP diagnostics change.
-  -- If you set this to false, you will need to manually fetch symbols
-  diagnostics_trigger_update = true,
 
   -- Enum: split_width, full_width, last, none
   -- Determines line highlighting mode when multiple buffers are visible
@@ -145,18 +144,29 @@ vim.g.aerial = {
   -- Run this command after jumping to a symbol (false will disable)
   post_jump_cmd = "normal! zz",
 
-  -- Set to false to not update the symbols when there are LSP errors
-  update_when_errors = true,
+  lsp = {
+    -- Fetch document symbols when LSP diagnostics change.
+    -- If you set this to false, you will need to manually fetch symbols
+    diagnostics_trigger_update = true,
 
-  -- A list of all symbols to display. Set to false to display all symbols.
-  filter_kind = {
-    "Class",
-    "Constructor",
-    "Enum",
-    "Function",
-    "Interface",
-    "Method",
-    "Struct",
+    -- Set to false to not update the symbols when there are LSP errors
+    update_when_errors = true,
+
+    -- A list of all symbols to display. Set to false to display all symbols.
+    filter_kind = {
+      "Class",
+      "Constructor",
+      "Enum",
+      "Function",
+      "Interface",
+      "Method",
+      "Struct",
+    },
+  },
+
+  treesitter = {
+    -- How long to wait after a buffer change before updating
+    update_delay = 300,
   },
 }
 
@@ -168,6 +178,16 @@ vim.g.aerial = {
     ['_']  = true,
     python = false,
     rust   = false,
+  }
+}
+
+-- backends can also be specified as a filetype map.
+vim.g.aerial = {
+  backends = {
+    -- use underscore to specify the default behavior
+    ['_']  = {'lsp', 'treesitter'},
+    python = {'treesitter'},
+    rust   = {'lsp'},
   }
 }
 
