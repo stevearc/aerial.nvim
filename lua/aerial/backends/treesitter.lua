@@ -15,6 +15,11 @@ local language_kind_map = {
     enum_declaration = "Enum",
     constructor_declaration = "Constructor",
   },
+  go = {
+    function_declaration = "Function",
+    method_declaration = "Method",
+    struct_type = "Struct",
+  },
   json = {
     object = "Class",
   },
