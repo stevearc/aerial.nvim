@@ -23,6 +23,12 @@ return {
     method_declaration = "Method",
     struct_type = "Struct",
   },
+  java = {
+    class_declaration = "Class",
+    enum_declaration = "Enum",
+    interface_declaration = "Interface",
+    method_declaration = "Method",
+  },
   javascript = {
     class_declaration = "Class",
     function_declaration = "Function",
