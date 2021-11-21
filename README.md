@@ -166,7 +166,7 @@ vim.g.aerial = {
   },
 
   treesitter = {
-    -- How long to wait after a buffer change before updating
+    -- How long to wait (in ms) after a buffer change before updating
     update_delay = 300,
   },
 }
