@@ -80,7 +80,8 @@ aerial supports all the usual plugin managers
 ## Setup
 Aerial can display document symbols from a couple of sources. You will need to
 use at least one of the. You can configure which one to use or your preferred
-source with the `backends` option (see [Options](#options))
+source with the `backends` option (see [Options](#options)). The default is to
+prefer LSP when it's available, and fall back to Treesitter.
 
 ### LSP
 
