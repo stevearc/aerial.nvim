@@ -47,6 +47,13 @@ describe("treesitter lua", function()
         lnum = 21,
         col = 11,
       },
+      {
+        kind = "Function",
+        name = "M.fn_5",
+        level = 0,
+        lnum = 26,
+        col = 9,
+      },
     })
   end)
 end)

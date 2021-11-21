@@ -22,3 +22,5 @@ local obj = {
     return
   end,
 }
+
+M.fn_5 = function() end
