@@ -4,6 +4,12 @@ return {
     function_declarator = "Function",
     struct_specifier = "Struct",
   },
+  cpp = {
+    class_specifier = "Class",
+    enum_specifier = "Enum",
+    function_definition = "Function",
+    struct_specifier = "Struct",
+  },
   c_sharp = {
     interface_declaration = "Interface",
     class_declaration = "Class",
