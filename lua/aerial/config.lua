@@ -1,7 +1,6 @@
 local M = {}
 local has_devicons = pcall(require, "nvim-web-devicons")
 
--- Copy this to the README after modification
 local default_options = {
   -- Priority list of preferred backends for aerial
   backends = { "lsp", "treesitter" },

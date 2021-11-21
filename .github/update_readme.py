@@ -36,13 +36,34 @@ def replace_section(file: str, start_pat: str, end_pat: str, lines: List[str]) -
         ofile.write("".join(all_lines))
 
 
-def main() -> None:
-    """Update the README"""
+def update_treesitter_languages():
     languages = sorted(os.listdir(os.path.join(ROOT, "queries")))
     language_lines = ["\n"] + [f"  * {l}\n" for l in languages]
     replace_section(
         README, r"^\s*<summary>Supported languages", r"^\s*</details>", language_lines
     )
+
+
+def update_config_options():
+    opt_lines = ["\n", "```lua\n", "vim.g.aerial = {\n"]
+    with open(
+        os.path.join(ROOT, "lua", "aerial", "config.lua"), "r", encoding="utf-8"
+    ) as ifile:
+        copying = False
+        for line in ifile:
+            if copying:
+                if re.match(r"^}$", line):
+                    break
+                opt_lines.append(line)
+            elif re.match(r"^\s*local default_options =", line):
+                copying = True
+    replace_section(README, r"^## Options", r"^}$", opt_lines)
+
+
+def main() -> None:
+    """Update the README"""
+    update_treesitter_languages()
+    update_config_options()
 
 
 if __name__ == "__main__":
