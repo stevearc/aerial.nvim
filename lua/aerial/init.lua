@@ -1,3 +1,4 @@
+local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local fold = require("aerial.fold")
@@ -139,6 +140,25 @@ M.sync_folds = function()
     end
   end
   util.go_win_no_au(mywin)
+end
+
+M.info = function()
+  local filetype = vim.api.nvim_buf_get_option(0, "filetype")
+  print("Aerial Info")
+  print("-----------")
+  print("Configured backends:")
+  for _, name in ipairs(config.get_backends(0)) do
+    local line = "  " .. name
+    if backends.is_supported(0, name) then
+      line = line .. " (supported)"
+    else
+      line = line .. " (not supported)"
+    end
+    if backends.is_backend_attached(0, name) then
+      line = line .. " (attached)"
+    end
+    print(line)
+  end
 end
 
 -- @deprecated

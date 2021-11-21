@@ -15,6 +15,7 @@ command! -bang AerialTreeToggle call <sid>AerialTreeCmd('toggle', <q-bang>)
 command! AerialTreeOpenAll lua require'aerial'.tree_open_all()
 command! AerialTreeCloseAll lua require'aerial'.tree_close_all()
 command! AerialTreeSyncFolds lua require'aerial'.sync_folds()
+command! AerialInfo lua require'aerial'.info()
 
 function! s:CompleteOpenDirection(ArgLead, CmdLine, CursorPos)
   let l:opts = ['right', 'left']

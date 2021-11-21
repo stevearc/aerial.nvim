@@ -5,6 +5,11 @@ local function get_backend(name)
   return require(string.format("aerial.backends.%s", name))
 end
 
+M.is_supported = function(bufnr, name)
+  local backend = get_backend(name)
+  return backend and backend.is_supported(bufnr)
+end
+
 M.get = function(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
