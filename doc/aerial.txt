@@ -230,6 +230,9 @@ g:aerial_lsp_update_when_errors                 *g:aerial_lsp_update_when_errors
 g:aerial_treesitter_update_delay               *g:aerial_treesitter_update_delay*
     How long to wait (in ms) after a buffer change before updating.
 
+g:aerial_markdown_update_delay                   *g:aerial_markdown_update_delay*
+    How long to wait (in ms) after a buffer change before updating.
+
 g:aerial_icons                                                   *g:aerial_icons*
     A map of |SymbolKind| to icons. You can also specify "<Symbol>Collapsed"
     to change the icon when the tree is collapsed at this symbol, or
