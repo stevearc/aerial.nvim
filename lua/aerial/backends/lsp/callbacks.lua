@@ -11,6 +11,7 @@ end
 
 local function process_symbols(symbols, bufnr)
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
+  local include_kind = config.get_filter_kind_map(filetype)
   local function _process_symbols(_symbols, parent, list, level)
     for _, symbol in ipairs(_symbols) do
       local kind = get_symbol_kind_name(symbol.kind)
@@ -20,7 +21,7 @@ local function process_symbols(symbols, bufnr)
       elseif symbol.range then -- DocumentSymbol type
         range = symbol.range
       end
-      local include_item = range and config.include_kind(kind, filetype)
+      local include_item = range and include_kind[kind]
 
       if include_item then
         local item = {

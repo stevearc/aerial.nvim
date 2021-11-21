@@ -40,6 +40,7 @@ M.fetch_symbols_sync = function(timeout)
     parser:for_each_tree(function(tree, lang_tree)
       local lang = lang_tree:lang()
       local kind_map = language_kind_map[lang]
+      local include_kind = config.get_filter_kind_map(filetype)
       if query.has_query_files(lang, "aerial") then
         for match in query.iter_group_results(bufnr, "aerial", tree:root(), lang) do
           local name_node = (utils.get_at_path(match, "name") or {}).node
@@ -54,7 +55,7 @@ M.fetch_symbols_sync = function(timeout)
               )
               break
             end
-            if config.include_kind(kind, filetype) then
+            if include_kind[kind] then
               local row, col
               if loc_node then
                 row, col = loc_node:start()

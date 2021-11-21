@@ -183,7 +183,7 @@ local function get_table_opt(opt, key, default_key, default)
   return get_table_default(get_option(opt), key, default_key, default)
 end
 
-M.include_kind = function(kind, filetype)
+M.get_filter_kind_map = function(filetype)
   local fk = M.filter_kind
   if type(fk) == "table" and not vim.tbl_islist(fk) then
     local filetype_fk = fk[filetype]
@@ -195,7 +195,27 @@ M.include_kind = function(kind, filetype)
     end
     fk = filetype_fk
   end
-  return not fk or vim.tbl_contains(fk, kind)
+
+  if fk == false then
+    return setmetatable({}, {
+      __index = function()
+        return true
+      end,
+      __tostring = function()
+        return "all symbols"
+      end,
+    })
+  else
+    local ret = {}
+    for _, kind in ipairs(fk) do
+      ret[kind] = true
+    end
+    return setmetatable(ret, {
+      __tostring = function()
+        return table.concat(fk, ", ")
+      end,
+    })
+  end
 end
 
 M.open_automatic = function()

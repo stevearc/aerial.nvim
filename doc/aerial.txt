@@ -26,6 +26,10 @@ COMMANDS                                                        *aerial-commands
 :AerialClose
         Close the aerial window.
 
+                                                                    *:AerialInfo*
+:AerialInfo
+        Print out debug info related to aerial.
+
                                                                     *:AerialNext*
 :[count]AerialNext
         Jump forwards [count] symbols (default 1).

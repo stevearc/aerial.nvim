@@ -73,6 +73,7 @@ Command               | arg            | description
 `AerialTreeOpenAll`   |                | Open all tree nodes
 `AerialTreeCloseAll`  |                | Collapse all tree nodes
 `AerialTreeSyncFolds` |                | Sync code folding with current tree state
+`AerialInfo`          |                | Print out debug info related to aerial
 
 ## Options
 

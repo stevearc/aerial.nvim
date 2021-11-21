@@ -146,6 +146,7 @@ M.info = function()
   local filetype = vim.api.nvim_buf_get_option(0, "filetype")
   print("Aerial Info")
   print("-----------")
+  print(string.format("Filetype: %s", filetype))
   print("Configured backends:")
   for _, name in ipairs(config.get_backends(0)) do
     local line = "  " .. name
@@ -159,6 +160,7 @@ M.info = function()
     end
     print(line)
   end
+  print(string.format("Show symbols: %s", config.get_filter_kind_map(filetype)))
 end
 
 -- @deprecated
