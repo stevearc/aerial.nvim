@@ -1,12 +1,13 @@
 local config = require("aerial.config")
 local M = {}
 
-local function get_backend(name)
-  return require(string.format("aerial.backends.%s", name))
+M.get_backend_by_name = function(name)
+  local ok, mod = pcall(require, string.format("aerial.backends.%s", name))
+  return ok and mod or nil
 end
 
 M.is_supported = function(bufnr, name)
-  local backend = get_backend(name)
+  local backend = M.get_backend_by_name(name)
   return backend and backend.is_supported(bufnr)
 end
 
@@ -16,8 +17,8 @@ M.get = function(bufnr)
   end
   local candidates = config.get_backends(bufnr)
   for _, name in ipairs(candidates) do
-    local backend = get_backend(name)
-    if backend.is_supported(bufnr) then
+    local backend = M.get_backend_by_name(name)
+    if backend and backend.is_supported(bufnr) then
       return backend, name
     end
   end
@@ -81,7 +82,7 @@ M.attach = function(bufnr, refresh)
   if backend and name ~= existing_backend_name then
     backend.attach(bufnr)
     if existing_backend_name then
-      get_backend(existing_backend_name).detach(bufnr)
+      M.get_backend_by_name(existing_backend_name).detach(bufnr)
     else
       require("aerial.autocommands").attach_autocommands(bufnr)
       require("aerial.fold").add_fold_mappings(bufnr)

@@ -1,6 +1,7 @@
 local backends = require("aerial.backends")
 local config = require("aerial.config")
 local language_kind_map = require("aerial.backends.treesitter.language_kind_map")
+local util = require("aerial.backends.util")
 local M = {}
 
 M.is_supported = function(bufnr)
@@ -91,62 +92,18 @@ M.fetch_symbols_sync = function(timeout)
       end
     end)
   end
-  backends.set_symbols(0, items)
+  backends.set_symbols(bufnr, items)
 end
 
 M.fetch_symbols = M.fetch_symbols_sync
 
 M.attach = function(bufnr)
-  if not bufnr or bufnr == 0 then
-    bufnr = vim.api.nvim_get_current_buf()
-  end
-  vim.cmd(string.format(
-    [[augroup AerialTS
-      au! * <buffer=%d>
-      au TextChanged <buffer=%d> lua require'aerial.backends.treesitter'._on_text_changed()
-      au InsertLeave <buffer=%d> lua require'aerial.backends.treesitter'._on_insert_leave()
-    augroup END
-    ]],
-    bufnr,
-    bufnr,
-    bufnr
-  ))
+  util.add_change_watcher(bufnr, "treesitter")
   M.fetch_symbols()
 end
 
 M.detach = function(bufnr)
-  vim.cmd(string.format(
-    [[augroup AerialTS
-      au! * <buffer=%d>
-    augroup END
-    ]],
-    bufnr
-  ))
-end
-
-local timer = nil
-local function throttle_update()
-  if timer or not backends.is_backend_attached(0, "treesitter") then
-    return
-  end
-  timer = vim.loop.new_timer()
-  timer:start(
-    config["treesitter.update_delay"],
-    0,
-    vim.schedule_wrap(function()
-      timer:close()
-      timer = nil
-      M.fetch_symbols()
-    end)
-  )
-end
-
-M._on_text_changed = function()
-  throttle_update()
-end
-
-M._on_insert_leave = function()
-  throttle_update()
+  util.remove_change_watcher(bufnr, "treesitter")
 end
 
 return M
