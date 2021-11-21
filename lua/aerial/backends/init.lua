@@ -87,8 +87,10 @@ M.attach = function(bufnr, refresh)
       require("aerial.fold").add_fold_mappings(bufnr)
     end
     set_backend(bufnr, name)
-    for _, cb in ipairs(attach_callbacks) do
-      cb(bufnr)
+    if not existing_backend_name then
+      for _, cb in ipairs(attach_callbacks) do
+        cb(bufnr)
+      end
     end
   end
 end
