@@ -17,6 +17,11 @@ return {
     method_declaration = "Method",
     struct_type = "Struct",
   },
+  javascript = {
+    class_declaration = "Class",
+    function_declaration = "Function",
+    method_definition = "Method",
+  },
   json = {
     object = "Class",
   },
