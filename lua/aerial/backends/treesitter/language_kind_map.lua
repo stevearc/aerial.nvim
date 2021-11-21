@@ -32,6 +32,12 @@ return {
   rst = {
     section = "Namespace",
   },
+  rust = {
+    enum_item = "Enum",
+    function_item = "Function",
+    mod_item = "Module",
+    struct_item = "Struct",
+  },
   typescript = {
     class_declaration = "Class",
     function_signature = "Function",
