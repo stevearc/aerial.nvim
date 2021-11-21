@@ -38,9 +38,9 @@ def replace_section(file: str, start_pat: str, end_pat: str, lines: List[str]) -
 
 def update_treesitter_languages():
     languages = sorted(os.listdir(os.path.join(ROOT, "queries")))
-    language_lines = ["\n"] + [f"  * {l}\n" for l in languages]
+    language_lines = ["\n"] + [f"  * {l}\n" for l in languages] + ["\n"]
     replace_section(
-        README, r"^\s*<summary>Supported languages", r"^\s*</details>", language_lines
+        README, r"^\s*<summary>Supported languages", r"^[^\s]", language_lines
     )
 
 
