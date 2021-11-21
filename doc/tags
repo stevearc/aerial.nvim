@@ -29,6 +29,7 @@ aerial.next()	aerial.txt	/*aerial.next()*
 aerial.nvim	aerial.txt	/*aerial.nvim*
 aerial.on_attach()	aerial.txt	/*aerial.on_attach()*
 aerial.open()	aerial.txt	/*aerial.open()*
+aerial.register_attach_cb()	aerial.txt	/*aerial.register_attach_cb()*
 aerial.select()	aerial.txt	/*aerial.select()*
 aerial.sync_folds()	aerial.txt	/*aerial.sync_folds()*
 aerial.toggle()	aerial.txt	/*aerial.toggle()*

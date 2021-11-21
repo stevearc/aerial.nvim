@@ -1,34 +1,134 @@
 # aerial.nvim
 A code outline window for skimming and quick navigation
 
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Setup](#setup)
+  * [LSP](#lsp)
+  * [Treesitter](#treesitter)
+  * [Keymaps](#keymaps)
+* [Commands](#commands)
+* [Options](#options)
+* [Default keybindings](#default-keybindings)
+* [Highlight](#highlight)
+* [FAQ](#faq)
+
 https://user-images.githubusercontent.com/506791/122652728-18688500-d0f5-11eb-80aa-910f7e6a5f46.mp4
 
 ## Requirements
-Neovim 0.5
-
-It's powered by LSP, so you'll need to have that already set up and working.
+* Neovim 0.5+
+* One or more of the following:
+  * A working LSP setup (see [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig))
+  * [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) with languages installed
 
 ## Installation
-aerial.nvim works with [Pathogen](https://github.com/tpope/vim-pathogen)
+aerial supports all the usual plugin managers
 
-```sh
-cd ~/.vim/bundle/
-git clone https://github.com/stevearc/aerial.nvim
-```
+<details>
+  <summary>Packer</summary>
 
-and [vim-plug](https://github.com/junegunn/vim-plug)
+  ```lua
+  require('packer').startup(function()
+      use {'stevearc/aerial.nvim'}
+  end)
+  ```
+</details>
 
-```vim
-Plug 'stevearc/aerial.nvim'
-```
+<details>
+  <summary>Paq</summary>
+
+  ```lua
+  require "paq" {
+      {'stevearc/aerial.nvim'};
+  }
+  ```
+</details>
+
+<details>
+  <summary>vim-plug</summary>
+
+  ```vim
+  Plug 'stevearc/aerial.nvim'
+  ```
+</details>
+
+<details>
+  <summary>dein</summary>
+
+  ```vim
+  call dein#add('stevearc/aerial.nvim')
+  ```
+</details>
+
+<details>
+  <summary>Pathogen</summary>
+
+  ```sh
+  git clone --depth=1 https://github.com/stevearc/aerial.nvim.git ~/.vim/bundle/
+  ```
+</details>
+
+<details>
+  <summary>Neovim native package</summary>
+
+  ```sh
+  git clone --depth=1 https://github.com/stevearc/aerial.nvim.git \
+    "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/pack/aerial/start/aerial.nvim
+  ```
+</details>
 
 ## Setup
+Aerial can display document symbols from a couple of sources. You will need to
+use at least one of the. You can configure which one to use or your preferred
+source with the `backends` option (see [Options](#options))
 
-Step one is to get a Neovim LSP set up, which is beyond the scope of this guide.
-See [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) for instructions.
+### LSP
 
-After you have a functioning LSP setup, you will need to customize the
-`on_attach` callback.
+First ensure you have a functioning LSP setup (see
+[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)). Once complete, add
+the aerial `on_attach` callback to your config:
+
+```lua
+-- Set up your LSP clients here, using the aerial on_attach method
+require'lspconfig'.vimls.setup{
+  on_attach = aerial.on_attach,
+}
+-- Repeat this for each language server you have configured
+```
+
+### Treesitter
+
+**The treesitter backend is in Alpha status**
+
+Please do try it out, and file an issue if you encounter any problems.
+
+First ensure you have
+[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) installed
+and configured for all languages you want to support. That's all! Aerial will
+automatically fetch symbols from treesitter.
+
+<details>
+  <summary>Supported languages</summary>
+
+  * c
+  * c_sharp
+  * cpp
+  * go
+  * java
+  * javascript
+  * json
+  * lua
+  * python
+  * rst
+  * rust
+  * typescript
+  * vim
+</details>
+
+### Keymaps
+
+While not required, you may want to add some keymaps for aerial. The best way to
+do this is with `register_attach_cb()`:
 
 ```lua
 local aerial = require'aerial'
@@ -44,11 +144,6 @@ aerial.register_attach_cb(function(bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '[[', '<cmd>AerialPrevUp<CR>', {})
   vim.api.nvim_buf_set_keymap(bufnr, 'n', ']]', '<cmd>AerialNextUp<CR>', {})
 end)
-
--- Set up your LSP clients here, using the aerial on_attach method
-require'lspconfig'.vimls.setup{
-  on_attach = aerial.on_attach,
-}
 ```
 
 ## Commands
@@ -260,17 +355,15 @@ Key       | Command
 
 If you have [telescope](https://github.com/nvim-telescope/telescope.nvim)
 installed, there is an extension for fuzzy finding and jumping to symbols. It
-functions similarly to the builtin `lsp_document_symbols` picker, the main
-difference being that the aerial extension uses the `filter_kind` configuration
-option to prefilter the results.
+functions similarly to the builtin `lsp_document_symbols` picker.
 
-Load the extension with:
+You can activate the picker with `:Telescope aerial`
+
+If you want the command to autocomplete, you can load the extension first:
 
 ```lua
 require('telescope').load_extension('aerial')
 ```
-
-You can then begin fuzzy finding with `:Telescope aerial`
 
 ### fzf
 
