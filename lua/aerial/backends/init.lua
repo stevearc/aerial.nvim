@@ -64,6 +64,11 @@ M.get_attached_backend = function(bufnr)
   return ok and val or nil
 end
 
+local attach_callbacks = {}
+M.register_attach_cb = function(callback)
+  table.insert(attach_callbacks, callback)
+end
+
 M.attach = function(bufnr, refresh)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
@@ -82,6 +87,9 @@ M.attach = function(bufnr, refresh)
       require("aerial.fold").add_fold_mappings(bufnr)
     end
     set_backend(bufnr, name)
+    for _, cb in ipairs(attach_callbacks) do
+      cb(bufnr)
+    end
   end
 end
 

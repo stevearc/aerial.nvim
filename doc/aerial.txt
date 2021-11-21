@@ -353,6 +353,10 @@ aerial.sync_folds()                                         *aerial.sync_folds()
     Sync code folding with current tree state. This ignores the
     |g:aerial_link_tree_to_folds| setting.
 
+aerial.register_attach_cb({callback})               *aerial.register_attach_cb()*
+    Register a callback to be called when aerial is attached to a buffer. This
+    is a good place to put your kemaps.
+
 ===============================================================================
 FAQ                                                                  *aerial-faq*
 

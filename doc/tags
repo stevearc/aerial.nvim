@@ -1,5 +1,6 @@
 :AerialClose	aerial.txt	/*:AerialClose*
 :AerialGo	aerial.txt	/*:AerialGo*
+:AerialInfo	aerial.txt	/*:AerialInfo*
 :AerialNext	aerial.txt	/*:AerialNext*
 :AerialNextUp	aerial.txt	/*:AerialNextUp*
 :AerialOpen	aerial.txt	/*:AerialOpen*
@@ -36,16 +37,18 @@ aerial.tree_cmd()	aerial.txt	/*aerial.tree_cmd()*
 aerial.tree_open_all()	aerial.txt	/*aerial.tree_open_all()*
 aerial.txt	aerial.txt	/*aerial.txt*
 aerial.up()	aerial.txt	/*aerial.up()*
+g:aerial_backends	aerial.txt	/*g:aerial_backends*
 g:aerial_close_behavior	aerial.txt	/*g:aerial_close_behavior*
 g:aerial_default_bindings	aerial.txt	/*g:aerial_default_bindings*
 g:aerial_default_direction	aerial.txt	/*g:aerial_default_direction*
-g:aerial_diagnostics_trigger_update	aerial.txt	/*g:aerial_diagnostics_trigger_update*
 g:aerial_filter_kind	aerial.txt	/*g:aerial_filter_kind*
 g:aerial_highlight_mode	aerial.txt	/*g:aerial_highlight_mode*
 g:aerial_highlight_on_jump	aerial.txt	/*g:aerial_highlight_on_jump*
 g:aerial_icons	aerial.txt	/*g:aerial_icons*
 g:aerial_link_folds_to_tree	aerial.txt	/*g:aerial_link_folds_to_tree*
 g:aerial_link_tree_to_folds	aerial.txt	/*g:aerial_link_tree_to_folds*
+g:aerial_lsp_diagnostics_trigger_update	aerial.txt	/*g:aerial_lsp_diagnostics_trigger_update*
+g:aerial_lsp_update_when_errors	aerial.txt	/*g:aerial_lsp_update_when_errors*
 g:aerial_manage_folds	aerial.txt	/*g:aerial_manage_folds*
 g:aerial_max_width	aerial.txt	/*g:aerial_max_width*
 g:aerial_min_width	aerial.txt	/*g:aerial_min_width*
@@ -55,5 +58,5 @@ g:aerial_open_automatic_min_lines	aerial.txt	/*g:aerial_open_automatic_min_lines
 g:aerial_open_automatic_min_symbols	aerial.txt	/*g:aerial_open_automatic_min_symbols*
 g:aerial_placement_editor_edge	aerial.txt	/*g:aerial_placement_editor_edge*
 g:aerial_post_jump_cmd	aerial.txt	/*g:aerial_post_jump_cmd*
-g:aerial_update_when_errors	aerial.txt	/*g:aerial_update_when_errors*
+g:aerial_treesitter_update_delay	aerial.txt	/*g:aerial_treesitter_update_delay*
 symbol	aerial.txt	/*symbol*

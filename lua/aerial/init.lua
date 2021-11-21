@@ -142,6 +142,8 @@ M.sync_folds = function()
   util.go_win_no_au(mywin)
 end
 
+M.register_attach_cb = backends.register_attach_cb
+
 M.info = function()
   local filetype = vim.api.nvim_buf_get_option(0, "filetype")
   print("Aerial Info")

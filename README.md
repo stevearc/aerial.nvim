@@ -33,25 +33,21 @@ After you have a functioning LSP setup, you will need to customize the
 ```lua
 local aerial = require'aerial'
 
-local custom_attach = function(client)
-  aerial.on_attach(client)
-
-  -- Aerial does not set any mappings by default, so you'll want to set some up
+-- Aerial does not set any mappings by default, so you'll want to set some up
+aerial.register_attach_cb(function(bufnr)
   -- Toggle the aerial window with <leader>a
-  vim.api.nvim_buf_set_keymap(0, 'n', '<leader>a', '<cmd>AerialToggle!<CR>', {})
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>a', '<cmd>AerialToggle!<CR>', {})
   -- Jump forwards/backwards with '{' and '}'
-  vim.api.nvim_buf_set_keymap(0, 'n', '{', '<cmd>AerialPrev<CR>', {})
-  vim.api.nvim_buf_set_keymap(0, 'n', '}', '<cmd>AerialNext<CR>', {})
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '{', '<cmd>AerialPrev<CR>', {})
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '}', '<cmd>AerialNext<CR>', {})
   -- Jump up the tree with '[[' or ']]'
-  vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>AerialPrevUp<CR>', {})
-  vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>AerialNextUp<CR>', {})
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '[[', '<cmd>AerialPrevUp<CR>', {})
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', ']]', '<cmd>AerialNextUp<CR>', {})
+end)
 
-  -- This is a great place to set up all your other LSP mappings
-end
-
--- Set up your LSP clients here, using the custom on_attach method
+-- Set up your LSP clients here, using the aerial on_attach method
 require'lspconfig'.vimls.setup{
-  on_attach = custom_attach,
+  on_attach = aerial.on_attach,
 }
 ```
 
