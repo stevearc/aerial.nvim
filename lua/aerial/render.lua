@@ -18,7 +18,7 @@ M.update_aerial_buffer = function(buf)
   end
   if not data:has_symbols(bufnr) then
     local lines = { "No symbols" }
-    if config.filter_kind ~= false then
+    if config["lsp.filter_kind"] ~= false then
       table.insert(lines, ":help filter_kind")
     end
     util.render_centered_text(aer_bufnr, lines)
@@ -101,7 +101,14 @@ M.update_highlights = function(buf)
     if i == #winids then
       end_hl = -1
     end
-    vim.api.nvim_buf_add_highlight(aer_bufnr, ns, "AerialLine", bufdata.positions[winid].lnum - 1, start_hl, end_hl)
+    vim.api.nvim_buf_add_highlight(
+      aer_bufnr,
+      ns,
+      "AerialLine",
+      bufdata.positions[winid].lnum - 1,
+      start_hl,
+      end_hl
+    )
     if hl_mode ~= "full_width" then
       start_hl = end_hl
       end_hl = end_hl + hl_width

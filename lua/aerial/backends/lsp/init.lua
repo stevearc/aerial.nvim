@@ -1,3 +1,7 @@
+local backends = require("aerial.backends")
+local callbacks = require("aerial.backends.lsp.callbacks")
+local config = require("aerial.config")
+local data = require("aerial.data")
 local M = {}
 
 -- callback args changed in Neovim 0.6. See:
@@ -14,14 +18,14 @@ local function mk_handler(fn)
       local result = select(3, ...)
       local client_id = select(4, ...)
       local bufnr = select(5, ...)
-      local config = select(6, ...)
-      fn(err, result, { method = method, client_id = client_id, bufnr = bufnr }, config)
+      local conf = select(6, ...)
+      fn(err, result, { method = method, client_id = client_id, bufnr = bufnr }, conf)
     end
   end
 end
 
 local has_hook = false
-M.add_handler = function(preserve_callback)
+local function add_handler(preserve_callback)
   if has_hook then
     return
   end
@@ -29,7 +33,7 @@ M.add_handler = function(preserve_callback)
   local old_callback = vim.lsp.handlers["textDocument/documentSymbol"]
   local new_callback
   new_callback = function(...)
-    mk_handler(require("aerial.callbacks").symbol_callback)(...)
+    mk_handler(callbacks.symbol_callback)(...)
     if preserve_callback then
       old_callback(...)
     end
@@ -52,7 +56,6 @@ M.fetch_symbols_sync = function(timeout)
   if err then
     vim.api.nvim_err_writeln("Error when finding document symbols: " .. err)
   else
-    local callbacks = require("aerial.callbacks")
     callbacks.handle_symbols(lsp_results[1].result)
   end
 end
@@ -69,8 +72,48 @@ M.is_supported = function(bufnr)
   return false
 end
 
-M.log_support_err = function()
-  vim.api.nvim_err_writeln("No LSP clients support textDocument/documentSymbol")
+M.on_attach = function(client, bufnr, opts)
+  if type(bufnr) == "table" then
+    opts = bufnr
+    bufnr = 0
+  elseif not bufnr then
+    bufnr = 0
+  end
+  opts = opts or {}
+  if not client.resolved_capabilities.document_symbol then
+    return
+  end
+  add_handler(opts.preserve_callback)
+  backends.attach(bufnr, true)
+end
+
+M.attach = function(bufnr)
+  if config["lsp.diagnostics_trigger_update"] then
+    vim.cmd([[augroup AerialDiagnostics
+      au!
+      au User LspDiagnosticsChanged lua require'aerial.backends.lsp'._on_diagnostics_changed()
+      au User DiagnosticsChanged lua require'aerial.backends.lsp'._on_diagnostics_changed()
+    augroup END
+    ]])
+  end
+  if config.open_automatic() and not config["lsp.diagnostics_trigger_update"] then
+    M.fetch_symbols()
+  end
+end
+
+M.detach = function(bufnr)
+  -- pass
+end
+
+M._on_diagnostics_changed = function()
+  if not backends.is_backend_attached(0, "lsp") then
+    return
+  end
+  local errors = vim.lsp.diagnostic.get_count(0, "Error")
+  -- if no errors, refresh symbols
+  if config["lsp.update_when_errors"] or errors == 0 or not data:has_symbols() then
+    M.fetch_symbols()
+  end
 end
 
 return M

@@ -60,7 +60,8 @@ local BufData = {
   end,
 
   is_collapsable = function(_, item)
-    return (item.level == 0 and config.manage_folds) or (item.children and not vim.tbl_isempty(item.children))
+    return (item.level == 0 and config.manage_folds)
+      or (item.children and not vim.tbl_isempty(item.children))
   end,
 
   get_root_of = function(_, item)
@@ -133,6 +134,14 @@ local Data = setmetatable({}, {
     return bufdata
   end,
 })
+
+function Data:has_received_data(bufnr)
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  local bufdata = rawget(self, bufnr)
+  return bufdata ~= nil
+end
 
 function Data:has_symbols(bufnr)
   if not bufnr or bufnr == 0 then

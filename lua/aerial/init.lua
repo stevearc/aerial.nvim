@@ -1,5 +1,4 @@
-local backend = require("aerial.backend")
-local callbacks = require("aerial.callbacks")
+local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local fold = require("aerial.fold")
@@ -61,61 +60,8 @@ M.up = function(direction, count)
   nav.up(direction, count)
 end
 
-M.on_attach = function(client, bufnr, opts)
-  if type(bufnr) == "table" then
-    opts = bufnr
-    bufnr = 0
-  elseif not bufnr then
-    bufnr = 0
-  end
-  opts = opts or {}
-  if not client.resolved_capabilities.document_symbol then
-    return
-  end
-
-  backend.add_handler(opts.preserve_callback)
-
-  if config.link_folds_to_tree then
-    local function map(key, cmd)
-      vim.api.nvim_buf_set_keymap(bufnr, "n", key, cmd, { silent = true, noremap = true })
-    end
-
-    map("za", [[<cmd>AerialTreeToggle<CR>]])
-    map("zA", [[<cmd>AerialTreeToggle!<CR>]])
-    map("zo", [[<cmd>AerialTreeOpen<CR>]])
-    map("zO", [[<cmd>AerialTreeOpen!<CR>]])
-    map("zc", [[<cmd>AerialTreeClose<CR>]])
-    map("zC", [[<cmd>AerialTreeClose!<CR>]])
-    map("zM", [[<cmd>AerialTreeCloseAll<CR>]])
-    map("zR", [[<cmd>AerialTreeOpenAll<CR>]])
-    map("zx", [[<cmd>AerialTreeSyncFolds<CR>]])
-    map("zX", [[<cmd>AerialTreeSyncFolds<CR>]])
-  end
-
-  local autocmd = [[augroup aerial
-    au!
-    au BufEnter * lua require'aerial.autocommands'.on_enter_buffer()
-  ]]
-  if config.diagnostics_trigger_update then
-    autocmd = autocmd
-      .. [[
-    au User LspDiagnosticsChanged lua require'aerial.autocommands'.on_diagnostics_changed()
-    ]]
-  end
-  autocmd = autocmd .. [[
-  augroup END
-  ]]
-  vim.cmd(autocmd)
-
-  vim.cmd("autocmd CursorMoved <buffer> lua require'aerial.autocommands'.on_cursor_move()")
-  vim.cmd(
-    [[autocmd BufDelete <buffer> call luaeval("require'aerial.autocommands'.on_buf_delete(_A)", expand('<abuf>'))]]
-  )
-  if config.open_automatic() then
-    if not config.diagnostics_trigger_update then
-      backend.fetch_symbols()
-    end
-  end
+M.on_attach = function(...)
+  require("aerial.backends.lsp").on_attach(...)
 end
 
 local function _post_tree_mutate(new_cursor_pos)
@@ -194,6 +140,29 @@ M.sync_folds = function()
     end
   end
   util.go_win_no_au(mywin)
+end
+
+M.register_attach_cb = backends.register_attach_cb
+
+M.info = function()
+  local filetype = vim.api.nvim_buf_get_option(0, "filetype")
+  print("Aerial Info")
+  print("-----------")
+  print(string.format("Filetype: %s", filetype))
+  print("Configured backends:")
+  for _, name in ipairs(config.get_backends(0)) do
+    local line = "  " .. name
+    if backends.is_supported(0, name) then
+      line = line .. " (supported)"
+    else
+      line = line .. " (not supported)"
+    end
+    if backends.is_backend_attached(0, name) then
+      line = line .. " (attached)"
+    end
+    print(line)
+  end
+  print(string.format("Show symbols: %s", config.get_filter_kind_map(filetype)))
 end
 
 -- @deprecated

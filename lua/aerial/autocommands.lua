@@ -1,5 +1,5 @@
 -- Functions that are called in response to autocommands
-local backend = require("aerial.backend")
+local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local fold = require("aerial.fold")
@@ -25,6 +25,7 @@ local function close_orphans()
 end
 
 M.on_enter_buffer = function()
+  backends.attach()
   if util.is_floating_win() then
     return
   end
@@ -35,8 +36,9 @@ M.on_enter_buffer = function()
       close_orphans()
     end
 
-    -- If we're not in an LSP-enabled buffer
-    if not backend.is_supported() then
+    -- If we're not in supported buffer
+    local backend = backends.get()
+    if not backend then
       fold.restore_foldmethod()
       close_orphans()
       return
@@ -77,19 +79,26 @@ M.on_buf_delete = function(bufnr)
   data[bufnr] = nil
 end
 
-M.on_diagnostics_changed = function()
-  if not backend.is_supported() then
-    return
-  end
-  local errors = vim.lsp.diagnostic.get_count(0, "Error")
-  -- if no errors, refresh symbols
-  if config.update_when_errors or errors == 0 or not data:has_symbols() then
-    backend.fetch_symbols()
-  end
-end
-
 M.on_cursor_move = function()
   window.update_position(0, true)
+end
+
+M.attach_autocommands = function(bufnr)
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  vim.cmd(
+    string.format(
+      "autocmd CursorMoved <buffer=%d> lua require'aerial.autocommands'.on_cursor_move()",
+      bufnr
+    )
+  )
+  vim.cmd(
+    string.format(
+      [[autocmd BufDelete <buffer=%d> call luaeval("require'aerial.autocommands'.on_buf_delete(_A)", expand('<abuf>'))]],
+      bufnr
+    )
+  )
 end
 
 return M

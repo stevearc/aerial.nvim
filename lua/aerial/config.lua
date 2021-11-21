@@ -1,8 +1,10 @@
 local M = {}
 local has_devicons = pcall(require, "nvim-web-devicons")
 
--- Copy this to the README after modification
 local default_options = {
+  -- Priority list of preferred backends for aerial
+  backends = { "lsp", "treesitter" },
+
   -- Enum: persist, close, auto, global
   --   persist - aerial window will stay open until closed
   --   close   - aerial window will close when original file is no longer visible
@@ -20,13 +22,16 @@ local default_options = {
   -- different buffer in the way of the preferred direction
   default_direction = "prefer_right",
 
-  -- Set to true to only open aerial at the far right/left of the editor
-  -- Default behavior opens aerial relative to current window
-  placement_editor_edge = false,
-
-  -- Fetch document symbols when LSP diagnostics change.
-  -- If you set this to false, you will need to manually fetch symbols
-  diagnostics_trigger_update = true,
+  -- A list of all symbols to display. Set to false to display all symbols.
+  filter_kind = {
+    "Class",
+    "Constructor",
+    "Enum",
+    "Function",
+    "Interface",
+    "Method",
+    "Struct",
+  },
 
   -- Enum: split_width, full_width, last, none
   -- Determines line highlighting mode when multiple buffers are visible
@@ -67,23 +72,60 @@ local default_options = {
   -- If open_automatic is true, only open aerial if there are at least this many symbols
   open_automatic_min_symbols = 0,
 
+  -- Set to true to only open aerial at the far right/left of the editor
+  -- Default behavior opens aerial relative to current window
+  placement_editor_edge = false,
+
   -- Run this command after jumping to a symbol (false will disable)
   post_jump_cmd = "normal! zz",
 
-  -- Set to false to not update the symbols when there are LSP errors
-  update_when_errors = true,
+  lsp = {
+    -- Fetch document symbols when LSP diagnostics change.
+    -- If you set this to false, you will need to manually fetch symbols
+    diagnostics_trigger_update = true,
 
-  -- A list of all symbols to display. Set to false to display all symbols.
-  filter_kind = {
-    "Class",
-    "Constructor",
-    "Enum",
-    "Function",
-    "Interface",
-    "Method",
-    "Struct",
+    -- Set to false to not update the symbols when there are LSP errors
+    update_when_errors = true,
+  },
+
+  treesitter = {
+    -- How long to wait (in ms) after a buffer change before updating
+    update_delay = 300,
   },
 }
+
+local function split(string, pattern)
+  local ret = {}
+  for token in string.gmatch(string, "[^" .. pattern .. "]+") do
+    table.insert(ret, token)
+  end
+  return ret
+end
+
+local function getkey(t, key)
+  local cur = t[key]
+  if cur ~= nil then
+    return cur
+  end
+  -- This is for backwards compatibility with lsp options that used to be in the
+  -- global namespace
+  if string.find(key, "lsp%.") == 1 then
+    cur = getkey(t, string.sub(key, 5))
+    if cur ~= nil then
+      return cur
+    end
+  end
+
+  local pieces = split(key, "\\.")
+  cur = t
+  for _, piece in ipairs(pieces) do
+    if cur == nil then
+      return nil
+    end
+    cur = cur[piece]
+  end
+  return cur
+end
 
 -- config options that are valid as bools, but don't have bools as the default
 local addl_bool_opts = {
@@ -96,12 +138,20 @@ local addl_bool_opts = {
 }
 
 local function get_option(opt)
-  local ret = vim.g[string.format("aerial_%s", opt)]
+  local varname = string.gsub(opt, "%.", "_")
+  local ret = vim.g["aerial_" .. varname]
   if ret == nil then
-    ret = (vim.g.aerial or {})[opt]
+    if string.find(varname, "lsp_") == 1 then
+      -- This is for backwards compatibility with lsp options that used to be in the
+      -- global namespace
+      ret = vim.g["aerial_" .. string.sub(varname, 5)]
+    end
+    if ret == nil then
+      ret = getkey((vim.g.aerial or {}), opt)
+    end
   end
   -- People are used to using 1/0 for v:true/v:false in vimscript
-  if type(default_options[opt]) == "boolean" or addl_bool_opts[opt] then
+  if type(getkey(default_options, opt)) == "boolean" or getkey(addl_bool_opts, opt) then
     if ret == 0 then
       ret = false
     elseif ret == 1 then
@@ -109,7 +159,7 @@ local function get_option(opt)
     end
   end
   if ret == nil then
-    return default_options[opt]
+    return getkey(default_options, opt)
   else
     return ret
   end
@@ -121,13 +171,13 @@ setmetatable(M, {
   end,
 })
 
-local function get_table_default(table, key, default_key, default)
-  if type(table) ~= "table" then
-    return table
+local function get_table_default(tab, key, default_key, default)
+  if type(tab) ~= "table" or vim.tbl_islist(tab) then
+    return tab
   end
-  local ret = table[key]
+  local ret = tab[key]
   if ret == nil and default_key then
-    ret = table[default_key]
+    ret = tab[default_key]
   end
   if ret == nil then
     return default
@@ -137,12 +187,42 @@ local function get_table_default(table, key, default_key, default)
 end
 
 local function get_table_opt(opt, key, default_key, default)
-  return get_table_default(get_option(opt) or {}, key, default_key, default)
+  return get_table_default(get_option(opt), key, default_key, default)
 end
 
-M.include_kind = function(kind)
+M.get_filter_kind_map = function(filetype)
   local fk = M.filter_kind
-  return not fk or vim.tbl_contains(M.filter_kind, kind)
+  if type(fk) == "table" and not vim.tbl_islist(fk) then
+    local filetype_fk = fk[filetype]
+    if filetype_fk == nil then
+      filetype_fk = fk["_"]
+      if filetype_fk == nil then
+        filetype_fk = default_options.filter_kind
+      end
+    end
+    fk = filetype_fk
+  end
+
+  if fk == false then
+    return setmetatable({}, {
+      __index = function()
+        return true
+      end,
+      __tostring = function()
+        return "all symbols"
+      end,
+    })
+  else
+    local ret = {}
+    for _, kind in ipairs(fk) do
+      ret[kind] = true
+    end
+    return setmetatable(ret, {
+      __tostring = function()
+        return table.concat(fk, ", ")
+      end,
+    })
+  end
 end
 
 M.open_automatic = function()
@@ -150,6 +230,11 @@ M.open_automatic = function()
   local ret = get_table_opt("open_automatic", ft, "_", false)
   -- People are used to using 0 for v:false in vimscript
   return ret and ret ~= 0
+end
+
+M.get_backends = function(bufnr)
+  local ft = vim.api.nvim_buf_get_option(bufnr or 0, "filetype")
+  return get_table_opt("backends", ft, "_", {})
 end
 
 -- stylua: ignore
@@ -230,6 +315,7 @@ M.get_icon = function(kind, collapsed)
   else
     if HAS_LSPKIND then
       return lspkind.symbolic(kind, { with_text = false })
+        or get_table_default(icons, kind, nil, kind)
     else
       return get_table_default(icons, kind, nil, kind)
     end

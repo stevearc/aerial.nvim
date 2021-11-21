@@ -3,6 +3,25 @@ local data = require("aerial.data")
 local util = require("aerial.util")
 local M = {}
 
+M.add_fold_mappings = function(bufnr)
+  if config.link_folds_to_tree then
+    local function map(key, cmd)
+      vim.api.nvim_buf_set_keymap(bufnr or 0, "n", key, cmd, { silent = true, noremap = true })
+    end
+
+    map("za", [[<cmd>AerialTreeToggle<CR>]])
+    map("zA", [[<cmd>AerialTreeToggle!<CR>]])
+    map("zo", [[<cmd>AerialTreeOpen<CR>]])
+    map("zO", [[<cmd>AerialTreeOpen!<CR>]])
+    map("zc", [[<cmd>AerialTreeClose<CR>]])
+    map("zC", [[<cmd>AerialTreeClose!<CR>]])
+    map("zM", [[<cmd>AerialTreeCloseAll<CR>]])
+    map("zR", [[<cmd>AerialTreeOpenAll<CR>]])
+    map("zx", [[<cmd>AerialTreeSyncFolds<CR>]])
+    map("zX", [[<cmd>AerialTreeSyncFolds<CR>]])
+  end
+end
+
 M.foldexpr = function(lnum, debug)
   if util.is_aerial_buffer() then
     return "0"

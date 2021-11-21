@@ -1,11 +1,7 @@
+local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
-local fold = require("aerial.fold")
-local loading = require("aerial.loading")
 local protocol = require("vim.lsp.protocol")
-local render = require("aerial.render")
-local util = require("aerial.util")
-local window = require("aerial.window")
 
 local M = {}
 
@@ -13,7 +9,9 @@ local function get_symbol_kind_name(kind_number)
   return protocol.SymbolKind[kind_number] or "Unknown"
 end
 
-local function process_symbols(symbols)
+local function process_symbols(symbols, bufnr)
+  local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
+  local include_kind = config.get_filter_kind_map(filetype)
   local function _process_symbols(_symbols, parent, list, level)
     for _, symbol in ipairs(_symbols) do
       local kind = get_symbol_kind_name(symbol.kind)
@@ -23,7 +21,7 @@ local function process_symbols(symbols)
       elseif symbol.range then -- DocumentSymbol type
         range = symbol.range
       end
-      local include_item = range and config.include_kind(kind)
+      local include_item = range and include_kind[kind]
 
       if include_item then
         local item = {
@@ -71,19 +69,7 @@ local function process_symbols(symbols)
 end
 
 M.handle_symbols = function(result, bufnr)
-  local had_symbols = data:has_symbols(bufnr)
-  local items = process_symbols(result)
-  data[bufnr].items = items
-  loading.set_loading(util.get_aerial_buffer(bufnr), false)
-
-  render.update_aerial_buffer(bufnr)
-  window.update_all_positions(bufnr, vim.api.nvim_get_current_win())
-  if not had_symbols then
-    fold.maybe_set_foldmethod(bufnr)
-    if bufnr == vim.api.nvim_get_current_buf() then
-      window.maybe_open_automatic()
-    end
-  end
+  backends.set_symbols(bufnr, process_symbols(result, bufnr))
 end
 
 local results = {}
@@ -95,7 +81,7 @@ M.symbol_callback = function(_err, result, context, _config)
   -- Don't update if there are diagnostics errors (or override by setting)
   local error_count = vim.lsp.diagnostic.get_count(bufnr, "Error")
   local has_symbols = data:has_symbols(bufnr)
-  if not config.update_when_errors and error_count > 0 and has_symbols then
+  if not config["lsp.update_when_errors"] and error_count > 0 and has_symbols then
     return
   end
 

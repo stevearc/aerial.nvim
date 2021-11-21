@@ -1,4 +1,4 @@
-local backend = require("aerial.backend")
+local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local loading = require("aerial.loading")
@@ -47,7 +47,7 @@ local function create_aerial_buffer(bufnr)
   -- Set buffer options
   api.nvim_buf_set_var(bufnr, "aerial_buffer", aer_bufnr)
   api.nvim_buf_set_var(aer_bufnr, "source_buffer", bufnr)
-  loading.set_loading(aer_bufnr, not data:has_symbols(bufnr))
+  loading.set_loading(aer_bufnr, not data:has_received_data(bufnr))
   api.nvim_buf_set_option(aer_bufnr, "buftype", "nofile")
   api.nvim_buf_set_option(aer_bufnr, "bufhidden", "wipe")
   api.nvim_buf_set_option(aer_bufnr, "buflisted", false)
@@ -155,8 +155,9 @@ M.open = function(focus, direction, opts)
   opts = vim.tbl_extend("keep", opts or {}, {
     winid = nil,
   })
-  if not backend.is_supported() then
-    backend.log_support_err()
+  local backend = backends.get()
+  if not backend then
+    backends.log_support_err()
     return
   end
   local bufnr, aer_bufnr = util.get_buffers()

@@ -1,4 +1,4 @@
-local backend = require("aerial.backend")
+local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
 
@@ -12,9 +12,10 @@ local function aerial_picker(opts)
   opts = opts or {}
   local bufnr = vim.api.nvim_get_current_buf()
   local filename = vim.api.nvim_buf_get_name(0)
+  local backend = backends.get()
 
-  if not backend.is_supported() then
-    backend.log_support_err()
+  if not backend then
+    backends.log_support_err()
     return
   elseif not data:has_symbols(0) then
     backend.fetch_symbols_sync(opts.timeout)
