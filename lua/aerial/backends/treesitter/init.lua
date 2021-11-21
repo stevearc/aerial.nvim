@@ -1,18 +1,22 @@
 local backends = require("aerial.backends")
 local config = require("aerial.config")
 local language_kind_map = require("aerial.backends.treesitter.language_kind_map")
-local parsers = require("nvim-treesitter.parsers")
-local query = require("nvim-treesitter.query")
-local ts_utils = require("nvim-treesitter.ts_utils")
-local utils = require("nvim-treesitter.utils")
 local M = {}
 
 M.is_supported = function(bufnr)
+  local ok, parsers = pcall(require, "nvim-treesitter.parsers")
+  if not ok then
+    return false
+  end
   local lang = parsers.get_buf_lang(bufnr)
   return parsers.has_parser(lang)
 end
 
 M.fetch_symbols_sync = function(timeout)
+  local parsers = require("nvim-treesitter.parsers")
+  local query = require("nvim-treesitter.query")
+  local ts_utils = require("nvim-treesitter.ts_utils")
+  local utils = require("nvim-treesitter.utils")
   local bufnr = 0
   local parser = parsers.get_parser(bufnr)
   local items = {}
