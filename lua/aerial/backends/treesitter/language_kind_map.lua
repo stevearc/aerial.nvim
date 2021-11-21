@@ -47,7 +47,7 @@ return {
     class_definition = "Class",
   },
   rst = {
-    section = "Namespace",
+    section = "Interface",
   },
   rust = {
     enum_item = "Enum",
