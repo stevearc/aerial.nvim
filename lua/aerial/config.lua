@@ -139,9 +139,17 @@ local addl_bool_opts = {
 }
 
 local function get_option(opt)
-  local ret = vim.g[string.format("aerial_%s", string.gsub(opt, "%.", "_"))]
+  local varname = string.gsub(opt, "%.", "_")
+  local ret = vim.g["aerial_" .. varname]
   if ret == nil then
-    ret = getkey((vim.g.aerial or {}), opt)
+    if string.find(varname, "lsp_") == 1 then
+      -- This is for backwards compatibility with lsp options that used to be in the
+      -- global namespace
+      ret = vim.g["aerial_" .. string.sub(varname, 5)]
+    end
+    if ret == nil then
+      ret = getkey((vim.g.aerial or {}), opt)
+    end
   end
   -- People are used to using 1/0 for v:true/v:false in vimscript
   if type(getkey(default_options, opt)) == "boolean" or getkey(addl_bool_opts, opt) then
