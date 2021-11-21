@@ -18,6 +18,7 @@ M.fetch_symbols_sync = function(timeout)
   local ts_utils = require("nvim-treesitter.ts_utils")
   local utils = require("nvim-treesitter.utils")
   local bufnr = 0
+  local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
   local parser = parsers.get_parser(bufnr)
   local items = {}
   if parser then
@@ -46,12 +47,6 @@ M.fetch_symbols_sync = function(timeout)
           local loc_node = (utils.get_at_path(match, "location") or {}).node
           local parent, parent_node, level = get_parent(type_node)
           if type_node and type_node ~= parent_node then
-            local row, col
-            if loc_node then
-              row, col = loc_node:start()
-            else
-              row, col = type_node:start()
-            end
             local kind = kind_map[type_node:type()]
             if not kind then
               vim.api.nvim_err_writeln(
@@ -59,29 +54,37 @@ M.fetch_symbols_sync = function(timeout)
               )
               break
             end
-            local name
-            if name_node then
-              name = ts_utils.get_node_text(name_node, bufnr)[1] or "<parse error>"
-            else
-              name = "<Anonymous>"
-            end
-            local item = {
-              kind = kind_map[type_node:type()],
-              name = name,
-              level = level,
-              parent = parent,
-              lnum = row + 1,
-              col = col,
-            }
-            if parent then
-              if not parent.children then
-                parent.children = {}
+            if config.include_kind(kind, filetype) then
+              local row, col
+              if loc_node then
+                row, col = loc_node:start()
+              else
+                row, col = type_node:start()
               end
-              table.insert(parent.children, item)
-            else
-              table.insert(items, item)
+              local name
+              if name_node then
+                name = ts_utils.get_node_text(name_node, bufnr)[1] or "<parse error>"
+              else
+                name = "<Anonymous>"
+              end
+              local item = {
+                kind = kind,
+                name = name,
+                level = level,
+                parent = parent,
+                lnum = row + 1,
+                col = col,
+              }
+              if parent then
+                if not parent.children then
+                  parent.children = {}
+                end
+                table.insert(parent.children, item)
+              else
+                table.insert(items, item)
+              end
+              table.insert(stack, { type_node, item })
             end
-            table.insert(stack, { type_node, item })
           end
         end
       end

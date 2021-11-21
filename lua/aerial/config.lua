@@ -23,9 +23,16 @@ local default_options = {
   -- different buffer in the way of the preferred direction
   default_direction = "prefer_right",
 
-  -- Set to true to only open aerial at the far right/left of the editor
-  -- Default behavior opens aerial relative to current window
-  placement_editor_edge = false,
+  -- A list of all symbols to display. Set to false to display all symbols.
+  filter_kind = {
+    "Class",
+    "Constructor",
+    "Enum",
+    "Function",
+    "Interface",
+    "Method",
+    "Struct",
+  },
 
   -- Enum: split_width, full_width, last, none
   -- Determines line highlighting mode when multiple buffers are visible
@@ -66,6 +73,10 @@ local default_options = {
   -- If open_automatic is true, only open aerial if there are at least this many symbols
   open_automatic_min_symbols = 0,
 
+  -- Set to true to only open aerial at the far right/left of the editor
+  -- Default behavior opens aerial relative to current window
+  placement_editor_edge = false,
+
   -- Run this command after jumping to a symbol (false will disable)
   post_jump_cmd = "normal! zz",
 
@@ -76,17 +87,6 @@ local default_options = {
 
     -- Set to false to not update the symbols when there are LSP errors
     update_when_errors = true,
-
-    -- A list of all symbols to display. Set to false to display all symbols.
-    filter_kind = {
-      "Class",
-      "Constructor",
-      "Enum",
-      "Function",
-      "Interface",
-      "Method",
-      "Struct",
-    },
   },
 
   treesitter = {
@@ -135,9 +135,7 @@ local addl_bool_opts = {
   manage_folds = true,
   nerd_font = true,
   post_jump_cmd = true,
-  lsp = {
-    filter_kind = true,
-  },
+  filter_kind = true,
 }
 
 local function get_option(opt)
@@ -185,8 +183,18 @@ local function get_table_opt(opt, key, default_key, default)
   return get_table_default(get_option(opt), key, default_key, default)
 end
 
-M.include_kind = function(kind)
-  local fk = M["lsp.filter_kind"]
+M.include_kind = function(kind, filetype)
+  local fk = M.filter_kind
+  if type(fk) == "table" and not vim.tbl_islist(fk) then
+    local filetype_fk = fk[filetype]
+    if filetype_fk == nil then
+      filetype_fk = fk["_"]
+      if filetype_fk == nil then
+        filetype_fk = default_options.filter_kind
+      end
+    end
+    fk = filetype_fk
+  end
   return not fk or vim.tbl_contains(fk, kind)
 end
 

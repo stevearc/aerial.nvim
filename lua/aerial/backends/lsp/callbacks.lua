@@ -9,7 +9,8 @@ local function get_symbol_kind_name(kind_number)
   return protocol.SymbolKind[kind_number] or "Unknown"
 end
 
-local function process_symbols(symbols)
+local function process_symbols(symbols, bufnr)
+  local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
   local function _process_symbols(_symbols, parent, list, level)
     for _, symbol in ipairs(_symbols) do
       local kind = get_symbol_kind_name(symbol.kind)
@@ -19,7 +20,7 @@ local function process_symbols(symbols)
       elseif symbol.range then -- DocumentSymbol type
         range = symbol.range
       end
-      local include_item = range and config.include_kind(kind)
+      local include_item = range and config.include_kind(kind, filetype)
 
       if include_item then
         local item = {
@@ -67,7 +68,7 @@ local function process_symbols(symbols)
 end
 
 M.handle_symbols = function(result, bufnr)
-  backends.set_symbols(bufnr, process_symbols(result))
+  backends.set_symbols(bufnr, process_symbols(result, bufnr))
 end
 
 local results = {}

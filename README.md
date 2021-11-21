@@ -98,9 +98,16 @@ vim.g.aerial = {
   -- different buffer in the way of the preferred direction
   default_direction = "prefer_right",
 
-  -- Set to true to only open aerial at the far right/left of the editor
-  -- Default behavior opens aerial relative to current window
-  placement_editor_edge = false,
+  -- A list of all symbols to display. Set to false to display all symbols.
+  filter_kind = {
+    "Class",
+    "Constructor",
+    "Enum",
+    "Function",
+    "Interface",
+    "Method",
+    "Struct",
+  },
 
   -- Enum: split_width, full_width, last, none
   -- Determines line highlighting mode when multiple buffers are visible
@@ -141,6 +148,10 @@ vim.g.aerial = {
   -- If open_automatic is true, only open aerial if there are at least this many symbols
   open_automatic_min_symbols = 0,
 
+  -- Set to true to only open aerial at the far right/left of the editor
+  -- Default behavior opens aerial relative to current window
+  placement_editor_edge = false,
+
   -- Run this command after jumping to a symbol (false will disable)
   post_jump_cmd = "normal! zz",
 
@@ -151,17 +162,6 @@ vim.g.aerial = {
 
     -- Set to false to not update the symbols when there are LSP errors
     update_when_errors = true,
-
-    -- A list of all symbols to display. Set to false to display all symbols.
-    filter_kind = {
-      "Class",
-      "Constructor",
-      "Enum",
-      "Function",
-      "Interface",
-      "Method",
-      "Struct",
-    },
   },
 
   treesitter = {
@@ -188,6 +188,15 @@ vim.g.aerial = {
     ['_']  = {'lsp', 'treesitter'},
     python = {'treesitter'},
     rust   = {'lsp'},
+  }
+}
+
+-- filter_kind can also be specified as a filetype map.
+vim.g.aerial = {
+  filter_kind = {
+    -- use underscore to specify the default behavior
+    ['_']  = {"Class", "Function", "Interface", "Method", "Struct"},
+    c = {"Namespace", "Function", "Struct", "Enum"}
   }
 }
 
