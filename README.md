@@ -183,7 +183,7 @@ Command               | arg            | description
 ```lua
 vim.g.aerial = {
   -- Priority list of preferred backends for aerial
-  backends = { "lsp", "treesitter" },
+  backends = { "lsp", "treesitter", "markdown" },
 
   -- Enum: persist, close, auto, global
   --   persist - aerial window will stay open until closed
@@ -269,6 +269,11 @@ vim.g.aerial = {
   },
 
   treesitter = {
+    -- How long to wait (in ms) after a buffer change before updating
+    update_delay = 300,
+  },
+
+  markdown = {
     -- How long to wait (in ms) after a buffer change before updating
     update_delay = 300,
   },
