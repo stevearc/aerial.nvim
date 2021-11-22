@@ -6,6 +6,7 @@ A code outline window for skimming and quick navigation
 * [Setup](#setup)
   * [LSP](#lsp)
   * [Treesitter](#treesitter)
+  * [Markdown](#markdown)
   * [Keymaps](#keymaps)
 * [Commands](#commands)
 * [Options](#options)
@@ -128,6 +129,13 @@ automatically fetch symbols from treesitter.
 Don't see your language here? [Request support for
 it](https://github.com/stevearc/aerial.nvim/issues/new?assignees=stevearc&labels=enhancement&template=feature-request--treesitter-language-.md&title=)
 </details>
+
+### Markdown
+
+Since it looks like it may be a while until we get a [treesitter parser for
+markdown](https://github.com/nvim-treesitter/nvim-treesitter/issues/872), there
+is a simple backend that does rudimentary parsing of markdown headers. It should
+work well enough in most cases.
 
 ### Keymaps
 
