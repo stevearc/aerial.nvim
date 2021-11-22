@@ -3,7 +3,7 @@ local has_devicons = pcall(require, "nvim-web-devicons")
 
 local default_options = {
   -- Priority list of preferred backends for aerial
-  backends = { "lsp", "treesitter" },
+  backends = { "lsp", "treesitter", "markdown" },
 
   -- Enum: persist, close, auto, global
   --   persist - aerial window will stay open until closed
@@ -89,6 +89,11 @@ local default_options = {
   },
 
   treesitter = {
+    -- How long to wait (in ms) after a buffer change before updating
+    update_delay = 300,
+  },
+
+  markdown = {
     -- How long to wait (in ms) after a buffer change before updating
     update_delay = 300,
   },

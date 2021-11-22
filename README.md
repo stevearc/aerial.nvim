@@ -6,6 +6,7 @@ A code outline window for skimming and quick navigation
 * [Setup](#setup)
   * [LSP](#lsp)
   * [Treesitter](#treesitter)
+  * [Markdown](#markdown)
   * [Keymaps](#keymaps)
 * [Commands](#commands)
 * [Options](#options)
@@ -129,6 +130,13 @@ Don't see your language here? [Request support for
 it](https://github.com/stevearc/aerial.nvim/issues/new?assignees=stevearc&labels=enhancement&template=feature-request--treesitter-language-.md&title=)
 </details>
 
+### Markdown
+
+Since it looks like it may be a while until we get a [treesitter parser for
+markdown](https://github.com/nvim-treesitter/nvim-treesitter/issues/872), there
+is a simple backend that does rudimentary parsing of markdown headers. It should
+work well enough in most cases.
+
 ### Keymaps
 
 While not required, you may want to add some keymaps for aerial. The best way to
@@ -175,7 +183,7 @@ Command               | arg            | description
 ```lua
 vim.g.aerial = {
   -- Priority list of preferred backends for aerial
-  backends = { "lsp", "treesitter" },
+  backends = { "lsp", "treesitter", "markdown" },
 
   -- Enum: persist, close, auto, global
   --   persist - aerial window will stay open until closed
@@ -261,6 +269,11 @@ vim.g.aerial = {
   },
 
   treesitter = {
+    -- How long to wait (in ms) after a buffer change before updating
+    update_delay = 300,
+  },
+
+  markdown = {
     -- How long to wait (in ms) after a buffer change before updating
     update_delay = 300,
   },

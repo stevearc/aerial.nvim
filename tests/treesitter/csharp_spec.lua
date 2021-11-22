@@ -2,7 +2,7 @@ local util = require("tests.test_util")
 
 describe("treesitter csharp", function()
   it("parses all symbols correctly", function()
-    util.test_file_symbols("./tests/treesitter/csharp_test.cs", {
+    util.test_file_symbols("treesitter", "./tests/treesitter/csharp_test.cs", {
       {
         kind = "Class",
         name = "Cl_1",

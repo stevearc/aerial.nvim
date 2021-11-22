@@ -2,7 +2,7 @@ local util = require("tests.test_util")
 
 describe("treesitter json", function()
   it("parses all symbols correctly", function()
-    util.test_file_symbols("./tests/treesitter/json_test.json", {
+    util.test_file_symbols("treesitter", "./tests/treesitter/json_test.json", {
       {
         kind = "Class",
         name = "obj1",

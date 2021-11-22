@@ -2,7 +2,7 @@ local util = require("tests.test_util")
 
 describe("treesitter python", function()
   it("parses all symbols correctly", function()
-    util.test_file_symbols("./tests/treesitter/python_test.py", {
+    util.test_file_symbols("treesitter", "./tests/treesitter/python_test.py", {
       {
         kind = "Function",
         name = "fn_1",

@@ -2,7 +2,7 @@ local util = require("tests.test_util")
 
 describe("treesitter vim", function()
   it("parses all symbols correctly", function()
-    util.test_file_symbols("./tests/treesitter/vim_test.vim", {
+    util.test_file_symbols("treesitter", "./tests/treesitter/vim_test.vim", {
       {
         kind = "Function",
         name = "Fn_1",

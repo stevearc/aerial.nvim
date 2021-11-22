@@ -2,7 +2,7 @@ local util = require("tests.test_util")
 
 describe("treesitter rst", function()
   it("parses all symbols correctly", function()
-    util.test_file_symbols("./tests/treesitter/rst_test.rst", {
+    util.test_file_symbols("treesitter", "./tests/treesitter/rst_test.rst", {
       {
         kind = "Interface",
         name = "Title 1",
