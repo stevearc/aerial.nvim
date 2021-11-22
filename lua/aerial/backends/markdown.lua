@@ -13,11 +13,12 @@ M.fetch_symbols_sync = function(timeout)
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
   local items = {}
   local stack = {}
+  local inside_code_block = false
   for lnum, line in ipairs(lines) do
     local idx, len = string.find(line, "^#+ ")
-    if idx == 1 then
+    if idx == 1 and not inside_code_block then
       local level = len - 2
-      local parent = stack[level]
+      local parent = stack[math.min(level, #stack)]
       local item = {
         kind = "Interface",
         name = string.sub(line, len + 1),
@@ -38,6 +39,8 @@ M.fetch_symbols_sync = function(timeout)
         table.remove(stack, #stack)
       end
       table.insert(stack, item)
+    elseif string.find(line, "```") == 1 then
+      inside_code_block = not inside_code_block
     end
   end
   backends.set_symbols(bufnr, items)

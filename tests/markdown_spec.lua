@@ -25,6 +25,24 @@ describe("markdown", function()
         level = 0,
         lnum = 5,
         col = 0,
+        children = {
+          {
+            kind = "Interface",
+            name = "Title 4",
+            level = 2,
+            lnum = 7,
+            col = 0,
+            children = {
+              {
+                kind = "Interface",
+                name = "Title 5",
+                level = 3,
+                lnum = 13,
+                col = 0,
+              },
+            },
+          },
+        },
       },
     })
   end)
