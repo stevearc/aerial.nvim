@@ -122,6 +122,7 @@ automatically fetch symbols from treesitter.
   * lua
   * python
   * rst
+  * ruby
   * rust
   * typescript
   * vim
