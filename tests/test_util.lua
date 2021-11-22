@@ -1,10 +1,12 @@
 local data = require("aerial.data")
-local ts = require("aerial.backends.treesitter")
+local backends = require("aerial.backends")
 local M = {}
 
-M.test_file_symbols = function(filename, expected)
+M.test_file_symbols = function(backend_name, filename, expected)
+  vim.g.aerial_backends = { backend_name }
   vim.cmd(string.format("edit %s", filename))
-  ts.fetch_symbols()
+  local backend = backends.get(0)
+  backend.fetch_symbols_sync()
   M.assert_tree_equals(data[0].items, expected)
 end
 

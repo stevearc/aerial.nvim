@@ -2,7 +2,7 @@ local util = require("tests.test_util")
 
 describe("treesitter rust", function()
   it("parses all symbols correctly", function()
-    util.test_file_symbols("./tests/treesitter/rust_test.rs", {
+    util.test_file_symbols("treesitter", "./tests/treesitter/rust_test.rs", {
       {
         kind = "Module",
         name = "mod_1",
