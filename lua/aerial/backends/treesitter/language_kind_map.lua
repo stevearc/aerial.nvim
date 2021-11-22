@@ -49,6 +49,12 @@ return {
   rst = {
     section = "Interface",
   },
+  ruby = {
+    class = "Class",
+    method = "Method",
+    module = "Module",
+    singleton_method = "Method",
+  },
   rust = {
     enum_item = "Enum",
     function_item = "Function",
