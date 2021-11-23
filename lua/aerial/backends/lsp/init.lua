@@ -85,9 +85,6 @@ M.on_attach = function(client, bufnr, opts)
   end
   add_handler(opts.preserve_callback)
   backends.attach(bufnr, true)
-end
-
-M.attach = function(bufnr)
   if config["lsp.diagnostics_trigger_update"] then
     local autocmd_name = vim.diagnostic and "DiagnosticsChanged" or "LspDiagnosticsChanged"
     vim.cmd(string.format(
@@ -102,6 +99,10 @@ M.attach = function(bufnr)
   if config.open_automatic() and not config["lsp.diagnostics_trigger_update"] then
     M.fetch_symbols()
   end
+end
+
+M.attach = function(bufnr)
+  -- no-op. This will be handled by on_attach
 end
 
 M.detach = function(bufnr)
