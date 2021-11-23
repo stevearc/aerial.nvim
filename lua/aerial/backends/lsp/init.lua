@@ -60,16 +60,20 @@ M.fetch_symbols_sync = function(timeout)
   end
 end
 
+local function mark_lsp_attached(bufnr)
+  vim.api.nvim_buf_set_var(bufnr, "_aerial_lsp_attached", true)
+end
+
+local function is_lsp_attached(bufnr)
+  local ok, attached = pcall(vim.api.nvim_buf_get_var, bufnr, "_aerial_lsp_attached")
+  return ok and attached
+end
+
 M.is_supported = function(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  for _, client in pairs(vim.lsp.buf_get_clients(bufnr)) do
-    if client.resolved_capabilities.document_symbol then
-      return true
-    end
-  end
-  return false
+  return is_lsp_attached(bufnr)
 end
 
 M.on_attach = function(client, bufnr, opts)
@@ -84,7 +88,11 @@ M.on_attach = function(client, bufnr, opts)
     return
   end
   add_handler(opts.preserve_callback)
+  mark_lsp_attached(bufnr)
   backends.attach(bufnr, true)
+end
+
+M.attach = function(bufnr)
   if config["lsp.diagnostics_trigger_update"] then
     local autocmd_name = vim.diagnostic and "DiagnosticsChanged" or "LspDiagnosticsChanged"
     vim.cmd(string.format(
@@ -99,10 +107,6 @@ M.on_attach = function(client, bufnr, opts)
   if config.open_automatic() and not config["lsp.diagnostics_trigger_update"] then
     M.fetch_symbols()
   end
-end
-
-M.attach = function(bufnr)
-  -- no-op. This will be handled by on_attach
 end
 
 M.detach = function(bufnr)
