@@ -47,6 +47,13 @@ describe("treesitter cpp", function()
           },
         },
       },
+      {
+        kind = "Function",
+        name = "A::bar",
+        level = 0,
+        lnum = 15,
+        col = 0,
+      },
     })
   end)
 end)

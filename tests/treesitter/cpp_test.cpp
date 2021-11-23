@@ -11,3 +11,5 @@ class cl_1 {
 public:
   void meth_1() {}
 };
+
+void A::bar() {}
