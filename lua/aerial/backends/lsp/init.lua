@@ -94,15 +94,26 @@ end
 
 M.attach = function(bufnr)
   if config["lsp.diagnostics_trigger_update"] then
-    local autocmd_name = vim.diagnostic and "DiagnosticsChanged" or "LspDiagnosticsChanged"
-    vim.cmd(string.format(
-      [[augroup AerialDiagnostics
-      au!
-      au User %s lua require'aerial.backends.lsp'._on_diagnostics_changed()
+    local cmd = [[lua require'aerial.backends.lsp'._on_diagnostics_changed()]]
+    if vim.fn.exists("##DiagnosticChanged") == 1 then
+      vim.cmd(string.format(
+        [[augroup AerialDiagnostics
+      au! * <buffer>
+      au DiagnosticChanged <buffer> %s
     augroup END
     ]],
-      autocmd_name
-    ))
+        cmd
+      ))
+    else
+      vim.cmd(string.format(
+        [[augroup AerialDiagnostics
+      au!
+      au User LspDiagnosticsChanged %s
+    augroup END
+    ]],
+        cmd
+      ))
+    end
   end
   if config.open_automatic() and not config["lsp.diagnostics_trigger_update"] then
     M.fetch_symbols()
