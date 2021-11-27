@@ -215,6 +215,9 @@ M.select = function(opts)
   if config.highlight_on_jump then
     util.flash_highlight(bufnr, item.lnum, config.highlight_on_jump)
   end
+  if config.close_on_select then
+    window.close()
+  end
 end
 
 return M

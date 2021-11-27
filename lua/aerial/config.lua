@@ -79,6 +79,9 @@ local default_options = {
   -- Run this command after jumping to a symbol (false will disable)
   post_jump_cmd = "normal! zz",
 
+  -- If close_on_select is true, aerial will automatically close after jumping to a symbol
+  close_on_select = false,
+
   lsp = {
     -- Fetch document symbols when LSP diagnostics change.
     -- If you set this to false, you will need to manually fetch symbols
