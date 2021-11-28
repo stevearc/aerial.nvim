@@ -4,6 +4,8 @@ local loading = require("aerial.loading")
 local util = require("aerial.util")
 local M = {}
 
+local INDENT = 2
+
 M.clear_buffer = function(bufnr)
   vim.api.nvim_buf_set_option(bufnr, "modifiable", true)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, {})
@@ -30,22 +32,23 @@ M.update_aerial_buffer = function(buf)
   local highlights = {}
   data[bufnr]:visit(function(item, conf)
     local kind = config.get_icon(item.kind, conf.collapsed)
-    local spacing = string.rep("  ", item.level)
+    local spacing = string.rep(" ", INDENT * item.level)
     local text = string.format("%s%s %s", spacing, kind, item.name)
-    local strlen = vim.fn.strdisplaywidth(text)
+    local text_cols = vim.api.nvim_strwidth(text)
+    local kindlen = vim.fn.strlen(kind)
     table.insert(highlights, {
       group = "Aerial" .. item.kind .. "Icon",
       row = row,
-      col_start = string.len(spacing),
-      col_end = string.len(spacing) + string.len(kind),
+      col_start = INDENT * item.level,
+      col_end = INDENT * item.level + kindlen,
     })
     table.insert(highlights, {
       group = "Aerial" .. item.kind,
       row = row,
-      col_start = strlen - string.len(item.name),
-      col_end = strlen,
+      col_start = INDENT * item.level + kindlen,
+      col_end = -1,
     })
-    max_len = math.max(max_len, strlen)
+    max_len = math.max(max_len, text_cols)
     table.insert(lines, text)
     row = row + 1
   end)
