@@ -237,30 +237,32 @@ M.get_position_in_win = function(bufnr, winid)
   }
 end
 
-M.update_all_positions = function(bufnr, update_last)
-  local winids = fn.win_findbuf(bufnr)
-  M.update_position(winids, update_last)
+M.update_all_positions = function(bufnr, last_focused_win)
+  local source_buffer = util.get_buffers(bufnr)
+  local all_source_wins = util.get_fixed_wins(source_buffer)
+  M.update_position(all_source_wins, last_focused_win)
 end
 
-M.update_position = function(winid, update_last)
+-- winids can be nil, a winid, or a list of winids
+M.update_position = function(winids, last_focused_win)
   if not config.highlight_mode or config.highlight_mode == "none" then
     return
   end
-  if winid == 0 then
-    winid = api.nvim_get_current_win()
+  if winids == nil or winids == 0 then
+    winids = { api.nvim_get_current_win() }
+  elseif type(winids) ~= "table" then
+    winids = { winids }
   end
-  local win_bufnr = api.nvim_win_get_buf(winid)
+  if #winids == 0 then
+    return
+  end
+  local win_bufnr = api.nvim_win_get_buf(winids[1])
   local bufnr, aer_bufnr = util.get_buffers(win_bufnr)
   if not data:has_symbols(bufnr) then
     return
   end
-  local winids
-  if not winid or util.is_aerial_buffer(win_bufnr) then
+  if util.is_aerial_buffer(win_bufnr) then
     winids = util.get_fixed_wins(bufnr)
-  elseif type(winid) == "table" then
-    winids = winid
-  else
-    winids = { winid }
   end
 
   local bufdata = data[bufnr]
@@ -268,14 +270,14 @@ M.update_position = function(winid, update_last)
     local pos = M.get_position_in_win(bufnr, target_win)
     if pos ~= nil then
       bufdata.positions[target_win] = pos
-      if update_last and (update_last == true or update_last == target_win) then
+      if last_focused_win and (last_focused_win == true or last_focused_win == target_win) then
         bufdata.last_position = pos.lnum
       end
     end
   end
 
   render.update_highlights(bufnr)
-  if update_last then
+  if last_focused_win then
     local aer_winid = fn.bufwinid(aer_bufnr)
 
     if aer_winid ~= -1 then

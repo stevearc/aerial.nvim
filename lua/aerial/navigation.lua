@@ -27,21 +27,26 @@ end
 
 local function get_target_win()
   local bufnr, _ = util.get_buffers()
-  local my_winid = vim.api.nvim_get_current_win()
   local winid
   if util.is_aerial_buffer() then
     if string.find(vim.o.switchbuf, "uselast") then
+      local my_winid = vim.api.nvim_get_current_win()
       vim.cmd("noau wincmd p")
-      winid = vim.api.nvim_get_current_win()
+      if bufnr == vim.api.nvim_get_current_buf() then
+        winid = vim.api.nvim_get_current_win()
+      end
       util.go_win_no_au(my_winid)
-    else
-      winid = vim.fn.win_findbuf(bufnr)[1]
+    end
+    if winid == nil then
+      for _, tabwin in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        if vim.api.nvim_win_get_buf(tabwin) == bufnr then
+          winid = tabwin
+          break
+        end
+      end
     end
   else
     winid = vim.api.nvim_get_current_win()
-  end
-  if winid == -1 then
-    return nil
   end
   return winid
 end

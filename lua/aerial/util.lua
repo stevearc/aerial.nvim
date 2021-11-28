@@ -26,13 +26,18 @@ M.get_width = function(bufnr)
 end
 
 M.set_width = function(bufnr, width)
+  if bufnr == nil or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
   if M.get_width(bufnr) == width then
     return
   end
   vim.api.nvim_buf_set_var(bufnr, "aerial_width", width)
 
-  for _, winid in ipairs(vim.fn.win_findbuf(bufnr)) do
-    vim.api.nvim_win_set_width(winid, width)
+  for _, winid in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_win_get_buf(winid) == bufnr then
+      vim.api.nvim_win_set_width(winid, width)
+    end
   end
 end
 
