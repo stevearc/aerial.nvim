@@ -18,6 +18,14 @@ return {
     enum_declaration = "Enum",
     constructor_declaration = "Constructor",
   },
+  dart = {
+    class_definition = "Class",
+    constructor_signature = "Constructor",
+    function_signature = "Function",
+    getter_signature = "Function",
+    setter_signature = "Function",
+    enum_declaration = "Enum",
+  },
   go = {
     function_declaration = "Function",
     method_declaration = "Method",
