@@ -3,7 +3,7 @@ local config = require("aerial.config")
 local M = {}
 
 M.rpad = function(str, length, padchar)
-  local strlen = vim.fn.strdisplaywidth(str)
+  local strlen = vim.api.nvim_strwidth(str)
   if strlen < length then
     return str .. string.rep(padchar or " ", length - strlen)
   end
@@ -50,7 +50,7 @@ M.go_win_no_au = function(winid)
   if winid == vim.api.nvim_get_current_win() then
     return
   end
-  local winnr = vim.fn.win_id2win(winid)
+  local winnr = vim.api.nvim_win_get_number(winid)
   vim.cmd(string.format("noau %dwincmd w", winnr))
 end
 
@@ -67,6 +67,14 @@ M.get_aerial_orphans = function()
     end
   end
   return orphans
+end
+
+M.buf_first_win_in_tabpage = function(bufnr)
+  for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if vim.api.nvim_win_get_buf(winid) == bufnr then
+      return winid
+    end
+  end
 end
 
 M.is_aerial_buffer_orphaned = function(bufnr)
@@ -196,10 +204,16 @@ M.render_centered_text = function(bufnr, text)
   if type(text) == "string" then
     text = { text }
   end
-  local winid = vim.fn.bufwinid(bufnr)
+  local winid
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_win_get_buf(win) == bufnr then
+      winid = win
+      break
+    end
+  end
   local height = 40
   local width = M.get_width(bufnr)
-  if winid ~= -1 then
+  if winid then
     height = vim.api.nvim_win_get_height(winid)
     width = vim.api.nvim_win_get_width(winid)
   end
@@ -208,7 +222,7 @@ M.render_centered_text = function(bufnr, text)
     table.insert(lines, "")
   end
   for _, line in ipairs(text) do
-    line = string.rep(" ", (width - vim.fn.strdisplaywidth(line)) / 2) .. line
+    line = string.rep(" ", (width - vim.api.nvim_strwidth(line)) / 2) .. line
     table.insert(lines, line)
   end
   vim.api.nvim_buf_set_option(bufnr, "modifiable", true)

@@ -120,20 +120,20 @@ M.is_open = function(bufnr)
   if aer_bufnr == -1 then
     return false
   else
-    local winid = fn.bufwinid(aer_bufnr)
-    return winid ~= -1
+    local winid = util.buf_first_win_in_tabpage(aer_bufnr)
+    return winid ~= nil
   end
 end
 
 M.close = function()
   if util.is_aerial_buffer() then
-    vim.cmd("close")
+    vim.api.nvim_win_close(0, false)
     return
   end
   local aer_bufnr = util.get_aerial_buffer()
-  local winnr = fn.bufwinnr(aer_bufnr)
-  if winnr ~= -1 then
-    vim.cmd(winnr .. "close")
+  local winid = util.buf_first_win_in_tabpage(aer_bufnr)
+  if winid then
+    vim.api.nvim_win_close(winid, false)
   end
 end
 
@@ -163,7 +163,7 @@ M.open = function(focus, direction, opts)
   local bufnr, aer_bufnr = util.get_buffers()
   if M.is_open() then
     if focus then
-      local winid = fn.bufwinid(aer_bufnr)
+      local winid = util.buf_first_win_in_tabpage(aer_bufnr)
       api.nvim_set_current_win(winid)
     end
     return
@@ -187,13 +187,13 @@ M.focus = function()
   end
   local bufnr = api.nvim_get_current_buf()
   local aer_bufnr = util.get_aerial_buffer(bufnr)
-  local winid = fn.bufwinid(aer_bufnr)
+  local winid = util.buf_first_win_in_tabpage(aer_bufnr)
   api.nvim_set_current_win(winid)
 end
 
 M.toggle = function(focus, direction)
   if util.is_aerial_buffer() then
-    vim.cmd("close")
+    vim.api.nvim_win_close(0, false)
     return false
   end
 
@@ -278,9 +278,8 @@ M.update_position = function(winids, last_focused_win)
 
   render.update_highlights(bufnr)
   if last_focused_win then
-    local aer_winid = fn.bufwinid(aer_bufnr)
-
-    if aer_winid ~= -1 then
+    local aer_winid = util.buf_first_win_in_tabpage(aer_bufnr)
+    if aer_winid then
       local last_position = bufdata.last_position
       local lines = api.nvim_buf_line_count(aer_bufnr)
 

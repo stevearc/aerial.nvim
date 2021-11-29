@@ -13,13 +13,13 @@ M.set_loading = function(aer_bufnr, is_loading)
     if timers[aer_bufnr] == nil then
       timers[aer_bufnr] = vim.loop.new_timer()
       local i = 0
-      local start = vim.fn.localtime()
+      local start = os.time()
       timers[aer_bufnr]:start(
         0,
         80,
         vim.schedule_wrap(function()
           local lines = { M.spinner_frames[i + 1] .. " Loading" }
-          if vim.fn.localtime() - start >= SLOW_TIMEOUT then
+          if os.time() - start >= SLOW_TIMEOUT then
             table.insert(lines, "stuck?")
             table.insert(lines, ":help aerial-loading")
           end
