@@ -11,7 +11,12 @@ M.is_supported = function(bufnr, name)
   return backend and backend.is_supported(bufnr)
 end
 
-M.get = function(bufnr)
+local attach_callbacks = {}
+M.register_attach_cb = function(callback)
+  table.insert(attach_callbacks, callback)
+end
+
+local function get_best_backend(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -23,6 +28,44 @@ M.get = function(bufnr)
     end
   end
   return nil, nil
+end
+
+local function set_backend(bufnr, backend)
+  vim.api.nvim_buf_set_var(bufnr, "aerial_backend", backend)
+end
+
+local function attach(bufnr, backend, name, existing_backend_name)
+  if not backend or name == existing_backend_name then
+    return
+  end
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  backend.attach(bufnr)
+  if existing_backend_name then
+    M.get_backend_by_name(existing_backend_name).detach(bufnr)
+  else
+    require("aerial.autocommands").attach_autocommands(bufnr)
+    require("aerial.fold").add_fold_mappings(bufnr)
+  end
+  set_backend(bufnr, name)
+  if not existing_backend_name then
+    for _, cb in ipairs(attach_callbacks) do
+      cb(bufnr)
+    end
+  end
+end
+
+M.get = function(bufnr)
+  local existing_backend_name = M.get_attached_backend(bufnr)
+  if existing_backend_name then
+    return M.get_backend_by_name(existing_backend_name)
+  end
+  local backend, name = get_best_backend(bufnr)
+  if backend then
+    attach(bufnr, backend, name, existing_backend_name)
+  end
+  return backend
 end
 
 M.set_symbols = function(bufnr, items)
@@ -51,10 +94,6 @@ M.log_support_err = function()
   vim.api.nvim_err_writeln("Aerial could find no supported backend")
 end
 
-local function set_backend(bufnr, backend)
-  vim.api.nvim_buf_set_var(bufnr, "aerial_backend", backend)
-end
-
 M.is_backend_attached = function(bufnr, backend)
   local b = M.get_attached_backend(bufnr)
   return b and (b == backend or backend == nil)
@@ -65,34 +104,13 @@ M.get_attached_backend = function(bufnr)
   return ok and val or nil
 end
 
-local attach_callbacks = {}
-M.register_attach_cb = function(callback)
-  table.insert(attach_callbacks, callback)
-end
-
 M.attach = function(bufnr, refresh)
-  if not bufnr or bufnr == 0 then
-    bufnr = vim.api.nvim_get_current_buf()
-  end
-  local existing_backend_name = M.get_attached_backend(bufnr)
-  if not refresh and existing_backend_name then
-    return
-  end
-  local backend, name = M.get()
-  if backend and name ~= existing_backend_name then
-    backend.attach(bufnr)
-    if existing_backend_name then
-      M.get_backend_by_name(existing_backend_name).detach(bufnr)
-    else
-      require("aerial.autocommands").attach_autocommands(bufnr)
-      require("aerial.fold").add_fold_mappings(bufnr)
-    end
-    set_backend(bufnr, name)
-    if not existing_backend_name then
-      for _, cb in ipairs(attach_callbacks) do
-        cb(bufnr)
-      end
-    end
+  if refresh then
+    local existing_backend_name = M.get_attached_backend(bufnr)
+    local backend, name = get_best_backend()
+    attach(bufnr, backend, name, existing_backend_name)
+  else
+    M.get(bufnr)
   end
 end
 
