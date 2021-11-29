@@ -282,7 +282,7 @@ Variable
 ===============================================================================
 FUNCTIONS                                                      *aerial-functions*
 
-aerial.on_attach({client}, [{opts}]                          *aerial.on_attach()*
+aerial.on_attach({client}, {bufnr}, [{opts}]                 *aerial.on_attach()*
     This must be called in the on_attach of your LSP client configuration. The
     {opts} dictionary can contain the following entries:
 
@@ -359,6 +359,15 @@ aerial.sync_folds()                                         *aerial.sync_folds()
 aerial.register_attach_cb({callback})               *aerial.register_attach_cb()*
     Register a callback to be called when aerial is attached to a buffer. This
     is a good place to put your kemaps.
+
+aerial.get_location()                                     *aerial.get_location()*
+    Returns a list representing the symbol path to the current location.
+    Returns empty list if none found or in an invalid buffer. Items have the
+    following keys:
+
+        name   The name of the symbol
+        kind   The |SymbolKind| of the symbol
+        icon   The icon that represents the symbol
 
 ===============================================================================
 FAQ                                                                  *aerial-faq*

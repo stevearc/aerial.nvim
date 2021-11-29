@@ -64,6 +64,29 @@ M.on_attach = function(...)
   require("aerial.backends.lsp").on_attach(...)
 end
 
+M.get_location = function()
+  if not data:has_symbols(0) then
+    return {}
+  end
+  local winid = vim.api.nvim_get_current_win()
+  local bufdata = data[0]
+  local pos = bufdata.positions[winid]
+  if not pos then
+    return {}
+  end
+  local item = bufdata:item(pos.lnum)
+  local ret = {}
+  while item do
+    table.insert(ret, 1, {
+      kind = item.kind,
+      icon = config.get_icon(item.kind),
+      name = item.name,
+    })
+    item = item.parent
+  end
+  return ret
+end
+
 local function _post_tree_mutate(new_cursor_pos)
   render.update_aerial_buffer()
   window.update_all_positions()

@@ -24,6 +24,7 @@ aerial-loading	aerial.txt	/*aerial-loading*
 aerial-options	aerial.txt	/*aerial-options*
 aerial.close()	aerial.txt	/*aerial.close()*
 aerial.focus()	aerial.txt	/*aerial.focus()*
+aerial.get_location()	aerial.txt	/*aerial.get_location()*
 aerial.is_open()	aerial.txt	/*aerial.is_open()*
 aerial.next()	aerial.txt	/*aerial.next()*
 aerial.nvim	aerial.txt	/*aerial.nvim*
