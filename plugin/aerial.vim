@@ -18,7 +18,7 @@ command! AerialTreeSyncFolds lua require'aerial'.sync_folds()
 command! AerialInfo lua require'aerial'.info()
 
 function! s:CompleteOpenDirection(ArgLead, CmdLine, CursorPos)
-  let l:opts = ['right', 'left']
+  let l:opts = ['right', 'left', 'float']
   return filter(l:opts, 'v:val =~ "^'. a:ArgLead .'"')
 endfunction
 

@@ -13,14 +13,14 @@ COMMANDS                                                        *aerial-commands
 
                                                                   *:AerialToggle*
 :AerialToggle[!] [direction]
-        Open or close the aerial window. [direction] can be either `left` or
-        `right`. If without [!] the cursor will jump to the aerial window if
-        it was opened.
+        Open or close the aerial window. [direction] can be `left`,
+        `right`, or `float`. If without [!] the cursor will jump to the aerial
+        window if it was opened.
 
                                                                     *:AerialOpen*
 :AerialOpen[!] [direction]
-        Open the aerial window. [direction] can be either `left` or `right`.
-        If without [!] the cursor will jump to the aerial window.
+        Open the aerial window. [direction] can be either `left`, `right`, or
+        `float`. If without [!] the cursor will jump to the aerial window.
 
                                                                    *:AerialClose*
 :AerialClose
@@ -128,6 +128,7 @@ g:aerial_default_direction                           *g:aerial_default_direction
                       none to the right
         prefer_right  Open to the right unless there are other windows right
                       and none to the left (default)
+        float         Open in a floating window
 
 g:aerial_placement_editor_edge                   *g:aerial_placement_editor_edge*
     If `true`, only open aerial at the far right/left of the editor. Default
@@ -293,8 +294,8 @@ aerial.on_attach({client}, {bufnr}, [{opts}]                 *aerial.on_attach()
 aerial.open([{focus}], [{direction}])                             *aerial.open()*
     Open the aerial window for the current buffer. {focus} is a boolean that,
     if true, will also jump your cursor to the aerial buffer. {direction} can
-    be either "left" or "right", to indicate which direction of vsplit to use
-    (defaults to |g:aerial_default_direction|).
+    be either "left", "right" or "toggle" to indicate which direction of
+    vsplit to use (defaults to |g:aerial_default_direction|).
 
 aerial.close()                                                   *aerial.close()*
     Close the aerial window for the current buffer.

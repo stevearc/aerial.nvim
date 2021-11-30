@@ -16,7 +16,7 @@ local default_options = {
   -- Set to false to remove the default keybindings for the aerial buffer
   default_bindings = true,
 
-  -- Enum: prefer_right, prefer_left, right, left
+  -- Enum: prefer_right, prefer_left, right, left, float
   -- Determines the default direction to open the aerial window. The 'prefer'
   -- options will open the window in the other direction *if* there is a
   -- different buffer in the way of the preferred direction
@@ -81,6 +81,25 @@ local default_options = {
 
   -- If close_on_select is true, aerial will automatically close after jumping to a symbol
   close_on_select = false,
+
+  -- Options for opening aerial in a floating win
+  float = {
+    -- Controls border appearance. Passed to nvim_open_win
+    border = "rounded",
+
+    -- Controls row offset from cursor. Passed to nvim_open_win
+    row = 1,
+
+    -- Controls col offset from cursor. Passed to nvim_open_win
+    col = 0,
+
+    -- The maximum height of the floating aerial window
+    max_height = 100,
+
+    -- The minimum height of the floating aerial window
+    -- To disable dynamic resizing, set this to be equal to max_height
+    min_height = 4,
+  },
 
   lsp = {
     -- Fetch document symbols when LSP diagnostics change.

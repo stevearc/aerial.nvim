@@ -53,8 +53,8 @@ M.update_aerial_buffer = function(buf)
     row = row + 1
   end)
 
-  local width = math.min(config.max_width, math.max(config.min_width, max_len))
-  util.set_width(aer_bufnr, width)
+  local width = util.set_width(aer_bufnr, max_len)
+  util.set_height(aer_bufnr, #lines)
 
   -- Insert lines into buffer
   for i, line in ipairs(lines) do

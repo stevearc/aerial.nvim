@@ -13,7 +13,6 @@ local M = {}
 local function create_aerial_buffer(bufnr)
   local aer_bufnr = api.nvim_create_buf(false, true)
 
-  util.go_buf_no_au(aer_bufnr)
   if config.default_bindings then
     for _, binding in ipairs(bindings.keys) do
       local keys, command, _ = unpack(binding)
@@ -34,56 +33,72 @@ local function create_aerial_buffer(bufnr)
   api.nvim_buf_set_option(aer_bufnr, "buflisted", false)
   api.nvim_buf_set_option(aer_bufnr, "swapfile", false)
   api.nvim_buf_set_option(aer_bufnr, "modifiable", false)
-  api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
   render.update_aerial_buffer(bufnr)
   return aer_bufnr
 end
 
 local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
+  -- We used to use < and > to indicate direction.
   if direction == "<" then
     direction = "left"
   end
   if direction == ">" then
     direction = "right"
   end
-  if direction ~= "left" and direction ~= "right" then
-    error("Expected direction to be 'left' or 'right'")
+  if direction ~= "left" and direction ~= "right" and direction ~= "float" then
+    error("Expected direction to be 'left', 'right', or 'float'")
     return
-  end
-  local my_winid = api.nvim_get_current_win()
-  if not existing_win then
-    local winids
-    if config.placement_editor_edge then
-      winids = util.get_fixed_wins()
-    else
-      winids = util.get_fixed_wins(bufnr)
-    end
-    local split_target
-    if direction == "left" then
-      split_target = winids[1]
-    else
-      split_target = winids[#winids]
-    end
-    if my_winid ~= split_target then
-      util.go_win_no_au(split_target)
-    end
-    if direction == "left" then
-      vim.cmd("noau vertical leftabove split")
-    else
-      vim.cmd("noau vertical rightbelow split")
-    end
-  else
-    util.go_win_no_au(existing_win)
   end
 
   if aer_bufnr == -1 then
     aer_bufnr = create_aerial_buffer(bufnr)
   end
-  util.go_buf_no_au(aer_bufnr)
 
+  local my_winid = api.nvim_get_current_win()
   if not existing_win then
-    api.nvim_win_set_width(0, util.get_width())
+    if direction == "float" then
+      vim.api.nvim_open_win(aer_bufnr, true, {
+        relative = "cursor",
+        row = config["float.row"],
+        col = config["float.col"],
+        width = util.get_width(aer_bufnr),
+        height = util.get_height(aer_bufnr),
+        zindex = 125,
+        style = "minimal",
+        border = config["float.border"],
+      })
+    else
+      local winids
+      if config.placement_editor_edge then
+        winids = util.get_fixed_wins()
+      else
+        winids = util.get_fixed_wins(bufnr)
+      end
+      local split_target
+      if direction == "left" then
+        split_target = winids[1]
+      else
+        split_target = winids[#winids]
+      end
+      if my_winid ~= split_target then
+        util.go_win_no_au(split_target)
+      end
+      if direction == "left" then
+        vim.cmd("noau vertical leftabove split")
+      else
+        vim.cmd("noau vertical rightbelow split")
+      end
+      api.nvim_win_set_width(0, util.get_width(aer_bufnr))
+    end
+  else
+    util.go_win_no_au(existing_win)
   end
+
+  util.go_buf_no_au(aer_bufnr)
+  -- Set the filetype only after we enter the buffer so that FileType autocmds
+  -- behave properly
+  api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
+
   api.nvim_win_set_option(0, "winfixwidth", true)
   api.nvim_win_set_option(0, "number", false)
   api.nvim_win_set_option(0, "signcolumn", "no")

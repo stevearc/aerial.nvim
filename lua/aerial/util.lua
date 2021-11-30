@@ -29,14 +29,38 @@ M.set_width = function(bufnr, width)
   if bufnr == nil or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
+  width = math.min(config.max_width, math.max(config.min_width, width))
   if M.get_width(bufnr) == width then
-    return
+    return width
   end
   vim.api.nvim_buf_set_var(bufnr, "aerial_width", width)
 
   for _, winid in ipairs(vim.api.nvim_list_wins()) do
     if vim.api.nvim_win_get_buf(winid) == bufnr then
       vim.api.nvim_win_set_width(winid, width)
+    end
+  end
+  return width
+end
+
+M.get_height = function(bufnr)
+  local ok, height = pcall(vim.api.nvim_buf_get_var, bufnr or 0, "aerial_height")
+  if ok then
+    return height
+  end
+  local max_height = math.min(config["float.max_height"], vim.o.lines - vim.o.cmdheight)
+  return math.max(config["float.min_height"], max_height / 2)
+end
+
+M.set_height = function(bufnr, height)
+  if bufnr == nil or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  height = math.min(config["float.max_height"], math.max(config["float.min_height"], height))
+  vim.api.nvim_buf_set_var(bufnr, "aerial_height", height)
+  for _, winid in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_win_get_buf(winid) == bufnr and M.is_floating_win(winid) then
+      vim.api.nvim_win_set_height(winid, height)
     end
   end
 end
@@ -160,10 +184,8 @@ end
 
 M.detect_split_direction = function(bufnr)
   local default = config.default_direction
-  if default == "left" then
-    return "left"
-  elseif default == "right" then
-    return "right"
+  if default ~= "prefer_left" and default ~= "prefer_right" then
+    return default
   end
   local wins = M.get_fixed_wins()
   local left_available, right_available
