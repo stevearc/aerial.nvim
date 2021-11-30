@@ -7,7 +7,7 @@ return {
   cpp = {
     class_specifier = "Class",
     enum_specifier = "Enum",
-    function_definition = "Function",
+    function_declarator = "Function",
     struct_specifier = "Struct",
   },
   c_sharp = {

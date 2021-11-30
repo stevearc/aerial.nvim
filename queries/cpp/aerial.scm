@@ -1,6 +1,5 @@
-(function_definition
-  declarator: (function_declarator
-    declarator: [(identifier) (field_identifier) (qualified_identifier)] @name)) @type
+(function_declarator
+  declarator: [(identifier) (field_identifier) (qualified_identifier)] @name) @type
 
 (struct_specifier
   name: (type_identifier) @name

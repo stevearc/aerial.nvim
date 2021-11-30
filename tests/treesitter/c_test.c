@@ -8,6 +8,8 @@ void fn_3() {}
 
 void *fn_4() { return 0; }
 
+void **fn_5() { return 0; }
+
 typedef enum {
   kVal,
 } kEnum;

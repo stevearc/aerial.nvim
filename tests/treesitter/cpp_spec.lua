@@ -8,7 +8,7 @@ describe("treesitter cpp", function()
         name = "fn_1",
         level = 0,
         lnum = 1,
-        col = 0,
+        col = 5,
       },
       {
         kind = "Struct",
@@ -43,7 +43,7 @@ describe("treesitter cpp", function()
             name = "meth_1",
             level = 1,
             lnum = 12,
-            col = 2,
+            col = 7,
           },
         },
       },
@@ -52,7 +52,21 @@ describe("treesitter cpp", function()
         name = "A::bar",
         level = 0,
         lnum = 15,
-        col = 0,
+        col = 5,
+      },
+      {
+        kind = "Function",
+        name = "fn_2",
+        level = 0,
+        lnum = 17,
+        col = 5,
+      },
+      {
+        kind = "Function",
+        name = "fn_3",
+        level = 0,
+        lnum = 19,
+        col = 6,
       },
     })
   end)
