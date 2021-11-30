@@ -100,7 +100,7 @@ require'lspconfig'.vimls.setup{
 
 ### Treesitter
 
-**The treesitter backend is in Alpha status**
+**The treesitter backend is in Beta status**
 
 Please do try it out, and file an issue if you encounter any problems.
 
