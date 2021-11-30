@@ -1,4 +1,8 @@
-return {
+local util = require("aerial.util")
+local M = {}
+
+M.keys = {
+  { "?", "<cmd>lua require'aerial.bindings'.show()<CR>", "Show default keymaps" },
   { "<CR>", "<cmd>lua require'aerial'.select()<CR>", "Jump to the symbol under the cursor" },
   {
     "<C-v>",
@@ -56,3 +60,59 @@ return {
     "Sync code folding to the tree (useful if they get out of sync)",
   },
 }
+
+M.show = function()
+  local lhs = {}
+  local rhs = {}
+  local max_left = 1
+  for _, binding in ipairs(M.keys) do
+    local keys, _, desc = unpack(binding)
+    if type(keys) ~= "table" then
+      keys = { keys }
+    end
+    local keystr = table.concat(keys, "/")
+    max_left = math.max(max_left, vim.api.nvim_strwidth(keystr))
+    table.insert(lhs, keystr)
+    table.insert(rhs, desc)
+  end
+
+  local lines = {}
+  local max_line = 1
+  for i = 1, #lhs do
+    local left = lhs[i]
+    local right = rhs[i]
+    local line = string.format(" %s   %s", util.rpad(left, max_left), right)
+    max_line = math.max(max_line, vim.api.nvim_strwidth(line))
+    table.insert(lines, line)
+  end
+
+  local bufnr = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, lines)
+  local ns = vim.api.nvim_create_namespace("AerialKeymap")
+  for i = 1, #lhs do
+    vim.api.nvim_buf_set_extmark(bufnr, ns, i - 1, 0, {
+      end_col = max_left + 1,
+      hl_group = "Special",
+    })
+  end
+  local opts = { noremap = true, silent = true }
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "q", "<cmd>close<CR>", opts)
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "<c-c>", "<cmd>close<CR>", opts)
+  vim.api.nvim_buf_set_option(bufnr, "modifiable", false)
+  vim.api.nvim_buf_set_option(bufnr, "bufhidden", "wipe")
+
+  local editor_width = vim.o.columns
+  local editor_height = vim.o.lines - vim.o.cmdheight
+  vim.api.nvim_open_win(bufnr, true, {
+    relative = "editor",
+    row = math.max(0, (editor_height - #lines) / 2),
+    col = math.max(0, (editor_width - max_line - 1) / 2),
+    width = math.min(editor_width, max_line + 1),
+    height = math.min(editor_height, #lines),
+    zindex = 150,
+    style = "minimal",
+    border = "rounded",
+  })
+end
+
+return M

@@ -15,7 +15,7 @@ local function create_aerial_buffer(bufnr)
 
   util.go_buf_no_au(aer_bufnr)
   if config.default_bindings then
-    for _, binding in ipairs(bindings) do
+    for _, binding in ipairs(bindings.keys) do
       local keys, command, _ = unpack(binding)
       if type(keys) == "string" then
         keys = { keys }

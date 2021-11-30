@@ -64,7 +64,7 @@ def update_config_options():
 
 def update_default_bindings():
     code, txt = subprocess.getstatusoutput(
-        """nvim --headless --noplugin -u /dev/null -c 'set runtimepath+=.' -c 'lua print(vim.json.encode(require("aerial.bindings")))' +qall"""
+        """nvim --headless --noplugin -u /dev/null -c 'set runtimepath+=.' -c 'lua print(vim.json.encode(require("aerial.bindings").keys))' +qall"""
     )
     if code != 0:
         raise Exception(f"Error updating default bindings: {txt}")
