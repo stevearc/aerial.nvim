@@ -9,6 +9,12 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Install Neovim and dependencies
+        env:
+          NVIM_TAG: v0.6.0
+        run: |
+          bash ./.github/workflows/install_nvim.sh
+
       - name: Update README
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

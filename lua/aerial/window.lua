@@ -1,4 +1,5 @@
 local backends = require("aerial.backends")
+local bindings = require("aerial.bindings")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local loading = require("aerial.loading")
@@ -14,34 +15,15 @@ local function create_aerial_buffer(bufnr)
 
   util.go_buf_no_au(aer_bufnr)
   if config.default_bindings then
-    local map = function(keys, cmd)
+    for _, binding in ipairs(bindings) do
+      local keys, command, _ = unpack(binding)
       if type(keys) == "string" then
         keys = { keys }
       end
       for _, key in ipairs(keys) do
-        api.nvim_buf_set_keymap(aer_bufnr, "n", key, cmd, { silent = true, noremap = true })
+        api.nvim_buf_set_keymap(aer_bufnr, "n", key, command, { silent = true, noremap = true })
       end
     end
-    map("<CR>", "<cmd>lua require'aerial'.select()<CR>")
-    map("<C-v>", "<cmd>lua require'aerial'.select({split='v'})<CR>")
-    map("<C-s>", "<cmd>lua require'aerial'.select({split='h'})<CR>")
-    map("p", "<cmd>lua require'aerial'.select({jump=false})<CR>")
-    map("<C-j>", "j<cmd>lua require'aerial'.select({jump=false})<CR>")
-    map("<C-k>", "k<cmd>lua require'aerial'.select({jump=false})<CR>")
-    map("}", "<cmd>AerialNext<CR>")
-    map("{", "<cmd>AerialPrev<CR>")
-    map("]]", "<cmd>AerialNextUp<CR>")
-    map("[[", "<cmd>AerialPrevUp<CR>")
-    map("q", "<cmd>AerialClose<CR>")
-    map({ "o", "za" }, "<cmd>AerialTreeToggle<CR>")
-    map({ "O", "zA" }, "<cmd>AerialTreeToggle!<CR>")
-    map({ "l", "zo" }, "<cmd>AerialTreeOpen<CR>")
-    map({ "L", "zO" }, "<cmd>AerialTreeOpen!<CR>")
-    map({ "h", "zc" }, "<cmd>AerialTreeClose<CR>")
-    map({ "H", "zC" }, "<cmd>AerialTreeClose!<CR>")
-    map("zR", "<cmd>AerialTreeOpenAll<CR>")
-    map("zM", "<cmd>AerialTreeCloseAll<CR>")
-    map({ "zx", "zX" }, "<cmd>AerialTreeSyncFolds<CR>")
   end
   -- Set buffer options
   api.nvim_buf_set_var(bufnr, "aerial_buffer", aer_bufnr)

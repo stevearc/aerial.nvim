@@ -1,7 +1,9 @@
 #!/usr/bin/env python
+import json
 import os
 import os.path
 import re
+import subprocess
 from typing import List
 
 HERE = os.path.dirname(__file__)
@@ -60,10 +62,35 @@ def update_config_options():
     replace_section(README, r"^## Options", r"^}$", opt_lines)
 
 
+def update_default_bindings():
+    code, txt = subprocess.getstatusoutput(
+        """nvim --headless --noplugin -u /dev/null -c 'set runtimepath+=.' -c 'lua print(vim.json.encode(require("aerial.bindings")))' +qall"""
+    )
+    if code != 0:
+        raise Exception(f"Error updating default bindings: {txt}")
+    try:
+        bindings = json.loads(txt)
+    except json.JSONDecodeError as e:
+        raise Exception(f"Json decode error: {txt}") from e
+    lhs = ["---"]
+    rhs = ["-------"]
+    for keys, _command, desc in bindings:
+        if not isinstance(keys, list):
+            keys = [keys]
+        lhs.append("/".join([f"`{key}`" for key in keys]))
+        rhs.append(desc)
+    max_lhs = max(map(len, lhs))
+    lines = [
+        left.ljust(max_lhs) + " | " + right + "\n" for left, right in zip(lhs, rhs)
+    ]
+    replace_section(README, r"^Key.*Command", r"^\s*$", lines)
+
+
 def main() -> None:
     """Update the README"""
     update_treesitter_languages()
     update_config_options()
+    update_default_bindings()
 
 
 if __name__ == "__main__":
