@@ -353,7 +353,7 @@ Key       | Command
 `<CR>`    | Jump to the symbol under the cursor
 `<C-v>`   | Jump to the symbol in a vertical split
 `<C-s>`   | Jump to the symbol in a horizontal split
-`<p>`     | Scroll to the symbol (stay in aerial buffer)
+`p`       | Scroll to the symbol (stay in aerial buffer)
 `<C-j>`   | Go down one line and scroll to that symbol
 `<C-k>`   | Go up one line and scroll to that symbol
 `{`       | Jump to the previous symbol
@@ -367,8 +367,8 @@ Key       | Command
 `L`/`zO`  | Recursive expand the symbol under the cursor
 `h`/`zc`  | Collapse the symbol under the cursor
 `H`/`zC`  | Recursive collapse the symbol under the cursor
-`zM`      | Collapse all nodes in the tree
 `zR`      | Expand all nodes in the tree
+`zM`      | Collapse all nodes in the tree
 `zx`/`zX` | Sync code folding to the tree (useful if they get out of sync)
 
 ## Fuzzy Finding
