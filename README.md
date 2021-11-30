@@ -115,6 +115,7 @@ automatically fetch symbols from treesitter.
   * c
   * c_sharp
   * cpp
+  * dart
   * go
   * java
   * javascript
