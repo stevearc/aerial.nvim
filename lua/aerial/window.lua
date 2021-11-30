@@ -6,7 +6,6 @@ local render = require("aerial.render")
 local util = require("aerial.util")
 
 local api = vim.api
-local fn = vim.fn
 
 local M = {}
 
