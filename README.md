@@ -350,6 +350,7 @@ The default keybindings in the aerial window. You can add your own in
 
 Key       | Command
 ---       | -------
+`?`       | Show default keymaps
 `<CR>`    | Jump to the symbol under the cursor
 `<C-v>`   | Jump to the symbol in a vertical split
 `<C-s>`   | Jump to the symbol in a horizontal split
