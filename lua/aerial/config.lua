@@ -330,6 +330,13 @@ local HAS_LSPKIND, lspkind = pcall(require, "lspkind")
 local _last_checked = 0
 local _last_icons = {}
 M.get_icon = function(kind, collapsed)
+  if HAS_LSPKIND then
+    local icon = lspkind.symbolic(kind, { with_text = false })
+    if icon then
+      return icon
+    end
+  end
+
   local icons = _last_icons
   if os.time() - _last_checked > 5 then
     local default
@@ -350,12 +357,7 @@ M.get_icon = function(kind, collapsed)
   if collapsed then
     return get_table_default(icons, kind .. "Collapsed", "Collapsed", kind)
   else
-    if HAS_LSPKIND then
-      return lspkind.symbolic(kind, { with_text = false })
-        or get_table_default(icons, kind, nil, kind)
-    else
-      return get_table_default(icons, kind, nil, kind)
-    end
+    return get_table_default(icons, kind, nil, kind)
   end
 end
 
