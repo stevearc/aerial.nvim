@@ -48,15 +48,15 @@ M.get_height = function(bufnr)
   if ok then
     return height
   end
-  local max_height = math.min(config["float.max_height"], vim.o.lines - vim.o.cmdheight)
-  return math.max(config["float.min_height"], max_height / 2)
+  local max_height = math.min(config.float.max_height, vim.o.lines - vim.o.cmdheight)
+  return math.max(config.float.min_height, max_height / 2)
 end
 
 M.set_height = function(bufnr, height)
   if bufnr == nil or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  height = math.min(config["float.max_height"], math.max(config["float.min_height"], height))
+  height = math.min(config.float.max_height, math.max(config.float.min_height, height))
   vim.api.nvim_buf_set_var(bufnr, "aerial_height", height)
   for _, winid in ipairs(vim.api.nvim_list_wins()) do
     if vim.api.nvim_win_get_buf(winid) == bufnr and M.is_floating_win(winid) then

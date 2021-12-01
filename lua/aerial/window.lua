@@ -59,13 +59,13 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
     if direction == "float" then
       vim.api.nvim_open_win(aer_bufnr, true, {
         relative = "cursor",
-        row = config["float.row"],
-        col = config["float.col"],
+        row = config.float.row,
+        col = config.float.col,
         width = util.get_width(aer_bufnr),
         height = util.get_height(aer_bufnr),
         zindex = 125,
         style = "minimal",
-        border = config["float.border"],
+        border = config.float.border,
       })
     else
       local winids

@@ -40,7 +40,7 @@ local function throttle_update(backend_name)
   end
   timer = vim.loop.new_timer()
   timer:start(
-    config[backend_name .. ".update_delay"] or 300,
+    config[backend_name].update_delay or 300,
     0,
     vim.schedule_wrap(function()
       timer:close()
