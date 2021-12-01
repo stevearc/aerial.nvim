@@ -325,12 +325,26 @@ local function get_table_default(tab, key, default_key, default)
   end
 end
 
-local HAS_LSPKIND, lspkind = pcall(require, "lspkind")
+-- Only exposed for tests
+M._get_icons = function()
+  local default
+  local nerd_font = M.nerd_font
+  if nerd_font == "auto" then
+    nerd_font = has_devicons
+  end
+  if nerd_font then
+    default = vim.tbl_extend("keep", nerd_icons, plain_icons)
+  else
+    default = plain_icons
+  end
+  return vim.tbl_extend("keep", get_option({ "icons" }) or {}, default)
+end
 
+local HAS_LSPKIND, lspkind = pcall(require, "lspkind")
 local _last_checked = 0
 local _last_icons = {}
 M.get_icon = function(kind, collapsed)
-  if HAS_LSPKIND then
+  if HAS_LSPKIND and not collapsed then
     local icon = lspkind.symbolic(kind, { with_text = false })
     if icon then
       return icon
@@ -339,17 +353,7 @@ M.get_icon = function(kind, collapsed)
 
   local icons = _last_icons
   if os.time() - _last_checked > 5 then
-    local default
-    local nerd_font = M.nerd_font
-    if nerd_font == "auto" then
-      nerd_font = has_devicons
-    end
-    if nerd_font then
-      default = vim.tbl_extend("keep", nerd_icons, plain_icons)
-    else
-      default = plain_icons
-    end
-    icons = vim.tbl_extend("keep", M.icons or {}, default)
+    icons = M._get_icons()
     _last_icons = icons
     _last_checked = os.time()
   end

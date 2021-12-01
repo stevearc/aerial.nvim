@@ -41,6 +41,7 @@ describe("config", function()
     vim.api.nvim_del_var("aerial_float_row")
   end)
 
+  -- Filetype maps
   it("reads the default value for filetype map option", function()
     assert.equals(config.open_automatic(), false)
   end)
@@ -62,6 +63,7 @@ describe("config", function()
     assert.equals(config.open_automatic(), true)
   end)
 
+  -- Filter kind
   it("reads the filter_kind option", function()
     vim.g.aerial = {
       filter_kind = { "Function" },
@@ -85,6 +87,24 @@ describe("config", function()
     local fk = config.get_filter_kind_map("foo")
     assert.equals(true, fk.Class)
     assert.equals(true, fk.Function)
+  end)
+
+  -- Icons
+  it("reads icons from the default table", function()
+    vim.g.aerial = {
+      nerd_font = true,
+    }
+    assert.equals("", config._get_icons()["Function"])
+  end)
+  it("reads icons from g:aerial dict var", function()
+    vim.g.aerial = {
+      nerd_font = true,
+      icons = {
+        Function = "*",
+      },
+    }
+    assert.equals("*", config._get_icons()["Function"])
+    assert.equals("", config._get_icons()["Method"])
   end)
 
   -- This is for backwards compatibility with lsp options that used to be in the
