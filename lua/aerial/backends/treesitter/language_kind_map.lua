@@ -1,4 +1,7 @@
 return {
+  bash = {
+    function_definition = "Function",
+  },
   c = {
     enum_specifier = "Enum",
     function_declarator = "Function",
