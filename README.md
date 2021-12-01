@@ -112,6 +112,7 @@ automatically fetch symbols from treesitter.
 <details>
   <summary>Supported languages</summary>
 
+  * bash
   * c
   * c_sharp
   * cpp
