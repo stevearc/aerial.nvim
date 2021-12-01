@@ -10,7 +10,11 @@ M.is_supported = function(bufnr)
     return false
   end
   local lang = parsers.get_buf_lang(bufnr)
-  return parsers.has_parser(lang)
+  if not parsers.has_parser(lang) then
+    return false
+  end
+  local query = require("nvim-treesitter.query")
+  return query.has_query_files(lang, "aerial")
 end
 
 M.fetch_symbols_sync = function(timeout)
