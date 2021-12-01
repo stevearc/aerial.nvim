@@ -264,6 +264,25 @@ vim.g.aerial = {
   -- If close_on_select is true, aerial will automatically close after jumping to a symbol
   close_on_select = false,
 
+  -- Options for opening aerial in a floating win
+  float = {
+    -- Controls border appearance. Passed to nvim_open_win
+    border = "rounded",
+
+    -- Controls row offset from cursor. Passed to nvim_open_win
+    row = 1,
+
+    -- Controls col offset from cursor. Passed to nvim_open_win
+    col = 0,
+
+    -- The maximum height of the floating aerial window
+    max_height = 100,
+
+    -- The minimum height of the floating aerial window
+    -- To disable dynamic resizing, set this to be equal to max_height
+    min_height = 4,
+  },
+
   lsp = {
     -- Fetch document symbols when LSP diagnostics change.
     -- If you set this to false, you will need to manually fetch symbols
