@@ -1,4 +1,3 @@
-local M = {}
 local has_devicons = pcall(require, "nvim-web-devicons")
 
 local default_options = {
@@ -129,23 +128,9 @@ local function split(string, pattern)
   return ret
 end
 
-local function getkey(t, key)
-  local cur = t[key]
-  if cur ~= nil then
-    return cur
-  end
-  -- This is for backwards compatibility with lsp options that used to be in the
-  -- global namespace
-  if string.find(key, "lsp%.") == 1 then
-    cur = getkey(t, string.sub(key, 5))
-    if cur ~= nil then
-      return cur
-    end
-  end
-
-  local pieces = split(key, "\\.")
-  cur = t
-  for _, piece in ipairs(pieces) do
+local function getkey(t, path)
+  local cur = t
+  for _, piece in ipairs(path) do
     if cur == nil then
       return nil
     end
@@ -161,76 +146,98 @@ local addl_bool_opts = {
   manage_folds = true,
   nerd_font = true,
   post_jump_cmd = true,
-  filter_kind = true,
 }
 
-local function get_option(opt)
-  local varname = string.gsub(opt, "%.", "_")
-  local ret = vim.g["aerial_" .. varname]
-  if ret == nil then
-    if string.find(varname, "lsp_") == 1 then
-      -- This is for backwards compatibility with lsp options that used to be in the
-      -- global namespace
-      ret = vim.g["aerial_" .. string.sub(varname, 5)]
-    end
-    if ret == nil then
-      ret = getkey((vim.g.aerial or {}), opt)
-    end
-  end
+-- Returns (sanitized) value or the default if value is nil
+local function option_or_default(path, value)
   -- People are used to using 1/0 for v:true/v:false in vimscript
-  if type(getkey(default_options, opt)) == "boolean" or getkey(addl_bool_opts, opt) then
-    if ret == 0 then
-      ret = false
-    elseif ret == 1 then
+  local default_value = getkey(default_options, path)
+  if type(default_value) == "boolean" or getkey(addl_bool_opts, path) then
+    if value == 0 then
+      value = false
+    elseif value == 1 then
       return true
     end
   end
-  if ret == nil then
-    return getkey(default_options, opt)
+  if value == nil then
+    return default_value
   else
-    return ret
+    return value
   end
 end
 
-setmetatable(M, {
-  __index = function(_, opt)
-    return get_option(opt)
-  end,
-})
+local function get_option(path)
+  -- First look in the g:aerial_<name> variables
+  local varname = "aerial_" .. table.concat(path, "_")
+  local ret = vim.g[varname]
+  -- This is for backwards compatibility with lsp options that used to be in the
+  -- global namespace
+  local no_lsp_path
+  if ret == nil and path[1] == "lsp" then
+    no_lsp_path = vim.list_slice(path)
+    table.remove(no_lsp_path, 1)
+    varname = "aerial_" .. table.concat(no_lsp_path, "_")
+    ret = vim.g[varname]
+  end
 
-local function get_table_default(tab, key, default_key, default)
-  if type(tab) ~= "table" or vim.tbl_islist(tab) then
-    return tab
-  end
-  local ret = tab[key]
-  if ret == nil and default_key then
-    ret = tab[default_key]
-  end
   if ret == nil then
-    return default
-  else
-    return ret
+    ret = getkey((vim.g.aerial or {}), path)
+  end
+  -- For the same backwards compatibility as above
+  if ret == nil and path[1] == "lsp" then
+    ret = getkey((vim.g.aerial or {}), no_lsp_path)
+  end
+
+  return option_or_default(path, ret)
+end
+
+local Config = {}
+function Config:new(path)
+  return setmetatable({
+    __path = path or {},
+  }, {
+    __index = function(t, key)
+      local ret = rawget(Config, key)
+      if ret then
+        return ret
+      end
+      local keypath = vim.list_extend({}, t.__path)
+      vim.list_extend(keypath, split(key, "\\."))
+      ret = get_option(keypath)
+      if type(ret) == "table" and (vim.tbl_isempty(ret) or not vim.tbl_islist(ret)) then
+        return t:new(keypath)
+      end
+      return ret
+    end,
+  })
+end
+
+local M = Config:new()
+
+local function create_filetype_opt_getter(path)
+  if type(path) ~= "table" then
+    path = { path }
+  end
+  return function(bufnr)
+    local ft = vim.api.nvim_buf_get_option(bufnr or 0, "filetype")
+    local ret = get_option(path)
+    if type(ret) == "table" then
+      ret = ret[ft] or ret["_"] or ret
+    end
+    return option_or_default(path, ret)
   end
 end
 
-local function get_table_opt(opt, key, default_key, default)
-  return get_table_default(get_option(opt), key, default_key, default)
-end
+M.backends = create_filetype_opt_getter("backends")
+M.open_automatic = create_filetype_opt_getter("open_automatic")
 
 M.get_filter_kind_map = function(filetype)
   local fk = M.filter_kind
   if type(fk) == "table" and not vim.tbl_islist(fk) then
-    local filetype_fk = fk[filetype]
-    if filetype_fk == nil then
-      filetype_fk = fk["_"]
-      if filetype_fk == nil then
-        filetype_fk = default_options.filter_kind
-      end
-    end
-    fk = filetype_fk
+    fk = fk[filetype] or fk["_"] or default_options.filter_kind
   end
 
-  if fk == false then
+  if fk == false or fk == 0 then
     return setmetatable({}, {
       __index = function()
         return true
@@ -250,18 +257,6 @@ M.get_filter_kind_map = function(filetype)
       end,
     })
   end
-end
-
-M.open_automatic = function()
-  local ft = vim.api.nvim_buf_get_option(0, "filetype")
-  local ret = get_table_opt("open_automatic", ft, "_", false)
-  -- People are used to using 0 for v:false in vimscript
-  return ret and ret ~= 0
-end
-
-M.get_backends = function(bufnr)
-  local ft = vim.api.nvim_buf_get_option(bufnr or 0, "filetype")
-  return get_table_opt("backends", ft, "_", {})
 end
 
 -- stylua: ignore
@@ -315,6 +310,21 @@ local nerd_icons = {
   Collapsed     = '';
 }
 
+local function get_table_default(tab, key, default_key, default)
+  if type(tab) ~= "table" or vim.tbl_islist(tab) then
+    return tab
+  end
+  local ret = tab[key]
+  if ret == nil and default_key then
+    ret = tab[default_key]
+  end
+  if ret == nil then
+    return default
+  else
+    return ret
+  end
+end
+
 local HAS_LSPKIND, lspkind = pcall(require, "lspkind")
 
 local _last_checked = 0
@@ -323,7 +333,7 @@ M.get_icon = function(kind, collapsed)
   local icons = _last_icons
   if os.time() - _last_checked > 5 then
     local default
-    local nerd_font = get_option("nerd_font")
+    local nerd_font = M.nerd_font
     if nerd_font == "auto" then
       nerd_font = has_devicons
     end

@@ -20,7 +20,7 @@ local function get_best_backend(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  local candidates = config.get_backends(bufnr)
+  local candidates = config.backends(bufnr)
   for _, name in ipairs(candidates) do
     local backend = M.get_backend_by_name(name)
     if backend and backend.is_supported(bufnr) then

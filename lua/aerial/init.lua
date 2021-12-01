@@ -173,7 +173,7 @@ M.info = function()
   print("-----------")
   print(string.format("Filetype: %s", filetype))
   print("Configured backends:")
-  for _, name in ipairs(config.get_backends(0)) do
+  for _, name in ipairs(config.backends(0)) do
     local line = "  " .. name
     if backends.is_supported(0, name) then
       line = line .. " (supported)"
