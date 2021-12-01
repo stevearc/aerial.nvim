@@ -315,6 +315,8 @@ vim.g.aerial = {
 }
 
 -- You can also override the default icons.
+-- Note that if you are using lspkind-nvim, aerial will use it for icons
+-- https://github.com/onsails/lspkind-nvim
 vim.g.aerial = {
   icons = {
     Class          = '';
