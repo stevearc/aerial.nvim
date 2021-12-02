@@ -400,7 +400,10 @@ Key       | Command
 
 If you have [telescope](https://github.com/nvim-telescope/telescope.nvim)
 installed, there is an extension for fuzzy finding and jumping to symbols. It
-functions similarly to the builtin `lsp_document_symbols` picker.
+functions similarly to the builtin `lsp_document_symbols` picker, the main
+difference being that it uses the aerial backend for the source (e.g. LSP,
+treesitter, etc) and that it filters out some symbols (see the `filter_kind`
+option).
 
 You can activate the picker with `:Telescope aerial`
 
