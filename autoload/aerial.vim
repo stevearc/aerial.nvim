@@ -18,7 +18,3 @@ endfunction
 function! aerial#goto_symbol(symbol) abort
 	call luaeval("require('aerial.fzf').goto_symbol(_A)", a:symbol)
 endfunction
-
-function! s:mk_fzf_callback(callback)
-  return { item -> s:fzf_leave(a:callback, s:ChooserValueFromLabel(item)) }
-endfunction
