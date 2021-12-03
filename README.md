@@ -11,6 +11,10 @@ A code outline window for skimming and quick navigation
 * [Commands](#commands)
 * [Options](#options)
 * [Default keybindings](#default-keybindings)
+* [Third-party integrations](#third-party-integrations)
+  * [Telescope](#telescope)
+  * [Fzf](#fzf)
+  * [Lualine](#lualine)
 * [Highlight](#highlight)
 * [FAQ](#faq)
 
@@ -394,7 +398,7 @@ Key       | Command
 `zM`      | Collapse all nodes in the tree
 `zx`/`zX` | Sync code folding to the tree (useful if they get out of sync)
 
-## Fuzzy Finding
+## Third-party integrations
 
 ### Telescope
 
@@ -419,6 +423,38 @@ If you have [fzf](https://github.com/junegunn/fzf.vim) installed you can trigger
 fuzzy finding with `:call aerial#fzf()`. To create a mapping:
 ```vim
 nmap <silent> <leader>ds <cmd>call aerial#fzf()<cr>
+```
+
+### Lualine
+
+There is a lualine component to display the symbols for your current cursor
+position
+
+```lua
+require("lualine").setup({
+  sections = {
+    lualine_x = { "aerial" },
+
+    -- Or you can customize it
+    lualine_y = { "aerial",
+      -- The separator to be used to separate symbols in status line.
+      sep = ' ) ',
+
+      -- The number of symbols to render top-down. In order to render only 'N' last
+      -- symbols, negative numbers may be supplied. For instance, 'depth = -1' can
+      -- be used in order to render only current symbol.
+      depth = nil,
+
+      -- When 'dense' mode is on, icons are not rendered near their symbols. Only
+      -- a single icon that represents the kind of current symbol is rendered at
+      -- the beginning of status line.
+      dense = false,
+
+      -- The separator to be used to separate symbols in dense mode.
+      dense_sep = '.',
+    },
+  },
+})
 ```
 
 ## Highlight
