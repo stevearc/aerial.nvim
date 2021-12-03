@@ -38,6 +38,20 @@ def replace_section(file: str, start_pat: str, end_pat: str, lines: List[str]) -
         ofile.write("".join(all_lines))
 
 
+def read_section(filename: str, start_pat: str, end_pat: str) -> List[str]:
+    lines = []
+    with open(filename, "r", encoding="utf-8") as ifile:
+        inside_section = False
+        for line in ifile:
+            if inside_section:
+                if re.match(end_pat, line):
+                    break
+                lines.append(line)
+            elif re.match(start_pat, line):
+                inside_section = True
+    return lines
+
+
 def update_treesitter_languages():
     languages = sorted(os.listdir(os.path.join(ROOT, "queries")))
     language_lines = ["\n"] + [f"  * {l}\n" for l in languages] + ["\n"]
@@ -47,18 +61,9 @@ def update_treesitter_languages():
 
 
 def update_config_options():
+    config_file = os.path.join(ROOT, "lua", "aerial", "config.lua")
     opt_lines = ["\n", "```lua\n", "vim.g.aerial = {\n"]
-    with open(
-        os.path.join(ROOT, "lua", "aerial", "config.lua"), "r", encoding="utf-8"
-    ) as ifile:
-        copying = False
-        for line in ifile:
-            if copying:
-                if re.match(r"^}$", line):
-                    break
-                opt_lines.append(line)
-            elif re.match(r"^\s*local default_options =", line):
-                copying = True
+    opt_lines += read_section(config_file, r"^\s*local default_options =", r"^}$")
     replace_section(README, r"^## Options", r"^}$", opt_lines)
 
 
