@@ -1,7 +1,6 @@
 local backends = require("aerial.backends")
 local callbacks = require("aerial.backends.lsp.callbacks")
 local config = require("aerial.config")
-local data = require("aerial.data")
 local M = {}
 
 -- callback args changed in Neovim 0.6. See:
@@ -24,21 +23,30 @@ local function mk_handler(fn)
   end
 end
 
-local has_hook = false
-local function add_handler(preserve_callback)
-  if has_hook then
-    return
-  end
-  has_hook = true
-  local old_callback = vim.lsp.handlers["textDocument/documentSymbol"]
+local function replace_handler(name, callback, preserve_callback)
+  local old_callback = vim.lsp.handlers[name]
   local new_callback
   new_callback = function(...)
-    mk_handler(callbacks.symbol_callback)(...)
+    mk_handler(callback)(...)
     if preserve_callback then
       old_callback(...)
     end
   end
-  vim.lsp.handlers["textDocument/documentSymbol"] = new_callback
+  vim.lsp.handlers[name] = new_callback
+end
+
+local has_hook = false
+local function hook_handlers(preserve_symbol_callback)
+  if has_hook then
+    return
+  end
+  has_hook = true
+  replace_handler(
+    "textDocument/documentSymbol",
+    callbacks.symbol_callback,
+    preserve_symbol_callback
+  )
+  replace_handler("textDocument/publishDiagnostics", callbacks.on_publish_diagnostics, true)
 end
 
 M.fetch_symbols = function()
@@ -84,55 +92,21 @@ M.on_attach = function(client, bufnr, opts)
     bufnr = 0
   end
   opts = opts or {}
-  if not client.resolved_capabilities.document_symbol then
-    return
+  if client.resolved_capabilities.document_symbol then
+    hook_handlers(opts.preserve_callback)
+    mark_lsp_attached(bufnr)
+    backends.attach(bufnr, true)
   end
-  add_handler(opts.preserve_callback)
-  mark_lsp_attached(bufnr)
-  backends.attach(bufnr, true)
 end
 
 M.attach = function(bufnr)
-  if config.lsp.diagnostics_trigger_update then
-    local cmd = [[lua require'aerial.backends.lsp'._on_diagnostics_changed()]]
-    if vim.fn.exists("##DiagnosticChanged") == 1 then
-      vim.cmd(string.format(
-        [[augroup AerialDiagnostics
-      au! * <buffer>
-      au DiagnosticChanged <buffer> %s
-    augroup END
-    ]],
-        cmd
-      ))
-    else
-      vim.cmd(string.format(
-        [[augroup AerialDiagnostics
-      au!
-      au User LspDiagnosticsChanged %s
-    augroup END
-    ]],
-        cmd
-      ))
-    end
-  end
-  if config.open_automatic() and not config.lsp.diagnostics_trigger_update then
+  if config.open_automatic(bufnr) and not config.lsp.diagnostics_trigger_update then
     M.fetch_symbols()
   end
 end
 
 M.detach = function(bufnr)
   -- pass
-end
-
-M._on_diagnostics_changed = function()
-  if not backends.is_backend_attached(0, "lsp") then
-    return
-  end
-  local errors = vim.lsp.diagnostic.get_count(0, "Error")
-  -- if no errors, refresh symbols
-  if config.lsp.update_when_errors or errors == 0 or not data:has_symbols() then
-    M.fetch_symbols()
-  end
 end
 
 return M

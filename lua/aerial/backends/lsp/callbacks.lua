@@ -72,16 +72,33 @@ M.handle_symbols = function(result, bufnr)
   backends.set_symbols(bufnr, process_symbols(result, bufnr))
 end
 
+local function get_error_count(bufnr, client_id)
+  -- Neovim 0.6+
+  if vim.diagnostic then
+    return #vim.diagnostic.get(bufnr, {
+      severity = vim.lsp.protocol.DiagnosticSeverity.Error,
+      namespace = vim.lsp.diagnostic.get_namespace(client_id),
+    })
+  else
+    -- Neovim < 0.6
+    return vim.lsp.diagnostic.get_count(bufnr, "Error")
+  end
+end
+
 local results = {}
 M.symbol_callback = function(_err, result, context, _config)
+  local client_id = context.client_id
   if not result or vim.tbl_isempty(result) then
     return
   end
   local bufnr = context.bufnr
-  -- Don't update if there are diagnostics errors (or override by setting)
-  local error_count = vim.lsp.diagnostic.get_count(bufnr, "Error")
-  local has_symbols = data:has_symbols(bufnr)
-  if not config.lsp.update_when_errors and error_count > 0 and has_symbols then
+  -- Don't update if there are diagnostics errors, unless config option is set
+  -- or we have no symbols for this buffer
+  if
+    not config.lsp.update_when_errors
+    and data:has_symbols(bufnr)
+    and get_error_count(bufnr, client_id) > 0
+  then
     return
   end
 
@@ -94,6 +111,37 @@ M.symbol_callback = function(_err, result, context, _config)
     end, 100)
   end
   results[bufnr] = result
+end
+
+M.on_publish_diagnostics = function(_err, result, ctx, _config)
+  local client_id = ctx.client_id
+  local client = vim.lsp.get_client_by_id(client_id)
+  local uri = result.uri
+  local bufnr = vim.uri_to_bufnr(uri)
+  if
+    not bufnr
+    or not backends.is_backend_attached(bufnr, "lsp")
+    or not config.lsp.diagnostics_trigger_update
+    or not client.resolved_capabilities.document_symbol
+  then
+    return
+  end
+
+  -- Don't update if there are diagnostics errors, unless config option is set
+  -- or we have no symbols for this buffer
+  if not config.lsp.update_when_errors and data:has_symbols(bufnr) then
+    for _, diagnostic in ipairs(result.diagnostics) do
+      local severity = diagnostic.severity
+      if type(severity) == "string" then
+        severity = vim.lsp.protocol.DiagnosticSeverity[diagnostic.severity]
+      end
+      if severity == vim.lsp.protocol.DiagnosticSeverity.Error then
+        return
+      end
+    end
+  end
+
+  backends.get(bufnr).fetch_symbols()
 end
 
 return M
