@@ -79,7 +79,7 @@ M.symbol_callback = function(_err, result, context, _config)
   end
   local bufnr = context.bufnr
   -- Don't update if there are diagnostics errors (or override by setting)
-  local error_count = vim.lsp.diagnostic.get_count(bufnr, "Error")
+  local error_count = #vim.diagnostic.get(bufnr, { severity = "Error" })
   local has_symbols = data:has_symbols(bufnr)
   if not config.lsp.update_when_errors and error_count > 0 and has_symbols then
     return

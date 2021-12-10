@@ -128,7 +128,7 @@ M._on_diagnostics_changed = function()
   if not backends.is_backend_attached(0, "lsp") then
     return
   end
-  local errors = vim.lsp.diagnostic.get_count(0, "Error")
+  local errors = #vim.diagnostic.get(0, { severity = "Error" })
   -- if no errors, refresh symbols
   if config.lsp.update_when_errors or errors == 0 or not data:has_symbols() then
     M.fetch_symbols()
