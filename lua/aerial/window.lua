@@ -95,10 +95,6 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   end
 
   util.go_buf_no_au(aer_bufnr)
-  -- Set the filetype only after we enter the buffer so that FileType autocmds
-  -- behave properly
-  api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
-
   api.nvim_win_set_option(0, "winfixwidth", true)
   api.nvim_win_set_option(0, "number", false)
   api.nvim_win_set_option(0, "signcolumn", "no")
@@ -106,6 +102,11 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   api.nvim_win_set_option(0, "relativenumber", false)
   api.nvim_win_set_option(0, "wrap", false)
   api.nvim_win_set_var(0, "is_aerial_win", true)
+  -- Set the filetype only after we enter the buffer so that FileType autocmds
+  -- behave properly
+  api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
+  util.set_win_width(0, util.get_width(aer_bufnr))
+
   local aer_winid = api.nvim_get_current_win()
   util.go_win_no_au(my_winid)
   return aer_winid
