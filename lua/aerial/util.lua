@@ -37,10 +37,21 @@ M.set_width = function(bufnr, width)
 
   for _, winid in ipairs(vim.api.nvim_list_wins()) do
     if vim.api.nvim_win_get_buf(winid) == bufnr then
-      vim.api.nvim_win_set_width(winid, width)
+      M.set_win_width(winid, width)
     end
   end
   return width
+end
+
+M.set_win_width = function(winid, width)
+  -- adjust width if buffer has line numbers
+  if
+    vim.api.nvim_win_get_option(winid, "number")
+    or vim.api.nvim_win_get_option(winid, "relativenumber")
+  then
+    width = math.min(config.max_width, width + vim.api.nvim_win_get_option(winid, "numberwidth"))
+  end
+  vim.api.nvim_win_set_width(winid, width)
 end
 
 M.get_height = function(bufnr)

@@ -88,7 +88,6 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
       else
         vim.cmd("noau vertical rightbelow split")
       end
-      api.nvim_win_set_width(0, util.get_width(aer_bufnr))
     end
   else
     util.go_win_no_au(existing_win)
