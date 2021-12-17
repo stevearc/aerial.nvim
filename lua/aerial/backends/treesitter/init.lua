@@ -25,6 +25,7 @@ M.fetch_symbols_sync = function(timeout)
   local utils = require("nvim-treesitter.utils")
   local bufnr = 0
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
+  local include_kind = config.get_filter_kind_map(filetype)
   local parser = parsers.get_parser(bufnr)
   local items = {}
   if not parser then
@@ -34,20 +35,24 @@ M.fetch_symbols_sync = function(timeout)
   -- This will track a loose hierarchy of recent node+items.
   -- It is used to determine node parents for the tree structure.
   local stack = {}
-
+  local top_lang = parser:lang()
   parser:for_each_tree(function(tree, lang_tree)
     local lang = lang_tree:lang()
-    local ext = extensions[lang]
-    local kind_map = language_kind_map[lang]
-    local include_kind = config.get_filter_kind_map(filetype)
+    -- TODO: we don't support parsing symbols from injected languages yet.
+    -- It's hard to put them in the correct position in the symbol tree.
+    if top_lang ~= lang then
+      return
+    end
     if not query.has_query_files(lang, "aerial") then
       return
     end
+    local ext = extensions[lang]
+    local kind_map = language_kind_map[lang]
     for match in query.iter_group_results(bufnr, "aerial", tree:root(), lang) do
       local name_node = (utils.get_at_path(match, "name") or {}).node
       local type_node = (utils.get_at_path(match, "type") or {}).node
       local loc_node = (utils.get_at_path(match, "location") or {}).node
-      local parent, parent_node, level = ext.get_parent(stack, match, type_node)
+      local parent_item, parent_node, level = ext.get_parent(stack, match, type_node)
       -- Sometimes our queries will match the same node twice.
       -- If we do (type_node == parent_node), skip all after first.
       if type_node and type_node ~= parent_node then
@@ -77,7 +82,7 @@ M.fetch_symbols_sync = function(timeout)
             kind = kind,
             name = name,
             level = level,
-            parent = parent,
+            parent = parent_item,
             lnum = row + 1,
             col = col,
           }
