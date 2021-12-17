@@ -76,7 +76,7 @@ M.on_enter_buffer = function()
 end
 
 M.on_buf_delete = function(bufnr)
-  data[bufnr] = nil
+  data[tonumber(bufnr)] = nil
 end
 
 M.on_cursor_move = function()
