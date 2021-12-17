@@ -139,10 +139,13 @@ it](https://github.com/stevearc/aerial.nvim/issues/new?assignees=stevearc&labels
 
 ### Markdown
 
-Since it looks like it may be a while until we get a [treesitter parser for
-markdown](https://github.com/nvim-treesitter/nvim-treesitter/issues/872), there
-is a simple backend that does rudimentary parsing of markdown headers. It should
-work well enough in most cases.
+There is a simple custom backend that does rudimentary parsing of markdown
+headers. It should work well enough in most cases, but does not parse the full
+markdown spec.
+
+There is now an experimental [treesitter parser for
+markdown](https://github.com/nvim-treesitter/nvim-treesitter/issues/872), so you
+can install that and try the treesitter backend instead.
 
 ### Keymaps
 
