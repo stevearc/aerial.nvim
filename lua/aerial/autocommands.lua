@@ -24,7 +24,7 @@ local function close_orphans()
   end
 end
 
-M.on_enter_buffer = function()
+M.on_enter_buffer = util.throttle(function()
   backends.attach()
   if util.is_floating_win() then
     return
@@ -73,7 +73,7 @@ M.on_enter_buffer = function()
       end, 5)
     end
   end
-end
+end, { delay = 10, reset_timer_on_call = true })
 
 M.on_buf_delete = function(bufnr)
   data[tonumber(bufnr)] = nil
