@@ -263,4 +263,36 @@ M.render_centered_text = function(bufnr, text)
   vim.api.nvim_buf_set_option(bufnr, "modifiable", false)
 end
 
+M.pack = function(...)
+  return { n = select("#", ...), ... }
+end
+
+M.throttle = function(func, opts)
+  opts = opts or {}
+  opts.delay = opts.delay or 300
+  local timer = nil
+  return function(...)
+    if timer then
+      if opts.reset_timer_on_call then
+        timer:close()
+        timer = nil
+      else
+        return timer
+      end
+    end
+    local args = M.pack(...)
+    local delay = opts.delay
+    if type(delay) == "function" then
+      delay = delay(unpack(args))
+    end
+    timer = vim.loop.new_timer()
+    timer:start(delay, 0, function()
+      timer:close()
+      timer = nil
+      vim.schedule_wrap(func)(unpack(args))
+    end)
+    return timer
+  end
+end
+
 return M

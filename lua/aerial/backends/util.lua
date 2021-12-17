@@ -1,5 +1,6 @@
 local backends = require("aerial.backends")
 local config = require("aerial.config")
+local util = require("aerial.util")
 local M = {}
 
 M.add_change_watcher = function(bufnr, backend_name)
@@ -33,32 +34,21 @@ M.remove_change_watcher = function(bufnr, backend_name)
   ))
 end
 
-local timer = nil
-local function throttle_update(backend_name)
-  if timer or not backends.is_backend_attached(0, backend_name) then
-    return
+local update_symbols = util.throttle(function(backend_name)
+  if backends.is_backend_attached(0, backend_name) then
+    local backend = backends.get_backend_by_name(backend_name)
+    if backend then
+      backend.fetch_symbols()
+    end
   end
-  timer = vim.loop.new_timer()
-  timer:start(
-    config[backend_name].update_delay or 300,
-    0,
-    vim.schedule_wrap(function()
-      timer:close()
-      timer = nil
-      local backend = backends.get_backend_by_name(backend_name)
-      if backend then
-        backend.fetch_symbols()
-      end
-    end)
-  )
-end
+end, {
+  delay = function(backend_name)
+    return config[backend_name].update_delay or 300
+  end,
+  reset_timer_on_call = true,
+})
 
-M._on_text_changed = function(backend_name)
-  throttle_update(backend_name)
-end
-
-M._on_insert_leave = function(backend_name)
-  throttle_update(backend_name)
-end
+M._on_text_changed = update_symbols
+M._on_insert_leave = update_symbols
 
 return M
