@@ -126,6 +126,7 @@ automatically fetch symbols from treesitter.
   * javascript
   * json
   * lua
+  * markdown
   * python
   * rst
   * ruby
