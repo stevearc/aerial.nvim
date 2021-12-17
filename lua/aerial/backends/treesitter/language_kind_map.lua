@@ -53,6 +53,9 @@ return {
     local_function = "Function",
     ["function"] = "Function",
   },
+  markdown = {
+    atx_heading = "Interface",
+  },
   python = {
     function_definition = "Function",
     class_definition = "Class",

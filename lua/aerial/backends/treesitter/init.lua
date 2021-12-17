@@ -18,6 +18,7 @@ M.is_supported = function(bufnr)
 end
 
 M.fetch_symbols_sync = function(timeout)
+  local extensions = require("aerial.backends.treesitter.extensions")
   local parsers = require("nvim-treesitter.parsers")
   local query = require("nvim-treesitter.query")
   local ts_utils = require("nvim-treesitter.ts_utils")
@@ -27,23 +28,13 @@ M.fetch_symbols_sync = function(timeout)
   local parser = parsers.get_parser(bufnr)
   local items = {}
   if parser then
+    -- This will track a loose hierarchy of recent node+items.
+    -- It is used to determine node parents for the tree structure.
     local stack = {}
-    local function get_parent(node)
-      if #stack == 0 or not node then
-        return nil, nil, 0
-      end
-      local len = #stack
-      local last_node, last_item = unpack(stack[len])
-      if ts_utils.is_parent(last_node, node) then
-        return last_item, last_node, len
-      else
-        table.remove(stack, len)
-        return get_parent(node)
-      end
-    end
 
     parser:for_each_tree(function(tree, lang_tree)
       local lang = lang_tree:lang()
+      local ext = extensions[lang]
       local kind_map = language_kind_map[lang]
       local include_kind = config.get_filter_kind_map(filetype)
       if query.has_query_files(lang, "aerial") then
@@ -51,7 +42,9 @@ M.fetch_symbols_sync = function(timeout)
           local name_node = (utils.get_at_path(match, "name") or {}).node
           local type_node = (utils.get_at_path(match, "type") or {}).node
           local loc_node = (utils.get_at_path(match, "location") or {}).node
-          local parent, parent_node, level = get_parent(type_node)
+          local parent, parent_node, level = ext.get_parent(stack, match, type_node)
+          -- Sometimes our queries will match the same node twice.
+          -- If we do (type_node == parent_node), skip all after first.
           if type_node and type_node ~= parent_node then
             local kind = kind_map[type_node:type()]
             if not kind then
@@ -62,6 +55,8 @@ M.fetch_symbols_sync = function(timeout)
             end
             if include_kind[kind] then
               local row, col
+              -- The location capture name is optional. We default to the
+              -- location of the @type capture
               if loc_node then
                 row, col = loc_node:start()
               else
@@ -81,15 +76,16 @@ M.fetch_symbols_sync = function(timeout)
                 lnum = row + 1,
                 col = col,
               }
-              if parent then
-                if not parent.children then
-                  parent.children = {}
+              ext.postprocess(item, match)
+              if item.parent then
+                if not item.parent.children then
+                  item.parent.children = {}
                 end
-                table.insert(parent.children, item)
+                table.insert(item.parent.children, item)
               else
                 table.insert(items, item)
               end
-              table.insert(stack, { type_node, item })
+              table.insert(stack, { node = type_node, item = item })
             end
           end
         end

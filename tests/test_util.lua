@@ -7,10 +7,13 @@ M.test_file_symbols = function(backend_name, filename, expected)
   vim.cmd(string.format("edit %s", filename))
   local backend = backends.get(0)
   backend.fetch_symbols_sync()
-  M.assert_tree_equals(data[0].items, expected)
+  local items = data[0].items
+  vim.api.nvim_buf_delete(0, { force = true })
+  M.assert_tree_equals(items, expected)
 end
 
-M.assert_tree_equals = function(received, expected)
+M.assert_tree_equals = function(received, expected, path)
+  path = path or {}
   assert.equals(
     type(received),
     type(expected),
@@ -22,7 +25,12 @@ M.assert_tree_equals = function(received, expected)
   assert.equals(
     #received,
     #expected,
-    string.format("Number of symbols do not match %d ~= %d", #received, #expected)
+    string.format(
+      "Number of symbols at '/%s' do not match %d ~= %d",
+      table.concat(path, "/"),
+      #received,
+      #expected
+    )
   )
   for i, child in ipairs(received) do
     local exp_child = expected[i]
@@ -49,7 +57,9 @@ M.assert_tree_equals = function(received, expected)
     for _, field in ipairs(fields) do
       assert.equals(child[field], exp_child[field], err_msg)
     end
-    M.assert_tree_equals(child.children, exp_child.children)
+    table.insert(path, exp_child.name)
+    M.assert_tree_equals(child.children, exp_child.children, path)
+    table.remove(path, #path)
   end
 end
 
