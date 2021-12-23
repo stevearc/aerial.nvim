@@ -185,7 +185,7 @@ M.info = function()
     end
     print(line)
   end
-  print(string.format("Show symbols: %s", config.get_filter_kind_map(filetype)))
+  print(string.format("Show symbols: %s", config.get_filter_kind_map()))
 end
 
 -- @deprecated

@@ -1,11 +1,11 @@
 local backends = require("aerial.backends")
-local util = require("aerial.backends.util")
+local backend_util = require("aerial.backends.util")
+local util = require("aerial.util")
 
 local M = {}
 
 M.is_supported = function(bufnr)
-  local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
-  return filetype == "markdown"
+  return vim.tbl_contains(util.get_filetypes(bufnr), "markdown")
 end
 
 M.fetch_symbols_sync = function(timeout)
@@ -49,12 +49,12 @@ end
 M.fetch_symbols = M.fetch_symbols_sync
 
 M.attach = function(bufnr)
-  util.add_change_watcher(bufnr, "markdown")
+  backend_util.add_change_watcher(bufnr, "markdown")
   M.fetch_symbols()
 end
 
 M.detach = function(bufnr)
-  util.remove_change_watcher(bufnr, "markdown")
+  backend_util.remove_change_watcher(bufnr, "markdown")
 end
 
 return M

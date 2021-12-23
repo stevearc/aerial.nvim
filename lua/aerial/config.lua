@@ -214,15 +214,29 @@ end
 
 local M = Config:new()
 
+M.get_filetypes = function(bufnr)
+  local ft = vim.api.nvim_buf_get_option(bufnr or 0, "filetype")
+  return split(ft, "\\.")
+end
+
 local function create_filetype_opt_getter(path)
   if type(path) ~= "table" then
     path = { path }
   end
   return function(bufnr)
-    local ft = vim.api.nvim_buf_get_option(bufnr or 0, "filetype")
     local ret = get_option(path)
     if type(ret) == "table" then
-      ret = ret[ft] or ret["_"] or ret
+      local found = false
+      for _, ft in ipairs(M.get_filetypes(bufnr)) do
+        if ret[ft] then
+          found = true
+          ret = ret[ft]
+          break
+        end
+      end
+      if not found then
+        ret = ret["_"] or default_options[path]
+      end
     end
     return option_or_default(path, ret)
   end
@@ -231,10 +245,20 @@ end
 M.backends = create_filetype_opt_getter("backends")
 M.open_automatic = create_filetype_opt_getter("open_automatic")
 
-M.get_filter_kind_map = function(filetype)
+M.get_filter_kind_map = function(bufnr)
   local fk = M.filter_kind
   if type(fk) == "table" and not vim.tbl_islist(fk) then
-    fk = fk[filetype] or fk["_"] or default_options.filter_kind
+    local found = false
+    for _, filetype in ipairs(M.get_filetypes(bufnr)) do
+      if fk[filetype] then
+        fk = fk[filetype]
+        found = true
+        break
+      end
+    end
+    if not found then
+      fk = fk["_"] or default_options.filter_kind
+    end
   end
 
   if fk == false or fk == 0 then

@@ -24,8 +24,7 @@ M.fetch_symbols_sync = function(timeout)
   local ts_utils = require("nvim-treesitter.ts_utils")
   local utils = require("nvim-treesitter.utils")
   local bufnr = 0
-  local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
-  local include_kind = config.get_filter_kind_map(filetype)
+  local include_kind = config.get_filter_kind_map(bufnr)
   local parser = parsers.get_parser(bufnr)
   local items = {}
   if not parser then

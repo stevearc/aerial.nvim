@@ -62,13 +62,22 @@ describe("config", function()
     vim.api.nvim_buf_set_option(0, "filetype", "fake_ft")
     assert.equals(config.open_automatic(), true)
   end)
+  it("reads the filetype value when using a compound filetype", function()
+    vim.g.aerial = {
+      open_automatic = {
+        fake_ft = 1,
+      },
+    }
+    vim.api.nvim_buf_set_option(0, "filetype", "fake_ft.extension")
+    assert.equals(config.open_automatic(), true)
+  end)
 
   -- Filter kind
   it("reads the filter_kind option", function()
     vim.g.aerial = {
       filter_kind = { "Function" },
     }
-    local fk = config.get_filter_kind_map("foo")
+    local fk = config.get_filter_kind_map()
     assert.equals(nil, fk.Class)
     assert.equals(true, fk.Function)
   end)
@@ -76,7 +85,8 @@ describe("config", function()
     vim.g.aerial = {
       filter_kind = { foo = { "Function" } },
     }
-    local fk = config.get_filter_kind_map("foo")
+    vim.api.nvim_buf_set_option(0, "filetype", "foo")
+    local fk = config.get_filter_kind_map()
     assert.equals(nil, fk.Class)
     assert.equals(true, fk.Function)
   end)
@@ -84,6 +94,7 @@ describe("config", function()
     vim.g.aerial = {
       filter_kind = { foo = 0 },
     }
+    vim.api.nvim_buf_set_option(0, "filetype", "foo")
     local fk = config.get_filter_kind_map("foo")
     assert.equals(true, fk.Class)
     assert.equals(true, fk.Function)

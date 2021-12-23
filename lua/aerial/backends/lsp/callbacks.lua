@@ -10,8 +10,7 @@ local function get_symbol_kind_name(kind_number)
 end
 
 local function process_symbols(symbols, bufnr)
-  local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
-  local include_kind = config.get_filter_kind_map(filetype)
+  local include_kind = config.get_filter_kind_map(bufnr)
   local function _process_symbols(_symbols, parent, list, level)
     for _, symbol in ipairs(_symbols) do
       local kind = get_symbol_kind_name(symbol.kind)

@@ -295,4 +295,8 @@ M.throttle = function(func, opts)
   end
 end
 
+M.split = config.split
+
+M.get_filetypes = config.get_filetypes
+
 return M
