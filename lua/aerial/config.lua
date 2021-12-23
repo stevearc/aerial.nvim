@@ -316,22 +316,33 @@ local plain_icons = {
 
 -- stylua: ignore
 local nerd_icons = {
-  Class         = '';
-  Constructor   = '';
-  Constant      = '[c]';
-  Enum          = '';
-  EnumMember    = '[e]';
-  Event         = '[E]';
-  Field         = '[F]';
-  File          = '';
-  Function      = '';
-  Interface     = '';
-  Method        = '';
-  Module        = '[M]';
-  Package       = '';
-  String        = '[s]';
-  Struct        = '';
-  Collapsed     = '';
+  Class       = " ",
+  Color       = " ",
+  Constant    = " ",
+  Constructor = " ",
+  Enum        = " ",
+  EnumMember  = " ",
+  Event       = "",
+  Field       = " ",
+  File        = " ",
+  Folder      = " ",
+  Function    = " ",
+  Interface   = " ",
+  Keyword     = " ",
+  Method      = " ",
+  Module      = " ",
+  Operator    = " ",
+  Package     = " ",
+  Property    = " ",
+  Reference   = " ",
+  Snippet     = " ",
+  String      = "s]";
+  Struct      = " ",
+  Text        = " ",
+  Unit        = "塞",
+  Value       = " ",
+  Variable    = " ",
+  Collapsed   = " ";
 }
 
 local function get_table_default(tab, key, default_key, default)
