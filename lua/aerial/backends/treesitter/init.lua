@@ -79,7 +79,7 @@ M.fetch_symbols_sync = function(timeout)
       lnum = row + 1,
       col = col,
     }
-    ext.postprocess(item, match)
+    ext.postprocess(bufnr, item, match)
     if item.parent then
       if not item.parent.children then
         item.parent.children = {}

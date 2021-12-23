@@ -15,3 +15,7 @@
 
 (trait_item
   name: (type_identifier) @name) @type
+
+(impl_item
+  trait: (type_identifier)? @trait
+  type: (type_identifier) @rust_type) @type

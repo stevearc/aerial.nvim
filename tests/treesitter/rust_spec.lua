@@ -26,7 +26,7 @@ describe("treesitter rust", function()
           },
           {
             kind = "Struct",
-            name = "St_1",
+            name = "MyStruct",
             level = 1,
             lnum = 6,
             col = 4,
@@ -43,6 +43,38 @@ describe("treesitter rust", function()
                 name = "TraitFn",
                 level = 2,
                 lnum = 9,
+                col = 8,
+              },
+            },
+          },
+          {
+            kind = "Class",
+            name = "MyStruct",
+            level = 1,
+            lnum = 12,
+            col = 4,
+            children = {
+              {
+                kind = "Function",
+                name = "StructFn",
+                level = 2,
+                lnum = 13,
+                col = 8,
+              },
+            },
+          },
+          {
+            kind = "Class",
+            name = "MyStruct > Display",
+            level = 1,
+            lnum = 16,
+            col = 4,
+            children = {
+              {
+                kind = "Function",
+                name = "fmt",
+                level = 2,
+                lnum = 17,
                 col = 8,
               },
             },

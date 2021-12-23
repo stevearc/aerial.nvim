@@ -73,6 +73,7 @@ return {
     enum_item = "Enum",
     function_item = "Function",
     function_signature_item = "Function",
+    impl_item = "Class",
     mod_item = "Module",
     struct_item = "Struct",
     trait_item = "Interface",
