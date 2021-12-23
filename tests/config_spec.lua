@@ -105,7 +105,7 @@ describe("config", function()
     vim.g.aerial = {
       nerd_font = true,
     }
-    assert.equals("", config._get_icons()["Function"])
+    assert.equals(" ", config._get_icons()["Function"])
   end)
   it("reads icons from g:aerial dict var", function()
     vim.g.aerial = {
@@ -115,7 +115,7 @@ describe("config", function()
       },
     }
     assert.equals("*", config._get_icons()["Function"])
-    assert.equals("", config._get_icons()["Method"])
+    assert.equals(" ", config._get_icons()["Method"])
   end)
 
   -- This is for backwards compatibility with lsp options that used to be in the
