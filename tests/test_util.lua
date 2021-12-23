@@ -17,7 +17,12 @@ M.assert_tree_equals = function(received, expected, path)
   assert.equals(
     type(received),
     type(expected),
-    string.format("Symbol list mismatch %s ~= %s", type(received), type(expected))
+    string.format(
+      "Symbol list mismatch at %s: %s ~= %s",
+      table.concat(path, "/"),
+      type(received),
+      type(expected)
+    )
   )
   if type(received) ~= "table" then
     return

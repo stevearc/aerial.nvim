@@ -31,6 +31,22 @@ describe("treesitter rust", function()
             lnum = 6,
             col = 4,
           },
+          {
+            kind = "Interface",
+            name = "MyTrait",
+            level = 1,
+            lnum = 8,
+            col = 4,
+            children = {
+              {
+                kind = "Function",
+                name = "TraitFn",
+                level = 2,
+                lnum = 9,
+                col = 8,
+              },
+            },
+          },
         },
       },
     })

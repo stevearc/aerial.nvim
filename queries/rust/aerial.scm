@@ -9,3 +9,9 @@
 
 (function_item
   name: (identifier) @name) @type
+
+(function_signature_item
+  name: (identifier) @name) @type
+
+(trait_item
+  name: (type_identifier) @name) @type
