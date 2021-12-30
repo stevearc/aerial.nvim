@@ -48,7 +48,7 @@ local default_options = {
 
   -- Use symbol tree for folding. Set to true or false to enable/disable
   -- 'auto' will manage folds if your previous foldmethod was 'manual'
-  manage_folds = "auto",
+  manage_folds = false,
 
   -- The maximum width of the aerial window
   max_width = 40,
