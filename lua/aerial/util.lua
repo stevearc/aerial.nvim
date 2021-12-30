@@ -22,7 +22,7 @@ M.get_width = function(bufnr)
   if ok then
     return width
   end
-  return (config.min_width + config.max_width) / 2
+  return math.floor((config.min_width + config.max_width) / 2)
 end
 
 M.set_width = function(bufnr, width)
