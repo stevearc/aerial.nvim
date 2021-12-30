@@ -74,7 +74,6 @@ local BufData = {
   _get_config = function(self, item)
     return {
       collapsed = self:is_collapsed(item),
-      has_children = self:is_collapsable(item),
     }
   end,
 
