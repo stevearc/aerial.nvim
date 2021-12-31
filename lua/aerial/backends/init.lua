@@ -78,6 +78,12 @@ M.get = function(bufnr)
 end
 
 M.set_symbols = function(bufnr, items)
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
   local data = require("aerial.data")
   local fold = require("aerial.fold")
   local loading = require("aerial.loading")
