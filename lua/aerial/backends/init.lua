@@ -7,8 +7,17 @@ M.get_backend_by_name = function(name)
 end
 
 M.is_supported = function(bufnr, name)
+  local max_lines = config.disable_max_lines
+  if max_lines and max_lines > 0 and vim.api.nvim_buf_line_count(bufnr) > max_lines then
+    return false, "File exceeds disable_max_lines size"
+  end
   local backend = M.get_backend_by_name(name)
-  return backend and backend.is_supported(bufnr)
+  if backend then
+    local supported, err = backend.is_supported(bufnr)
+    return supported, err
+  else
+    return false, "No such backend"
+  end
 end
 
 local attach_callbacks = {}
@@ -20,11 +29,11 @@ local function get_best_backend(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
+
   local candidates = config.backends(bufnr)
   for _, name in ipairs(candidates) do
-    local backend = M.get_backend_by_name(name)
-    if backend and backend.is_supported(bufnr) then
-      return backend, name
+    if M.is_supported(bufnr, name) then
+      return M.get_backend_by_name(name), name
     end
   end
   return nil, nil
@@ -115,7 +124,7 @@ M.attach = function(bufnr, refresh)
 end
 
 -- Backends must provide the following methods:
--- is_supported(bufnr)
+-- is_supported(bufnr) -> bool, err
 -- fetch_symbols_sync(timeout)
 -- fetch_symbols()
 -- attach(bufnr)

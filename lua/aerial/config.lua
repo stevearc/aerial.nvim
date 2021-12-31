@@ -21,6 +21,9 @@ local default_options = {
   -- different buffer in the way of the preferred direction
   default_direction = "prefer_right",
 
+  -- Disable aerial on files with this many lines
+  disable_max_lines = 10000,
+
   -- A list of all symbols to display. Set to false to display all symbols.
   filter_kind = {
     "Class",
@@ -33,7 +36,7 @@ local default_options = {
   },
 
   -- Enum: split_width, full_width, last, none
-  -- Determines line highlighting mode when multiple buffers are visible
+  -- Determines line highlighting mode when multiple splits are visible
   highlight_mode = "split_width",
 
   -- When jumping to a symbol, highlight the line for this many ms

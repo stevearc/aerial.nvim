@@ -5,7 +5,10 @@ local util = require("aerial.util")
 local M = {}
 
 M.is_supported = function(bufnr)
-  return vim.tbl_contains(util.get_filetypes(bufnr), "markdown")
+  if not vim.tbl_contains(util.get_filetypes(bufnr), "markdown") then
+    return false, "Filetype is not markdown"
+  end
+  return true, nil
 end
 
 M.fetch_symbols_sync = function(timeout)

@@ -7,14 +7,17 @@ local M = {}
 M.is_supported = function(bufnr)
   local ok, parsers = pcall(require, "nvim-treesitter.parsers")
   if not ok then
-    return false
+    return false, "nvim-treesitter not found"
   end
   local lang = parsers.get_buf_lang(bufnr)
   if not parsers.has_parser(lang) then
-    return false
+    return false, string.format("No treesitter parser for %s", lang)
   end
   local query = require("nvim-treesitter.query")
-  return query.has_query_files(lang, "aerial")
+  if not query.has_query_files(lang, "aerial") then
+    return false, string.format("No query file for '%s'", lang)
+  end
+  return true, nil
 end
 
 M.fetch_symbols_sync = function(timeout)

@@ -81,7 +81,15 @@ M.is_supported = function(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  return is_lsp_attached(bufnr)
+  if not is_lsp_attached(bufnr) then
+    for _, client in pairs(vim.lsp.buf_get_clients(bufnr)) do
+      if client.resolved_capabilities.document_symbol then
+        return false, "LSP client not attached (did you call aerial.on_attach?)"
+      end
+    end
+    return false, "LSP client not attached"
+  end
+  return true, nil
 end
 
 M.on_attach = function(client, bufnr, opts)

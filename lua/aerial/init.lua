@@ -175,10 +175,11 @@ M.info = function()
   print("Configured backends:")
   for _, name in ipairs(config.backends(0)) do
     local line = "  " .. name
-    if backends.is_supported(0, name) then
+    local supported, err = backends.is_supported(0, name)
+    if supported then
       line = line .. " (supported)"
     else
-      line = line .. " (not supported)"
+      line = line .. " (not supported) [" .. err .. "]"
     end
     if backends.is_backend_attached(0, name) then
       line = line .. " (attached)"
