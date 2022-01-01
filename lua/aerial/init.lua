@@ -10,6 +10,8 @@ local window = require("aerial.window")
 
 local M = {}
 
+M.setup = config.setup
+
 M.is_open = function(bufnr)
   return window.is_open(bufnr)
 end

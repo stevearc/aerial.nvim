@@ -1,7 +1,9 @@
-local has_devicons = pcall(require, "nvim-web-devicons")
+local HAS_DEVICONS = pcall(require, "nvim-web-devicons")
+local HAS_LSPKIND, lspkind = pcall(require, "lspkind")
 
 local default_options = {
-  -- Priority list of preferred backends for aerial
+  -- Priority list of preferred backends for aerial.
+  -- This can be a filetype map (see :help aerial-filetype-map)
   backends = { "lsp", "treesitter", "markdown" },
 
   -- Enum: persist, close, auto, global
@@ -25,6 +27,8 @@ local default_options = {
   disable_max_lines = 10000,
 
   -- A list of all symbols to display. Set to false to display all symbols.
+  -- This can be a filetype map (see :help aerial-filetype-map)
+  -- To see all available values, see :help SymbolKind
   filter_kind = {
     "Class",
     "Constructor",
@@ -37,17 +41,34 @@ local default_options = {
 
   -- Enum: split_width, full_width, last, none
   -- Determines line highlighting mode when multiple splits are visible
+  -- split_width   Each open window will have its cursor location marked in the
+  --               aerial buffer. Each line will only be partially highlighted
+  --               to indicate which window is at that location.
+  -- full_width    Each open window will have its cursor location marked as a
+  --               full-width highlight in the aerial buffer.
+  -- last          Only the most-recently focused window will have its location
+  --               marked in the aerial buffer.
+  -- none          Do not show the cursor locations in the aerial window.
   highlight_mode = "split_width",
 
-  -- When jumping to a symbol, highlight the line for this many ms
-  -- Set to 0 or false to disable
+  -- When jumping to a symbol, highlight the line for this many ms.
+  -- Set to false to disable
   highlight_on_jump = 300,
 
-  -- Fold code when folding the tree. Only works when manage_folds is enabled
-  link_tree_to_folds = true,
+  -- Define symbol icons. You can also specify "<Symbol>Collapsed" to change the
+  -- icon when the tree is collapsed at that symbol, or "Collapsed" to specify a
+  -- default collapsed icon. The default icon set is determined by the
+  -- "nerd_font" option below.
+  -- If you have lspkind-nvim installed, aerial will use it for icons.
+  icons = {},
 
-  -- Fold the tree when folding code. Only works when manage_folds is enabled
+  -- When you fold code with za, zo, or zc, update the aerial tree as well.
+  -- Only works when manage_folds = true
   link_folds_to_tree = false,
+
+  -- Fold code when you open/collapse symbols in the tree.
+  -- Only works when manage_folds = true
+  link_tree_to_folds = true,
 
   -- Use symbol tree for folding. Set to true or false to enable/disable
   -- 'auto' will manage folds if your previous foldmethod was 'manual'
@@ -60,11 +81,12 @@ local default_options = {
   -- To disable dynamic resizing, set this to be equal to max_width
   min_width = 10,
 
-  -- Set default symbol icons to use Nerd Font icons (see https://www.nerdfonts.com/)
+  -- Set default symbol icons to use patched font icons (see https://www.nerdfonts.com/)
+  -- "auto" will set it to true if nvim-web-devicons or lspkind-nvim is installed.
   nerd_font = "auto",
 
-  -- Whether to open aerial automatically when entering a buffer.
-  -- Can also be specified per-filetype as a map (see below)
+  -- If true, open aerial automatically when entering a new buffer.
+  -- This can be a filetype map (see :help aerial-filetype-map)
   open_automatic = false,
 
   -- If open_automatic is true, only open aerial if the source buffer is at
@@ -81,7 +103,7 @@ local default_options = {
   -- Run this command after jumping to a symbol (false will disable)
   post_jump_cmd = "normal! zz",
 
-  -- If close_on_select is true, aerial will automatically close after jumping to a symbol
+  -- When true, aerial will automatically close after jumping to a symbol
   close_on_select = false,
 
   -- Options for opening aerial in a floating win
@@ -123,198 +145,35 @@ local default_options = {
   },
 }
 
-local function split(string, pattern)
-  local ret = {}
-  for token in string.gmatch(string, "[^" .. pattern .. "]+") do
-    table.insert(ret, token)
-  end
-  return ret
-end
-
-local function getkey(t, path)
-  local cur = t
-  for _, piece in ipairs(path) do
-    if cur == nil then
-      return nil
-    end
-    cur = cur[piece]
-  end
-  return cur
-end
-
--- config options that are valid as bools, but don't have bools as the default
-local addl_bool_opts = {
-  highlight_mode = true,
-  highlight_on_jump = true,
-  manage_folds = true,
-  nerd_font = true,
-  post_jump_cmd = true,
-}
-
--- Returns (sanitized) value or the default if value is nil
-local function option_or_default(path, value)
-  -- People are used to using 1/0 for v:true/v:false in vimscript
-  local default_value = getkey(default_options, path)
-  if type(default_value) == "boolean" or getkey(addl_bool_opts, path) then
-    if value == 0 then
-      value = false
-    elseif value == 1 then
-      return true
-    end
-  end
-  if value == nil then
-    return default_value
-  else
-    return value
-  end
-end
-
-local function get_option(path)
-  -- First look in the g:aerial_<name> variables
-  local varname = "aerial_" .. table.concat(path, "_")
-  local ret = vim.g[varname]
-  -- This is for backwards compatibility with lsp options that used to be in the
-  -- global namespace
-  local no_lsp_path
-  if ret == nil and path[1] == "lsp" then
-    no_lsp_path = vim.list_slice(path)
-    table.remove(no_lsp_path, 1)
-    varname = "aerial_" .. table.concat(no_lsp_path, "_")
-    ret = vim.g[varname]
-  end
-
-  if ret == nil then
-    ret = getkey((vim.g.aerial or {}), path)
-  end
-  -- For the same backwards compatibility as above
-  if ret == nil and path[1] == "lsp" then
-    ret = getkey((vim.g.aerial or {}), no_lsp_path)
-  end
-
-  return option_or_default(path, ret)
-end
-
-local Config = {}
-function Config:new(path)
-  return setmetatable({
-    __path = path or {},
-  }, {
-    __index = function(t, key)
-      local ret = rawget(Config, key)
-      if ret then
-        return ret
-      end
-      local keypath = vim.list_extend({}, t.__path)
-      vim.list_extend(keypath, split(key, "\\."))
-      ret = get_option(keypath)
-      if type(ret) == "table" and (vim.tbl_isempty(ret) or not vim.tbl_islist(ret)) then
-        return t:new(keypath)
-      end
-      return ret
-    end,
-  })
-end
-
-local M = Config:new()
-
-M.get_filetypes = function(bufnr)
-  local ft = vim.api.nvim_buf_get_option(bufnr or 0, "filetype")
-  return split(ft, "\\.")
-end
-
-local function create_filetype_opt_getter(path)
-  if type(path) ~= "table" then
-    path = { path }
-  end
-  return function(bufnr)
-    local ret = get_option(path)
-    if type(ret) == "table" then
-      local found = false
-      for _, ft in ipairs(M.get_filetypes(bufnr)) do
-        if ret[ft] then
-          found = true
-          ret = ret[ft]
-          break
-        end
-      end
-      if not found then
-        ret = ret["_"] or default_options[path]
-      end
-    end
-    return option_or_default(path, ret)
-  end
-end
-
-M.backends = create_filetype_opt_getter("backends")
-M.open_automatic = create_filetype_opt_getter("open_automatic")
-
-M.get_filter_kind_map = function(bufnr)
-  local fk = M.filter_kind
-  if type(fk) == "table" and not vim.tbl_islist(fk) then
-    local found = false
-    for _, filetype in ipairs(M.get_filetypes(bufnr)) do
-      if fk[filetype] then
-        fk = fk[filetype]
-        found = true
-        break
-      end
-    end
-    if not found then
-      fk = fk["_"] or default_options.filter_kind
-    end
-  end
-
-  if fk == false or fk == 0 then
-    return setmetatable({}, {
-      __index = function()
-        return true
-      end,
-      __tostring = function()
-        return "all symbols"
-      end,
-    })
-  else
-    local ret = {}
-    for _, kind in ipairs(fk) do
-      ret[kind] = true
-    end
-    return setmetatable(ret, {
-      __tostring = function()
-        return table.concat(fk, ", ")
-      end,
-    })
-  end
-end
-
 -- stylua: ignore
 local plain_icons = {
-  Array         = '[a]';
-  Boolean       = '[b]';
-  Class         = '[C]';
-  Constant      = '[const]';
-  Constructor   = '[Co]';
-  Enum          = '[E]';
-  EnumMember    = '[em]';
-  Event         = '[Ev]';
-  Field         = '[Fld]';
-  File          = '[File]';
-  Function      = '[F]';
-  Interface     = '[I]';
-  Key           = '[K]';
-  Method        = '[M]';
-  Module        = '[Mod]';
-  Namespace     = '[NS]';
-  Null          = '[-]';
-  Number        = '[n]';
-  Object        = '[o]';
-  Operator      = '[+]';
-  Package       = '[Pkg]';
-  Property      = '[P]';
-  String        = '[str]';
-  Struct        = '[S]';
-  TypeParameter = '[T]';
-  Variable      = '[V]';
-  Collapsed     = '▶';
+  Array         = "[a]",
+  Boolean       = "[b]",
+  Class         = "[C]",
+  Constant      = "[const]",
+  Constructor   = "[Co]",
+  Enum          = "[E]",
+  EnumMember    = "[em]",
+  Event         = "[Ev]",
+  Field         = "[Fld]",
+  File          = "[File]",
+  Function      = "[F]",
+  Interface     = "[I]",
+  Key           = "[K]",
+  Method        = "[M]",
+  Module        = "[Mod]",
+  Namespace     = "[NS]",
+  Null          = "[-]",
+  Number        = "[n]",
+  Object        = "[o]",
+  Operator      = "[+]",
+  Package       = "[Pkg]",
+  Property      = "[P]",
+  String        = "[str]",
+  Struct        = "[S]",
+  TypeParameter = "[T]",
+  Variable      = "[V]",
+  Collapsed     = "▶",
 }
 
 -- stylua: ignore
@@ -325,7 +184,7 @@ local nerd_icons = {
   Constructor = " ",
   Enum        = " ",
   EnumMember  = " ",
-  Event       = "",
+  Event       = " ",
   Field       = " ",
   File        = " ",
   Folder      = " ",
@@ -339,48 +198,189 @@ local nerd_icons = {
   Property    = " ",
   Reference   = " ",
   Snippet     = " ",
-  String      = "s]";
+  String      = "s]",
   Struct      = " ",
   Text        = " ",
   Unit        = "塞",
   Value       = " ",
   Variable    = " ",
-  Collapsed   = " ";
+  Collapsed   = " ",
 }
 
-local function get_table_default(tab, key, default_key, default)
-  if type(tab) ~= "table" or vim.tbl_islist(tab) then
-    return tab
+local M = {}
+
+local function split(string, pattern)
+  local ret = {}
+  for token in string.gmatch(string, "[^" .. pattern .. "]+") do
+    table.insert(ret, token)
   end
-  local ret = tab[key]
-  if ret == nil and default_key then
-    ret = tab[default_key]
-  end
-  if ret == nil then
-    return default
+  return ret
+end
+
+M.get_filetypes = function(bufnr)
+  local ft = vim.api.nvim_buf_get_option(bufnr or 0, "filetype")
+  return split(ft, "\\.")
+end
+
+local function create_filetype_opt_getter(option, default)
+  if type(option) ~= "table" or vim.tbl_islist(option) then
+    return function()
+      return option
+    end
   else
+    return function(bufnr)
+      for _, ft in ipairs(M.get_filetypes(bufnr)) do
+        if option[ft] ~= nil then
+          return option[ft]
+        end
+      end
+      return option["_"] and option["_"] or default
+    end
+  end
+end
+
+M.setup = function(opts)
+  local newconf = vim.tbl_deep_extend("force", default_options, opts or {})
+  if newconf.nerd_font == "auto" then
+    newconf.nerd_font = HAS_DEVICONS or HAS_LSPKIND
+  end
+  -- TODO for backwards compatibility
+  for k, _ in pairs(default_options.lsp) do
+    if newconf[k] ~= nil then
+      newconf.lsp[k] = newconf[k]
+      newconf[k] = nil
+    end
+  end
+  newconf.icons = vim.tbl_deep_extend(
+    "keep",
+    newconf.icons or {},
+    newconf.nerd_font and nerd_icons or plain_icons
+  )
+  for k, v in pairs(newconf) do
+    M[k] = v
+  end
+  M.open_automatic = create_filetype_opt_getter(M.open_automatic, default_options.open_automatic)
+  M.backends = create_filetype_opt_getter(M.backends, default_options.backends)
+  local get_filter_kind_list = create_filetype_opt_getter(
+    M.filter_kind,
+    default_options.filter_kind
+  )
+  M.get_filter_kind_map = function(bufnr)
+    local fk = get_filter_kind_list(bufnr)
+    if fk == false or fk == 0 then
+      return setmetatable({}, {
+        __index = function()
+          return true
+        end,
+        __tostring = function()
+          return "all symbols"
+        end,
+      })
+    else
+      local ret = {}
+      for _, kind in ipairs(fk) do
+        ret[kind] = true
+      end
+      return setmetatable(ret, {
+        __tostring = function()
+          return table.concat(fk, ", ")
+        end,
+      })
+    end
+  end
+
+  -- Clear the metatable that looks up the vim.g.aerial values
+  setmetatable(M, {})
+end
+
+local bool_opts = {
+  close_on_select = true,
+  default_bindings = true,
+  diagnostics_trigger_update = true,
+  highlight_mode = true,
+  highlight_on_jump = true,
+  link_folds_to_tree = true,
+  link_tree_to_folds = true,
+  manage_folds = true,
+  nerd_font = true,
+  open_automatic = true,
+  placement_editor_edge = true,
+  post_jump_cmd = true,
+  update_when_errors = true,
+}
+
+local function calculate_opts()
+  local opts
+  local found_var = false
+  if vim.g.aerial then
+    opts = vim.g.aerial
+    found_var = true
+  else
+    opts = vim.deepcopy(default_options)
+  end
+
+  local function walk(prefix, obj)
+    for k, v in pairs(obj) do
+      local found, var = pcall(vim.api.nvim_get_var, prefix .. k)
+      -- This is for backwards compatibility with lsp options that used to be in the
+      -- global namespace
+      if not found and prefix == "aerial_lsp_" then
+        found, var = pcall(vim.api.nvim_get_var, "aerial_" .. k)
+      end
+      if found then
+        found_var = true
+        -- Convert 0/1 to true/false for backwards compatibility
+        if bool_opts[k] and type(var) ~= "boolean" then
+          vim.notify(
+            string.format(
+              "Deprecated: aerial expects a boolean for option '%s'",
+              k,
+              vim.log.levels.WARN
+            )
+          )
+          var = var ~= 0
+        end
+        obj[k] = var
+      elseif type(v) == "table" and not vim.tbl_islist(v) then
+        walk(prefix .. k .. "_", v)
+      end
+    end
+  end
+  walk("aerial_", opts)
+
+  if found_var then
+    vim.notify(
+      "Deprecated: aerial should no longer be configured with g:aerial, you should use require('aerial').setup(). See :help aerial for more details",
+      vim.log.levels.WARN
+    )
+  end
+  return opts
+end
+
+-- For backwards compatibility: if we search for config values and we haven't
+-- yet called setup(), call setup with the config values pulled from global vars
+setmetatable(M, {
+  __index = function(t, key)
+    M.setup(calculate_opts())
+    return rawget(M, key)
+  end,
+})
+
+-- Exposed for tests
+M._get_icon = function(kind, collapsed)
+  if collapsed then
+    kind = kind .. "Collapsed"
+  end
+  local ret = M.icons[kind]
+  if ret ~= nil then
     return ret
   end
+  if collapsed then
+    ret = M.icons["Collapsed"]
+  end
+  return ret or " "
 end
 
--- Only exposed for tests
-M._get_icons = function()
-  local default
-  local nerd_font = M.nerd_font
-  if nerd_font == "auto" then
-    nerd_font = has_devicons
-  end
-  if nerd_font then
-    default = vim.tbl_extend("keep", nerd_icons, plain_icons)
-  else
-    default = plain_icons
-  end
-  return vim.tbl_extend("keep", get_option({ "icons" }) or {}, default)
-end
-
-local HAS_LSPKIND, lspkind = pcall(require, "lspkind")
-local _last_checked = 0
-local _last_icons = {}
 M.get_icon = function(kind, collapsed)
   if HAS_LSPKIND and not collapsed then
     local icon = lspkind.symbolic(kind, { with_text = false })
@@ -388,19 +388,7 @@ M.get_icon = function(kind, collapsed)
       return icon
     end
   end
-
-  local icons = _last_icons
-  if os.time() - _last_checked > 5 then
-    icons = M._get_icons()
-    _last_icons = icons
-    _last_checked = os.time()
-  end
-
-  if collapsed then
-    return get_table_default(icons, kind .. "Collapsed", "Collapsed", kind)
-  else
-    return get_table_default(icons, kind, nil, kind)
-  end
+  return M._get_icon(kind, collapsed)
 end
 
 return M

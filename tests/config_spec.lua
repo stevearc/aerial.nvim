@@ -1,8 +1,14 @@
 local config = require("aerial.config")
 
+local function reset()
+  package.loaded["aerial.config"] = nil
+  config = require("aerial.config")
+end
+
 describe("config", function()
   before_each(function()
     pcall(vim.api.nvim_del_var, "aerial")
+    reset()
   end)
 
   it("falls back to default options", function()
@@ -28,15 +34,12 @@ describe("config", function()
         row = 10,
       },
     }
-    assert.equals(config["float.row"], 10)
     assert.equals(config.float.row, 10)
-    assert.equals(config["float.col"], 0)
     assert.equals(config.float.col, 0)
   end)
 
   it("merges nested options with g:aerial_<name> vars", function()
     vim.g.aerial_float_row = 10
-    assert.equals(config["float.row"], 10)
     assert.equals(config.float.row, 10)
     vim.api.nvim_del_var("aerial_float_row")
   end)
@@ -48,7 +51,7 @@ describe("config", function()
   it("reads the filetype default value for filetype map option", function()
     vim.g.aerial = {
       open_automatic = {
-        ["_"] = 1,
+        ["_"] = true,
       },
     }
     assert.equals(config.open_automatic(), true)
@@ -56,7 +59,7 @@ describe("config", function()
   it("reads the filetype value for filetype map option", function()
     vim.g.aerial = {
       open_automatic = {
-        fake_ft = 1,
+        fake_ft = true,
       },
     }
     vim.api.nvim_buf_set_option(0, "filetype", "fake_ft")
@@ -65,7 +68,7 @@ describe("config", function()
   it("reads the filetype value when using a compound filetype", function()
     vim.g.aerial = {
       open_automatic = {
-        fake_ft = 1,
+        fake_ft = true,
       },
     }
     vim.api.nvim_buf_set_option(0, "filetype", "fake_ft.extension")
@@ -95,7 +98,7 @@ describe("config", function()
       filter_kind = { foo = 0 },
     }
     vim.api.nvim_buf_set_option(0, "filetype", "foo")
-    local fk = config.get_filter_kind_map("foo")
+    local fk = config.get_filter_kind_map()
     assert.equals(true, fk.Class)
     assert.equals(true, fk.Function)
   end)
@@ -105,7 +108,7 @@ describe("config", function()
     vim.g.aerial = {
       nerd_font = true,
     }
-    assert.equals(" ", config._get_icons()["Function"])
+    assert.equals(" ", config._get_icon("Function", false))
   end)
   it("reads icons from g:aerial dict var", function()
     vim.g.aerial = {
@@ -114,24 +117,24 @@ describe("config", function()
         Function = "*",
       },
     }
-    assert.equals("*", config._get_icons()["Function"])
-    assert.equals(" ", config._get_icons()["Method"])
+    assert.equals("*", config._get_icon("Function", false))
+    assert.equals(" ", config._get_icon("Method", false))
   end)
 
   -- This is for backwards compatibility with lsp options that used to be in the
   -- global namespace
   it("reads lsp_ options from g:aerial dict var", function()
-    assert.equals(config["lsp.update_when_errors"], true)
+    assert.equals(config.lsp.update_when_errors, true)
     vim.g.aerial = {
       update_when_errors = false,
     }
-    assert.equals(config["lsp.update_when_errors"], false)
+    reset()
     assert.equals(config.lsp.update_when_errors, false)
   end)
   it("reads lsp_ options from g:aerial_<name> vars", function()
-    assert.equals(config["lsp.update_when_errors"], true)
+    assert.equals(config.lsp.update_when_errors, true)
     vim.g.aerial_update_when_errors = false
-    assert.equals(config["lsp.update_when_errors"], false)
+    reset()
     assert.equals(config.lsp.update_when_errors, false)
     vim.api.nvim_del_var("aerial_update_when_errors")
   end)

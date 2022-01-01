@@ -9,6 +9,21 @@ from typing import List
 HERE = os.path.dirname(__file__)
 ROOT = os.path.abspath(os.path.join(HERE, os.path.pardir))
 README = os.path.join(ROOT, "README.md")
+DOC = os.path.join(ROOT, "doc", "aerial.txt")
+
+
+def indent(lines: List[str], amount: int) -> List[str]:
+    ret = []
+    for line in lines:
+        if amount >= 0:
+            ret.append(" " * amount + line)
+        else:
+            space = re.match(r"[ \t]+", line)
+            if space:
+                ret.append(line[min(abs(amount), space.span()[1]) :])
+            else:
+                ret.append(line)
+    return ret
 
 
 def replace_section(file: str, start_pat: str, end_pat: str, lines: List[str]) -> None:
@@ -62,9 +77,11 @@ def update_treesitter_languages():
 
 def update_config_options():
     config_file = os.path.join(ROOT, "lua", "aerial", "config.lua")
-    opt_lines = ["\n", "```lua\n", "vim.g.aerial = {\n"]
-    opt_lines += read_section(config_file, r"^\s*local default_options =", r"^}$")
-    replace_section(README, r"^## Options", r"^}$", opt_lines)
+    opt_lines = read_section(config_file, r"^\s*local default_options =", r"^}$")
+    replace_section(README, r'^require\("aerial"\).setup\(', r"^}\)$", opt_lines)
+    replace_section(
+        DOC, r'^\s*require\("aerial"\)\.setup', r"^\s*}\)$", indent(opt_lines, 4)
+    )
 
 
 def update_default_bindings():
