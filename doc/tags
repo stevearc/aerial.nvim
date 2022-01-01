@@ -18,10 +18,8 @@ SymbolKind	aerial.txt	/*SymbolKind*
 aerial	aerial.txt	/*aerial*
 aerial-commands	aerial.txt	/*aerial-commands*
 aerial-contents	aerial.txt	/*aerial-contents*
-aerial-faq	aerial.txt	/*aerial-faq*
 aerial-filetype-map	aerial.txt	/*aerial-filetype-map*
 aerial-functions	aerial.txt	/*aerial-functions*
-aerial-loading	aerial.txt	/*aerial-loading*
 aerial-notes	aerial.txt	/*aerial-notes*
 aerial-options	aerial.txt	/*aerial-options*
 aerial.close()	aerial.txt	/*aerial.close()*
