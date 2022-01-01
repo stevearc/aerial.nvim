@@ -247,6 +247,13 @@ be used as the default if the filetype is not present. >
         }
 <
 
+                                                                  *aerial-filter*
+If you don't see any symbols in aerial when you expect to, it could be that
+the symbol kinds are being filtered out. Aerial only shows a subset of symbols
+by default, to avoid clutter. See the "filter_kind" option in |aerial-options|
+for details, and try setting "filter_kind = false" to disable all symbol
+filtering.
+
                                                               *SymbolKind* *symbol*
 A quick note on SymbolKind. An authoritative list of valid SymbolKinds can be
 found in the LSP spec:

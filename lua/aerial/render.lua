@@ -21,7 +21,7 @@ M.update_aerial_buffer = function(buf)
   if not data:has_symbols(bufnr) then
     local lines = { "No symbols" }
     if config.lsp.filter_kind ~= false then
-      table.insert(lines, ":help filter_kind")
+      table.insert(lines, ":help aerial-filter")
     end
     util.render_centered_text(aer_bufnr, lines)
     return

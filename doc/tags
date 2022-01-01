@@ -19,6 +19,7 @@ aerial	aerial.txt	/*aerial*
 aerial-commands	aerial.txt	/*aerial-commands*
 aerial-contents	aerial.txt	/*aerial-contents*
 aerial-filetype-map	aerial.txt	/*aerial-filetype-map*
+aerial-filter	aerial.txt	/*aerial-filter*
 aerial-notes	aerial.txt	/*aerial-notes*
 aerial-options	aerial.txt	/*aerial-options*
 aerial.nvim	aerial.txt	/*aerial.nvim*
