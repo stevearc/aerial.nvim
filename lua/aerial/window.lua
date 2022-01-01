@@ -39,10 +39,13 @@ end
 
 local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   -- We used to use < and > to indicate direction.
+  -- TODO: remove these at some point
   if direction == "<" then
     direction = "left"
+    vim.notify("Invalid aerial direction '<'. Use 'left'", vim.log.levels.WARN)
   end
   if direction == ">" then
+    vim.notify("Invalid aerial direction '>'. Use 'right'", vim.log.levels.WARN)
     direction = "right"
   end
   if direction ~= "left" and direction ~= "right" and direction ~= "float" then

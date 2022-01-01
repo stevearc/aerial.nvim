@@ -12,14 +12,21 @@ local M = {}
 
 M.setup = config.setup
 
+-- Returns true if aerial is open for the current buffer
+-- (returns false inside an aerial buffer)
 M.is_open = function(bufnr)
   return window.is_open(bufnr)
 end
 
+-- Close the aerial window for the current buffer, or the current window if it
+-- is an aerial buffer
 M.close = function()
   window.close()
 end
 
+-- Open the aerial window for the current buffer.
+-- focus (bool): If true, jump to aerial window
+-- direction (enum): "left", "right", or "float"
 M.open = function(focus, direction)
   -- We get empty strings from the vim command
   if focus == "" then
@@ -33,10 +40,14 @@ M.open = function(focus, direction)
   window.open(focus, direction)
 end
 
+-- Jump to the aerial window for the current buffer, if it is open
 M.focus = function()
   window.focus()
 end
 
+-- Open or close the aerial window for the current buffer.
+-- focus (bool): If true, jump to aerial window if it is opened
+-- direction (enum): "left", "right", or "float"
 M.toggle = function(focus, direction)
   -- We get empty strings from the vim command
   if focus == "" then
@@ -50,22 +61,42 @@ M.toggle = function(focus, direction)
   return window.toggle(focus, direction)
 end
 
+-- Jump to a specific symbol. "opts" can have the following keys:
+-- index (int): The symbol to jump to. If nil, will jump to the symbol under
+--              the cursor (in the aerial buffer)
+-- split (str): Jump to the symbol in a new split. Can be "v" for vertical or
+--              "h" for horizontal. Can also be a raw command to execute (e.g.
+--              "belowright split")
+-- jump (bool): If false and in the aerial window, do not leave the aerial
+--              window. (Default true)
 M.select = function(opts)
   nav.select(opts)
 end
 
+-- Jump forwards or backwards in the symbol list.
+-- step (int): Number of symbols to jump by (default 1)
 M.next = function(step)
   nav.next(step)
 end
 
+-- Jump up the tree
+-- direction (int): -1 for backwards or 1 for forwards
+-- count (int): How many levels to jump up (default 1)
 M.up = function(direction, count)
   nav.up(direction, count)
 end
 
+-- This LSP on_attach function must be called in order to use the LSP backend
 M.on_attach = function(...)
   require("aerial.backends.lsp").on_attach(...)
 end
 
+-- Returns a list representing the symbol path to the current location.
+-- Returns empty list if none found or in an invalid buffer.
+-- Items have the following keys:
+--     name   The name of the symbol
+--     kind   The SymbolKind of the symbol
+--     icon   The icon that represents the symbol
 M.get_location = function()
   if not data:has_symbols(0) then
     return {}
@@ -101,6 +132,7 @@ local function _post_tree_mutate(new_cursor_pos)
   end
 end
 
+-- Collapse all nodes in the symbol tree
 M.tree_close_all = function()
   local new_cursor_pos
   local bufdata = data[0]
@@ -118,6 +150,7 @@ M.tree_close_all = function()
   _post_tree_mutate(new_cursor_pos)
 end
 
+-- Expand all nodes in the symbol tree
 M.tree_open_all = function()
   tree.open_all(data[0])
   if config.link_tree_to_folds then
@@ -126,6 +159,20 @@ M.tree_open_all = function()
   _post_tree_mutate()
 end
 
+-- Perform an action on the symbol tree.
+-- action (enum): can be one of the following:
+--   open    Open the tree at the selected location
+--   close   Collapse the tree at the selected location
+--   toggle  Toggle the collapsed state at the selected location
+-- opts (table): can contain the following values:
+--   index    The index of the symbol to perform the action on.
+--            Defaults to cursor location.
+--   fold     If false, do not modify folds regardless of
+--            'link_tree_to_folds' setting. (default true)
+--   recurse  If true, perform the action recursively on all children
+--            (default false)
+--   bubble   If true and current symbol has no children, perform the
+--            action on the nearest parent (default true)
 M.tree_cmd = function(action, opts)
   opts = vim.tbl_extend("keep", opts or {}, {
     index = nil,
@@ -151,6 +198,8 @@ M.tree_cmd = function(action, opts)
   end
 end
 
+-- Sync code folding with the current tree state.
+-- Ignores the 'link_tree_to_folds' config option.
 M.sync_folds = function()
   local mywin = vim.api.nvim_get_current_win()
   if util.is_aerial_buffer() then
@@ -167,8 +216,10 @@ M.sync_folds = function()
   util.go_win_no_au(mywin)
 end
 
+-- Register a callback to be called when aerial is attached to a buffer.
 M.register_attach_cb = backends.register_attach_cb
 
+-- Print out debug information for aerial
 M.info = function()
   local filetype = vim.api.nvim_buf_get_option(0, "filetype")
   print("Aerial Info")

@@ -6,7 +6,6 @@ CONTENTS                                                        *aerial-contents
     1. Commands........................................|aerial-commands|
     2. Options.........................................|aerial-options|
     3. Notes...........................................|aerial-notes|
-    4. Functions.......................................|aerial-functions|
 
 ===============================================================================
 COMMANDS                                                        *aerial-commands*
@@ -280,96 +279,6 @@ String
 Struct
 TypeParameter
 Variable
-
-===============================================================================
-FUNCTIONS                                                      *aerial-functions*
-
-aerial.on_attach({client}, {bufnr}, [{opts}]                 *aerial.on_attach()*
-    This must be called in the on_attach of your LSP client configuration. The
-    {opts} dictionary can contain the following entries:
-
-        preserve_callback    boolean. If true, will add to the
-                             textDocument/documentSymbol callback instead of
-                             replacing it.
-
-aerial.open([{focus}], [{direction}])                             *aerial.open()*
-    Open the aerial window for the current buffer. {focus} is a boolean that,
-    if true, will also jump your cursor to the aerial buffer. {direction} can
-    be either "left", "right" or "toggle" to indicate which direction of
-    vsplit to use (defaults to |g:aerial_default_direction|).
-
-aerial.close()                                                   *aerial.close()*
-    Close the aerial window for the current buffer.
-
-aerial.toggle([{focus}], [{direction}])                         *aerial.toggle()*
-    Same as |aerial.open()|, but will close the window if it is already open.
-
-aerial.focus()                                                   *aerial.focus()*
-    Jump to the aerial window for the current buffer if it exists.
-
-aerial.is_open()                                               *aerial.is_open()*
-    Returns true if the aerial window is open for the current buffer.
-
-aerial.select([{opts}])                                         *aerial.select()*
-    Jump to a specific symbol. {opts} is a table with the following optional
-    keys:
-        index    The symbol to jump to. If nil, will jump to the symbol under
-                 the cursor (in the aerial buffer)
-        split    Jump to the symbol in a new split. Can be "v" for vertical or
-                 "h" for horizontal. Can also be a raw command to execute (e.g.
-                 "belowright split")
-        jump     If `false` and in the aerial window, do not leave the aerial
-                 window. (Default `true`)
-
-aerial.next([{step}])                                             *aerial.next()*
-    Jump forwards or backwards {step} symbols (default 1). Use negative values
-    to jump backwards.
-
-aerial.up({direction}, [{count}])                                   *aerial.up()*
-    Jump up the tree {count} levels (default 1). Direction should be -1 to
-    move backwards, or 1 to move forwards.
-
-aerial.tree_cmd({action}, [{opts}])                           *aerial.tree_cmd()*
-    Perform an action on the symbol tree {action} can be one of the following
-    values:
-
-        open     Open the tree at the selected location
-        close    Collapse the tree at the selected location
-        toggle   Toggle the collapsed state at the selected location
-
-    {opts} can be a table with the following optional keys:
-
-        index    The index of the tree to perform the action on. Defaults to
-                 cursor location.
-        fold     If `false`, do not modify folds regardless of
-                 |g:aerial_link_tree_to_folds| setting. (default `true`)
-        recurse  If `true`, perform the action recursively on all children
-                 (default `false`)
-        bubble   If `true` and current symbol has no children, perform the
-                 action on the nearest parent (default `true`)
-
-aerial.tree_open_all()                                   *aerial.tree_open_all()*
-    Expand all the tree nodes.
-
-aerial.tree_close_all()                                 *aerial.tree_close_all()*
-    Collapse all the tree nodes.
-
-aerial.sync_folds()                                         *aerial.sync_folds()*
-    Sync code folding with current tree state. This ignores the
-    |g:aerial_link_tree_to_folds| setting.
-
-aerial.register_attach_cb({callback})               *aerial.register_attach_cb()*
-    Register a callback to be called when aerial is attached to a buffer. This
-    is a good place to put your kemaps.
-
-aerial.get_location()                                     *aerial.get_location()*
-    Returns a list representing the symbol path to the current location.
-    Returns empty list if none found or in an invalid buffer. Items have the
-    following keys:
-
-        name   The name of the symbol
-        kind   The |SymbolKind| of the symbol
-        icon   The icon that represents the symbol
 
 ===============================================================================
 vim:ft=help:et:ts=2:sw=2:sts=2:norl
