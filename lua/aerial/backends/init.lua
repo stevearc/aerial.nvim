@@ -20,11 +20,6 @@ M.is_supported = function(bufnr, name)
   end
 end
 
-local attach_callbacks = {}
-M.register_attach_cb = function(callback)
-  table.insert(attach_callbacks, callback)
-end
-
 local function get_best_backend(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
@@ -58,10 +53,8 @@ local function attach(bufnr, backend, name, existing_backend_name)
     require("aerial.fold").add_fold_mappings(bufnr)
   end
   set_backend(bufnr, name)
-  if not existing_backend_name then
-    for _, cb in ipairs(attach_callbacks) do
-      cb(bufnr)
-    end
+  if not existing_backend_name and config.on_attach then
+    config.on_attach(bufnr)
   end
 end
 

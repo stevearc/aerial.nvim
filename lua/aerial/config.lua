@@ -85,6 +85,10 @@ local default_options = {
   -- "auto" will set it to true if nvim-web-devicons or lspkind-nvim is installed.
   nerd_font = "auto",
 
+  -- Call this function when aerial attaches to a buffer.
+  -- Useful for setting keymaps. Takes a single `bufnr` argument.
+  on_attach = nil,
+
   -- If true, open aerial automatically when entering a new buffer.
   -- This can be a filetype map (see :help aerial-filetype-map)
   open_automatic = false,

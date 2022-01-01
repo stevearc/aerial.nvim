@@ -217,7 +217,13 @@ M.sync_folds = function()
 end
 
 -- Register a callback to be called when aerial is attached to a buffer.
-M.register_attach_cb = backends.register_attach_cb
+M.register_attach_cb = function(callback)
+  vim.notify(
+    "Deprecated(register_attach_cb): pass `on_attach` to aerial.setup() instead (see :help aerial)",
+    vim.log.levels.WARN
+  )
+  config.on_attach = callback
+end
 
 -- Print out debug information for aerial
 M.info = function()
