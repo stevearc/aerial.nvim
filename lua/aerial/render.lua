@@ -30,22 +30,28 @@ M.update_aerial_buffer = function(buf)
   local max_len = 1
   local lines = {}
   local highlights = {}
+  local kindlen = setmetatable({}, {
+    __index = function(t, kind)
+      local len = vim.fn.strlen(kind)
+      t[kind] = len
+      return len
+    end,
+  })
   data[bufnr]:visit(function(item, conf)
     local kind = config.get_icon(item.kind, conf.collapsed)
     local spacing = string.rep(" ", INDENT * item.level)
     local text = string.format("%s%s %s", spacing, kind, item.name)
     local text_cols = vim.api.nvim_strwidth(text)
-    local kindlen = vim.fn.strlen(kind)
     table.insert(highlights, {
       group = "Aerial" .. item.kind .. "Icon",
       row = row,
       col_start = INDENT * item.level,
-      col_end = INDENT * item.level + kindlen,
+      col_end = INDENT * item.level + kindlen[kind],
     })
     table.insert(highlights, {
       group = "Aerial" .. item.kind,
       row = row,
-      col_start = INDENT * item.level + kindlen,
+      col_start = INDENT * item.level + kindlen[kind],
       col_end = -1,
     })
     max_len = math.max(max_len, text_cols)
