@@ -147,7 +147,7 @@ function Data:has_symbols(bufnr)
     bufnr = vim.api.nvim_get_current_buf()
   end
   local bufdata = rawget(self, bufnr)
-  return bufdata ~= nil and not vim.tbl_isempty(bufdata.items)
+  return bufdata ~= nil and bufdata.items[1] ~= nil
 end
 
 return Data
