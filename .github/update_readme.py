@@ -69,16 +69,21 @@ def read_section(filename: str, start_pat: str, end_pat: str) -> List[str]:
 
 def update_treesitter_languages():
     languages = sorted(os.listdir(os.path.join(ROOT, "queries")))
-    language_lines = ["\n"] + [f"  * {l}\n" for l in languages] + ["\n"]
+    language_lines = ["\n"] + [f"- {l}\n" for l in languages] + ["\n"]
     replace_section(
-        README, r"^\s*<summary>Supported languages", r"^[^\s]", language_lines
+        README, r"^\s*<summary>Supported languages", r"^[^\s\-]", language_lines
     )
 
 
 def update_config_options():
     config_file = os.path.join(ROOT, "lua", "aerial", "config.lua")
     opt_lines = read_section(config_file, r"^\s*local default_options =", r"^}$")
-    replace_section(README, r'^require\("aerial"\).setup\(', r"^}\)$", opt_lines)
+    replace_section(
+        README,
+        r"^\-\- Call the setup function",
+        r"^}\)$",
+        ['require("aerial").setup({\n'] + opt_lines,
+    )
     replace_section(
         DOC, r'^\s*require\("aerial"\)\.setup', r"^\s*}\)$", indent(opt_lines, 4)
     )
@@ -94,18 +99,22 @@ def update_default_bindings():
         bindings = json.loads(txt)
     except json.JSONDecodeError as e:
         raise Exception(f"Json decode error: {txt}") from e
-    lhs = ["---"]
-    rhs = ["-------"]
+    lhs = []
+    rhs = []
     for keys, _command, desc in bindings:
         if not isinstance(keys, list):
             keys = [keys]
         lhs.append("/".join([f"`{key}`" for key in keys]))
         rhs.append(desc)
     max_lhs = max(map(len, lhs))
+    max_rhs = max(map(len, rhs))
+    lhs.insert(0, "-" * max_lhs)
+    rhs.insert(0, "-" * max_rhs)
     lines = [
-        left.ljust(max_lhs) + " | " + right + "\n" for left, right in zip(lhs, rhs)
+        "| " + left.ljust(max_lhs) + " | " + right.ljust(max_rhs) + " |\n"
+        for left, right in zip(lhs, rhs)
     ]
-    replace_section(README, r"^Key.*Command", r"^\s*$", lines)
+    replace_section(README, r"^\|\s*Key.*Command", r"^\s*$", lines)
 
 
 def main() -> None:
