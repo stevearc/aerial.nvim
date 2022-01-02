@@ -22,37 +22,62 @@ M.add_fold_mappings = function(bufnr)
   end
 end
 
-M.foldexpr = function(lnum, debug)
+local fold_cache = {}
+
+local function compute_folds(bufnr)
+  local bufdata = data[bufnr]
+  local fold_levels = {}
+  local line_no = 1
+  local fold_item = { level = -1 }
+
+  local function add_fold()
+    local levelstr = string.format("%d", fold_item.level + 1)
+    if line_no == fold_item.lnum then
+      levelstr = ">" .. levelstr
+    elseif vim.api.nvim_buf_get_lines(bufnr, line_no - 1, line_no, true)[1] == "" then
+      levelstr = "-1"
+    end
+    table.insert(fold_levels, levelstr)
+    line_no = line_no + 1
+  end
+
+  bufdata:visit(function(item)
+    while item.lnum > line_no do
+      add_fold()
+    end
+    if bufdata:is_collapsable(item) then
+      fold_item = item
+    end
+  end, {
+    incl_hidden = true,
+  })
+  for _ = line_no, vim.api.nvim_buf_line_count(bufnr), 1 do
+    add_fold()
+  end
+
+  fold_cache[bufnr] = fold_levels
+  return fold_levels
+end
+
+M.foldexpr = function(lnum)
   if util.is_aerial_buffer() then
     return "0"
   end
   if not data:has_symbols(0) then
     return "0"
   end
-  local bufdata = data[0]
-  local lastItem = {}
-  local foldItem = { level = -1 }
-  bufdata:visit(function(item)
-    lastItem = item
-    if item.lnum > lnum then
-      return true
-    elseif bufdata:is_collapsable(item) then
-      foldItem = item
-    end
-  end, {
-    incl_hidden = true,
-  })
-  local levelstr = string.format("%d", foldItem.level + 1)
-  if lnum == foldItem.lnum then
-    levelstr = ">" .. levelstr
-  elseif vim.api.nvim_buf_get_lines(0, lnum - 1, lnum, true)[1] == "" then
-    levelstr = "-1"
+  local bufnr = vim.api.nvim_get_current_buf()
+  local cache = fold_cache[bufnr]
+  -- Precompute the folds for all lines of the file. We only want to iterate
+  -- through the symbols once, and foldexpr() is called on each line number.
+  if not cache then
+    cache = compute_folds(bufnr)
   end
-
-  if debug then
-    levelstr = string.format("%s %s:%d:%d", levelstr, lastItem.name, lastItem.level, lastItem.lnum)
+  -- Clear the cache after calling foldexpr on all lines
+  if lnum == vim.api.nvim_buf_line_count(bufnr) then
+    fold_cache[bufnr] = nil
   end
-  return levelstr
+  return cache[lnum]
 end
 
 local prev_fdm = "_aerial_prev_foldmethod"
