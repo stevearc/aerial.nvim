@@ -81,7 +81,7 @@ COMMANDS                                                        *aerial-commands
                                                            *:AerialTreeSyncFolds*
 :AerialTreeSyncFolds
         Sync code folding with current tree state. This ignores the
-        |g:aerial_link_tree_to_folds| setting.
+        link_tree_to_folds setting.
 
 ===============================================================================
 OPTIONS                                                          *aerial-options*

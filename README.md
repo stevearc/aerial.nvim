@@ -361,7 +361,7 @@ filtering.
 ## Default Keybindings
 
 The default keybindings in the aerial window. You can add your own in
-`ftplugin/aerial.vim`, and remove these by setting `g:aerial_default_bindings = 0`.
+`ftplugin/aerial.vim`, and remove these by setting `default_bindings = false`.
 
 | Key       | Command                                                        |
 | --------- | -------------------------------------------------------------- |
