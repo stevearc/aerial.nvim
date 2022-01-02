@@ -136,14 +136,14 @@ M.close = function()
   end
 end
 
-M.maybe_open_automatic = function()
-  if not config.open_automatic() then
-    return false
-  end
-  if data[0]:count() < config.open_automatic_min_symbols then
-    return false
-  end
-  if api.nvim_buf_line_count(0) < config.open_automatic_min_lines then
+M.maybe_open_automatic = function(bufnr)
+  bufnr = bufnr or 0
+  if
+    not config.open_automatic(bufnr)
+    or not data:has_symbols(bufnr)
+    or (api.nvim_buf_line_count(bufnr) < config.open_automatic_min_lines)
+    or (data[bufnr]:count() < config.open_automatic_min_symbols)
+  then
     return false
   end
   M.open(false)

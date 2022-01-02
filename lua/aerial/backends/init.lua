@@ -93,7 +93,7 @@ M.set_symbols = function(bufnr, items)
   if not had_symbols then
     fold.maybe_set_foldmethod(bufnr)
     if bufnr == vim.api.nvim_get_current_buf() then
-      window.maybe_open_automatic()
+      window.maybe_open_automatic(bufnr)
     end
   end
 end
