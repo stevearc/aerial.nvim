@@ -248,4 +248,6 @@ M.info = function()
   print(string.format("Show symbols: %s", config.get_filter_kind_map()))
 end
 
+_G.aerial_foldexpr = fold.foldexpr
+
 return M

@@ -59,7 +59,7 @@ local function compute_folds(bufnr)
   return fold_levels
 end
 
-M.foldexpr = function(lnum)
+M.foldexpr = function()
   if util.is_aerial_buffer() then
     return "0"
   end
@@ -73,6 +73,7 @@ M.foldexpr = function(lnum)
   if not cache then
     cache = compute_folds(bufnr)
   end
+  local lnum = vim.v.lnum
   -- Clear the cache after calling foldexpr on all lines
   if lnum == vim.api.nvim_buf_line_count(bufnr) then
     fold_cache[bufnr] = nil
@@ -119,7 +120,7 @@ M.maybe_set_foldmethod = function(bufnr)
       vim.api.nvim_win_set_var(winid, prev_fdm, fdm)
       vim.api.nvim_win_set_var(winid, prev_fde, fde)
       vim.api.nvim_win_set_option(winid, "foldmethod", "expr")
-      vim.api.nvim_win_set_option(winid, "foldexpr", "aerial#foldexpr()")
+      vim.api.nvim_win_set_option(winid, "foldexpr", "v:lua.aerial_foldexpr()")
       if config.link_tree_to_folds then
         vim.api.nvim_win_set_option(winid, "foldlevel", 99)
       end

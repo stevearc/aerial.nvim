@@ -190,7 +190,7 @@ M.is_floating_win = function(winid)
 end
 
 M.is_managing_folds = function(winid)
-  return vim.api.nvim_win_get_option(winid or 0, "foldexpr") == "aerial#foldexpr()"
+  return vim.api.nvim_win_get_option(winid or 0, "foldexpr") == "v:lua.aerial_foldexpr()"
 end
 
 M.detect_split_direction = function(bufnr)
