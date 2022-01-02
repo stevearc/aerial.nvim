@@ -64,6 +64,7 @@ return {
     section = "Interface",
   },
   ruby = {
+    call = "Method",
     class = "Class",
     method = "Method",
     module = "Module",

@@ -62,4 +62,17 @@ M.rust = {
   end,
 }
 
+M.ruby = {
+  get_parent = default_get_parent,
+  postprocess = function(bufnr, item, match)
+    local method = (utils.get_at_path(match, "method") or {}).node
+    if method then
+      local fn = ts_utils.get_node_text(method, bufnr)[1] or "<parse error>"
+      if fn == "it" or fn == "describe" then
+        item.name = fn .. " " .. item.name
+      end
+    end
+  end,
+}
+
 return M
