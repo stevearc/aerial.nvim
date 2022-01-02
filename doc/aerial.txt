@@ -258,6 +258,24 @@ by default, to avoid clutter. See the "filter_kind" option in |aerial-options|
 for details, and try setting "filter_kind = false" to disable all symbol
 filtering.
 
+                                                          *aerial-open-automatic*
+Aerial can be configured to open automatically in certain conditions. To
+replicate the old behavior you could get with `open_automatic_min_lines` and
+`open_automatic_min_symbols`, use the following:
+>
+        local aerial = require("aerial")
+        aerial.setup({
+          open_automatic = function(bufnr)
+            -- Enforce a minimum line count
+            return vim.api.nvim_buf_line_count(bufnr) > 80
+              -- Enforce a minimum symbol count
+              and aerial.num_symbols(bufnr) > 4
+              -- A useful way to keep aerial closed when closed manually
+              and not aerial.was_closed()
+        }
+<
+
+
                                                               *SymbolKind* *symbol*
 A quick note on SymbolKind. An authoritative list of valid SymbolKinds can be
 found in the LSP spec:

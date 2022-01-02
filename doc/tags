@@ -21,6 +21,7 @@ aerial-contents	aerial.txt	/*aerial-contents*
 aerial-filetype-map	aerial.txt	/*aerial-filetype-map*
 aerial-filter	aerial.txt	/*aerial-filter*
 aerial-notes	aerial.txt	/*aerial-notes*
+aerial-open-automatic	aerial.txt	/*aerial-open-automatic*
 aerial-options	aerial.txt	/*aerial-options*
 aerial.nvim	aerial.txt	/*aerial.nvim*
 aerial.txt	aerial.txt	/*aerial.txt*

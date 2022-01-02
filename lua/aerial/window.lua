@@ -137,17 +137,17 @@ M.close = function()
 end
 
 M.maybe_open_automatic = function(bufnr)
-  bufnr = bufnr or 0
-  if
-    not config.open_automatic(bufnr)
-    or not data:has_symbols(bufnr)
-    or (api.nvim_buf_line_count(bufnr) < config.open_automatic_min_lines)
-    or (data[bufnr]:count() < config.open_automatic_min_symbols)
-  then
+  if config.open_automatic(bufnr or 0) then
+    local opts = {}
+    local orphans = util.get_aerial_orphans()
+    if orphans[1] then
+      opts.winid = orphans[1]
+    end
+    M.open(false, nil, opts)
+    return true
+  else
     return false
   end
-  M.open(false)
-  return true
 end
 
 M.open = function(focus, direction, opts)
