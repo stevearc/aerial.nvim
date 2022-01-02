@@ -176,16 +176,9 @@ Configure aerial by calling the setup() function.
       -- Useful for setting keymaps. Takes a single `bufnr` argument.
       on_attach = nil,
     
-      -- If true, open aerial automatically when entering a new buffer.
-      -- This can be a filetype map (see :help aerial-filetype-map)
+      -- Automatically open aerial when entering supported buffers.
+      -- This can be a function (see :help aerial-open-automatic)
       open_automatic = false,
-    
-      -- If open_automatic is true, only open aerial if the source buffer is at
-      -- least this long
-      open_automatic_min_lines = 0,
-    
-      -- If open_automatic is true, only open aerial if there are at least this many symbols
-      open_automatic_min_symbols = 0,
     
       -- Set to true to only open aerial at the far right/left of the editor
       -- Default behavior opens aerial relative to current window
