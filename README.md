@@ -106,10 +106,20 @@ the aerial `on_attach` callback to your config:
 
 ```lua
 -- Set up your LSP clients here, using the aerial on_attach method
-require'lspconfig'.vimls.setup{
-  on_attach = aerial.on_attach,
+require("lspconfig").vimls.setup{
+  on_attach = require("aerial").on_attach,
 }
 -- Repeat this for each language server you have configured
+```
+
+If you have your own custom `on_attach` function, call aerial's `on_attach` from
+inside it:
+
+```lua
+local function my_custom_attach(client, bufnr)
+  -- your code here
+  require("aerial").on_attach(client, bufnr)
+end
 ```
 
 ### Treesitter
