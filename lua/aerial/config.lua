@@ -89,16 +89,9 @@ local default_options = {
   -- Useful for setting keymaps. Takes a single `bufnr` argument.
   on_attach = nil,
 
-  -- If true, open aerial automatically when entering a new buffer.
-  -- This can be a filetype map (see :help aerial-filetype-map)
+  -- Automatically open aerial when entering supported buffers.
+  -- This can be a function (see :help aerial-open-automatic)
   open_automatic = false,
-
-  -- If open_automatic is true, only open aerial if the source buffer is at
-  -- least this long
-  open_automatic_min_lines = 0,
-
-  -- If open_automatic is true, only open aerial if there are at least this many symbols
-  open_automatic_min_symbols = 0,
 
   -- Set to true to only open aerial at the far right/left of the editor
   -- Default behavior opens aerial relative to current window
@@ -260,10 +253,44 @@ M.setup = function(opts)
     newconf.icons or {},
     newconf.nerd_font and nerd_icons or plain_icons
   )
+
+  -- Much of this logic is for backwards compatibility and can be removed in the
+  -- future
+  local open_automatic_min_symbols = newconf.open_automatic_min_symbols or 0
+  local open_automatic_min_lines = newconf.open_automatic_min_lines or 0
+  if
+    newconf.open_automatic_min_lines
+    or newconf.open_automatic_min_symbols
+    or type(newconf.open_automatic) == "table"
+  then
+    vim.notify(
+      "Deprecated: open_automatic should be a boolean or function. See :help aerial-open-automatic",
+      vim.log.levels.WARN
+    )
+    newconf.open_automatic_min_symbols = nil
+    newconf.open_automatic_min_lines = nil
+  end
+  if type(newconf.open_automatic) == "boolean" then
+    local open_automatic = newconf.open_automatic
+    newconf.open_automatic = function()
+      return open_automatic
+    end
+  elseif type(newconf.open_automatic) ~= "function" then
+    local open_automatic_fn = create_filetype_opt_getter(newconf.open_automatic, false)
+    newconf.open_automatic = function(bufnr)
+      if
+        vim.api.nvim_buf_line_count(bufnr) < open_automatic_min_lines
+        or require("aerial").num_symbols(bufnr) < open_automatic_min_symbols
+      then
+        return false
+      end
+      return open_automatic_fn(bufnr)
+    end
+  end
+
   for k, v in pairs(newconf) do
     M[k] = v
   end
-  M.open_automatic = create_filetype_opt_getter(M.open_automatic, default_options.open_automatic)
   M.backends = create_filetype_opt_getter(M.backends, default_options.backends)
   local get_filter_kind_list = create_filetype_opt_getter(
     M.filter_kind,

@@ -62,7 +62,7 @@ M.on_enter_buffer = util.throttle(function()
     render.update_aerial_buffer()
   else
     local orphans = util.get_aerial_orphans()
-    if not vim.tbl_isempty(orphans) then
+    if orphans[1] then
       -- open our symbols in that window
       vim.defer_fn(function()
         window.open(false, nil, { winid = orphans[1] })

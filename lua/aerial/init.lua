@@ -10,6 +10,7 @@ local window = require("aerial.window")
 
 local M = {}
 
+local was_closed = nil
 M.setup = config.setup
 
 -- Returns true if aerial is open for the current buffer
@@ -21,6 +22,7 @@ end
 -- Close the aerial window for the current buffer, or the current window if it
 -- is an aerial buffer
 M.close = function()
+  was_closed = true
   window.close()
 end
 
@@ -28,6 +30,7 @@ end
 -- focus (bool): If true, jump to aerial window
 -- direction (enum): "left", "right", or "float"
 M.open = function(focus, direction)
+  was_closed = false
   -- We get empty strings from the vim command
   if focus == "" then
     focus = true
@@ -58,7 +61,9 @@ M.toggle = function(focus, direction)
   if direction == "" then
     direction = nil
   end
-  return window.toggle(focus, direction)
+  local opened = window.toggle(focus, direction)
+  was_closed = not opened
+  return opened
 end
 
 -- Jump to a specific symbol. "opts" can have the following keys:
@@ -246,6 +251,25 @@ M.info = function()
     print(line)
   end
   print(string.format("Show symbols: %s", config.get_filter_kind_map()))
+end
+
+-- Returns the number of symbols for the buffer
+M.num_symbols = function(bufnr)
+  bufnr = bufnr or 0
+  if not data:has_symbols(bufnr) then
+    return 0
+  end
+  return data[bufnr]:count()
+end
+
+-- Returns true if the user has manually closed aerial.
+-- Will become false if the user opens aerial again.
+M.was_closed = function(default)
+  if was_closed == nil then
+    return default
+  else
+    return was_closed
+  end
 end
 
 _G.aerial_foldexpr = fold.foldexpr

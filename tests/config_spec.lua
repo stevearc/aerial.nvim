@@ -75,6 +75,15 @@ describe("config", function()
     assert.equals(config.open_automatic(), true)
   end)
 
+  it("Calls the open_automatic function", function()
+    config.setup({
+      open_automatic = function()
+        return true
+      end,
+    })
+    assert.equals(config.open_automatic(), true)
+  end)
+
   -- Filter kind
   it("reads the filter_kind option", function()
     vim.g.aerial = {
