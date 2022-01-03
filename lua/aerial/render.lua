@@ -75,6 +75,7 @@ M.update_aerial_buffer = function(buf)
   for _, hl in ipairs(highlights) do
     vim.api.nvim_buf_add_highlight(aer_bufnr, ns, hl.group, hl.row - 1, hl.col_start, hl.col_end)
   end
+  M.update_highlights(bufnr)
 end
 
 -- Update the highlighted lines in the aerial buffer
