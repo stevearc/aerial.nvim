@@ -18,3 +18,10 @@
   (function_definition) @type)
 
 (function_definition) @type
+
+(function_call
+  (identifier) @method @name (#any-of? @method "describe" "it" "before_each" "after_each" "setup" "teardown")
+  (arguments
+    (string)? @name
+    (function_definition) @type)
+) @location

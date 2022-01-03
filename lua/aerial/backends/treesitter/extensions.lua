@@ -75,4 +75,17 @@ M.ruby = {
   end,
 }
 
+M.lua = {
+  get_parent = default_get_parent,
+  postprocess = function(bufnr, item, match)
+    local method = (utils.get_at_path(match, "method") or {}).node
+    if method then
+      local fn = ts_utils.get_node_text(method, bufnr)[1] or "<parse error>"
+      if fn == "it" or fn == "describe" then
+        item.name = fn .. " " .. string.sub(item.name, 2, string.len(item.name) - 1)
+      end
+    end
+  end,
+}
+
 return M

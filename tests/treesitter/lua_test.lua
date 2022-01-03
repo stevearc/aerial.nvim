@@ -24,3 +24,9 @@ local obj = {
 }
 
 M.fn_5 = function() end
+
+describe("UnitTest", function()
+  before_each(function() end)
+  after_each(function() end)
+  it("describes the test", function() end)
+end)

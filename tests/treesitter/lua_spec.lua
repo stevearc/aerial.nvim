@@ -54,6 +54,36 @@ describe("treesitter lua", function()
         lnum = 26,
         col = 9,
       },
+      {
+        kind = "Function",
+        name = "describe UnitTest",
+        level = 0,
+        lnum = 28,
+        col = 0,
+        children = {
+          {
+            kind = "Function",
+            name = "before_each",
+            level = 1,
+            lnum = 29,
+            col = 2,
+          },
+          {
+            kind = "Function",
+            name = "after_each",
+            level = 1,
+            lnum = 30,
+            col = 2,
+          },
+          {
+            kind = "Function",
+            name = "it describes the test",
+            level = 1,
+            lnum = 31,
+            col = 2,
+          },
+        },
+      },
     })
   end)
 end)
