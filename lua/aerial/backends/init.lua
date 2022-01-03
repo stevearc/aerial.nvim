@@ -45,6 +45,7 @@ local function attach(bufnr, backend, name, existing_backend_name)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
+  set_backend(bufnr, name)
   backend.attach(bufnr)
   if existing_backend_name then
     M.get_backend_by_name(existing_backend_name).detach(bufnr)
@@ -52,7 +53,6 @@ local function attach(bufnr, backend, name, existing_backend_name)
     require("aerial.autocommands").attach_autocommands(bufnr)
     require("aerial.fold").add_fold_mappings(bufnr)
   end
-  set_backend(bufnr, name)
   if not existing_backend_name and config.on_attach then
     config.on_attach(bufnr)
   end
