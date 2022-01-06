@@ -35,6 +35,7 @@ local default_options = {
     "Enum",
     "Function",
     "Interface",
+    "Module",
     "Method",
     "Struct",
   },
