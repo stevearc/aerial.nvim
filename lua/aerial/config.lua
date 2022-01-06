@@ -103,6 +103,9 @@ local default_options = {
   -- When true, aerial will automatically close after jumping to a symbol
   close_on_select = false,
 
+  -- Show box drawing characters for the tree hierarchy
+  show_guides = false,
+
   -- Options for opening aerial in a floating win
   float = {
     -- Controls border appearance. Passed to nvim_open_win

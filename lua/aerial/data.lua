@@ -71,23 +71,25 @@ local BufData = {
     return item
   end,
 
-  _get_config = function(self, item)
-    return {
-      collapsed = self:is_collapsed(item),
-    }
-  end,
-
   visit = function(self, callback, opts)
     opts = vim.tbl_extend("keep", opts or {}, {
       incl_hidden = false,
     })
+    -- Stack of bools where each one indicates if the item at that level is the
+    -- last of its siblings
+    local is_last_by_level = {}
     local function visit_item(item)
-      local ret = callback(item, self:_get_config(item))
+      local ret = callback(item, {
+        collapsed = self:is_collapsed(item),
+        is_last_by_level = is_last_by_level,
+      })
       if ret then
         return ret
       end
       if item.children and (opts.incl_hidden or not self:is_collapsed(item)) then
-        for _, child in ipairs(item.children) do
+        local children_len = #item.children
+        for i, child in ipairs(item.children) do
+          is_last_by_level[child.level] = i == children_len
           ret = visit_item(child)
           if ret then
             return ret

@@ -4,8 +4,6 @@ local loading = require("aerial.loading")
 local util = require("aerial.util")
 local M = {}
 
-local INDENT = 2
-
 M.clear_buffer = function(bufnr)
   vim.api.nvim_buf_set_option(bufnr, "modifiable", true)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, {})
@@ -30,7 +28,7 @@ M.update_aerial_buffer = function(buf)
   local max_len = 1
   local lines = {}
   local highlights = {}
-  local kindlen = setmetatable({}, {
+  local string_len = setmetatable({}, {
     __index = function(t, kind)
       local len = vim.fn.strlen(kind)
       t[kind] = len
@@ -39,19 +37,40 @@ M.update_aerial_buffer = function(buf)
   })
   data[bufnr]:visit(function(item, conf)
     local kind = config.get_icon(item.kind, conf.collapsed)
-    local spacing = string.rep(" ", INDENT * item.level)
+    local spacing
+    if config.show_guides then
+      spacing = ""
+      for i = 1, item.level do
+        local is_last = conf.is_last_by_level[i]
+        if i == item.level then
+          if is_last then
+            spacing = spacing .. "└─"
+          else
+            spacing = spacing .. "├─"
+          end
+        else
+          if is_last then
+            spacing = spacing .. "  "
+          else
+            spacing = spacing .. "│ "
+          end
+        end
+      end
+    else
+      spacing = string.rep("  ", item.level)
+    end
     local text = string.format("%s%s %s", spacing, kind, item.name)
     local text_cols = vim.api.nvim_strwidth(text)
     table.insert(highlights, {
       group = "Aerial" .. item.kind .. "Icon",
       row = row,
-      col_start = INDENT * item.level,
-      col_end = INDENT * item.level + kindlen[kind],
+      col_start = string_len[spacing],
+      col_end = string_len[spacing] + string_len[kind],
     })
     table.insert(highlights, {
       group = "Aerial" .. item.kind,
       row = row,
-      col_start = INDENT * item.level + kindlen[kind],
+      col_start = string_len[spacing] + string_len[kind],
       col_end = -1,
     })
     max_len = math.max(max_len, text_cols)
