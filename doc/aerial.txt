@@ -122,6 +122,7 @@ Configure aerial by calling the setup() function.
         "Enum",
         "Function",
         "Interface",
+        "Module",
         "Method",
         "Struct",
       },

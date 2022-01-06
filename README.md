@@ -145,6 +145,7 @@ automatically fetch symbols from treesitter.
 - java
 - javascript
 - json
+- julia
 - lua
 - markdown
 - python
@@ -247,6 +248,7 @@ require("aerial").setup({
     "Enum",
     "Function",
     "Interface",
+    "Module",
     "Method",
     "Struct",
   },
