@@ -48,6 +48,14 @@ return {
   json = {
     object = "Class",
   },
+  julia = {
+    const_statement = "Constant",
+    abstract_definition = "Interface",
+    call_expression = "Function",
+    function_definition = "Function",
+    module_definition = "Module",
+    struct_definition = "Class",
+  },
   lua = {
     function_definition = "Function",
     local_function = "Function",

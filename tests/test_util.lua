@@ -15,8 +15,8 @@ end
 M.assert_tree_equals = function(received, expected, path)
   path = path or {}
   assert.equals(
-    type(received),
     type(expected),
+    type(received),
     string.format(
       "Symbol list mismatch at %s: %s ~= %s",
       table.concat(path, "/"),
@@ -28,8 +28,8 @@ M.assert_tree_equals = function(received, expected, path)
     return
   end
   assert.equals(
-    #received,
     #expected,
+    #received,
     string.format(
       "Number of symbols at '/%s' do not match %d ~= %d",
       table.concat(path, "/"),
@@ -60,7 +60,7 @@ M.assert_tree_equals = function(received, expected, path)
     )
     local fields = { "kind", "name", "level", "lnum", "col" }
     for _, field in ipairs(fields) do
-      assert.equals(child[field], exp_child[field], err_msg)
+      assert.equals(exp_child[field], child[field], err_msg)
     end
     table.insert(path, exp_child.name)
     M.assert_tree_equals(child.children, exp_child.children, path)
