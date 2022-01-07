@@ -17,3 +17,6 @@
 (const_statement
   (variable_declaration
     . (identifier) @name)) @type
+
+(macro_definition
+  name: (identifier) @name) @type

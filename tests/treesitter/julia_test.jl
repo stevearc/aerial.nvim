@@ -14,4 +14,7 @@ struct MyStruct <: MyType
     method() = nothing
 end
 
+macro mac(expr)
+end
+
 end

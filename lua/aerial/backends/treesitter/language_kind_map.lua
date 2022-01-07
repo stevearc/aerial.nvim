@@ -53,6 +53,7 @@ return {
     abstract_definition = "Interface",
     call_expression = "Function",
     function_definition = "Function",
+    macro_definition = "Function",
     module_definition = "Module",
     struct_definition = "Class",
   },

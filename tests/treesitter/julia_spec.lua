@@ -61,6 +61,13 @@ describe("treesitter julia", function()
               },
             },
           },
+          {
+            kind = "Function",
+            name = "mac",
+            level = 1,
+            lnum = 17,
+            col = 0,
+          },
         },
       },
     })
