@@ -14,6 +14,10 @@ A clear and concise description of what the bug is.
 - OS: [windows/linux/mac]
 - Neovim version:
 - AerialInfo: [output of :AerialInfo]
+- Aerial config:
+```lua
+-- Paste your call to require("aerial").setup(...) in here
+```
 
 **To Reproduce**
 Steps to reproduce the behavior:
