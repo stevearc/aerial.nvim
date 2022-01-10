@@ -109,6 +109,10 @@ M.update_highlights = function(buf)
   end
   local bufdata = data[bufnr]
   local winids = util.get_fixed_wins(bufnr)
+  -- Take out any winids that don't have position data
+  winids = vim.tbl_filter(function(wid)
+    return bufdata.positions[wid]
+  end, winids)
   local ns = vim.api.nvim_create_namespace("aerial-line")
   vim.api.nvim_buf_clear_namespace(aer_bufnr, ns, 0, -1)
   if vim.tbl_isempty(winids) then
@@ -117,7 +121,7 @@ M.update_highlights = function(buf)
   local hl_width = math.floor(util.get_width(aer_bufnr) / #winids)
 
   if hl_mode == "last" then
-    local row = data[bufnr].last_position
+    local row = bufdata.last_position
     vim.api.nvim_buf_add_highlight(aer_bufnr, ns, "AerialLine", row - 1, 0, -1)
     return
   end
