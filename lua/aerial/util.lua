@@ -60,7 +60,7 @@ M.get_height = function(bufnr)
     return height
   end
   local max_height = math.min(config.float.max_height, vim.o.lines - vim.o.cmdheight)
-  return math.max(config.float.min_height, max_height / 2)
+  return math.max(config.float.min_height, math.floor(max_height / 2))
 end
 
 M.set_height = function(bufnr, height)
