@@ -79,6 +79,13 @@ describe("treesitter rust", function()
               },
             },
           },
+          {
+            kind = "Class",
+            name = "MyStruct > GenericTrait",
+            level = 1,
+            lnum = 21,
+            col = 4,
+          },
         },
       },
     })

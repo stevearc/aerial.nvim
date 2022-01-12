@@ -18,4 +18,5 @@ mod mod_1 {
             write!(f, "hi");
         }
     }
+    impl<T> GenericTrait for MyStruct<T> {}
 }

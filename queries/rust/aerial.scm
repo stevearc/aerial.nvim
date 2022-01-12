@@ -19,3 +19,8 @@
 (impl_item
   trait: (type_identifier)? @trait
   type: (type_identifier) @rust_type) @type
+
+(impl_item
+  trait: (type_identifier)? @trait
+  type: (generic_type
+    type: (type_identifier) @rust_type)) @type
