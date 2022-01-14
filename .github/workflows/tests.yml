@@ -6,7 +6,7 @@ jobs:
   run_tests:
     strategy:
       matrix:
-        nvim_tag: [v0.5.0, v0.5.1, v0.6.0]
+        nvim_tag: [v0.5.0, v0.5.1, v0.6.0, v0.6.1]
 
     name: Run tests
     runs-on: ubuntu-latest
