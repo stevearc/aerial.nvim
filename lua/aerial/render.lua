@@ -83,7 +83,7 @@ M.update_aerial_buffer = function(buf)
 
   -- Insert lines into buffer
   for i, line in ipairs(lines) do
-    lines[i] = util.rpad(line, width)
+    lines[i] = util.rpad(line, width, config.padchar)
   end
   vim.api.nvim_buf_set_option(aer_bufnr, "modifiable", true)
   vim.api.nvim_buf_set_lines(aer_bufnr, 0, -1, false, lines)

@@ -1,4 +1,5 @@
 local util = require("aerial.util")
+local config = require("aerial.config")
 local M = {}
 
 M.keys = {
@@ -81,7 +82,7 @@ M.show = function()
   for i = 1, #lhs do
     local left = lhs[i]
     local right = rhs[i]
-    local line = string.format(" %s   %s", util.rpad(left, max_left), right)
+    local line = string.format(" %s   %s", util.rpad(left, max_left, config.padchar), right)
     max_line = math.max(max_line, vim.api.nvim_strwidth(line))
     table.insert(lines, line)
   end
