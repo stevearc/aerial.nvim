@@ -88,4 +88,21 @@ M.lua = {
   end,
 }
 
+M.javascript = {
+  get_parent = default_get_parent,
+  postprocess = function(bufnr, item, match)
+    local method = (utils.get_at_path(match, "method") or {}).node
+    local modifier = (utils.get_at_path(match, "modifier") or {}).node
+    local string = (utils.get_at_path(match, "string") or {}).node
+    if method and string then
+      local fn = ts_utils.get_node_text(method, bufnr)[1] or "<parse error>"
+      if modifier then
+        fn = fn .. "." .. (ts_utils.get_node_text(modifier, bufnr)[1] or "<parse error>")
+      end
+      local str = ts_utils.get_node_text(string, bufnr)[1] or "<parse error>"
+      item.name = fn .. " " .. str
+    end
+  end,
+}
+
 return M

@@ -41,6 +41,7 @@ return {
     method_declaration = "Method",
   },
   javascript = {
+    call_expression = "Function",
     class_declaration = "Class",
     function_declaration = "Function",
     method_definition = "Method",
