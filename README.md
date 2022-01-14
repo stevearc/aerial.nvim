@@ -307,6 +307,11 @@ require("aerial").setup({
   -- This can be a function (see :help aerial-open-automatic)
   open_automatic = false,
 
+  -- The character that fills the empty space between the end of the
+  -- symbol name and the edge of the aerial window
+  -- (leaving this as "" will cause partial highlighting on current symbol)
+  padchar = " ",
+
   -- Set to true to only open aerial at the far right/left of the editor
   -- Default behavior opens aerial relative to current window
   placement_editor_edge = false,
