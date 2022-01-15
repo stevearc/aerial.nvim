@@ -97,6 +97,11 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   end
 
   util.go_buf_no_au(aer_bufnr)
+  vim.opt_local.listchars:remove("trail")
+  vim.opt_local.listchars:remove("eol")
+  vim.opt_local.listchars:remove("space")
+  vim.opt_local.listchars:remove("multispace")
+  vim.opt_local.listchars:remove("lead")
   api.nvim_win_set_option(0, "winfixwidth", true)
   api.nvim_win_set_option(0, "number", false)
   api.nvim_win_set_option(0, "signcolumn", "no")
