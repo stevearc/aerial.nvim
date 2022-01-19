@@ -1,5 +1,6 @@
 local data = require("aerial.data")
 local backends = require("aerial.backends")
+local config = require("aerial.config")
 local M = {}
 
 local function summarize(received, expected)
@@ -27,7 +28,10 @@ local function summarize(received, expected)
 end
 
 M.test_file_symbols = function(backend_name, filename, expected)
-  vim.g.aerial_backends = { backend_name }
+  config.setup({
+    backends = { backend_name },
+    filter_kind = false,
+  })
   vim.cmd(string.format("edit %s", filename))
   local backend = backends.get(0)
   backend.fetch_symbols_sync()
