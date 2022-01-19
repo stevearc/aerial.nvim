@@ -59,9 +59,8 @@ return {
     struct_definition = "Class",
   },
   lua = {
+    function_declaration = "Function",
     function_definition = "Function",
-    local_function = "Function",
-    ["function"] = "Function",
   },
   markdown = {
     atx_heading = "Interface",

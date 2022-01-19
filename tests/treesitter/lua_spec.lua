@@ -22,14 +22,14 @@ describe("treesitter lua", function()
         name = "fn_3",
         level = 0,
         lnum = 9,
-        col = 13,
+        col = 0,
       },
       {
         kind = "Function",
         name = "fn_4",
         level = 0,
         lnum = 13,
-        col = 7,
+        col = 0,
         children = {
           {
             kind = "Function",
@@ -45,14 +45,14 @@ describe("treesitter lua", function()
         name = "meth_1",
         level = 0,
         lnum = 21,
-        col = 11,
+        col = 2,
       },
       {
         kind = "Function",
         name = "M.fn_5",
         level = 0,
         lnum = 26,
-        col = 9,
+        col = 0,
       },
       {
         kind = "Function",
