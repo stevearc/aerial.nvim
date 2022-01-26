@@ -24,6 +24,7 @@ local obj = {
 }
 
 M.fn_5 = function() end
+function M.fn_6() end
 
 describe("UnitTest", function()
   before_each(function() end)
