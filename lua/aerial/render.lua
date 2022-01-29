@@ -39,29 +39,33 @@ M.update_aerial_buffer = function(buf)
     local kind = config.get_icon(item.kind, conf.collapsed)
     local spacing
     if config.show_guides then
-      spacing = ""
+      local last_spacing = 0
+      local guides = {}
       for i = 1, item.level do
         local is_last = conf.is_last_by_level[i]
         if i == item.level then
           if is_last then
-            spacing = spacing .. config.guides.last_item
+            table.insert(guides, config.guides.last_item)
           else
-            spacing = spacing .. config.guides.mid_item
+            table.insert(guides, config.guides.mid_item)
           end
         else
           if is_last then
-            spacing = spacing .. config.guides.whitespace
+            table.insert(guides, config.guides.whitespace)
           else
-            spacing = spacing .. config.guides.nested_top
+            table.insert(guides, config.guides.nested_top)
           end
         end
+        local hl_end = last_spacing + string_len[guides[i]]
+        table.insert(highlights, {
+          group = string.format("AerialGuide%d", i),
+          row = row,
+          col_start = last_spacing,
+          col_end = hl_end,
+        })
+        last_spacing = hl_end
       end
-      table.insert(highlights, {
-        group = "AerialGuide",
-        row = row,
-        col_start = 0,
-        col_end = string_len[spacing],
-      })
+      spacing = table.concat(guides, "")
     else
       spacing = string.rep("  ", item.level)
     end

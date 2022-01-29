@@ -48,6 +48,15 @@ highlight default link AerialLine QuickFixLine
 
 " The guides when show_guide = true
 highlight default link AerialGuide Comment
+highlight default link AerialGuide1 AerialGuide
+highlight default link AerialGuide2 AerialGuide
+highlight default link AerialGuide3 AerialGuide
+highlight default link AerialGuide4 AerialGuide
+highlight default link AerialGuide5 AerialGuide
+highlight default link AerialGuide6 AerialGuide
+highlight default link AerialGuide7 AerialGuide
+highlight default link AerialGuide8 AerialGuide
+highlight default link AerialGuide9 AerialGuide
 
 " The icon displayed to the left of the symbol
 highlight default link AerialArrayIcon         Identifier
