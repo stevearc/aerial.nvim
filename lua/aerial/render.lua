@@ -44,15 +44,15 @@ M.update_aerial_buffer = function(buf)
         local is_last = conf.is_last_by_level[i]
         if i == item.level then
           if is_last then
-            spacing = spacing .. "└─"
+            spacing = spacing .. config.guides.last_item
           else
-            spacing = spacing .. "├─"
+            spacing = spacing .. config.guides.mid_item
           end
         else
           if is_last then
-            spacing = spacing .. "  "
+            spacing = spacing .. config.guides.whitespace
           else
-            spacing = spacing .. "│ "
+            spacing = spacing .. config.guides.nested_top
           end
         end
       end
