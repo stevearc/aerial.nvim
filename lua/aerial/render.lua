@@ -56,6 +56,12 @@ M.update_aerial_buffer = function(buf)
           end
         end
       end
+      table.insert(highlights, {
+        group = "AerialGuide",
+        row = row,
+        col_start = 0,
+        col_end = string_len[spacing],
+      })
     else
       spacing = string.rep("  ", item.level)
     end

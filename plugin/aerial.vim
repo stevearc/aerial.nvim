@@ -46,6 +46,9 @@ aug END
 " The line that shows where your cursor(s) are
 highlight default link AerialLine QuickFixLine
 
+" The guides when show_guide = true
+highlight default link AerialGuide Comment
+
 " The icon displayed to the left of the symbol
 highlight default link AerialArrayIcon         Identifier
 highlight default link AerialBooleanIcon       Identifier
