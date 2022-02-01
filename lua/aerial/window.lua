@@ -71,26 +71,23 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
         border = config.float.border,
       })
     else
-      local winids
+      local modifier
       if config.placement_editor_edge then
-        winids = util.get_fixed_wins()
+        modifier = direction == "left" and "topleft" or "botright"
       else
-        winids = util.get_fixed_wins(bufnr)
+        local winids = util.get_fixed_wins(bufnr)
+        local split_target
+        if direction == "left" then
+          split_target = winids[1]
+        else
+          split_target = winids[#winids]
+        end
+        if my_winid ~= split_target then
+          util.go_win_no_au(split_target)
+        end
+        modifier = direction == "left" and "leftabove" or "rightbelow"
       end
-      local split_target
-      if direction == "left" then
-        split_target = winids[1]
-      else
-        split_target = winids[#winids]
-      end
-      if my_winid ~= split_target then
-        util.go_win_no_au(split_target)
-      end
-      if direction == "left" then
-        vim.cmd("noau vertical leftabove split")
-      else
-        vim.cmd("noau vertical rightbelow split")
-      end
+      vim.cmd(string.format("noau vertical %s split", modifier))
     end
   else
     util.go_win_no_au(existing_win)
