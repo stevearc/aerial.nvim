@@ -30,6 +30,8 @@ local function process_symbols(symbols, bufnr)
           parent = parent,
           lnum = range.start.line + 1,
           col = range.start.character,
+          end_lnum = range["end"].line + 1,
+          end_col = range["end"].character,
         }
 
         -- Skip this symbol if it's in the same location as the last one.

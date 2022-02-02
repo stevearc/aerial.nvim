@@ -47,6 +47,7 @@ local default_options = {
   depth = nil,
   dense = false,
   dense_sep = ".",
+  exact = true,
 }
 
 local function format_status(symbols, depth, separator, icons_enabled)
@@ -86,7 +87,7 @@ function M:update_status()
 end
 
 function M:get_status_normal()
-  local symbols = aerial.get_location()
+  local symbols = aerial.get_location(self.options.exact)
   local status = format_status(
     symbols,
     self.options.depth,
@@ -97,7 +98,7 @@ function M:get_status_normal()
 end
 
 function M:get_status_dense()
-  local symbols = aerial.get_location()
+  local symbols = aerial.get_location(self.options.exact)
   local status = format_status(
     symbols,
     self.options.depth,

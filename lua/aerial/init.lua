@@ -97,12 +97,18 @@ M.on_attach = function(...)
 end
 
 -- Returns a list representing the symbol path to the current location.
+-- exact (bool): If true, only return symbols if we are exactly inside the
+--               hierarchy. When false, will return the closest symbol.
 -- Returns empty list if none found or in an invalid buffer.
 -- Items have the following keys:
 --     name   The name of the symbol
 --     kind   The SymbolKind of the symbol
 --     icon   The icon that represents the symbol
-M.get_location = function()
+M.get_location = function(exact)
+  -- exact defaults to true
+  if exact == nil then
+    exact = true
+  end
   if not data:has_symbols(0) then
     return {}
   end
@@ -113,13 +119,27 @@ M.get_location = function()
     return {}
   end
   local item = bufdata:item(pos.lnum)
+  local cur = vim.api.nvim_win_get_cursor(0)
   local ret = {}
   while item do
+    if exact then
+      if not item.end_lnum or not item.end_col then
+        -- end_lnum/end_col isn't supported by all backends yet
+      elseif
+        item.lnum > cur[1]
+        or item.end_lnum < cur[1]
+        or (item.lnum == cur[1] and item.col > cur[2])
+        or (item.end_lnum == cur[1] and item.end_col < cur[2])
+      then
+        goto continue
+      end
+    end
     table.insert(ret, 1, {
       kind = item.kind,
       icon = config.get_icon(item.kind),
       name = item.name,
     })
+    ::continue::
     item = item.parent
   end
   return ret
