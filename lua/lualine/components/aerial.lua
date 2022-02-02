@@ -108,7 +108,7 @@ function M:get_status_dense()
     false
   )
 
-  if self.options.icons_enabled then
+  if self.options.icons_enabled and not vim.tbl_isempty(symbols) then
     status = string.format("%s %s", symbols[#symbols].icon, status)
   end
   return status
