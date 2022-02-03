@@ -6,7 +6,7 @@ local BufData = {
     local new = {
       items = {},
       positions = {},
-      last_position = 1,
+      last_win = -1,
       collapsed = {},
     }
     setmetatable(new, { __index = t })

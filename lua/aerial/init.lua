@@ -118,28 +118,19 @@ M.get_location = function(exact)
   if not pos then
     return {}
   end
-  local item = bufdata:item(pos.lnum)
-  local cur = vim.api.nvim_win_get_cursor(0)
+  local item
+  if exact then
+    item = pos.exact_symbol
+  else
+    item = pos.closest_symbol
+  end
   local ret = {}
   while item do
-    if exact then
-      if not item.end_lnum or not item.end_col then
-        -- end_lnum/end_col isn't supported by all backends yet
-      elseif
-        item.lnum > cur[1]
-        or item.end_lnum < cur[1]
-        or (item.lnum == cur[1] and item.col > cur[2])
-        or (item.end_lnum == cur[1] and item.end_col < cur[2])
-      then
-        goto continue
-      end
-    end
     table.insert(ret, 1, {
       kind = item.kind,
       icon = config.get_icon(item.kind),
       name = item.name,
     })
-    ::continue::
     item = item.parent
   end
   return ret
@@ -204,14 +195,20 @@ M.tree_cmd = function(action, opts)
     fold = true,
   })
   local index
+  local item
   if opts.index then
     index = opts.index
   elseif util.is_aerial_buffer() then
     index = vim.api.nvim_win_get_cursor(0)[1]
   else
-    index = window.get_position_in_win().lnum
+    local pos = window.get_position_in_win()
+    index = pos.lnum
+    item = pos.closest_symbol
   end
-  local lnum = data[0]:item(index).lnum
+  if item == nil then
+    item = data[0]:item(index)
+  end
+  local lnum = item.lnum
   local did_update, new_cursor_pos = tree.edit_tree_node(data[0], action, index, opts)
   if did_update then
     if config.link_tree_to_folds and opts.fold then

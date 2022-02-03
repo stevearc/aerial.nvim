@@ -209,36 +209,61 @@ M.get_position_in_win = function(bufnr, winid)
   local bufdata = data[bufnr]
   local selected = 0
   local relative = "above"
-  bufdata:visit(function(item)
+  local prev = nil
+  local symbol = bufdata:visit(function(item)
     if item.lnum > lnum then
-      return true
+      return prev or item
     elseif item.lnum == lnum then
       if item.col > col then
-        return true
+        return prev or item
       elseif item.col == col then
         selected = selected + 1
         relative = "exact"
-        return true
+        return item
       else
         relative = "below"
       end
     else
       relative = "below"
     end
+    prev = item
     selected = selected + 1
   end)
+  -- Check if we're on the last symbol
+  if symbol == nil then
+    symbol = prev
+  end
+  local exact_symbol = symbol
+  while
+    exact_symbol
+    -- TODO: end_lnum/end_col isn't supported by all backends yet
+    and exact_symbol.end_lnum
+    and exact_symbol.end_col
+    and (
+      exact_symbol.lnum > lnum
+      or exact_symbol.end_lnum < lnum
+      or (exact_symbol.lnum == lnum and exact_symbol.col > col)
+      or (exact_symbol.end_lnum == lnum and exact_symbol.end_col < col)
+    )
+  do
+    exact_symbol = exact_symbol.parent
+  end
   return {
     lnum = math.max(1, selected),
+    closest_symbol = symbol,
+    exact_symbol = exact_symbol,
     relative = relative,
   }
 end
 
+-- Updates all cursor positions for a given source buffer
 M.update_all_positions = function(bufnr, last_focused_win)
   local source_buffer = util.get_buffers(bufnr)
   local all_source_wins = util.get_fixed_wins(source_buffer)
   M.update_position(all_source_wins, last_focused_win)
 end
 
+-- Update the cursor position for one or more windows
 -- winids can be nil, a winid, or a list of winids
 M.update_position = function(winids, last_focused_win)
   if not config.highlight_mode or config.highlight_mode == "none" then
@@ -267,7 +292,7 @@ M.update_position = function(winids, last_focused_win)
     if pos ~= nil then
       bufdata.positions[target_win] = pos
       if last_focused_win and (last_focused_win == true or last_focused_win == target_win) then
-        bufdata.last_position = pos.lnum
+        bufdata.last_win = target_win
       end
     end
   end
@@ -276,14 +301,14 @@ M.update_position = function(winids, last_focused_win)
   if last_focused_win then
     local aer_winid = util.buf_first_win_in_tabpage(aer_bufnr)
     if aer_winid then
-      local last_position = bufdata.last_position
+      local last_position = bufdata.positions[bufdata.last_win]
       local lines = api.nvim_buf_line_count(aer_bufnr)
 
       -- When aerial window is global, the items can change and cursor will move
       -- before the symbols are published, which causes the line number to be
       -- invalid.
-      if lines >= last_position then
-        api.nvim_win_set_cursor(aer_winid, { bufdata.last_position, 0 })
+      if last_position and lines >= last_position.lnum then
+        api.nvim_win_set_cursor(aer_winid, { last_position.lnum, 0 })
       end
     end
   end

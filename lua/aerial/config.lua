@@ -41,7 +41,7 @@ local default_options = {
   },
 
   -- Enum: split_width, full_width, last, none
-  -- Determines line highlighting mode when multiple splits are visible
+  -- Determines line highlighting mode when multiple splits are visible.
   -- split_width   Each open window will have its cursor location marked in the
   --               aerial buffer. Each line will only be partially highlighted
   --               to indicate which window is at that location.
@@ -51,6 +51,9 @@ local default_options = {
   --               marked in the aerial buffer.
   -- none          Do not show the cursor locations in the aerial window.
   highlight_mode = "split_width",
+
+  -- Highlight the closest symbol if the cursor is not exactly on one.
+  highlight_closest = true,
 
   -- When jumping to a symbol, highlight the line for this many ms.
   -- Set to false to disable

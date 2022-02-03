@@ -131,8 +131,10 @@ M.update_highlights = function(buf)
   local hl_width = math.floor(util.get_width(aer_bufnr) / #winids)
 
   if hl_mode == "last" then
-    local row = bufdata.last_position
-    vim.api.nvim_buf_add_highlight(aer_bufnr, ns, "AerialLine", row - 1, 0, -1)
+    local pos = bufdata.positions[bufdata.last_win]
+    if pos and (config.highlight_closest or pos.exact_symbol) then
+      vim.api.nvim_buf_add_highlight(aer_bufnr, ns, "AerialLine", pos.lnum - 1, 0, -1)
+    end
     return
   end
 
@@ -144,14 +146,10 @@ M.update_highlights = function(buf)
     if i == #winids then
       end_hl = -1
     end
-    vim.api.nvim_buf_add_highlight(
-      aer_bufnr,
-      ns,
-      "AerialLine",
-      bufdata.positions[winid].lnum - 1,
-      start_hl,
-      end_hl
-    )
+    local pos = bufdata.positions[winid]
+    if config.highlight_closest or pos.exact_symbol then
+      vim.api.nvim_buf_add_highlight(aer_bufnr, ns, "AerialLine", pos.lnum - 1, start_hl, end_hl)
+    end
     if hl_mode ~= "full_width" then
       start_hl = end_hl
       end_hl = end_hl + hl_width

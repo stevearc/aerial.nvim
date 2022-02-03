@@ -180,7 +180,7 @@ M.select = function(opts)
       opts.index = vim.api.nvim_win_get_cursor(0)[1]
     else
       local bufdata = data[0]
-      opts.index = bufdata.positions[winid]
+      opts.index = bufdata.positions[winid].lnum
     end
     opts.index = opts.index or 1
   end
