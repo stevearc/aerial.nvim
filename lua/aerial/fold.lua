@@ -28,9 +28,10 @@ local function compute_folds(bufnr)
   local bufdata = data[bufnr]
   local fold_levels = {}
   local line_no = 1
-  local fold_item = { level = -1 }
+  local fold_stack = { { level = -1 } }
 
   local function add_fold()
+    local fold_item = fold_stack[#fold_stack]
     local levelstr = string.format("%d", fold_item.level + 1)
     if line_no == fold_item.lnum then
       levelstr = ">" .. levelstr
@@ -45,8 +46,11 @@ local function compute_folds(bufnr)
     while item.lnum > line_no do
       add_fold()
     end
+    while fold_stack[#fold_stack].level >= item.level do
+      table.remove(fold_stack, #fold_stack)
+    end
     if bufdata:is_collapsable(item) then
-      fold_item = item
+      table.insert(fold_stack, item)
     end
   end, {
     incl_hidden = true,
