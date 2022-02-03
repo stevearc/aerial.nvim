@@ -139,8 +139,8 @@ local default_options = {
   },
 
   lsp = {
-    -- Fetch document symbols when LSP diagnostics change.
-    -- If you set this to false, you will need to manually fetch symbols
+    -- Fetch document symbols when LSP diagnostics update.
+    -- If false, will update on buffer changes.
     diagnostics_trigger_update = true,
 
     -- Set to false to not update the symbols when there are LSP errors

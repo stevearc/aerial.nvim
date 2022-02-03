@@ -1,6 +1,7 @@
 local backends = require("aerial.backends")
 local callbacks = require("aerial.backends.lsp.callbacks")
 local config = require("aerial.config")
+local util = require("aerial.backends.util")
 local M = {}
 
 -- callback args changed in Neovim 0.6. See:
@@ -108,13 +109,16 @@ M.on_attach = function(client, bufnr, opts)
 end
 
 M.attach = function(bufnr)
-  if config.open_automatic(bufnr) and not config.lsp.diagnostics_trigger_update then
+  if not config.lsp.diagnostics_trigger_update then
+    util.add_change_watcher(bufnr, "lsp")
     M.fetch_symbols()
   end
 end
 
 M.detach = function(bufnr)
-  -- pass
+  if not config.lsp.diagnostics_trigger_update then
+    util.remove_change_watcher(bufnr, "lsp")
+  end
 end
 
 return M
