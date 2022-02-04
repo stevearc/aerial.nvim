@@ -9,6 +9,8 @@ describe("treesitter rst", function()
         level = 0,
         lnum = 1,
         col = 0,
+        end_lnum = 3,
+        end_col = 0,
       },
       {
         kind = "Interface",
@@ -16,6 +18,8 @@ describe("treesitter rst", function()
         level = 0,
         lnum = 4,
         col = 0,
+        end_lnum = 6,
+        end_col = 8,
       },
     })
   end)

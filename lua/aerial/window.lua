@@ -236,9 +236,6 @@ M.get_position_in_win = function(bufnr, winid)
   local exact_symbol = symbol
   while
     exact_symbol
-    -- TODO: end_lnum/end_col isn't supported by all backends yet
-    and exact_symbol.end_lnum
-    and exact_symbol.end_col
     and (
       exact_symbol.lnum > lnum
       or exact_symbol.end_lnum < lnum

@@ -69,8 +69,9 @@ M.assert_tree_equals = function(received, expected, path)
   for i, child in ipairs(received) do
     local exp_child = expected[i]
     local lines = { "Symbol mismatch: {" }
-    for _, field in ipairs({ "kind", "name", "level", "lnum", "col" }) do
-      local s_field = string.rep(" ", 5 - string.len(field)) .. field
+    local fields = { "kind", "name", "level", "lnum", "col", "end_lnum", "end_col" }
+    for _, field in ipairs(fields) do
+      local s_field = string.rep(" ", 8 - string.len(field)) .. field
       local line = string.format("%s = %s", s_field, exp_child[field])
       if child[field] ~= exp_child[field] then
         line = line .. string.format("  [%s]", child[field])
@@ -79,7 +80,6 @@ M.assert_tree_equals = function(received, expected, path)
     end
     table.insert(lines, "}")
     local err_msg = table.concat(lines, "\n")
-    local fields = { "kind", "name", "level", "lnum", "col" }
     for _, field in ipairs(fields) do
       assert.equals(exp_child[field], child[field], err_msg)
     end

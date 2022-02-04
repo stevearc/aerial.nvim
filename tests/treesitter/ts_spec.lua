@@ -9,6 +9,8 @@ describe("treesitter ts", function()
         level = 0,
         lnum = 1,
         col = 0,
+        end_lnum = 1,
+        end_col = 19,
       },
       {
         kind = "Function",
@@ -16,6 +18,8 @@ describe("treesitter ts", function()
         level = 0,
         lnum = 3,
         col = 0,
+        end_lnum = 3,
+        end_col = 22,
       },
       {
         kind = "Interface",
@@ -23,6 +27,8 @@ describe("treesitter ts", function()
         level = 0,
         lnum = 5,
         col = 0,
+        end_lnum = 5,
+        end_col = 21,
       },
       {
         kind = "Class",
@@ -30,6 +36,8 @@ describe("treesitter ts", function()
         level = 0,
         lnum = 7,
         col = 0,
+        end_lnum = 9,
+        end_col = 1,
         children = {
           {
             kind = "Method",
@@ -37,6 +45,8 @@ describe("treesitter ts", function()
             level = 1,
             lnum = 8,
             col = 2,
+            end_lnum = 8,
+            end_col = 14,
           },
         },
       },
@@ -46,6 +56,8 @@ describe("treesitter ts", function()
         level = 0,
         lnum = 11,
         col = 0,
+        end_lnum = 11,
+        end_col = 17,
       },
     })
   end)

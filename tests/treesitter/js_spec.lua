@@ -9,6 +9,8 @@ describe("treesitter js", function()
         level = 0,
         lnum = 1,
         col = 0,
+        end_lnum = 3,
+        end_col = 1,
         children = {
           {
             kind = "Method",
@@ -16,6 +18,8 @@ describe("treesitter js", function()
             level = 1,
             lnum = 2,
             col = 2,
+            end_lnum = 2,
+            end_col = 13,
           },
         },
       },
@@ -25,6 +29,8 @@ describe("treesitter js", function()
         level = 0,
         lnum = 5,
         col = 0,
+        end_lnum = 5,
+        end_col = 18,
       },
       {
         kind = "Function",
@@ -32,6 +38,8 @@ describe("treesitter js", function()
         level = 0,
         lnum = 7,
         col = 0,
+        end_lnum = 19,
+        end_col = 2,
         children = {
           {
             kind = "Function",
@@ -39,6 +47,8 @@ describe("treesitter js", function()
             level = 1,
             lnum = 8,
             col = 2,
+            end_lnum = 8,
+            end_col = 20,
           },
           {
             kind = "Function",
@@ -46,6 +56,8 @@ describe("treesitter js", function()
             level = 1,
             lnum = 9,
             col = 2,
+            end_lnum = 9,
+            end_col = 21,
           },
           {
             kind = "Function",
@@ -53,6 +65,8 @@ describe("treesitter js", function()
             level = 1,
             lnum = 10,
             col = 2,
+            end_lnum = 10,
+            end_col = 21,
           },
           {
             kind = "Function",
@@ -60,6 +74,8 @@ describe("treesitter js", function()
             level = 1,
             lnum = 11,
             col = 2,
+            end_lnum = 11,
+            end_col = 22,
           },
           {
             kind = "Function",
@@ -67,6 +83,8 @@ describe("treesitter js", function()
             level = 1,
             lnum = 12,
             col = 2,
+            end_lnum = 12,
+            end_col = 44,
           },
           {
             kind = "Function",
@@ -74,6 +92,8 @@ describe("treesitter js", function()
             level = 1,
             lnum = 13,
             col = 2,
+            end_lnum = 13,
+            end_col = 38,
           },
           {
             kind = "Function",
@@ -81,6 +101,8 @@ describe("treesitter js", function()
             level = 1,
             lnum = 14,
             col = 2,
+            end_lnum = 14,
+            end_col = 39,
           },
           {
             kind = "Function",
@@ -88,6 +110,8 @@ describe("treesitter js", function()
             level = 1,
             lnum = 15,
             col = 2,
+            end_lnum = 15,
+            end_col = 29,
           },
           {
             kind = "Function",
@@ -95,6 +119,8 @@ describe("treesitter js", function()
             level = 1,
             lnum = 16,
             col = 2,
+            end_lnum = 18,
+            end_col = 4,
             children = {
               {
                 kind = "Function",
@@ -102,6 +128,8 @@ describe("treesitter js", function()
                 level = 2,
                 lnum = 17,
                 col = 4,
+                end_lnum = 17,
+                end_col = 50,
               },
             },
           },

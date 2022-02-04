@@ -8,6 +8,8 @@ describe("markdown", function()
       level = 0,
       lnum = 1,
       col = 0,
+      end_lnum = 4,
+      end_col = 0,
       children = {
         {
           kind = "Interface",
@@ -15,6 +17,8 @@ describe("markdown", function()
           level = 1,
           lnum = 3,
           col = 0,
+          end_lnum = 4,
+          end_col = 0,
         },
       },
     },
@@ -24,6 +28,8 @@ describe("markdown", function()
       level = 0,
       lnum = 5,
       col = 0,
+      end_lnum = 15,
+      end_col = 8,
       children = {
         {
           kind = "Interface",
@@ -31,6 +37,8 @@ describe("markdown", function()
           level = 2,
           lnum = 7,
           col = 0,
+          end_lnum = 15,
+          end_col = 8,
           children = {
             {
               kind = "Interface",
@@ -38,6 +46,8 @@ describe("markdown", function()
               level = 3,
               lnum = 13,
               col = 0,
+              end_lnum = 15,
+              end_col = 8,
             },
           },
         },

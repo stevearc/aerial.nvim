@@ -4,6 +4,12 @@ local language_kind_map = require("aerial.backends.treesitter.language_kind_map"
 local util = require("aerial.backends.util")
 local M = {}
 
+-- Custom capture groups:
+-- type: Used to determine the SymbolKind (via language_kind_map)
+-- name (optional): The text of this node will be used in the display
+-- start (optional): The location of the start of this symbol (default @type)
+-- end (optional): The location of the end of this symbol (default @start)
+
 M.is_supported = function(bufnr)
   local ok, parsers = pcall(require, "nvim-treesitter.parsers")
   if not ok then
@@ -48,9 +54,10 @@ M.fetch_symbols_sync = function(timeout)
   for match in query.iter_group_results(bufnr, "aerial", syntax_tree:root(), lang) do
     local name_node = (utils.get_at_path(match, "name") or {}).node
     local type_node = (utils.get_at_path(match, "type") or {}).node
-    -- The location capture name is optional. We default to the
+    -- The location capture groups are optional. We default to the
     -- location of the @type capture
-    local loc_node = (utils.get_at_path(match, "location") or {}).node or type_node
+    local start_node = (utils.get_at_path(match, "start") or {}).node or type_node
+    local end_node = (utils.get_at_path(match, "end") or {}).node or start_node
     local parent_item, parent_node, level = ext.get_parent(stack, match, type_node)
     -- Sometimes our queries will match the same node twice.
     -- Detect that (type_node == parent_node), and skip dupes.
@@ -67,7 +74,8 @@ M.fetch_symbols_sync = function(timeout)
     if not include_kind[kind] then
       goto continue
     end
-    local row, col = loc_node:start()
+    local row, col = start_node:start()
+    local end_row, end_col = end_node:end_()
     local name
     if name_node then
       name = ts_utils.get_node_text(name_node, bufnr)[1] or "<parse error>"
@@ -80,7 +88,9 @@ M.fetch_symbols_sync = function(timeout)
       level = level,
       parent = parent_item,
       lnum = row + 1,
+      end_lnum = end_row + 1,
       col = col,
+      end_col = end_col,
     }
     ext.postprocess(bufnr, item, match)
     if item.parent then
@@ -95,6 +105,7 @@ M.fetch_symbols_sync = function(timeout)
 
     ::continue::
   end
+  ext.postprocess_symbols(bufnr, items)
   backends.set_symbols(bufnr, items)
 end
 

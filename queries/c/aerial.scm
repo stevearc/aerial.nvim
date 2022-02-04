@@ -1,6 +1,11 @@
 (type_definition
   type: [(enum_specifier) (struct_specifier)] @type
-  declarator: (type_identifier) @name) @location
+  declarator: (type_identifier) @name) @start
 
-(function_declarator
-  declarator: (identifier) @name) @type
+(
+  (declaration) @root @start
+  .
+  (function_definition) @type @end
+)
+
+(function_definition) @type @root

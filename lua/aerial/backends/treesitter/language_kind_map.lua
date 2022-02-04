@@ -4,13 +4,13 @@ return {
   },
   c = {
     enum_specifier = "Enum",
-    function_declarator = "Function",
+    function_definition = "Function",
     struct_specifier = "Struct",
   },
   cpp = {
     class_specifier = "Class",
     enum_specifier = "Enum",
-    function_declarator = "Function",
+    function_definition = "Function",
     struct_specifier = "Struct",
   },
   c_sharp = {
@@ -25,8 +25,7 @@ return {
     class_definition = "Class",
     constructor_signature = "Constructor",
     function_signature = "Function",
-    getter_signature = "Function",
-    setter_signature = "Function",
+    method_signature = "Method",
     enum_declaration = "Enum",
   },
   go = {

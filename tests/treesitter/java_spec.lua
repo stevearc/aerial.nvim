@@ -9,6 +9,8 @@ describe("treesitter java", function()
         level = 0,
         lnum = 1,
         col = 0,
+        end_lnum = 3,
+        end_col = 1,
         children = {
           {
             kind = "Method",
@@ -16,6 +18,8 @@ describe("treesitter java", function()
             level = 1,
             lnum = 2,
             col = 2,
+            end_lnum = 2,
+            end_col = 16,
           },
         },
       },
@@ -25,6 +29,8 @@ describe("treesitter java", function()
         level = 0,
         lnum = 5,
         col = 0,
+        end_lnum = 7,
+        end_col = 1,
         children = {
           {
             kind = "Method",
@@ -32,6 +38,8 @@ describe("treesitter java", function()
             level = 1,
             lnum = 6,
             col = 2,
+            end_lnum = 6,
+            end_col = 19,
           },
         },
       },
@@ -41,6 +49,8 @@ describe("treesitter java", function()
         level = 0,
         lnum = 9,
         col = 0,
+        end_lnum = 9,
+        end_col = 13,
       },
     })
   end)

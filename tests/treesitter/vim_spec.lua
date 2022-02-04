@@ -9,6 +9,8 @@ describe("treesitter vim", function()
         level = 0,
         lnum = 1,
         col = 0,
+        end_lnum = 2,
+        end_col = 11,
       },
       {
         kind = "Function",
@@ -16,6 +18,8 @@ describe("treesitter vim", function()
         level = 0,
         lnum = 4,
         col = 0,
+        end_lnum = 5,
+        end_col = 11,
       },
     })
   end)

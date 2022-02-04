@@ -9,6 +9,8 @@ describe("treesitter bash", function()
         level = 0,
         lnum = 3,
         col = 0,
+        end_lnum = 5,
+        end_col = 1,
       },
     })
   end)

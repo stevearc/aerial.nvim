@@ -9,6 +9,8 @@ describe("treesitter go", function()
         level = 0,
         lnum = 3,
         col = 0,
+        end_lnum = 3,
+        end_col = 14,
       },
       {
         kind = "Struct",
@@ -16,6 +18,8 @@ describe("treesitter go", function()
         level = 0,
         lnum = 5,
         col = 0,
+        end_lnum = 5,
+        end_col = 18,
       },
       {
         kind = "Method",
@@ -23,6 +27,8 @@ describe("treesitter go", function()
         level = 0,
         lnum = 7,
         col = 0,
+        end_lnum = 7,
+        end_col = 23,
       },
     })
   end)

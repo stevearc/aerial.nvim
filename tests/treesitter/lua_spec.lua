@@ -9,6 +9,8 @@ describe("treesitter lua", function()
         level = 0,
         lnum = 1,
         col = 0,
+        end_lnum = 3,
+        end_col = 3,
       },
       {
         kind = "Function",
@@ -16,6 +18,8 @@ describe("treesitter lua", function()
         level = 0,
         lnum = 5,
         col = 0,
+        end_lnum = 7,
+        end_col = 3,
       },
       {
         kind = "Function",
@@ -23,6 +27,8 @@ describe("treesitter lua", function()
         level = 0,
         lnum = 9,
         col = 0,
+        end_lnum = 11,
+        end_col = 3,
       },
       {
         kind = "Function",
@@ -30,6 +36,8 @@ describe("treesitter lua", function()
         level = 0,
         lnum = 13,
         col = 0,
+        end_lnum = 18,
+        end_col = 3,
         children = {
           {
             kind = "Function",
@@ -37,6 +45,8 @@ describe("treesitter lua", function()
             level = 1,
             lnum = 14,
             col = 7,
+            end_lnum = 16,
+            end_col = 5,
           },
         },
       },
@@ -46,6 +56,8 @@ describe("treesitter lua", function()
         level = 0,
         lnum = 21,
         col = 2,
+        end_lnum = 23,
+        end_col = 5,
       },
       {
         kind = "Function",
@@ -53,6 +65,8 @@ describe("treesitter lua", function()
         level = 0,
         lnum = 26,
         col = 0,
+        end_lnum = 26,
+        end_col = 23,
       },
       {
         kind = "Function",
@@ -60,6 +74,8 @@ describe("treesitter lua", function()
         level = 0,
         lnum = 27,
         col = 0,
+        end_lnum = 27,
+        end_col = 21,
       },
       {
         kind = "Function",
@@ -67,6 +83,8 @@ describe("treesitter lua", function()
         level = 0,
         lnum = 29,
         col = 0,
+        end_lnum = 33,
+        end_col = 4,
         children = {
           {
             kind = "Function",
@@ -74,6 +92,8 @@ describe("treesitter lua", function()
             level = 1,
             lnum = 30,
             col = 2,
+            end_lnum = 30,
+            end_col = 29,
           },
           {
             kind = "Function",
@@ -81,6 +101,8 @@ describe("treesitter lua", function()
             level = 1,
             lnum = 31,
             col = 2,
+            end_lnum = 31,
+            end_col = 28,
           },
           {
             kind = "Function",
@@ -88,6 +110,8 @@ describe("treesitter lua", function()
             level = 1,
             lnum = 32,
             col = 2,
+            end_lnum = 32,
+            end_col = 42,
           },
         },
       },

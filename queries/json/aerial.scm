@@ -1,4 +1,4 @@
 (pair
   key: (string
     (string_content) @name)
-  value: (object) @type) @location
+  value: (object) @type) @start

@@ -9,6 +9,8 @@ describe("treesitter rust", function()
         level = 0,
         lnum = 1,
         col = 0,
+        end_lnum = 22,
+        end_col = 1,
         children = {
           {
             kind = "Enum",
@@ -16,6 +18,8 @@ describe("treesitter rust", function()
             level = 1,
             lnum = 2,
             col = 4,
+            end_lnum = 2,
+            end_col = 18,
           },
           {
             kind = "Function",
@@ -23,6 +27,8 @@ describe("treesitter rust", function()
             level = 1,
             lnum = 4,
             col = 4,
+            end_lnum = 4,
+            end_col = 16,
           },
           {
             kind = "Struct",
@@ -30,6 +36,8 @@ describe("treesitter rust", function()
             level = 1,
             lnum = 6,
             col = 4,
+            end_lnum = 6,
+            end_col = 22,
           },
           {
             kind = "Interface",
@@ -37,6 +45,8 @@ describe("treesitter rust", function()
             level = 1,
             lnum = 8,
             col = 4,
+            end_lnum = 10,
+            end_col = 5,
             children = {
               {
                 kind = "Function",
@@ -44,6 +54,8 @@ describe("treesitter rust", function()
                 level = 2,
                 lnum = 9,
                 col = 8,
+                end_lnum = 9,
+                end_col = 21,
               },
             },
           },
@@ -53,6 +65,8 @@ describe("treesitter rust", function()
             level = 1,
             lnum = 12,
             col = 4,
+            end_lnum = 14,
+            end_col = 5,
             children = {
               {
                 kind = "Function",
@@ -60,6 +74,8 @@ describe("treesitter rust", function()
                 level = 2,
                 lnum = 13,
                 col = 8,
+                end_lnum = 13,
+                end_col = 24,
               },
             },
           },
@@ -69,6 +85,8 @@ describe("treesitter rust", function()
             level = 1,
             lnum = 16,
             col = 4,
+            end_lnum = 20,
+            end_col = 5,
             children = {
               {
                 kind = "Function",
@@ -76,6 +94,8 @@ describe("treesitter rust", function()
                 level = 2,
                 lnum = 17,
                 col = 8,
+                end_lnum = 19,
+                end_col = 9,
               },
             },
           },
@@ -85,6 +105,8 @@ describe("treesitter rust", function()
             level = 1,
             lnum = 21,
             col = 4,
+            end_lnum = 21,
+            end_col = 43,
           },
         },
       },

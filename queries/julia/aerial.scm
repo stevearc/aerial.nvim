@@ -6,7 +6,7 @@
 
 (assignment_expression
   . (call_expression
-    (identifier) @name) @type) @location
+    (identifier) @name) @type) @start
 
 (abstract_definition
   name: (identifier) @name) @type

@@ -9,6 +9,8 @@ describe("treesitter csharp", function()
         level = 0,
         lnum = 1,
         col = 0,
+        end_lnum = 4,
+        end_col = 1,
         children = {
           {
             kind = "Constructor",
@@ -16,6 +18,8 @@ describe("treesitter csharp", function()
             level = 1,
             lnum = 2,
             col = 2,
+            end_lnum = 2,
+            end_col = 18,
           },
           {
             kind = "Method",
@@ -23,6 +27,8 @@ describe("treesitter csharp", function()
             level = 1,
             lnum = 3,
             col = 2,
+            end_lnum = 3,
+            end_col = 25,
           },
         },
       },
@@ -32,6 +38,8 @@ describe("treesitter csharp", function()
         level = 0,
         lnum = 5,
         col = 0,
+        end_lnum = 5,
+        end_col = 20,
       },
       {
         kind = "Struct",
@@ -39,6 +47,8 @@ describe("treesitter csharp", function()
         level = 0,
         lnum = 6,
         col = 0,
+        end_lnum = 6,
+        end_col = 22,
       },
     })
   end)

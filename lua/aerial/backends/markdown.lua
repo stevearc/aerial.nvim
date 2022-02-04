@@ -12,6 +12,7 @@ M.is_supported = function(bufnr)
 end
 
 M.fetch_symbols_sync = function(timeout)
+  local extensions = require("aerial.backends.treesitter.extensions")
   local bufnr = 0
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
   local items = {}
@@ -46,6 +47,8 @@ M.fetch_symbols_sync = function(timeout)
       inside_code_block = not inside_code_block
     end
   end
+  -- This sets the proper end_lnum and end_col
+  extensions.markdown.postprocess_symbols(bufnr, items)
   backends.set_symbols(bufnr, items)
 end
 
