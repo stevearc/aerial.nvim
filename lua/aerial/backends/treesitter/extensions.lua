@@ -46,9 +46,11 @@ local function set_end_range(bufnr, items, last_line)
     end
     prev = item
   end
-  prev.end_lnum = last_line
-  prev.end_col = get_line_len(bufnr, last_line)
-  set_end_range(bufnr, prev.children, last_line)
+  if prev then
+    prev.end_lnum = last_line
+    prev.end_col = get_line_len(bufnr, last_line)
+    set_end_range(bufnr, prev.children, last_line)
+  end
 end
 
 M.markdown = {
