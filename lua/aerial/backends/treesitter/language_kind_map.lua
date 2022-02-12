@@ -64,6 +64,14 @@ return {
   markdown = {
     atx_heading = "Interface",
   },
+  php = {
+    anonymous_function_creation_expression = "Function",
+    class_declaration = "Class",
+    function_definition = "Function",
+    interface_declaration = "Interface",
+    method_declaration = "Method",
+    trait_declaration = "Class",
+  },
   python = {
     function_definition = "Function",
     class_definition = "Class",
