@@ -95,6 +95,14 @@ return {
     method_definition = "Method",
     type_alias_declaration = "Type",
   },
+  tsx = {
+    class_declaration = "Class",
+    function_signature = "Function",
+    function_declaration = "Function",
+    interface_declaration = "Interface",
+    method_definition = "Method",
+    type_alias_declaration = "Type",
+  },
   vim = {
     function_definition = "Function",
   },
