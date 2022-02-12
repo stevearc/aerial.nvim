@@ -148,10 +148,12 @@ automatically fetch symbols from treesitter.
 - julia
 - lua
 - markdown
+- php
 - python
 - rst
 - ruby
 - rust
+- tsx
 - typescript
 - vim
 
