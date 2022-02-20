@@ -256,7 +256,7 @@ end
 -- Updates all cursor positions for a given source buffer
 M.update_all_positions = function(bufnr, last_focused_win)
   local source_buffer = util.get_buffers(bufnr)
-  local all_source_wins = util.get_fixed_wins(source_buffer)
+  local all_source_wins = util.get_non_ignored_fixed_wins(source_buffer)
   M.update_position(all_source_wins, last_focused_win)
 end
 
@@ -280,7 +280,7 @@ M.update_position = function(winids, last_focused_win)
     return
   end
   if util.is_aerial_buffer(win_bufnr) then
-    winids = util.get_fixed_wins(bufnr)
+    winids = util.get_non_ignored_fixed_wins(bufnr)
   end
 
   local bufdata = data[bufnr]
