@@ -201,6 +201,7 @@ M.is_ignored_filetype = function(filetype)
 end
 
 M.is_ignored_buf = function(bufnr)
+  bufnr = bufnr or 0
   local ignore = config.ignore
   if ignore.unlisted_buffers and not vim.api.nvim_buf_get_option(bufnr, "buflisted") then
     return true
@@ -229,6 +230,7 @@ M.is_ignored_buf = function(bufnr)
 end
 
 M.is_ignored_win = function(winid)
+  winid = winid or 0
   local bufnr = vim.api.nvim_win_get_buf(winid)
   if M.is_ignored_buf(bufnr) then
     return true
