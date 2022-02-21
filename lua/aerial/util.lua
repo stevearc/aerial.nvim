@@ -186,7 +186,7 @@ M.get_fixed_wins = function(bufnr)
 end
 
 M.get_non_ignored_fixed_wins = function(bufnr)
-  return vim.tbl_map(function(winid)
+  return vim.tbl_filter(function(winid)
     return not M.is_ignored_win(winid)
   end, M.get_fixed_wins(bufnr))
 end
