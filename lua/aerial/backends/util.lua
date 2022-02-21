@@ -10,12 +10,12 @@ M.add_change_watcher = function(bufnr, backend_name)
   vim.cmd(string.format(
     [[augroup Aerial%s
       au! * <buffer=%d>
-      au TextChanged <buffer=%d> lua require'aerial.backends.util'._on_text_changed('%s')
-      au InsertLeave <buffer=%d> lua require'aerial.backends.util'._on_insert_leave('%s')
+      au %s <buffer=%d> lua require'aerial.backends.util'._update_symbols('%s')
     augroup END
     ]],
     backend_name,
     bufnr,
+    config.update_events,
     bufnr,
     backend_name,
     bufnr,
@@ -34,7 +34,7 @@ M.remove_change_watcher = function(bufnr, backend_name)
   ))
 end
 
-local update_symbols = util.throttle(function(backend_name)
+M._update_symbols = util.throttle(function(backend_name)
   if backends.is_backend_attached(0, backend_name) then
     local backend = backends.get_backend_by_name(backend_name)
     if backend then
@@ -47,8 +47,5 @@ end, {
   end,
   reset_timer_on_call = true,
 })
-
-M._on_text_changed = update_symbols
-M._on_insert_leave = update_symbols
 
 return M
