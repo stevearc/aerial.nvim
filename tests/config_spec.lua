@@ -31,17 +31,17 @@ describe("config", function()
   it("merges nested options with g:aerial dict", function()
     vim.g.aerial = {
       float = {
-        row = 10,
+        border = "single",
       },
     }
-    assert.equals(config.float.row, 10)
-    assert.equals(config.float.col, 0)
+    assert.equals(config.float.border, "single")
+    assert.equals(config.float.max_height, 0.9)
   end)
 
   it("merges nested options with g:aerial_<name> vars", function()
-    vim.g.aerial_float_row = 10
-    assert.equals(config.float.row, 10)
-    vim.api.nvim_del_var("aerial_float_row")
+    vim.g.aerial_float_border = "single"
+    assert.equals(config.float.border, "single")
+    vim.api.nvim_del_var("aerial_float_border")
   end)
 
   -- Filetype maps
