@@ -66,6 +66,44 @@ local default_options = {
   -- If you have lspkind-nvim installed, aerial will use it for icons.
   icons = {},
 
+  -- Control which windows and buffers aerial should ignore.
+  -- If close_behavior is "global", focusing an ignored window/buffer will
+  -- not cause the aerial window to update.
+  -- If open_automatic is true, focusing an ignored window/buffer will not
+  -- cause an aerial window to open.
+  -- If open_automatic is a function, ignore rules have no effect on aerial
+  -- window opening behavior; it's entirely handled by the open_automatic
+  -- function.
+  ignore = {
+    -- Ignore unlisted buffers. See :help buflisted
+    unlisted_buffers = true,
+
+    -- List of filetypes to ignore.
+    filetypes = {},
+
+    -- Ignored buftypes.
+    -- Can be one of the following:
+    -- false or nil - No buftypes are ignored.
+    -- "special"    - All buffers other than normal buffers are ignored.
+    -- table        - A list of buftypes to ignore. See :help buftype for the
+    --                possible values.
+    -- function     - A function that returns true if the buffer should be
+    --                ignored or false if it should not be ignored.
+    --                Takes two arguments, `bufnr` and `buftype`.
+    buftypes = "special",
+
+    -- Ignored wintypes.
+    -- Can be one of the following:
+    -- false or nil - No wintypes are ignored.
+    -- "special"    - All windows other than normal windows are ignored.
+    -- table        - A list of wintypes to ignore. See :help win_gettype() for the
+    --                possible values.
+    -- function     - A function that returns true if the window should be
+    --                ignored or false if it should not be ignored.
+    --                Takes two arguments, `winid` and `wintype`.
+    wintypes = "special",
+  },
+
   -- When you fold code with za, zo, or zc, update the aerial tree as well.
   -- Only works when manage_folds = true
   link_folds_to_tree = false,
@@ -291,8 +329,8 @@ M.setup = function(opts)
   end
   if type(newconf.open_automatic) == "boolean" then
     local open_automatic = newconf.open_automatic
-    newconf.open_automatic = function()
-      return open_automatic
+    newconf.open_automatic = function(bufnr)
+      return open_automatic and not require("aerial.util").is_ignored_buf(bufnr)
     end
   elseif type(newconf.open_automatic) ~= "function" then
     local open_automatic_fn = create_filetype_opt_getter(newconf.open_automatic, false)

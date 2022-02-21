@@ -26,7 +26,7 @@ end
 
 M.on_enter_buffer = util.throttle(function()
   backends.attach()
-  if util.is_floating_win() then
+  if util.is_ignored_win() then
     return
   end
 
