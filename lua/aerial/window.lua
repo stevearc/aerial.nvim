@@ -2,6 +2,7 @@ local backends = require("aerial.backends")
 local bindings = require("aerial.bindings")
 local config = require("aerial.config")
 local data = require("aerial.data")
+local layout = require("aerial.layout")
 local loading = require("aerial.loading")
 local render = require("aerial.render")
 local util = require("aerial.util")
@@ -33,7 +34,6 @@ local function create_aerial_buffer(bufnr)
   api.nvim_buf_set_option(aer_bufnr, "buflisted", false)
   api.nvim_buf_set_option(aer_bufnr, "swapfile", false)
   api.nvim_buf_set_option(aer_bufnr, "modifiable", false)
-  render.update_aerial_buffer(bufnr)
   return aer_bufnr
 end
 
@@ -60,16 +60,26 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   local my_winid = api.nvim_get_current_win()
   if not existing_win then
     if direction == "float" then
-      vim.api.nvim_open_win(aer_bufnr, true, {
-        relative = "cursor",
-        row = config.float.row,
-        col = config.float.col,
-        width = util.get_width(aer_bufnr),
-        height = util.get_height(aer_bufnr),
+      local rel = config.float.relative
+      local width = layout.calculate_width(rel, nil, config)
+      local height = layout.calculate_height(rel, nil, config.float)
+      local row = layout.calculate_row(rel, height)
+      local col = layout.calculate_col(rel, width)
+      local win_config = {
+        relative = rel,
+        row = row,
+        col = col,
+        width = width,
+        height = height,
         zindex = 125,
         style = "minimal",
         border = config.float.border,
-      })
+      }
+      if rel == "win" then
+        win_config.win = vim.api.nvim_get_current_win()
+      end
+      local new_config = config.float.override(win_config)
+      vim.api.nvim_open_win(aer_bufnr, true, new_config or win_config)
     else
       local modifier
       if config.placement_editor_edge then
@@ -105,10 +115,10 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   -- Set the filetype only after we enter the buffer so that FileType autocmds
   -- behave properly
   api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
-  util.set_win_width(0, util.get_width(aer_bufnr))
 
   local aer_winid = api.nvim_get_current_win()
   util.go_win_no_au(my_winid)
+  render.update_aerial_buffer(aer_bufnr)
   return aer_winid
 end
 

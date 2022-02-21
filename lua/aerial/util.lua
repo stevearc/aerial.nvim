@@ -17,62 +17,26 @@ M.lpad = function(str, length, padchar)
   return str
 end
 
-M.get_width = function(bufnr)
-  local ok, width = pcall(vim.api.nvim_buf_get_var, bufnr or 0, "aerial_width")
+M.restore_width = function(winid)
+  local ok, width = pcall(vim.api.nvim_win_get_var, winid or 0, "aerial_width")
   if ok then
-    return width
+    vim.api.nvim_win_set_width(winid or 0, width)
   end
-  return math.floor((config.min_width + config.max_width) / 2)
 end
 
-M.set_width = function(bufnr, width)
-  if bufnr == nil or bufnr == 0 then
-    bufnr = vim.api.nvim_get_current_buf()
-  end
-  width = math.min(config.max_width, math.max(config.min_width, width))
-  if M.get_width(bufnr) == width then
-    return width
-  end
-  vim.api.nvim_buf_set_var(bufnr, "aerial_width", width)
-
-  for _, winid in ipairs(vim.api.nvim_list_wins()) do
-    if vim.api.nvim_win_get_buf(winid) == bufnr then
-      M.set_win_width(winid, width)
-    end
-  end
-  return width
+M.save_width = function(winid, width)
+  vim.api.nvim_win_set_var(winid or 0, "aerial_width", width)
 end
 
-M.set_win_width = function(winid, width)
-  -- adjust width if buffer has line numbers
+M.win_get_gutter_width = function(winid)
+  winid = winid or 0
   if
     vim.api.nvim_win_get_option(winid, "number")
     or vim.api.nvim_win_get_option(winid, "relativenumber")
   then
-    width = math.min(config.max_width, width + vim.api.nvim_win_get_option(winid, "numberwidth"))
-  end
-  vim.api.nvim_win_set_width(winid, width)
-end
-
-M.get_height = function(bufnr)
-  local ok, height = pcall(vim.api.nvim_buf_get_var, bufnr or 0, "aerial_height")
-  if ok then
-    return height
-  end
-  local max_height = math.min(config.float.max_height, vim.o.lines - vim.o.cmdheight)
-  return math.max(config.float.min_height, math.floor(max_height / 2))
-end
-
-M.set_height = function(bufnr, height)
-  if bufnr == nil or bufnr == 0 then
-    bufnr = vim.api.nvim_get_current_buf()
-  end
-  height = math.min(config.float.max_height, math.max(config.float.min_height, height))
-  vim.api.nvim_buf_set_var(bufnr, "aerial_height", height)
-  for _, winid in ipairs(vim.api.nvim_list_wins()) do
-    if vim.api.nvim_win_get_buf(winid) == bufnr and M.is_floating_win(winid) then
-      vim.api.nvim_win_set_height(winid, height)
-    end
+    return vim.api.nvim_win_get_option(winid, "numberwidth")
+  else
+    return 0
   end
 end
 
@@ -305,7 +269,7 @@ M.render_centered_text = function(bufnr, text)
     end
   end
   local height = 40
-  local width = M.get_width(bufnr)
+  local width = 30
   if winid then
     height = vim.api.nvim_win_get_height(winid)
     width = vim.api.nvim_win_get_width(winid)

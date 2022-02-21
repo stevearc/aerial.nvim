@@ -1,5 +1,6 @@
 local config = require("aerial.config")
 local data = require("aerial.data")
+local layout = require("aerial.layout")
 local loading = require("aerial.loading")
 local util = require("aerial.util")
 local M = {}
@@ -10,10 +11,60 @@ M.clear_buffer = function(bufnr)
   vim.api.nvim_buf_set_option(bufnr, "modifiable", false)
 end
 
+-- Resize all windows displaying this aerial buffer
+local function resize_all_wins(aer_bufnr, preferred_width, preferred_height)
+  local max_width = 0
+  for _, winid in ipairs(vim.api.nvim_list_wins()) do
+    if vim.api.nvim_win_get_buf(winid) == aer_bufnr then
+      local relative = "editor"
+      local parent_win = 0
+      if util.is_floating_win(winid) then
+        local win_conf = vim.api.nvim_win_get_config(winid)
+        relative = win_conf.relative
+        parent_win = win_conf.win
+      end
+
+      -- preferred width can be nil if symbols are loading
+      local pw = preferred_width
+      local gutter = util.win_get_gutter_width(winid)
+      if pw then
+        pw = pw + gutter
+      end
+      local width = layout.calculate_width(relative, pw, config, parent_win)
+      -- Subtract the gutter here because it is passed back to be used for
+      -- padding out whitespace. The gutter needs to adjust the total window
+      -- size, but it doesn't take space away from the content.
+      max_width = math.max(max_width, width - gutter)
+      vim.api.nvim_win_set_width(winid, width)
+      util.save_width(winid, width)
+
+      -- Reposition floating windows
+      if util.is_floating_win(winid) then
+        local height = layout.calculate_height(relative, preferred_height, config.float, parent_win)
+        vim.api.nvim_win_set_height(winid, height)
+        if relative ~= "cursor" then
+          local row = layout.calculate_row(relative, height, parent_win)
+          local col = layout.calculate_col(relative, width, parent_win)
+          local win_conf = {
+            row = row,
+            col = col,
+            relative = relative,
+            win = parent_win,
+          }
+          local new_conf = config.float.override(win_conf)
+          vim.api.nvim_win_set_config(winid, new_conf or win_conf)
+        end
+      end
+    end
+  end
+  return max_width
+end
+
 -- Update the aerial buffer from cached symbols
 M.update_aerial_buffer = function(buf)
   local bufnr, aer_bufnr = util.get_buffers(buf)
   if aer_bufnr == -1 or loading.is_loading(aer_bufnr) then
+    resize_all_wins(aer_bufnr)
     return
   end
   if not data:has_symbols(bufnr) then
@@ -21,6 +72,7 @@ M.update_aerial_buffer = function(buf)
     if config.lsp.filter_kind ~= false then
       table.insert(lines, ":help aerial-filter")
     end
+    resize_all_wins(aer_bufnr)
     util.render_centered_text(aer_bufnr, lines)
     return
   end
@@ -88,8 +140,7 @@ M.update_aerial_buffer = function(buf)
     row = row + 1
   end)
 
-  local width = util.set_width(aer_bufnr, max_len)
-  util.set_height(aer_bufnr, #lines)
+  local width = resize_all_wins(aer_bufnr, max_len, #lines)
 
   -- Insert lines into buffer
   for i, line in ipairs(lines) do
@@ -128,7 +179,8 @@ M.update_highlights = function(buf)
   if vim.tbl_isempty(winids) then
     return
   end
-  local hl_width = math.floor(util.get_width(aer_bufnr) / #winids)
+  local line = vim.api.nvim_buf_get_lines(aer_bufnr, 0, 1, true)[1]
+  local hl_width = math.floor(vim.api.nvim_strwidth(line) / #winids)
 
   if hl_mode == "last" then
     local pos = bufdata.positions[bufdata.last_win]

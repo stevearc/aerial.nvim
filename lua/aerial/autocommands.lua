@@ -55,7 +55,7 @@ M.on_enter_buffer = util.throttle(function()
       vim.cmd("quit")
     else
       -- Hack to ignore winwidth
-      util.set_win_width(0, util.get_width(0))
+      util.restore_width(0)
     end
   elseif window.is_open() then
     close_orphans()
