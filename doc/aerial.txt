@@ -203,11 +203,12 @@ Configure aerial by calling the setup() function.
       -- 'auto' will manage folds if your previous foldmethod was 'manual'
       manage_folds = false,
     
-      -- The maximum width of the aerial window
-      max_width = 40,
-    
-      -- The minimum width of the aerial window.
-      -- To disable dynamic resizing, set this to be equal to max_width
+      -- These control the width of the aerial window.
+      -- They can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
+      -- min_width and max_width can be a list of mixed types.
+      -- max_value = {40, 0.2} means "the lesser of 40 columns or 20% of total"
+      max_width = { 40, 0.2 },
+      width = nil,
       min_width = 10,
     
       -- Set default symbol icons to use patched font icons (see https://www.nerdfonts.com/)
@@ -252,18 +253,25 @@ Configure aerial by calling the setup() function.
         -- Controls border appearance. Passed to nvim_open_win
         border = "rounded",
     
-        -- Controls row offset from cursor. Passed to nvim_open_win
-        row = 1,
+        -- Enum: cursor, editor, win
+        --   cursor - Opens float on top of the cursor
+        --   editor - Opens float centered in the editor
+        --   win    - Opens float centered in the window
+        relative = "cursor",
     
-        -- Controls col offset from cursor. Passed to nvim_open_win
-        col = 0,
+        -- These control the height of the floating window.
+        -- They can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
+        -- min_height and max_height can be a list of mixed types.
+        -- min_value = {8, 0.1} means "the greater of 8 rows or 10% of total"
+        max_height = 0.9,
+        height = nil,
+        min_height = { 8, 0.1 },
     
-        -- The maximum height of the floating aerial window
-        max_height = 100,
-    
-        -- The minimum height of the floating aerial window
-        -- To disable dynamic resizing, set this to be equal to max_height
-        min_height = 4,
+        override = function(conf)
+          -- This is the config that will be passed to nvim_open_win.
+          -- Change values here to customize the layout
+          return conf
+        end,
       },
     
       lsp = {
