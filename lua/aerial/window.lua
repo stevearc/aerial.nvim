@@ -78,8 +78,11 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
       if rel == "win" then
         win_config.win = vim.api.nvim_get_current_win()
       end
-      local new_config = config.float.override(win_config)
-      vim.api.nvim_open_win(aer_bufnr, true, new_config or win_config)
+      local new_config = config.float.override(win_config) or win_config
+      local winid = vim.api.nvim_open_win(aer_bufnr, true, new_config)
+      -- We store this as a window variable because relative=cursor gets
+      -- turned into relative=win when checking nvim_win_get_config()
+      vim.api.nvim_win_set_var(winid, "relative", new_config.relative)
     else
       local modifier
       if config.placement_editor_edge then

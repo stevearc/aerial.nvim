@@ -20,7 +20,12 @@ local function resize_all_wins(aer_bufnr, preferred_width, preferred_height)
       local parent_win = 0
       if util.is_floating_win(winid) then
         local win_conf = vim.api.nvim_win_get_config(winid)
-        relative = win_conf.relative
+        local ok, v = pcall(vim.api.nvim_win_get_var, winid, "relative")
+        if ok then
+          relative = v
+        else
+          relative = win_conf.relative
+        end
         parent_win = win_conf.win
       end
 
