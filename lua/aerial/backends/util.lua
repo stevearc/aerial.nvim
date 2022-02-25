@@ -7,6 +7,10 @@ M.add_change_watcher = function(bufnr, backend_name)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
+  local event = config.update_events
+  if type(config.update_events) == "table" then
+    event = table.concat(config.update_events, ",")
+  end
   vim.cmd(string.format(
     [[augroup Aerial%s
       au! * <buffer=%d>
@@ -15,7 +19,7 @@ M.add_change_watcher = function(bufnr, backend_name)
     ]],
     backend_name,
     bufnr,
-    config.update_events,
+    event,
     bufnr,
     backend_name,
     bufnr,
