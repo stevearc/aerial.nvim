@@ -97,7 +97,7 @@ M.ruby = {
     local method = (utils.get_at_path(match, "method") or {}).node
     if method then
       local fn = ts_utils.get_node_text(method, bufnr)[1] or "<parse error>"
-      if fn == "it" or fn == "describe" then
+      if fn ~= "before" and fn ~= "after" then
         item.name = fn .. " " .. item.name
       end
     end
