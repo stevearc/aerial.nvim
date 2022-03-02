@@ -334,7 +334,7 @@ require("aerial").setup({
   -- These control the width of the aerial window.
   -- They can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
   -- min_width and max_width can be a list of mixed types.
-  -- max_value = {40, 0.2} means "the lesser of 40 columns or 20% of total"
+  -- max_width = {40, 0.2} means "the lesser of 40 columns or 20% of total"
   max_width = { 40, 0.2 },
   width = nil,
   min_width = 10,
@@ -393,7 +393,7 @@ require("aerial").setup({
     -- These control the height of the floating window.
     -- They can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
     -- min_height and max_height can be a list of mixed types.
-    -- min_value = {8, 0.1} means "the greater of 8 rows or 10% of total"
+    -- min_height = {8, 0.1} means "the greater of 8 rows or 10% of total"
     max_height = 0.9,
     height = nil,
     min_height = { 8, 0.1 },
