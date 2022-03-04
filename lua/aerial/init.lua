@@ -1,3 +1,4 @@
+local autocommands = require("aerial.autocommands")
 local backends = require("aerial.backends")
 local command = require("aerial.command")
 local config = require("aerial.config")
@@ -15,6 +16,7 @@ local M = {}
 local was_closed = nil
 M.setup = function(opts)
   config.setup(opts)
+  autocommands.on_enter_buffer()
   vim.cmd([[
     aug AerialEnterBuffer
       au!
