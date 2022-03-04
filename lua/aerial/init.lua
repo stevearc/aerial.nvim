@@ -1,7 +1,9 @@
 local backends = require("aerial.backends")
+local command = require("aerial.command")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local fold = require("aerial.fold")
+local highlight = require("aerial.highlight")
 local nav = require("aerial.navigation")
 local render = require("aerial.render")
 local tree = require("aerial.tree")
@@ -11,7 +13,17 @@ local window = require("aerial.window")
 local M = {}
 
 local was_closed = nil
-M.setup = config.setup
+M.setup = function(opts)
+  config.setup(opts)
+  vim.cmd([[
+    aug AerialEnterBuffer
+      au!
+      au BufEnter * lua require'aerial.autocommands'.on_enter_buffer()
+    aug END
+  ]])
+  command.create_commands()
+  highlight.create_highlight_groups()
+end
 
 -- Returns true if aerial is open for the current buffer
 -- (returns false inside an aerial buffer)
