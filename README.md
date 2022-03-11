@@ -270,6 +270,9 @@ require("aerial").setup({
   -- Highlight the closest symbol if the cursor is not exactly on one.
   highlight_closest = true,
 
+  -- Highlight the symbol in the source buffer when cursor is in the aerial win
+  highlight_on_hover = false,
+
   -- When jumping to a symbol, highlight the line for this many ms.
   -- Set to false to disable
   highlight_on_jump = 300,
