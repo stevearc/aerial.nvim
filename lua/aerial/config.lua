@@ -308,6 +308,12 @@ local function create_filetype_opt_getter(option, default)
 end
 
 M.setup = function(opts)
+  if HAS_LSPKIND and opts.icons then
+    vim.notify(
+      "Aerial: use lspkind to configure symbols instead of config value 'icons'",
+      vim.log.levels.WARN
+    )
+  end
   local newconf = vim.tbl_deep_extend("force", default_options, opts or {})
   if newconf.nerd_font == "auto" then
     newconf.nerd_font = HAS_DEVICONS or HAS_LSPKIND
