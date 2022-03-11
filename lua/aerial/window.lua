@@ -34,6 +34,14 @@ local function create_aerial_buffer(bufnr)
   api.nvim_buf_set_option(aer_bufnr, "buflisted", false)
   api.nvim_buf_set_option(aer_bufnr, "swapfile", false)
   api.nvim_buf_set_option(aer_bufnr, "modifiable", false)
+  vim.cmd(string.format(
+    [[
+    au CursorMoved <buffer=%d> lua require('aerial.autocommands').on_cursor_move(true)
+    au BufLeave <buffer=%d> lua require('aerial.autocommands').on_leave_aerial_buf()
+  ]],
+    aer_bufnr,
+    aer_bufnr
+  ))
   return aer_bufnr
 end
 

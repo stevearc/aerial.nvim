@@ -79,8 +79,16 @@ M.on_buf_delete = function(bufnr)
   data[tonumber(bufnr)] = nil
 end
 
-M.on_cursor_move = function()
-  window.update_position(0, true)
+M.on_cursor_move = function(is_aerial_buf)
+  if is_aerial_buf then
+    render.update_highlights(util.get_source_buffer())
+  else
+    window.update_position(0, true)
+  end
+end
+
+M.on_leave_aerial_buf = function()
+  render.clear_highlights(util.get_source_buffer())
 end
 
 M.attach_autocommands = function(bufnr)

@@ -179,8 +179,7 @@ M.update_highlights = function(buf)
   winids = vim.tbl_filter(function(wid)
     return bufdata.positions[wid]
   end, winids)
-  local ns = vim.api.nvim_create_namespace("aerial-line")
-  vim.api.nvim_buf_clear_namespace(aer_bufnr, ns, 0, -1)
+  local ns = M.clear_highlights(aer_bufnr)
   if vim.tbl_isempty(winids) then
     return
   end
@@ -212,6 +211,20 @@ M.update_highlights = function(buf)
       end_hl = end_hl + hl_width
     end
   end
+
+  -- If we're in the aerial buffer, update highlight line in the source buffer
+  if config.highlight_on_hover and aer_bufnr == vim.api.nvim_get_current_buf() then
+    M.clear_highlights(bufnr)
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    local item = data[0]:item(cursor[1])
+    vim.api.nvim_buf_add_highlight(bufnr, ns, "AerialLine", item.lnum - 1, 0, -1)
+  end
+end
+
+M.clear_highlights = function(buf)
+  local ns = vim.api.nvim_create_namespace("aerial-line")
+  vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
+  return ns
 end
 
 return M
