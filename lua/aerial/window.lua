@@ -122,6 +122,7 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   api.nvim_win_set_option(0, "foldcolumn", "0")
   api.nvim_win_set_option(0, "relativenumber", false)
   api.nvim_win_set_option(0, "wrap", false)
+  api.nvim_win_set_option(0, "spell", false)
   api.nvim_win_set_var(0, "is_aerial_win", true)
   -- Set the filetype only after we enter the buffer so that FileType autocmds
   -- behave properly
