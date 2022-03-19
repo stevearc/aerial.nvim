@@ -96,7 +96,7 @@ git clone --depth=1 https://github.com/stevearc/aerial.nvim.git \
 Aerial can display document symbols from a couple of sources; you will need to
 follow the setup steps for at least one of them. You can configure your
 preferred source(s) with the `backends` option (see [Options](#options)). The
-default is to prefer LSP when it's available and fall back to Treesitter.
+default is to prefer Treesitter when it's available and fall back to LSP.
 
 ### LSP
 
@@ -123,10 +123,6 @@ end
 ```
 
 ### Treesitter
-
-**The treesitter backend is in Beta status**
-
-Please do try it out, and file an issue if you encounter any problems.
 
 First ensure you have
 [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) installed

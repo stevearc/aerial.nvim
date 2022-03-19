@@ -4,7 +4,7 @@ local HAS_LSPKIND, lspkind = pcall(require, "lspkind")
 local default_options = {
   -- Priority list of preferred backends for aerial.
   -- This can be a filetype map (see :help aerial-filetype-map)
-  backends = { "lsp", "treesitter", "markdown" },
+  backends = { "treesitter", "lsp", "markdown" },
 
   -- Enum: persist, close, auto, global
   --   persist - aerial window will stay open until closed
