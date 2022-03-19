@@ -217,7 +217,7 @@ M.tree_cmd = function(action, opts)
   else
     local pos = window.get_position_in_win()
     index = pos.lnum
-    item = pos.closest_symbol
+    item = pos.exact_symbol
   end
   if item == nil then
     item = data[0]:item(index)

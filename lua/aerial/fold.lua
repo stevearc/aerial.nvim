@@ -28,35 +28,32 @@ local function compute_folds(bufnr)
   local bufdata = data[bufnr]
   local fold_levels = {}
   local line_no = 1
-  local fold_stack = { { level = -1 } }
 
-  local function add_fold()
-    local fold_item = fold_stack[#fold_stack]
-    local levelstr = string.format("%d", fold_item.level + 1)
-    if line_no == fold_item.lnum then
-      levelstr = ">" .. levelstr
-    elseif vim.api.nvim_buf_get_lines(bufnr, line_no - 1, line_no, true)[1] == "" then
+  local function add_no_symbol_fold_level()
+    local levelstr
+    if vim.api.nvim_buf_get_lines(bufnr, line_no - 1, line_no, true)[1] == "" then
       levelstr = "-1"
+    else
+      levelstr = "0"
     end
-    table.insert(fold_levels, levelstr)
+    fold_levels[line_no] = levelstr
     line_no = line_no + 1
   end
 
   bufdata:visit(function(item)
     while item.lnum > line_no do
-      add_fold()
+      add_no_symbol_fold_level()
     end
-    while fold_stack[#fold_stack].level >= item.level do
-      table.remove(fold_stack, #fold_stack)
+    fold_levels[item.lnum] = string.format(">%d", item.level + 1)
+    for lnum = item.lnum + 1, item.end_lnum, 1 do
+      fold_levels[lnum] = string.format("%d", item.level + 1)
     end
-    if bufdata:is_collapsable(item) then
-      table.insert(fold_stack, item)
-    end
+    line_no = math.max(line_no, item.end_lnum + 1)
   end, {
     incl_hidden = true,
   })
-  for _ = line_no, vim.api.nvim_buf_line_count(bufnr), 1 do
-    add_fold()
+  while line_no <= vim.api.nvim_buf_line_count(bufnr) do
+    add_no_symbol_fold_level()
   end
 
   fold_cache[bufnr] = fold_levels

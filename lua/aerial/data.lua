@@ -60,8 +60,7 @@ local BufData = {
   end,
 
   is_collapsable = function(_, item)
-    return (item.level == 0 and config.manage_folds)
-      or (item.children and not vim.tbl_isempty(item.children))
+    return config.manage_folds or (item.children and not vim.tbl_isempty(item.children))
   end,
 
   get_root_of = function(_, item)

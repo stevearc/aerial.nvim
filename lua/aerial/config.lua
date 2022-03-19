@@ -318,7 +318,14 @@ M.setup = function(opts)
   if newconf.nerd_font == "auto" then
     newconf.nerd_font = HAS_DEVICONS or HAS_LSPKIND
   end
-  -- TODO for backwards compatibility
+
+  -- If not managing folds, don't link either direction
+  if newconf.manage_folds == false then
+    newconf.link_tree_to_folds = false
+    newconf.link_folds_to_tree = false
+  end
+
+  -- for backwards compatibility
   for k, _ in pairs(default_options.lsp) do
     if newconf[k] ~= nil then
       newconf.lsp[k] = newconf[k]
