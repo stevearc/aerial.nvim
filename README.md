@@ -434,7 +434,7 @@ filtering.
 ## Default Keybindings
 
 The default keybindings in the aerial window. You can add your own in
-`ftplugin/aerial.vim`, and remove these by setting `default_bindings = false`.
+`ftplugin/aerial.vim`, and remove these by setting `default_bindings = false`. To view the default bindings and how to replace them, please see [here](https://github.com/stevearc/aerial.nvim/blob/master/lua/aerial/bindings.lua#L4).
 
 | Key       | Command                                                        |
 | --------- | -------------------------------------------------------------- |
