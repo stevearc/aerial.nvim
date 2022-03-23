@@ -540,6 +540,10 @@ hi link AerialGuide Comment
 " You can set a different guide color for each level
 hi AerialGuide1 guifg=Red
 hi AerialGuide2 guifg=Blue
+
+" If highlight_mode="split_width", you can set a separate color for the
+" non-current location highlight
+hi AerialLineNC guibg=Gray
 ```
 
 ## FAQ

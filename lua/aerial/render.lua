@@ -204,7 +204,8 @@ M.update_highlights = function(buf)
     end
     local pos = bufdata.positions[winid]
     if config.highlight_closest or pos.exact_symbol then
-      vim.api.nvim_buf_add_highlight(aer_bufnr, ns, "AerialLine", pos.lnum - 1, start_hl, end_hl)
+      local hl_group = winid == bufdata.last_win and "AerialLine" or "AerialLineNC"
+      vim.api.nvim_buf_add_highlight(aer_bufnr, ns, hl_group, pos.lnum - 1, start_hl, end_hl)
     end
     if hl_mode ~= "full_width" then
       start_hl = end_hl

@@ -3,7 +3,8 @@ local M = {}
 M.create_highlight_groups = function()
   vim.cmd([[
     " The line that shows where your cursor(s) are
-    highlight default link AerialLine QuickFixLine
+    highlight default link AerialLine   QuickFixLine
+    highlight default link AerialLineNC AerialLine
 
     " The guides when show_guide = true
     highlight default link AerialGuide Comment
