@@ -31,3 +31,5 @@ describe("UnitTest", function()
   after_each(function() end)
   it("describes the test", function() end)
 end)
+
+function M:fn_7() end

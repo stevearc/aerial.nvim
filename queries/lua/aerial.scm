@@ -1,5 +1,5 @@
 (function_declaration
-  name: [(identifier) (dot_index_expression)] @name) @type
+  name: [(identifier) (dot_index_expression) (method_index_expression)] @name) @type
 
 (variable_declaration
   (assignment_statement
