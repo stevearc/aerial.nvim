@@ -11,6 +11,14 @@ M.is_supported = function(bufnr, name)
   if max_lines and max_lines > 0 and vim.api.nvim_buf_line_count(bufnr) > max_lines then
     return false, "File exceeds disable_max_lines size"
   end
+  local max_size = config.disable_max_size
+  if max_size and max_size > 0 then
+    local size = vim.fn.getfsize(vim.api.nvim_buf_get_name(bufnr))
+    -- size will be -2 if it doesn't fit into a number
+    if size > max_size or size == -2 then
+      return false, "File exceeds disable_max_size"
+    end
+  end
   local backend = M.get_backend_by_name(name)
   if backend then
     local supported, err = backend.is_supported(bufnr)
