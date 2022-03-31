@@ -11,8 +11,8 @@ end
 
 local function process_symbols(symbols, bufnr)
   local include_kind = config.get_filter_kind_map(bufnr)
-  local function _process_symbols(_symbols, parent, list, level)
-    for _, symbol in ipairs(_symbols) do
+  local function _process_symbols(symbols_, parent, list, level)
+    for _, symbol in ipairs(symbols_) do
       local kind = get_symbol_kind_name(symbol.kind)
       local range
       if symbol.location then -- SymbolInformation type
