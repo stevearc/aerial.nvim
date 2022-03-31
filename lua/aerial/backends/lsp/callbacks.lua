@@ -23,9 +23,15 @@ local function process_symbols(symbols, bufnr)
       local include_item = range and include_kind[kind]
 
       if include_item then
+        local name = symbol.name
+        -- Some LSP servers return multiline symbols with newlines
+        local nl = string.find(symbol.name, "\n")
+        if nl then
+          name = string.sub(name, 1, nl - 1)
+        end
         local item = {
           kind = kind,
-          name = symbol.name,
+          name = name,
           level = level,
           parent = parent,
           lnum = range.start.line + 1,
