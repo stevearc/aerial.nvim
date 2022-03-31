@@ -200,6 +200,10 @@ local default_options = {
 
     -- Set to false to not update the symbols when there are LSP errors
     update_when_errors = true,
+
+    -- How long to wait (in ms) after a buffer change before updating
+    -- Only used when diagnostics_trigger_update = false
+    update_delay = 300,
   },
 
   treesitter = {
