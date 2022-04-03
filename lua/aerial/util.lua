@@ -46,7 +46,7 @@ M.is_aerial_buffer = function(bufnr)
 end
 
 M.go_win_no_au = function(winid)
-  if winid == vim.api.nvim_get_current_win() then
+  if winid == nil or winid == vim.api.nvim_get_current_win() then
     return
   end
   local winnr = vim.api.nvim_win_get_number(winid)
