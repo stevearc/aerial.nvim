@@ -1,5 +1,5 @@
 (class
-  name: (constant) @name) @type
+  name: [(constant) (scope_resolution)] @name) @type
 
 (method
   name: (identifier) @name) @type
@@ -8,7 +8,7 @@
   name: (identifier) @name) @type
 
 (module
-  name: (constant) @name) @type
+  name: [(constant) (scope_resolution)] @name) @type
 
 ; For Rspec and Rake
 (call

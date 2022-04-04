@@ -137,6 +137,26 @@ describe("treesitter ruby", function()
           },
         },
       },
+      {
+        kind = "Module",
+        name = "Long::Mod::Name",
+        level = 0,
+        lnum = 27,
+        col = 0,
+        end_lnum = 30,
+        end_col = 3,
+        children = {
+          {
+            kind = "Class",
+            name = "Long::Class::Name",
+            level = 1,
+            lnum = 28,
+            col = 2,
+            end_lnum = 29,
+            end_col = 5
+          }
+        }
+      }
     })
   end)
 end)

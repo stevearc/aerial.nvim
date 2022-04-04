@@ -22,3 +22,9 @@ namespace "rake_namespace" do
   multitask parallel_prereqs: %w[task1 task2 task3] do end
   file "create_file" do || end
 end
+
+
+module Long::Mod::Name
+  class Long::Class::Name
+  end
+end
