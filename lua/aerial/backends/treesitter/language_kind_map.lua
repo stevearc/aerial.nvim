@@ -96,6 +96,7 @@ return {
     trait_item = "Interface",
   },
   typescript = {
+    arrow_function = "Function",
     class_declaration = "Class",
     function_signature = "Function",
     function_declaration = "Function",
@@ -104,6 +105,7 @@ return {
     type_alias_declaration = "Type",
   },
   tsx = {
+    arrow_function = "Function",
     class_declaration = "Class",
     function_signature = "Function",
     function_declaration = "Function",

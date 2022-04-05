@@ -59,6 +59,15 @@ describe("treesitter tsx", function()
         end_lnum = 13,
         end_col = 16,
       },
+      {
+        kind = "Function",
+        name = "fn_3",
+        level = 0,
+        lnum = 15,
+        col = 6,
+        end_lnum = 15,
+        end_col = 21,
+      },
     })
   end)
 end)

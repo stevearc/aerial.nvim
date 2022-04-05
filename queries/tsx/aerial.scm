@@ -4,6 +4,11 @@
 (function_declaration
   name: (identifier) @name) @type
 
+(variable_declarator
+  name: (identifier) @name
+  value: (arrow_function) @type
+) @start
+
 (interface_declaration
   name: (type_identifier) @name) @type
 

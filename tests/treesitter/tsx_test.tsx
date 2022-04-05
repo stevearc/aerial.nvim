@@ -11,3 +11,5 @@ class Cl_1 {
 }
 
 type Type1 = {};
+
+const fn_3 = () => {};

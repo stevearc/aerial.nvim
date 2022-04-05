@@ -10,7 +10,7 @@ describe("treesitter ts", function()
         lnum = 1,
         col = 0,
         end_lnum = 1,
-        end_col = 19,
+        end_col = 18,
       },
       {
         kind = "Function",
@@ -28,7 +28,7 @@ describe("treesitter ts", function()
         lnum = 5,
         col = 0,
         end_lnum = 5,
-        end_col = 21,
+        end_col = 20,
       },
       {
         kind = "Class",
@@ -46,7 +46,7 @@ describe("treesitter ts", function()
             lnum = 8,
             col = 2,
             end_lnum = 8,
-            end_col = 14,
+            end_col = 13,
           },
         },
       },
@@ -57,7 +57,16 @@ describe("treesitter ts", function()
         lnum = 11,
         col = 0,
         end_lnum = 11,
-        end_col = 17,
+        end_col = 16,
+      },
+      {
+        kind = "Function",
+        name = "fn_3",
+        level = 0,
+        lnum = 13,
+        col = 6,
+        end_lnum = 13,
+        end_col = 21,
       },
     })
   end)
