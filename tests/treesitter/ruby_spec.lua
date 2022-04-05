@@ -153,10 +153,10 @@ describe("treesitter ruby", function()
             lnum = 28,
             col = 2,
             end_lnum = 29,
-            end_col = 5
-          }
-        }
-      }
+            end_col = 5,
+          },
+        },
+      },
     })
   end)
 end)
