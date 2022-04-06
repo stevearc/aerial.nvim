@@ -10,7 +10,7 @@ M.get_labels = function(opts)
     backends.log_support_err()
     return nil
   elseif not data:has_symbols(0) then
-    backend.fetch_symbols_sync(opts.timeout)
+    backend.fetch_symbols_sync(0, opts)
   end
   local results = {}
   if data:has_symbols(0) then

@@ -132,8 +132,8 @@ end
 
 -- Backends must provide the following methods:
 -- is_supported(bufnr) -> bool, err
--- fetch_symbols_sync(timeout)
--- fetch_symbols()
+-- fetch_symbols_sync(bufnr, {timeout})
+-- fetch_symbols(bufnr)
 -- attach(bufnr)
 -- detach(bufnr)
 

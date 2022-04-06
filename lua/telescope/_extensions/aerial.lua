@@ -18,7 +18,7 @@ local function aerial_picker(opts)
     backends.log_support_err()
     return
   elseif not data:has_symbols(0) then
-    backend.fetch_symbols_sync(opts.timeout)
+    backend.fetch_symbols_sync(0, opts)
   end
 
   local displayer = entry_display.create({

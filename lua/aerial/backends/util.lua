@@ -42,7 +42,7 @@ M._update_symbols = util.throttle(function(backend_name)
   if backends.is_backend_attached(0, backend_name) then
     local backend = backends.get_backend_by_name(backend_name)
     if backend then
-      backend.fetch_symbols()
+      backend.fetch_symbols(0)
     end
   end
 end, {

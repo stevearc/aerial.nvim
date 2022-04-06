@@ -11,9 +11,9 @@ M.is_supported = function(bufnr)
   return true, nil
 end
 
-M.fetch_symbols_sync = function(timeout)
+M.fetch_symbols_sync = function(bufnr)
+  bufnr = bufnr or 0
   local extensions = require("aerial.backends.treesitter.extensions")
-  local bufnr = 0
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
   local items = {}
   local stack = {}
@@ -56,7 +56,7 @@ M.fetch_symbols = M.fetch_symbols_sync
 
 M.attach = function(bufnr)
   backend_util.add_change_watcher(bufnr, "markdown")
-  M.fetch_symbols()
+  M.fetch_symbols(bufnr)
 end
 
 M.detach = function(bufnr)

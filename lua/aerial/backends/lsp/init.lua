@@ -50,17 +50,23 @@ local function hook_handlers(preserve_symbol_callback)
   replace_handler("textDocument/publishDiagnostics", callbacks.on_publish_diagnostics, true)
 end
 
-M.fetch_symbols = function()
-  vim.lsp.buf.document_symbol()
+M.fetch_symbols = function(bufnr)
+  bufnr = bufnr or 0
+  local params = { textDocument = vim.lsp.util.make_text_document_params() }
+  vim.lsp.buf_request(bufnr, "textDocument/documentSymbol", params, callbacks.symbol_callback)
 end
 
-M.fetch_symbols_sync = function(timeout)
-  local params = vim.lsp.util.make_position_params()
+M.fetch_symbols_sync = function(bufnr, opts)
+  bufnr = bufnr or 0
+  opts = vim.tbl_extend("keep", opts or {}, {
+    timeout = 4000,
+  })
+  local params = { textDocument = vim.lsp.util.make_text_document_params() }
   local lsp_results, err = vim.lsp.buf_request_sync(
-    0,
+    bufnr,
     "textDocument/documentSymbol",
     params,
-    timeout or 4000
+    opts.timeout
   )
   if err then
     vim.api.nvim_err_writeln("Error when finding document symbols: " .. err)
@@ -112,7 +118,7 @@ M.attach = function(bufnr)
   if not config.lsp.diagnostics_trigger_update then
     util.add_change_watcher(bufnr, "lsp")
   end
-  M.fetch_symbols()
+  M.fetch_symbols(bufnr)
 end
 
 M.detach = function(bufnr)

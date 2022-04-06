@@ -26,13 +26,13 @@ M.is_supported = function(bufnr)
   return true, nil
 end
 
-M.fetch_symbols_sync = function(timeout)
+M.fetch_symbols_sync = function(bufnr)
+  bufnr = bufnr or 0
   local extensions = require("aerial.backends.treesitter.extensions")
   local parsers = require("nvim-treesitter.parsers")
   local query = require("nvim-treesitter.query")
   local ts_utils = require("nvim-treesitter.ts_utils")
   local utils = require("nvim-treesitter.utils")
-  local bufnr = 0
   local include_kind = config.get_filter_kind_map(bufnr)
   local parser = parsers.get_parser(bufnr)
   local items = {}
@@ -113,7 +113,7 @@ M.fetch_symbols = M.fetch_symbols_sync
 
 M.attach = function(bufnr)
   util.add_change_watcher(bufnr, "treesitter")
-  M.fetch_symbols()
+  M.fetch_symbols(bufnr)
 end
 
 M.detach = function(bufnr)

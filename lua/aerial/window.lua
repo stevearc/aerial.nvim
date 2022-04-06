@@ -190,7 +190,7 @@ M.open = function(focus, direction, opts)
   direction = direction or util.detect_split_direction()
   local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction, opts.winid)
   if not data:has_symbols(bufnr) then
-    backend.fetch_symbols()
+    backend.fetch_symbols(bufnr)
   end
   local my_winid = api.nvim_get_current_win()
   M.update_position(nil, my_winid)

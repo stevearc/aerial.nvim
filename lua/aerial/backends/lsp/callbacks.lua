@@ -148,7 +148,7 @@ M.on_publish_diagnostics = function(_err, result, ctx, _config)
     end
   end
 
-  backends.get(bufnr).fetch_symbols()
+  backends.get(bufnr).fetch_symbols(bufnr)
 end
 
 return M
