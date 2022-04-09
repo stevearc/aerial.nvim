@@ -9,10 +9,8 @@ M.create_commands = function()
   end
 
   vim.cmd([[
-command! -bang -complete=customlist,v:lua.aerial_complete_open_direction -nargs=? AerialToggle
-  \ call luaeval("require'aerial'.toggle(_A[1], _A[2])", [expand('<bang>'), expand('<args>')])
-command! -bang -complete=customlist,v:lua.aerial_complete_open_direction -nargs=? AerialOpen
-  \ call luaeval("require'aerial'.open(_A[1], _A[2])", [expand('<bang>'), expand('<args>')])
+command! -bang -complete=customlist,v:lua.aerial_complete_open_direction -nargs=? AerialToggle call luaeval("require'aerial'.toggle(_A[1], _A[2])", [expand('<bang>'), expand('<args>')])
+command! -bang -complete=customlist,v:lua.aerial_complete_open_direction -nargs=? AerialOpen call luaeval("require'aerial'.open(_A[1], _A[2])", [expand('<bang>'), expand('<args>')])
 command! AerialClose lua require'aerial'.close()
 command! -count=1 AerialNext call luaeval("require'aerial'.next(tonumber(_A))", expand('<count>'))
 command! -count=1 AerialPrev call luaeval("require'aerial'.next(-1*tonumber(_A))", expand('<count>'))
