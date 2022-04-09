@@ -5,8 +5,8 @@ A code outline window for skimming and quick navigation
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Setup](#setup)
-  - [LSP](#lsp)
   - [Treesitter](#treesitter)
+  - [LSP](#lsp)
   - [Markdown](#markdown)
   - [Keymaps](#keymaps)
 - [Commands](#commands)
@@ -37,7 +37,10 @@ aerial supports all the usual plugin managers
 
 ```lua
 require('packer').startup(function()
-    use {'stevearc/aerial.nvim'}
+    use {
+      'stevearc/aerial.nvim',
+      config = function() require('aerial').setup() end
+    }
 end)
 ```
 
@@ -93,34 +96,17 @@ git clone --depth=1 https://github.com/stevearc/aerial.nvim.git \
 
 ## Setup
 
-Aerial can display document symbols from a couple of sources; you will need to
-follow the setup steps for at least one of them. You can configure your
-preferred source(s) with the `backends` option (see [Options](#options)). The
-default is to prefer Treesitter when it's available and fall back to LSP.
-
-### LSP
-
-First ensure you have a functioning LSP setup (see
-[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)). Once complete, add
-the aerial `on_attach` callback to your config:
+Somewhere in your init.lua you will need to call `aerial.setup()`. See below for
+[a full list of options](#options).
 
 ```lua
--- Set up your LSP clients here, using the aerial on_attach method
-require("lspconfig").vimls.setup{
-  on_attach = require("aerial").on_attach,
-}
--- Repeat this for each language server you have configured
+require('aerial').setup({})
 ```
 
-If you have your own custom `on_attach` function, call aerial's `on_attach` from
-inside it:
-
-```lua
-local function my_custom_attach(client, bufnr)
-  -- your code here
-  require("aerial").on_attach(client, bufnr)
-end
-```
+In addition, you will need to follow the setup steps for at least one of the
+symbol sources listed below. You can configure your preferred source(s) with the
+`backends` option (see [Options](#options)). The default is to prefer Treesitter
+when it's available and fall back to LSP.
 
 ### Treesitter
 
@@ -157,6 +143,30 @@ Don't see your language here? [Request support for
 it](https://github.com/stevearc/aerial.nvim/issues/new?assignees=stevearc&labels=enhancement&template=feature-request--treesitter-language-.md&title=)
 
 </details>
+
+### LSP
+
+First ensure you have a functioning LSP setup (see
+[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)). Once complete, add
+the aerial `on_attach` callback to your config:
+
+```lua
+-- Set up your LSP clients here, using the aerial on_attach method
+require("lspconfig").vimls.setup{
+  on_attach = require("aerial").on_attach,
+}
+-- Repeat this for each language server you have configured
+```
+
+If you have your own custom `on_attach` function, call aerial's `on_attach` from
+inside it:
+
+```lua
+local function my_custom_attach(client, bufnr)
+  -- your code here
+  require("aerial").on_attach(client, bufnr)
+end
+```
 
 ### Markdown
 
@@ -441,7 +451,10 @@ filtering.
 ## Default Keybindings
 
 The default keybindings in the aerial window. You can add your own in
-`ftplugin/aerial.vim`, and remove these by setting `default_bindings = false`. To view the default bindings and how to replace them, please see [here](https://github.com/stevearc/aerial.nvim/blob/master/lua/aerial/bindings.lua#L4).
+`ftplugin/aerial.vim`, and remove these by setting `default_bindings = false`.
+The default bindings are set in
+[bindings.lua](https://github.com/stevearc/aerial.nvim/blob/master/lua/aerial/bindings.lua#L4),
+which you can use as a reference if you want to set your own bindings.
 
 | Key       | Command                                                        |
 | --------- | -------------------------------------------------------------- |
@@ -541,16 +554,15 @@ hi AerialFunctionIcon guifg=#cb4b16 guibg=NONE guisp=NONE gui=NONE cterm=NONE
 
 " There's also this group for the cursor position
 hi link AerialLine QuickFixLine
+" If highlight_mode="split_width", you can set a separate color for the
+" non-current location highlight
+hi AerialLineNC guibg=Gray
 
 " You can customize the guides (if show_guide=true)
 hi link AerialGuide Comment
 " You can set a different guide color for each level
 hi AerialGuide1 guifg=Red
 hi AerialGuide2 guifg=Blue
-
-" If highlight_mode="split_width", you can set a separate color for the
-" non-current location highlight
-hi AerialLineNC guibg=Gray
 ```
 
 ## FAQ
