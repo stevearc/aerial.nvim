@@ -130,6 +130,7 @@ automatically fetch symbols from treesitter.
 - julia
 - lua
 - markdown
+- org
 - php
 - python
 - rst

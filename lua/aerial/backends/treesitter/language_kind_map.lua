@@ -64,6 +64,9 @@ return {
   markdown = {
     atx_heading = "Interface",
   },
+  org = {
+    section = "Interface",
+  },
   php = {
     anonymous_function_creation_expression = "Function",
     class_declaration = "Class",
