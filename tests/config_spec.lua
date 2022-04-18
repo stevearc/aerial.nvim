@@ -46,7 +46,7 @@ describe("config", function()
 
   -- Filetype maps
   it("reads the default value for filetype map option", function()
-    assert.equals(config.open_automatic(), false)
+    assert.equals(config.open_automatic(0), false)
   end)
   it("reads the filetype default value for filetype map option", function()
     vim.g.aerial = {
@@ -54,7 +54,7 @@ describe("config", function()
         ["_"] = true,
       },
     }
-    assert.equals(config.open_automatic(), true)
+    assert.equals(config.open_automatic(0), true)
   end)
   it("reads the filetype value for filetype map option", function()
     vim.g.aerial = {
@@ -63,7 +63,7 @@ describe("config", function()
       },
     }
     vim.api.nvim_buf_set_option(0, "filetype", "fake_ft")
-    assert.equals(config.open_automatic(), true)
+    assert.equals(config.open_automatic(0), true)
   end)
   it("reads the filetype value when using a compound filetype", function()
     vim.g.aerial = {
@@ -72,7 +72,7 @@ describe("config", function()
       },
     }
     vim.api.nvim_buf_set_option(0, "filetype", "fake_ft.extension")
-    assert.equals(config.open_automatic(), true)
+    assert.equals(config.open_automatic(0), true)
   end)
 
   it("Calls the open_automatic function", function()
