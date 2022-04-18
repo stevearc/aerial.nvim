@@ -8,5 +8,5 @@ vim.bo.swapfile = false
 vim.cmd([[autocmd BufRead,BufNewFile *.jl setfiletype julia]])
 
 require("nvim-treesitter.configs").setup({
-  ensure_installed = "maintained",
+  ensure_installed = "all",
 })

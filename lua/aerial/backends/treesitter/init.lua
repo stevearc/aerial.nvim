@@ -31,7 +31,15 @@ M.fetch_symbols_sync = function(bufnr)
   local extensions = require("aerial.backends.treesitter.extensions")
   local parsers = require("nvim-treesitter.parsers")
   local query = require("nvim-treesitter.query")
-  local ts_utils = require("nvim-treesitter.ts_utils")
+  local get_node_text
+  if vim.treesitter.query and vim.treesitter.query.get_node_text then
+    get_node_text = vim.treesitter.query.get_node_text
+  else
+    local ts_utils = require("nvim-treesitter.ts_utils")
+    get_node_text = function(node, buf)
+      return ts_utils.get_node_text(node, buf)[1]
+    end
+  end
   local utils = require("nvim-treesitter.utils")
   local include_kind = config.get_filter_kind_map(bufnr)
   local parser = parsers.get_parser(bufnr)
@@ -78,7 +86,7 @@ M.fetch_symbols_sync = function(bufnr)
     local end_row, end_col = end_node:end_()
     local name
     if name_node then
-      name = ts_utils.get_node_text(name_node, bufnr)[1] or "<parse error>"
+      name = get_node_text(name_node, bufnr) or "<parse error>"
     else
       name = "<Anonymous>"
     end

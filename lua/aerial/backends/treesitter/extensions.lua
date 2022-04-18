@@ -1,7 +1,15 @@
 -- This file is used by the markdown backend as well.
 -- We pcall(require) so it doesn't error when nvim-treesitter isn't installed.
-local _, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
+local has_ts_utils, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
 local _, utils = pcall(require, "nvim-treesitter.utils")
+local get_node_text
+if vim.treesitter.query and vim.treesitter.query.get_node_text then
+  get_node_text = vim.treesitter.query.get_node_text
+elseif has_ts_utils then
+  get_node_text = function(node, buf)
+    return ts_utils.get_node_text(node, buf)[1]
+  end
+end
 local M = {}
 
 local default_methods = {
@@ -82,9 +90,9 @@ M.rust = {
     if item.kind == "Class" then
       local trait_node = (utils.get_at_path(match, "trait") or {}).node
       local type = (utils.get_at_path(match, "rust_type") or {}).node
-      local name = ts_utils.get_node_text(type, bufnr)[1] or "<parse error>"
+      local name = get_node_text(type, bufnr) or "<parse error>"
       if trait_node then
-        local trait = ts_utils.get_node_text(trait_node, bufnr)[1] or "<parse error>"
+        local trait = get_node_text(trait_node, bufnr) or "<parse error>"
         name = string.format("%s > %s", name, trait)
       end
       item.name = name
@@ -96,7 +104,7 @@ M.ruby = {
   postprocess = function(bufnr, item, match)
     local method = (utils.get_at_path(match, "method") or {}).node
     if method then
-      local fn = ts_utils.get_node_text(method, bufnr)[1] or "<parse error>"
+      local fn = get_node_text(method, bufnr) or "<parse error>"
       if fn ~= "before" and fn ~= "after" then
         item.name = fn .. " " .. item.name
       end
@@ -108,7 +116,7 @@ M.lua = {
   postprocess = function(bufnr, item, match)
     local method = (utils.get_at_path(match, "method") or {}).node
     if method then
-      local fn = ts_utils.get_node_text(method, bufnr)[1] or "<parse error>"
+      local fn = get_node_text(method, bufnr) or "<parse error>"
       if fn == "it" or fn == "describe" then
         item.name = fn .. " " .. string.sub(item.name, 2, string.len(item.name) - 1)
       end
@@ -122,11 +130,11 @@ M.javascript = {
     local modifier = (utils.get_at_path(match, "modifier") or {}).node
     local string = (utils.get_at_path(match, "string") or {}).node
     if method and string then
-      local fn = ts_utils.get_node_text(method, bufnr)[1] or "<parse error>"
+      local fn = get_node_text(method, bufnr) or "<parse error>"
       if modifier then
-        fn = fn .. "." .. (ts_utils.get_node_text(modifier, bufnr)[1] or "<parse error>")
+        fn = fn .. "." .. (get_node_text(modifier, bufnr) or "<parse error>")
       end
-      local str = ts_utils.get_node_text(string, bufnr)[1] or "<parse error>"
+      local str = get_node_text(string, bufnr) or "<parse error>"
       item.name = fn .. " " .. str
     end
   end,
@@ -145,7 +153,7 @@ local function c_postprocess(bufnr, item, match)
       -- Search the declarator downwards until you hit the identifier
       root = root:field("declarator")[1]
     end
-    item.name = ts_utils.get_node_text(root, bufnr)[1] or "<parse error>"
+    item.name = get_node_text(root, bufnr) or "<parse error>"
   end
 end
 
