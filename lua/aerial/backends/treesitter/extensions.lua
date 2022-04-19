@@ -146,7 +146,7 @@ local function c_postprocess(bufnr, item, match)
     while
       root
       and not vim.tbl_contains(
-        { "identifier", "field_identifier", "qualified_identifier" },
+        { "identifier", "field_identifier", "qualified_identifier", "destructor_name" },
         root:type()
       )
     do

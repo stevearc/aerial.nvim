@@ -8,6 +8,7 @@ struct {
 enum en_1 {};
 
 class cl_1 {
+  ~cl_1() {}
 public:
   void meth_1() {}
 };
