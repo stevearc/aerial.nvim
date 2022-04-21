@@ -18,3 +18,5 @@ void A::bar() {}
 int *fn_2() {}
 
 int **fn_3() {}
+
+bool operator < (int, int) {}

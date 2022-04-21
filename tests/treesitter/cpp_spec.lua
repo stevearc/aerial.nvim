@@ -95,6 +95,15 @@ describe("treesitter cpp", function()
         end_lnum = 20,
         end_col = 15,
       },
+      {
+        kind = "Function",
+        name = "operator <",
+        level = 0,
+        lnum = 22,
+        col = 0,
+        end_lnum = 22,
+        end_col = 29,
+      },
     })
   end)
 end)

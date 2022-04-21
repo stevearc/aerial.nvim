@@ -145,13 +145,21 @@ local function c_postprocess(bufnr, item, match)
   if root then
     while
       root
-      and not vim.tbl_contains(
-        { "identifier", "field_identifier", "qualified_identifier", "destructor_name" },
-        root:type()
-      )
+      and not vim.tbl_contains({
+        "identifier",
+        "field_identifier",
+        "qualified_identifier",
+        "destructor_name",
+        "operator_name",
+      }, root:type())
     do
       -- Search the declarator downwards until you hit the identifier
-      root = root:field("declarator")[1]
+      local next = root:field("declarator")[1]
+      if next ~= nil then
+        root = next
+      else
+        break
+      end
     end
     item.name = get_node_text(root, bufnr) or "<parse error>"
   end
