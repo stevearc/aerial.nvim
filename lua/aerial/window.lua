@@ -127,6 +127,8 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   -- Set the filetype only after we enter the buffer so that FileType autocmds
   -- behave properly
   api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
+  -- Set the buffer name
+  api.nvim_buf_set_name(aer_bufnr, "Aerial")
 
   local aer_winid = api.nvim_get_current_win()
   util.go_win_no_au(my_winid)
