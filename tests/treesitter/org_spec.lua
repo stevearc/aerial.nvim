@@ -1,5 +1,11 @@
 local util = require("tests.test_util")
 
+-- Old versions of nvim-treesitter do not have this parser
+-- New versions of nvim-treesitter do not support neovim <0.7.0
+if not require("treesitter.parsers").has_parser("org") then
+  return
+end
+
 describe("org", function()
   local symbols = {
     {
