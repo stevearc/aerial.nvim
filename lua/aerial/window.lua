@@ -25,8 +25,8 @@ local function create_aerial_buffer(bufnr)
       end
     end
   end
-  -- Set buffer options
   api.nvim_buf_set_var(bufnr, "aerial_buffer", aer_bufnr)
+  -- Set buffer options
   api.nvim_buf_set_var(aer_bufnr, "source_buffer", bufnr)
   loading.set_loading(aer_bufnr, not data:has_received_data(bufnr))
   api.nvim_buf_set_option(aer_bufnr, "buftype", "nofile")
@@ -127,8 +127,6 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   -- Set the filetype only after we enter the buffer so that FileType autocmds
   -- behave properly
   api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
-  -- Set the buffer name
-  api.nvim_buf_set_name(aer_bufnr, "Aerial")
 
   local aer_winid = api.nvim_get_current_win()
   util.go_win_no_au(my_winid)
