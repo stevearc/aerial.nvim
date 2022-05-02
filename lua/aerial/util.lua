@@ -166,6 +166,11 @@ end
 
 M.is_ignored_buf = function(bufnr)
   bufnr = bufnr or 0
+  local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
+  -- Never ignore aerial buffers
+  if filetype == "aerial" then
+    return false
+  end
   local ignore = config.ignore
   if ignore.unlisted_buffers and not vim.api.nvim_buf_get_option(bufnr, "buflisted") then
     return true
@@ -185,7 +190,6 @@ M.is_ignored_buf = function(bufnr)
     end
   end
   if ignore.filetypes then
-    local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
     if M.is_ignored_filetype(filetype) then
       return true
     end
