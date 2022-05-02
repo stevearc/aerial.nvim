@@ -90,7 +90,7 @@ M.is_supported = function(bufnr)
   end
   if not is_lsp_attached(bufnr) then
     for _, client in pairs(vim.lsp.buf_get_clients(bufnr)) do
-      if client.resolved_capabilities.document_symbol then
+      if client.server_capabilities.documentSymbol then
         return false, "LSP client not attached (did you call aerial.on_attach?)"
       end
     end
@@ -107,7 +107,7 @@ M.on_attach = function(client, bufnr, opts)
     bufnr = 0
   end
   opts = opts or {}
-  if client.resolved_capabilities.document_symbol then
+  if client.server_capabilities.documentSymbol then
     hook_handlers(opts.preserve_callback)
     mark_lsp_attached(bufnr)
     backends.attach(bufnr, true)
