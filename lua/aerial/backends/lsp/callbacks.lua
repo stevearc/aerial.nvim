@@ -129,7 +129,7 @@ M.on_publish_diagnostics = function(_err, result, ctx, _config)
     not bufnr
     or not backends.is_backend_attached(bufnr, "lsp")
     or not config.lsp.diagnostics_trigger_update
-    or not client.server_capabilities.documentSymbol
+    or not client.server_capabilities.documentSymbolProvider
   then
     return
   end
