@@ -150,9 +150,25 @@ M.close = function()
     return
   end
   local aer_bufnr = util.get_aerial_buffer()
-  local winid = util.buf_first_win_in_tabpage(aer_bufnr)
-  if winid then
-    vim.api.nvim_win_close(winid, false)
+  if aer_bufnr == -1 then
+    -- No aerial buffer for this buffer.
+    local backend = backends.get()
+    -- If this buffer has no supported symbols backend,
+    -- look for other aerial windows and close the first
+    if backend == nil then
+      for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        local winbuf = vim.api.nvim_win_get_buf(winid)
+        if util.is_aerial_buffer(winbuf) then
+          vim.api.nvim_win_close(winid, false)
+          break
+        end
+      end
+    end
+  else
+    local winid = util.buf_first_win_in_tabpage(aer_bufnr)
+    if winid then
+      vim.api.nvim_win_close(winid, false)
+    end
   end
 end
 
