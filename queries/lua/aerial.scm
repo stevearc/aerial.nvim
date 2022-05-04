@@ -10,7 +10,7 @@
 
 (assignment_statement
   (variable_list
-    name: [(identifier) (dot_index_expression)] @name)
+    name: [(identifier) (dot_index_expression) (bracket_index_expression)] @name)
   (expression_list
     value: (function_definition) @type)) @start
 

@@ -33,3 +33,5 @@ describe("UnitTest", function()
 end)
 
 function M:fn_7() end
+
+M["fn_8"] = function() end
