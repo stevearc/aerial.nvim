@@ -154,9 +154,9 @@ M.close = function()
   if aer_bufnr == -1 then
     -- No aerial buffer for this buffer.
     local backend = backends.get()
-    -- If this buffer has no supported symbols backend,
+    -- If this buffer has no supported symbols backend or no symbols,
     -- look for other aerial windows and close the first
-    if backend == nil then
+    if backend == nil or not data:has_symbols(0) then
       for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
         local winbuf = vim.api.nvim_win_get_buf(winid)
         if util.is_aerial_buffer(winbuf) then
