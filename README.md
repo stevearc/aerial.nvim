@@ -459,7 +459,7 @@ which you can use as a reference if you want to set your own bindings.
 
 | Key       | Command                                                        |
 | --------- | -------------------------------------------------------------- |
-| `?`       | Show default keymaps                                           |
+| `?`/`g?`  | Show default keymaps                                           |
 | `<CR>`    | Jump to the symbol under the cursor                            |
 | `<C-v>`   | Jump to the symbol in a vertical split                         |
 | `<C-s>`   | Jump to the symbol in a horizontal split                       |
