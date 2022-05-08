@@ -11,6 +11,7 @@ end
 
 local function process_symbols(symbols, bufnr)
   local include_kind = config.get_filter_kind_map(bufnr)
+  local max_line = vim.api.nvim_buf_line_count(bufnr)
   local function _process_symbols(symbols_, parent, list, level)
     for _, symbol in ipairs(symbols_) do
       local kind = get_symbol_kind_name(symbol.kind)
@@ -39,6 +40,9 @@ local function process_symbols(symbols, bufnr)
           end_lnum = range["end"].line + 1,
           end_col = range["end"].character,
         }
+        -- Some language servers give number values that are wildly incorrect
+        -- See https://github.com/stevearc/aerial.nvim/issues/101
+        item.end_lnum = math.min(item.end_lnum, max_line)
 
         -- Skip this symbol if it's in the same location as the last one.
         -- This can happen on C++ macros
