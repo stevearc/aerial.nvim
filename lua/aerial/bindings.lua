@@ -2,7 +2,7 @@ local util = require("aerial.util")
 local M = {}
 
 M.keys = {
-  { "?", "<cmd>lua require'aerial.bindings'.show()<CR>", "Show default keymaps" },
+  { { "?", "g?" }, "<cmd>lua require'aerial.bindings'.show()<CR>", "Show default keymaps" },
   { "<CR>", "<cmd>lua require'aerial'.select()<CR>", "Jump to the symbol under the cursor" },
   {
     "<C-v>",
