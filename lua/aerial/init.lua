@@ -156,23 +156,31 @@ M.get_location = function(exact)
   return ret
 end
 
-local function _post_tree_mutate(new_cursor_pos)
-  render.update_aerial_buffer()
-  window.update_all_positions()
-  if util.is_aerial_buffer() then
-    if new_cursor_pos then
-      vim.api.nvim_win_set_cursor(0, { new_cursor_pos, 0 })
+local function _post_tree_mutate(bufnr, new_cursor_pos)
+  bufnr = bufnr or 0
+  render.update_aerial_buffer(bufnr)
+  local mywin = vim.api.nvim_get_current_win()
+  window.update_all_positions(bufnr, mywin)
+  local _, aer_bufnr = util.get_buffers(bufnr)
+  if new_cursor_pos then
+    for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+      if vim.api.nvim_win_get_buf(winid) == aer_bufnr then
+        vim.api.nvim_win_set_cursor(winid, { new_cursor_pos, 0 })
+      end
     end
-  else
-    window.update_position(0, true)
   end
 end
 
 -- Collapse all nodes in the symbol tree
-M.tree_close_all = function()
+M.tree_close_all = function(bufnr)
+  bufnr = bufnr or 0
+  local mybuf = vim.api.nvim_get_current_buf()
+  if bufnr == 0 then
+    bufnr = mybuf
+  end
   local new_cursor_pos
-  local bufdata = data[0]
-  if util.is_aerial_buffer() then
+  local bufdata = data[bufnr]
+  if bufnr == mybuf and util.is_aerial_buffer(bufnr) then
     local lnum = vim.api.nvim_win_get_cursor(0)[1]
     local root = bufdata:get_root_of(bufdata:item(lnum))
     tree.close_all(bufdata)
@@ -181,18 +189,19 @@ M.tree_close_all = function()
     tree.close_all(bufdata)
   end
   if config.link_tree_to_folds then
-    M.sync_folds()
+    M.sync_folds(bufnr)
   end
-  _post_tree_mutate(new_cursor_pos)
+  _post_tree_mutate(bufnr, new_cursor_pos)
 end
 
 -- Expand all nodes in the symbol tree
-M.tree_open_all = function()
-  tree.open_all(data[0])
+M.tree_open_all = function(bufnr)
+  bufnr = bufnr or 0
+  tree.open_all(data[bufnr])
   if config.link_tree_to_folds then
-    M.sync_folds()
+    M.sync_folds(bufnr)
   end
-  _post_tree_mutate()
+  _post_tree_mutate(bufnr)
 end
 
 -- Perform an action on the symbol tree.
@@ -242,18 +251,11 @@ end
 
 -- Sync code folding with the current tree state.
 -- Ignores the 'link_tree_to_folds' config option.
-M.sync_folds = function()
+M.sync_folds = function(bufnr)
   local mywin = vim.api.nvim_get_current_win()
-  if util.is_aerial_buffer() then
-    local bufnr = util.get_source_buffer()
-    for _, winid in ipairs(util.get_fixed_wins(bufnr)) do
-      fold.sync_tree_folds(winid)
-    end
-  else
-    local bufnr = vim.api.nvim_get_current_buf()
-    for _, winid in ipairs(util.get_fixed_wins(bufnr)) do
-      fold.sync_tree_folds(winid)
-    end
+  local source_buf, _ = util.get_buffers(bufnr)
+  for _, winid in ipairs(util.get_fixed_wins(source_buf)) do
+    fold.sync_tree_folds(winid)
   end
   util.go_win_no_au(mywin)
 end
