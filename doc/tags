@@ -1,9 +1,12 @@
 :AerialClose	aerial.txt	/*:AerialClose*
+:AerialCloseAll	aerial.txt	/*:AerialCloseAll*
+:AerialCloseAllButCurrent	aerial.txt	/*:AerialCloseAllButCurrent*
 :AerialGo	aerial.txt	/*:AerialGo*
 :AerialInfo	aerial.txt	/*:AerialInfo*
 :AerialNext	aerial.txt	/*:AerialNext*
 :AerialNextUp	aerial.txt	/*:AerialNextUp*
 :AerialOpen	aerial.txt	/*:AerialOpen*
+:AerialOpenAll	aerial.txt	/*:AerialOpenAll*
 :AerialPrev	aerial.txt	/*:AerialPrev*
 :AerialPrevUp	aerial.txt	/*:AerialPrevUp*
 :AerialToggle	aerial.txt	/*:AerialToggle*

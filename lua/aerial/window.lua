@@ -173,6 +173,24 @@ M.close = function()
   end
 end
 
+M.close_all = function()
+  for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if util.is_aerial_buffer(vim.api.nvim_win_get_buf(winid)) then
+      vim.api.nvim_win_close(winid, false)
+    end
+  end
+end
+
+M.close_all_but_current = function()
+  local _, aer_bufnr = util.get_buffers(0)
+  for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    local bufnr = vim.api.nvim_win_get_buf(winid)
+    if bufnr ~= aer_bufnr and util.is_aerial_buffer(bufnr) then
+      vim.api.nvim_win_close(winid, false)
+    end
+  end
+end
+
 M.maybe_open_automatic = function(bufnr)
   if config.open_automatic(bufnr or 0) then
     local opts = {}
@@ -213,6 +231,19 @@ M.open = function(focus, direction, opts)
   M.update_position(nil, my_winid)
   if focus then
     api.nvim_set_current_win(aer_winid)
+  end
+end
+
+M.open_all = function()
+  if config.close_behavior == "global" then
+    return M.open()
+  end
+  for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if not util.is_ignored_win(winid) and not util.is_floating_win(winid) then
+      vim.api.nvim_win_call(winid, function()
+        M.open()
+      end)
+    end
   end
 end
 

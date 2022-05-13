@@ -40,6 +40,10 @@ M.close = function()
   window.close()
 end
 
+M.close_all = window.close_all
+
+M.close_all_but_current = window.close_all_but_current
+
 -- Open the aerial window for the current buffer.
 -- focus (bool): If true, jump to aerial window
 -- direction (enum): "left", "right", or "float"
@@ -56,6 +60,8 @@ M.open = function(focus, direction)
   end
   window.open(focus, direction)
 end
+
+M.open_all = window.open_all
 
 -- Jump to the aerial window for the current buffer, if it is open
 M.focus = function()
