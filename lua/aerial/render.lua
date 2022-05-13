@@ -126,7 +126,7 @@ M.update_aerial_buffer = function(buf)
     else
       spacing = string.rep("  ", item.level)
     end
-    local text = string.format("%s%s %s", spacing, kind, item.name)
+    local text = util.remove_newlines(string.format("%s%s %s", spacing, kind, item.name))
     local text_cols = vim.api.nvim_strwidth(text)
     table.insert(highlights, {
       group = "Aerial" .. item.kind .. "Icon",

@@ -17,6 +17,10 @@ M.lpad = function(str, length, padchar)
   return str
 end
 
+M.remove_newlines = function(str)
+  return string.gsub(str, "\n", " ")
+end
+
 M.restore_width = function(winid)
   local ok, width = pcall(vim.api.nvim_win_get_var, winid or 0, "aerial_width")
   if ok then
