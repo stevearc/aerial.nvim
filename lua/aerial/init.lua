@@ -173,33 +173,27 @@ end
 
 -- Collapse all nodes in the symbol tree
 M.tree_close_all = function(bufnr)
-  bufnr = bufnr or 0
-  local mybuf = vim.api.nvim_get_current_buf()
-  if bufnr == 0 then
-    bufnr = mybuf
-  end
-  local new_cursor_pos
-  local bufdata = data[bufnr]
-  if bufnr == mybuf and util.is_aerial_buffer(bufnr) then
-    local lnum = vim.api.nvim_win_get_cursor(0)[1]
-    local root = bufdata:get_root_of(bufdata:item(lnum))
-    tree.close_all(bufdata)
-    new_cursor_pos = bufdata:indexof(root)
-  else
-    tree.close_all(bufdata)
-  end
-  if config.link_tree_to_folds then
-    M.sync_folds(bufnr)
-  end
-  _post_tree_mutate(bufnr, new_cursor_pos)
+  M.tree_set_collapse_level(bufnr, 0)
 end
 
 -- Expand all nodes in the symbol tree
 M.tree_open_all = function(bufnr)
-  bufnr = bufnr or 0
-  tree.open_all(data[bufnr])
+  M.tree_set_collapse_level(bufnr, 99)
+end
+
+-- 0 is all closed, use 99 to open all
+M.tree_set_collapse_level = function(bufnr, level)
+  bufnr = util.get_buffers(bufnr or 0)
+  if not data:has_symbols(bufnr) then
+    return
+  end
+  tree.set_collapse_level(data[bufnr], level)
   if config.link_tree_to_folds then
-    M.sync_folds(bufnr)
+    for _, winid in ipairs(vim.api.nvim_list_wins()) do
+      if vim.api.nvim_win_get_buf(winid) == bufnr then
+        vim.api.nvim_win_set_option(winid, "foldlevel", level)
+      end
+    end
   end
   _post_tree_mutate(bufnr)
 end
@@ -245,7 +239,7 @@ M.tree_cmd = function(action, opts)
         recurse = opts.recurse,
       })
     end
-    _post_tree_mutate(new_cursor_pos)
+    _post_tree_mutate(0, new_cursor_pos)
   end
 end
 

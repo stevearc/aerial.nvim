@@ -122,7 +122,10 @@ M.maybe_set_foldmethod = function(bufnr)
       vim.api.nvim_win_set_var(winid, prev_fde, fde)
       vim.api.nvim_win_set_option(winid, "foldmethod", "expr")
       vim.api.nvim_win_set_option(winid, "foldexpr", "v:lua.aerial_foldexpr()")
-      if config.link_tree_to_folds then
+      if config.link_folds_to_tree then
+        local fdl = vim.api.nvim_win_get_option(winid, "foldlevel")
+        require("aerial").tree_set_collapse_level(bufnr, fdl)
+      elseif config.link_tree_to_folds then
         vim.api.nvim_win_set_option(winid, "foldlevel", 99)
       end
     end

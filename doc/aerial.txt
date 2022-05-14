@@ -91,6 +91,10 @@ COMMANDS                                                        *aerial-commands
 :AerialTreeCloseAll
         Collapse all the tree nodes.
 
+                                                    *:AerialTreeSetCollapseLevel*
+:AerialTreeSetCollapseLevel
+        Collapse symbols at a depth greater than N (0 collapses all)
+
                                                            *:AerialTreeSyncFolds*
 :AerialTreeSyncFolds
         Sync code folding with current tree state. This ignores the

@@ -26,6 +26,7 @@ command! -bang AerialTreeToggle call luaeval('require("aerial.command")._tree_cm
 command! AerialTreeOpenAll lua require'aerial'.tree_open_all()
 command! AerialTreeCloseAll lua require'aerial'.tree_close_all()
 command! AerialTreeSyncFolds lua require'aerial'.sync_folds()
+command! -nargs=1 AerialTreeSetCollapseLevel call luaeval('require("aerial").tree_set_collapse_level(0, tonumber(_A))', <q-args>)
 command! AerialInfo lua require'aerial'.info()
   ]])
 end

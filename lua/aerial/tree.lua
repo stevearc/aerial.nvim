@@ -25,6 +25,13 @@ M.open_all = function(bufdata)
   bufdata.collapsed = {}
 end
 
+M.set_collapse_level = function(bufdata, level)
+  bufdata:visit(function(item)
+    local collapsed = bufdata:is_collapsable(item) and level <= item.level
+    bufdata:set_collapsed(item, collapsed)
+  end)
+end
+
 M.edit_tree_node = function(bufdata, action, index, opts)
   opts = vim.tbl_extend("keep", opts or {}, {
     bubble = true,

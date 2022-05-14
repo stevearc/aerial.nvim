@@ -201,26 +201,27 @@ require("aerial").setup({
 
 ## Commands
 
-| Command                    | arg                    | description                                                                |
-| -------------------------- | ---------------------- | -------------------------------------------------------------------------- |
-| `AerialToggle[!]`          | `left`/`right`/`float` | Open or close the aerial window. With `[!]` cursor stays in current window |
-| `AerialOpen[!]`            | `left`/`right`/`float` | Open the aerial window. With `[!]` cursor stays in current window          |
-| `AerialOpenAll`            |                        | Open an aerial window for each visible window                              |
-| `AerialClose`              |                        | Close the aerial window                                                    |
-| `AerialCloseAll`           |                        | Close all visible aerial windows                                           |
-| `AerialCloseAllButCurrent` |                        | Close all visible aerial windows except for the focused one                |
-| `AerialPrev`               | N=1                    | Jump backwards N symbols                                                   |
-| `AerialNext`               | N=1                    | Jump forwards N symbols                                                    |
-| `AerialPrevUp`             | N=1                    | Jump up the tree N levels, moving backwards                                |
-| `AerialNextUp`             | N=1                    | Jump up the tree N levels, moving forwards                                 |
-| `AerialGo`                 | N=1, `v`/`h`           | Jump to the Nth symbol                                                     |
-| `AerialTreeOpen[!]`        |                        | Expand tree at current location. `[!]` makes it recursive.                 |
-| `AerialTreeClose[!]`       |                        | Collapse tree at current location. `[!]` makes it recursive.               |
-| `AerialTreeToggle[!]`      |                        | Toggle tree at current location. `[!]` makes it recursive.                 |
-| `AerialTreeOpenAll`        |                        | Open all tree nodes                                                        |
-| `AerialTreeCloseAll`       |                        | Collapse all tree nodes                                                    |
-| `AerialTreeSyncFolds`      |                        | Sync code folding with current tree state                                  |
-| `AerialInfo`               |                        | Print out debug info related to aerial                                     |
+| Command                      | arg                    | description                                                                |
+| ---------------------------- | ---------------------- | -------------------------------------------------------------------------- |
+| `AerialToggle[!]`            | `left`/`right`/`float` | Open or close the aerial window. With `[!]` cursor stays in current window |
+| `AerialOpen[!]`              | `left`/`right`/`float` | Open the aerial window. With `[!]` cursor stays in current window          |
+| `AerialOpenAll`              |                        | Open an aerial window for each visible window                              |
+| `AerialClose`                |                        | Close the aerial window                                                    |
+| `AerialCloseAll`             |                        | Close all visible aerial windows                                           |
+| `AerialCloseAllButCurrent`   |                        | Close all visible aerial windows except for the focused one                |
+| `AerialPrev`                 | N=1                    | Jump backwards N symbols                                                   |
+| `AerialNext`                 | N=1                    | Jump forwards N symbols                                                    |
+| `AerialPrevUp`               | N=1                    | Jump up the tree N levels, moving backwards                                |
+| `AerialNextUp`               | N=1                    | Jump up the tree N levels, moving forwards                                 |
+| `AerialGo`                   | N=1, `v`/`h`           | Jump to the Nth symbol                                                     |
+| `AerialTreeOpen[!]`          |                        | Expand tree at current location. `[!]` makes it recursive.                 |
+| `AerialTreeClose[!]`         |                        | Collapse tree at current location. `[!]` makes it recursive.               |
+| `AerialTreeToggle[!]`        |                        | Toggle tree at current location. `[!]` makes it recursive.                 |
+| `AerialTreeOpenAll`          |                        | Open all tree nodes                                                        |
+| `AerialTreeCloseAll`         |                        | Collapse all tree nodes                                                    |
+| `AerialTreeSetCollapseLevel` | N                      | Collapse symbols at a depth greater than N (0 collapses all)               |
+| `AerialTreeSyncFolds`        |                        | Sync code folding with current tree state                                  |
+| `AerialInfo`                 |                        | Print out debug info related to aerial                                     |
 
 ## Options
 
