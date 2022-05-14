@@ -47,6 +47,7 @@ M.edit_tree_node = function(bufdata, action, index, opts)
           do_action(child)
         end
       end
+      return item
     elseif action == "close" then
       did_update = did_update or not is_collapsed
       bufdata:set_collapsed(item, true)
