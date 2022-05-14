@@ -461,28 +461,29 @@ The default bindings are set in
 which you can use as a reference if you want to set your own bindings.
 
 | Key       | Command                                                        |
-| --------- | -------------------------------------------------------------- |
-| `?`/`g?`  | Show default keymaps                                           |
-| `<CR>`    | Jump to the symbol under the cursor                            |
-| `<C-v>`   | Jump to the symbol in a vertical split                         |
-| `<C-s>`   | Jump to the symbol in a horizontal split                       |
-| `p`       | Scroll to the symbol (stay in aerial buffer)                   |
-| `<C-j>`   | Go down one line and scroll to that symbol                     |
-| `<C-k>`   | Go up one line and scroll to that symbol                       |
-| `{`       | Jump to the previous symbol                                    |
-| `}`       | Jump to the next symbol                                        |
-| `[[`      | Jump up the tree, moving backwards                             |
-| `]]`      | Jump up the tree, moving forwards                              |
-| `q`       | Close the aerial window                                        |
-| `o`/`za`  | Toggle the symbol under the cursor open/closed                 |
-| `O`/`zA`  | Recursive toggle the symbol under the cursor open/closed       |
-| `l`/`zo`  | Expand the symbol under the cursor                             |
-| `L`/`zO`  | Recursive expand the symbol under the cursor                   |
-| `h`/`zc`  | Collapse the symbol under the cursor                           |
-| `H`/`zC`  | Recursive collapse the symbol under the cursor                 |
-| `zR`      | Expand all nodes in the tree                                   |
-| `zM`      | Collapse all nodes in the tree                                 |
-| `zx`/`zX` | Sync code folding to the tree (useful if they get out of sync) |
+| --------------- | -------------------------------------------------------------- |
+| `?`/`g?`        | Show default keymaps                                           |
+| `<CR>`          | Jump to the symbol under the cursor                            |
+| `<C-v>`         | Jump to the symbol in a vertical split                         |
+| `<C-s>`         | Jump to the symbol in a horizontal split                       |
+| `p`             | Scroll to the symbol (stay in aerial buffer)                   |
+| `<C-j>`         | Go down one line and scroll to that symbol                     |
+| `<C-k>`         | Go up one line and scroll to that symbol                       |
+| `{`             | Jump to the previous symbol                                    |
+| `}`             | Jump to the next symbol                                        |
+| `[[`            | Jump up the tree, moving backwards                             |
+| `]]`            | Jump up the tree, moving forwards                              |
+| `q`             | Close the aerial window                                        |
+| `o`/`za`        | Toggle the symbol under the cursor open/closed                 |
+| `O`/`zA`        | Recursive toggle the symbol under the cursor open/closed       |
+| `l`/`zo`        | Expand the symbol under the cursor                             |
+| `L`/`zO`        | Recursive expand the symbol under the cursor                   |
+| `h`/`zc`        | Collapse the symbol under the cursor                           |
+| `H`/`zC`        | Recursive collapse the symbol under the cursor                 |
+| `zR`            | Expand all nodes in the tree                                   |
+| `zM`            | Collapse all nodes in the tree                                 |
+| `zx`/`zX`       | Sync code folding to the tree (useful if they get out of sync) |
+| `<2-LeftMouse>` | Jump to the symbol under the cursor                            |
 
 ## Third-party integrations
 
