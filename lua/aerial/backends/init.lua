@@ -103,6 +103,9 @@ M.set_symbols = function(bufnr, items)
     if bufnr == vim.api.nvim_get_current_buf() then
       window.maybe_open_automatic(bufnr)
     end
+    if config.on_first_symbols then
+      config.on_first_symbols(bufnr)
+    end
   end
 end
 

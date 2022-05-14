@@ -138,6 +138,10 @@ local default_options = {
   -- Useful for setting keymaps. Takes a single `bufnr` argument.
   on_attach = nil,
 
+  -- Call this function when aerial first sets symbols on a buffer.
+  -- Takes a single `bufnr` argument.
+  on_first_symbols = nil,
+
   -- Automatically open aerial when entering supported buffers.
   -- This can be a function (see :help aerial-open-automatic)
   open_automatic = false,
