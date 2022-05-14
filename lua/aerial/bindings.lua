@@ -59,6 +59,11 @@ M.keys = {
     "<cmd>AerialTreeSyncFolds<CR>",
     "Sync code folding to the tree (useful if they get out of sync)",
   },
+  {
+    "<2-LeftMouse>",
+    "<cmd>lua require'aerial'.select()<CR>",
+    "Jump to the symbol under the cursor",
+  },
 }
 
 M.show = function()
