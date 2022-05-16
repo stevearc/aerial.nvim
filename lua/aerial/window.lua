@@ -131,7 +131,6 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   local aer_winid = api.nvim_get_current_win()
   util.go_win_no_au(my_winid)
   render.update_aerial_buffer(aer_bufnr)
-  vim.cmd([[wincmd =]])
   return aer_winid
 end
 
