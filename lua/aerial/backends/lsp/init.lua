@@ -71,7 +71,7 @@ M.fetch_symbols_sync = function(bufnr, opts)
   if err then
     vim.api.nvim_err_writeln("Error when finding document symbols: " .. err)
   else
-    callbacks.handle_symbols(lsp_results[1].result)
+    callbacks.handle_symbols(lsp_results[1].result, bufnr)
   end
 end
 
