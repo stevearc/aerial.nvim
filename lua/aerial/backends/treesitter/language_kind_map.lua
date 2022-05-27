@@ -61,6 +61,9 @@ return {
     function_declaration = "Function",
     function_definition = "Function",
   },
+  make = {
+    rule = "Interface",
+  },
   markdown = {
     atx_heading = "Interface",
   },

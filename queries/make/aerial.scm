@@ -1,0 +1,3 @@
+(rule
+  (targets) @name
+  ) @type
