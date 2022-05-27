@@ -129,6 +129,7 @@ automatically fetch symbols from treesitter.
 - json
 - julia
 - lua
+- make
 - markdown
 - org
 - php
