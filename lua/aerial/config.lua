@@ -27,7 +27,7 @@ local default_options = {
   disable_max_lines = 10000,
 
   -- Disable aerial on files this size or larger (in bytes)
-  disable_max_size = 10000000,
+  disable_max_size = 2000000, -- Default 2MB
 
   -- A list of all symbols to display. Set to false to display all symbols.
   -- This can be a filetype map (see :help aerial-filetype-map)
