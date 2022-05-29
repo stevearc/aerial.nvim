@@ -219,6 +219,9 @@ M.tree_cmd = function(action, opts)
   })
   local index
   local item
+  if not data:has_symbols(0) then
+    return
+  end
   if opts.index then
     index = opts.index
   elseif util.is_aerial_buffer() then
