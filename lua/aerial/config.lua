@@ -288,17 +288,9 @@ local nerd_icons = {
 
 local M = {}
 
-local function split(string, pattern)
-  local ret = {}
-  for token in string.gmatch(string, "[^" .. pattern .. "]+") do
-    table.insert(ret, token)
-  end
-  return ret
-end
-
 M.get_filetypes = function(bufnr)
   local ft = vim.api.nvim_buf_get_option(bufnr or 0, "filetype")
-  return split(ft, "\\.")
+  return vim.split(ft, "%.")
 end
 
 local function create_filetype_opt_getter(option, default)
