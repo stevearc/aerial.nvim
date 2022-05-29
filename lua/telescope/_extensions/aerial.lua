@@ -32,7 +32,7 @@ local function aerial_picker(opts)
 
   local function make_display(entry)
     local item = entry.value
-    local icon = config.get_icon(item.kind)
+    local icon = config.get_icon(bufnr, item.kind)
     local text = vim.api.nvim_buf_get_lines(bufnr, item.lnum - 1, item.lnum, false)[1] or ""
     text = vim.trim(text)
     local columns = {

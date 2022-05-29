@@ -334,7 +334,7 @@ NOTES                                                              *aerial-notes
 
                                                             *aerial-filetype-map*
 Certain options can be configured per-filetype by passing in a table. "_" will
-be used as the default if the filetype is not present. >
+be used as the default if the filetype is not present.
 >
         backends = {
             '_'      = {"lsp", "treesitter"},

@@ -148,7 +148,7 @@ M.get_location = function(exact)
   while item do
     table.insert(ret, 1, {
       kind = item.kind,
-      icon = config.get_icon(item.kind),
+      icon = config.get_icon(0, item.kind),
       name = item.name,
     })
     item = item.parent

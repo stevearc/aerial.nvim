@@ -93,7 +93,7 @@ M.update_aerial_buffer = function(buf)
     end,
   })
   data[bufnr]:visit(function(item, conf)
-    local kind = config.get_icon(item.kind, conf.collapsed)
+    local kind = config.get_icon(bufnr, item.kind, conf.collapsed)
     local spacing
     if config.show_guides then
       local last_spacing = 0

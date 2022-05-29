@@ -114,20 +114,57 @@ describe("config", function()
 
   -- Icons
   it("reads icons from the default table", function()
-    vim.g.aerial = {
-      nerd_font = true,
-    }
-    assert.equals(" ", config._get_icon("Function", false))
+    config.setup({ nerd_font = true, use_lspkind = false })
+    assert.equals(" ", config.get_icon(0, "Function", false))
   end)
-  it("reads icons from g:aerial dict var", function()
-    vim.g.aerial = {
+  it("reads icons from setup var", function()
+    config.setup({
       nerd_font = true,
       icons = {
         Function = "*",
       },
-    }
-    assert.equals("*", config._get_icon("Function", false))
-    assert.equals(" ", config._get_icon("Method", false))
+      use_lspkind = false,
+    })
+    assert.equals("*", config.get_icon(0, "Function", false))
+    assert.equals(" ", config.get_icon(0, "Method", false))
+  end)
+  it("fetches the collapsed version of icon", function()
+    config.setup({
+      icons = {
+        FunctionCollapsed = "a",
+      },
+    })
+    assert.equals("a", config.get_icon(0, "Function", true))
+  end)
+  it("defaults to 'Collapsed' for collapsed icons", function()
+    config.setup({
+      icons = {
+        Collapsed = "a",
+      },
+    })
+    assert.equals("a", config.get_icon(0, "Function", true))
+  end)
+  it("uses filetype overrides for icons", function()
+    config.setup({
+      icons = {
+        foo = {
+          Function = "a",
+        },
+      },
+    })
+    vim.api.nvim_buf_set_option(0, "filetype", "foo")
+    assert.equals("a", config.get_icon(0, "Function", false))
+  end)
+  it("falls back to '_' filetype if no match", function()
+    config.setup({
+      icons = {
+        ["_"] = {
+          Function = "a",
+        },
+      },
+    })
+    vim.api.nvim_buf_set_option(0, "filetype", "foo")
+    assert.equals("a", config.get_icon(0, "Function", false))
   end)
 
   -- This is for backwards compatibility with lsp options that used to be in the

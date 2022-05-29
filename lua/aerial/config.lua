@@ -69,7 +69,8 @@ local default_options = {
   -- icon when the tree is collapsed at that symbol, or "Collapsed" to specify a
   -- default collapsed icon. The default icon set is determined by the
   -- "nerd_font" option below.
-  -- If you have lspkind-nvim installed, aerial will use it for icons.
+  -- If you have lspkind-nvim installed, it will be the default icon set.
+  -- This can be a filetype map (see :help aerial-filetype-map)
   icons = {},
 
   -- Control which windows and buffers aerial should ignore.
@@ -312,15 +313,15 @@ end
 
 M.setup = function(opts)
   opts = opts or {}
-  if HAS_LSPKIND and opts.icons then
-    vim.notify(
-      "Aerial: use lspkind to configure symbols instead of config value 'icons'",
-      vim.log.levels.WARN
-    )
-  end
   local newconf = vim.tbl_deep_extend("force", default_options, opts)
   if newconf.nerd_font == "auto" then
     newconf.nerd_font = HAS_DEVICONS or HAS_LSPKIND
+  end
+
+  -- Undocumented use_lspkind option for tests. End users can simply provide
+  -- their own icons
+  if newconf.use_lspkind == nil then
+    newconf.use_lspkind = true
   end
 
   -- If not managing folds, don't link either direction
@@ -336,11 +337,7 @@ M.setup = function(opts)
       newconf[k] = nil
     end
   end
-  newconf.icons = vim.tbl_deep_extend(
-    "keep",
-    newconf.icons or {},
-    newconf.nerd_font and nerd_icons or plain_icons
-  )
+  newconf.default_icons = newconf.nerd_font and nerd_icons or plain_icons
 
   -- Much of this logic is for backwards compatibility and can be removed in the
   -- future
@@ -492,29 +489,46 @@ setmetatable(M, {
   end,
 })
 
--- Exposed for tests
-M._get_icon = function(kind, collapsed)
-  if collapsed then
-    kind = kind .. "Collapsed"
-  end
-  local ret = M.icons[kind]
-  if ret ~= nil then
-    return ret
-  end
-  if collapsed then
-    ret = M.icons["Collapsed"]
-  end
-  return ret or " "
-end
-
-M.get_icon = function(kind, collapsed)
-  if HAS_LSPKIND and not collapsed then
-    local icon = lspkind.symbolic(kind, { with_text = false })
+local function get_icon(kind, filetypes)
+  for _, ft in ipairs(filetypes) do
+    local icon_map = M.icons[ft]
+    local icon = icon_map and icon_map[kind]
     if icon then
       return icon
     end
   end
-  return M._get_icon(kind, collapsed)
+  return M.icons[kind]
+end
+
+M.get_icon = function(bufnr, kind, collapsed)
+  if collapsed then
+    kind = kind .. "Collapsed"
+  end
+  local icon
+  -- Slight optimization for users that don't specify icons
+  if not vim.tbl_isempty(M.icons) then
+    local filetypes = M.get_filetypes(bufnr)
+    table.insert(filetypes, "_")
+    icon = get_icon(kind, filetypes)
+    if not icon and collapsed then
+      icon = get_icon("Collapsed", filetypes)
+    end
+    if icon then
+      return icon
+    end
+  end
+
+  if HAS_LSPKIND and M.use_lspkind and not collapsed then
+    icon = lspkind.symbolic(kind, { with_text = false })
+    if icon and icon ~= "" then
+      return icon
+    end
+  end
+  icon = M.default_icons[kind]
+  if not icon and collapsed then
+    icon = M.default_icons.Collapsed
+  end
+  return icon or " "
 end
 
 return M
