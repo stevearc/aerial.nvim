@@ -296,7 +296,8 @@ require("aerial").setup({
   -- icon when the tree is collapsed at that symbol, or "Collapsed" to specify a
   -- default collapsed icon. The default icon set is determined by the
   -- "nerd_font" option below.
-  -- If you have lspkind-nvim installed, aerial will use it for icons.
+  -- If you have lspkind-nvim installed, it will be the default icon set.
+  -- This can be a filetype map (see :help aerial-filetype-map)
   icons = {},
 
   -- Control which windows and buffers aerial should ignore.
