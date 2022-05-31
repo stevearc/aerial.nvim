@@ -219,9 +219,6 @@ M.tree_cmd = function(action, opts)
   })
   local index
   local item
-  if not data:has_symbols(0) then
-    return
-  end
   if opts.index then
     index = opts.index
   elseif util.is_aerial_buffer() then
@@ -233,6 +230,9 @@ M.tree_cmd = function(action, opts)
   end
   if item == nil then
     item = data[0]:item(index)
+  end
+  if not item then
+    return
   end
   local lnum = item.lnum
   local did_update, new_cursor_pos = tree.edit_tree_node(data[0], action, index, opts)
