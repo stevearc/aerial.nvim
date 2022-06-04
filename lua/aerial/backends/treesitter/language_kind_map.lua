@@ -122,4 +122,8 @@ return {
   vim = {
     function_definition = "Function",
   },
+  yaml = {
+    block_mapping = "Class",
+    block_sequence = "Enum",
+  },
 }
