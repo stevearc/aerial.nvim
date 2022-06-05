@@ -1,0 +1,17 @@
+version: "4.7"
+
+services:
+  proxy:
+    image: "traefik:v2.5.3"
+    ports:
+      - "80:80"
+
+  db:
+    image: "postgres:14"
+
+volumes:
+  media-volume:
+    external: true
+
+networks:
+  traefik-public: null
