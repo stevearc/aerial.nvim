@@ -30,6 +30,10 @@ jobs:
         run: |
           bash ./.github/workflows/install_nvim.sh
 
+      - name: Install tree-sitter CLI
+        run: |
+          npm install -g tree-sitter-cli
+
       - name: Ensure TS parsers installed
         run: |
           nvim --headless -c "TSInstallSync all" -c "q"
