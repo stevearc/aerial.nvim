@@ -101,6 +101,10 @@ return {
     struct_item = "Struct",
     trait_item = "Interface",
   },
+  teal = {
+    function_statement = "Function",
+    anon_function = "Function",
+  },
   typescript = {
     arrow_function = "Function",
     class_declaration = "Class",
