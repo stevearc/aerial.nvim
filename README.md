@@ -141,6 +141,7 @@ automatically fetch symbols from treesitter.
 - tsx
 - typescript
 - vim
+- yaml
 
 Don't see your language here? [Request support for
 it](https://github.com/stevearc/aerial.nvim/issues/new?assignees=stevearc&labels=enhancement&template=feature-request--treesitter-language-.md&title=)
