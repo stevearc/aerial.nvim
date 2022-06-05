@@ -8,6 +8,10 @@ local finders = require("telescope.finders")
 local pickers = require("telescope.pickers")
 local telescope = require("telescope")
 
+local ext_config = {
+  show_nesting = true,
+}
+
 local function aerial_picker(opts)
   opts = opts or {}
   local bufnr = vim.api.nvim_get_current_buf()
@@ -37,17 +41,26 @@ local function aerial_picker(opts)
     text = vim.trim(text)
     local columns = {
       { icon, "Aerial" .. item.kind .. "Icon" },
-      { item.name, "Aerial" .. item.kind },
+      { entry.name, "Aerial" .. item.kind },
       text,
     }
     return displayer(columns)
   end
 
   local function make_entry(item)
+    local name = item.name
+    if ext_config.show_nesting then
+      local cur = item.parent
+      while cur do
+        name = string.format("%s.%s", cur.name, name)
+        cur = cur.parent
+      end
+    end
     return {
       value = item,
       display = make_display,
-      ordinal = item.name .. " " .. string.lower(item.kind),
+      name = name,
+      ordinal = name .. " " .. string.lower(item.kind),
       lnum = item.lnum,
       col = item.col + 1,
       filename = filename,
@@ -72,6 +85,9 @@ local function aerial_picker(opts)
 end
 
 return telescope.register_extension({
+  setup = function(user_config)
+    ext_config = vim.tbl_extend("force", ext_config, user_config or {})
+  end,
   exports = {
     aerial = aerial_picker,
   },

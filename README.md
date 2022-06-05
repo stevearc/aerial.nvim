@@ -468,7 +468,7 @@ The default bindings are set in
 [bindings.lua](https://github.com/stevearc/aerial.nvim/blob/master/lua/aerial/bindings.lua#L4),
 which you can use as a reference if you want to set your own bindings.
 
-| Key       | Command                                                        |
+| Key             | Command                                                        |
 | --------------- | -------------------------------------------------------------- |
 | `?`/`g?`        | Show default keymaps                                           |
 | `<CR>`          | Jump to the symbol under the cursor                            |
@@ -510,6 +510,19 @@ If you want the command to autocomplete, you can load the extension first:
 
 ```lua
 require('telescope').load_extension('aerial')
+```
+
+The extension can be customized with the following options:
+
+```lua
+require('telescope').setup({
+  extensions = {
+    aerial = {
+      -- Display symbols as <root>.<parent>.<symbol>
+      show_nesting = true
+    }
+  }
+})
 ```
 
 ### fzf
