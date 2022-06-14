@@ -8,6 +8,8 @@ vim.bo.swapfile = false
 vim.cmd([[autocmd BufRead,BufNewFile *.jl setfiletype julia]])
 -- Neovim below 0.7 doesn't have org filetype detection
 vim.cmd([[autocmd BufRead,BufNewFile *.org setfiletype org]])
+-- Neovim doesn't have built-in norg filetype detection
+vim.cmd([[autocmd BufRead,BufNewFile *.norg setfiletype norg]])
 
 require("nvim-treesitter.configs").setup({
   ensure_installed = "all",

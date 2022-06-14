@@ -68,12 +68,12 @@ return {
     atx_heading = "Interface",
   },
   norg = {
-      heading1 = "Interface",
-      heading2 = "Interface",
-      heading3 = "Interface",
-      heading4 = "Interface",
-      heading5 = "Interface",
-      heading6 = "Interface",
+    heading1 = "Interface",
+    heading2 = "Interface",
+    heading3 = "Interface",
+    heading4 = "Interface",
+    heading5 = "Interface",
+    heading6 = "Interface",
   },
   org = {
     section = "Interface",
