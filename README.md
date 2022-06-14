@@ -131,6 +131,7 @@ automatically fetch symbols from treesitter.
 - lua
 - make
 - markdown
+- norg
 - org
 - php
 - python
