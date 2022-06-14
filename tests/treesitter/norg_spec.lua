@@ -30,11 +30,10 @@ describe("treesitter neorg", function()
                 end_lnum = 3,
                 end_col = 20,
               },
-            }
+            },
           },
-        }
+        },
       },
     })
   end)
 end)
-
