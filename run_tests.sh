@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
 
-nvim --headless --noplugin -u tests/init.lua \
-  -c "PlenaryBustedDirectory ${1-tests} { minimal_init = './tests/init.lua' }"
+nvim --headless --noplugin -u tests/minimal_init.lua \
+  -c "PlenaryBustedDirectory ${1-tests} { minimal_init = './tests/minimal_init.lua' }"
 echo "Success"
