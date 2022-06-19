@@ -32,6 +32,12 @@ describe("UnitTest", function()
   it("describes the test", function() end)
 end)
 
+a.describe("UnitTest", function()
+  a.before_each(function() end)
+  a.after_each(function() end)
+  a.it("describes the test", function() end)
+end)
+
 function M:fn_7() end
 
 M["fn_8"] = function() end

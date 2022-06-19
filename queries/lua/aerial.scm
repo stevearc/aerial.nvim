@@ -25,4 +25,14 @@
     (function_definition) @type)
 ) @start
 
+(function_call
+  name: (dot_index_expression
+          table: (identifier) @tbl (#match? @tbl "^a")
+          field: (identifier) @method @name (#any-of? @method "describe" "it" "before_each" "after_each")
+  )
+  arguments: (arguments
+    (string)? @name
+    (function_definition) @type)
+) @start
+
 (function_definition) @type
