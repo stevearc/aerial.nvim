@@ -123,6 +123,7 @@ automatically fetch symbols from treesitter.
 - c_sharp
 - cpp
 - dart
+- elixir
 - go
 - java
 - javascript

@@ -100,7 +100,9 @@ M.fetch_symbols_sync = function(bufnr)
       col = col,
       end_col = end_col,
     }
-    ext.postprocess(bufnr, item, match)
+    if ext.postprocess(bufnr, item, match) == false then
+      goto continue
+    end
     if item.parent then
       if not item.parent.children then
         item.parent.children = {}
