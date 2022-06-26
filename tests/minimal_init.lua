@@ -1,6 +1,8 @@
 vim.cmd([[set runtimepath+=.]])
 vim.cmd([[runtime! plugin/plenary.vim]])
 vim.cmd([[runtime! plugin/nvim-treesitter.vim]])
+-- Force load the nvim-treesitter query predicates
+require("nvim-treesitter.query_predicates")
 
 vim.o.swapfile = false
 vim.bo.swapfile = false
