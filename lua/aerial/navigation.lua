@@ -214,14 +214,14 @@ M.select = function(opts)
 
   if opts.jump then
     vim.api.nvim_set_current_win(winid)
+    if config.close_on_select then
+      window.close()
+    end
   else
     window.update_position(winid)
   end
   if config.highlight_on_jump then
     util.flash_highlight(bufnr, item.lnum, config.highlight_on_jump)
-  end
-  if config.close_on_select then
-    window.close()
   end
 end
 
