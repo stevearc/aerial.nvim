@@ -23,7 +23,7 @@ https://user-images.githubusercontent.com/506791/122652728-18688500-d0f5-11eb-80
 
 ## Requirements
 
-- Neovim 0.5+
+- Neovim 0.5+ for LSP symbols, 0.7+ for treesitter symbols
 - One or more of the following:
   - A working LSP setup (see [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig))
   - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) with languages installed
