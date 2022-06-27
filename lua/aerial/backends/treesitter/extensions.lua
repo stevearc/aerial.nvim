@@ -61,6 +61,40 @@ local function set_end_range(bufnr, items, last_line)
   end
 end
 
+M.elixir = {
+  kind_map = {
+    callback = "Function",
+    def = "Function",
+    defguard = "Function",
+    defimpl = "Class",
+    defmacro = "Function",
+    defmacrop = "Function",
+    defmodule = "Module",
+    defp = "Function",
+    defprotocol = "Interface",
+    defstruct = "Struct",
+    module_attribute = "Field",
+    spec = "TypeParameter",
+  },
+  postprocess = function(bufnr, item, match)
+    local identifier = (utils.get_at_path(match, "identifier") or {}).node
+    if identifier then
+      local name = get_node_text(identifier, bufnr) or "<parse error>"
+      item.kind = M.elixir.kind_map[name] or item.kind
+      if name == "callback" and item.parent then
+        item.parent.kind = "Interface"
+      elseif name == "defstruct" and item.parent then
+        item.parent.kind = "Struct"
+        return false
+      elseif name == "defimpl" then
+        local protocol = (utils.get_at_path(match, "protocol") or {}).node
+        local protocol_name = get_node_text(protocol, bufnr) or "<parse error>"
+        item.name = string.format("%s > %s", item.name, protocol_name)
+      end
+    end
+  end,
+}
+
 M.markdown = {
   get_parent = function(stack, match, node)
     local level_node = (utils.get_at_path(match, "level") or {}).node

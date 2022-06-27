@@ -79,9 +79,6 @@ M.fetch_symbols_sync = function(bufnr)
       )
       break
     end
-    if not include_kind[kind] then
-      goto continue
-    end
     local row, col = start_node:start()
     local end_row, end_col = end_node:end_()
     local name
@@ -100,7 +97,9 @@ M.fetch_symbols_sync = function(bufnr)
       col = col,
       end_col = end_col,
     }
-    ext.postprocess(bufnr, item, match)
+    if ext.postprocess(bufnr, item, match) == false or not include_kind[item.kind] then
+      goto continue
+    end
     if item.parent then
       if not item.parent.children then
         item.parent.children = {}

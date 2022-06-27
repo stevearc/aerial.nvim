@@ -28,6 +28,9 @@ return {
     method_signature = "Method",
     enum_declaration = "Enum",
   },
+  elixir = {
+    call = "Function",
+  },
   go = {
     function_declaration = "Function",
     method_declaration = "Method",
