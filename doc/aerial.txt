@@ -338,9 +338,9 @@ Certain options can be configured per-filetype by passing in a table. "_" will
 be used as the default if the filetype is not present.
 >
         backends = {
-            '_'      = {"lsp", "treesitter"},
-            'python' = {"treesitter"},
-            'rust'   = {"lsp"},
+            ['_']  = {"lsp", "treesitter"},
+            python = {"treesitter"},
+            rust   = {"lsp"},
         }
 <
 
