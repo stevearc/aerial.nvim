@@ -39,8 +39,10 @@ M.edit_tree_node = function(bufdata, action, index, opts)
     elseif action == "close" then
       did_update = did_update or not is_collapsed
       bufdata:set_collapsed(item, true)
-      if opts.recurse and item.parent then
-        return do_action(item.parent)
+      if opts.recurse and item.children then
+        for _, child in ipairs(item.children) do
+          do_action(child)
+        end
       end
       return item
     else
