@@ -171,23 +171,37 @@ local function _post_tree_mutate(bufnr, new_cursor_pos)
   end
 end
 
--- Collapse all nodes in the symbol tree
+---Collapse all nodes in the symbol tree
+---@param bufnr integer
 M.tree_close_all = function(bufnr)
+  bufnr = util.get_buffers(bufnr or 0)
+  if not data:has_symbols(bufnr) then
+    return
+  end
+  data[bufnr]:clear_collapsed()
   M.tree_set_collapse_level(bufnr, 0)
 end
 
--- Expand all nodes in the symbol tree
+---Expand all nodes in the symbol tree
+---@param bufnr integer
 M.tree_open_all = function(bufnr)
+  bufnr = util.get_buffers(bufnr or 0)
+  if not data:has_symbols(bufnr) then
+    return
+  end
+  data[bufnr]:clear_collapsed()
   M.tree_set_collapse_level(bufnr, 99)
 end
 
--- 0 is all closed, use 99 to open all
+---0 is all closed, use 99 to open all
+---@param bufnr integer
+---@param level integer
 M.tree_set_collapse_level = function(bufnr, level)
   bufnr = util.get_buffers(bufnr or 0)
   if not data:has_symbols(bufnr) then
     return
   end
-  tree.set_collapse_level(data[bufnr], level)
+  data[bufnr].collapse_level = level
   if config.link_tree_to_folds then
     for _, winid in ipairs(vim.api.nvim_list_wins()) do
       if vim.api.nvim_win_get_buf(winid) == bufnr then
@@ -246,8 +260,9 @@ M.tree_cmd = function(action, opts)
   end
 end
 
--- Sync code folding with the current tree state.
--- Ignores the 'link_tree_to_folds' config option.
+---Sync code folding with the current tree state.
+---Ignores the 'link_tree_to_folds' config option.
+---@param bufnr integer
 M.sync_folds = function(bufnr)
   local mywin = vim.api.nvim_get_current_win()
   local source_buf, _ = util.get_buffers(bufnr)
@@ -266,7 +281,7 @@ M.register_attach_cb = function(callback)
   config.on_attach = callback
 end
 
--- Print out debug information for aerial
+---Print out debug information for aerial
 M.info = function()
   local filetype = vim.api.nvim_buf_get_option(0, "filetype")
   print("Aerial Info")
@@ -289,7 +304,9 @@ M.info = function()
   print(string.format("Show symbols: %s", config.get_filter_kind_map()))
 end
 
--- Returns the number of symbols for the buffer
+---Returns the number of symbols for the buffer
+---@param bufnr integer
+---@return integer
 M.num_symbols = function(bufnr)
   bufnr = bufnr or 0
   if not data:has_symbols(bufnr) then
@@ -298,8 +315,10 @@ M.num_symbols = function(bufnr)
   return data[bufnr]:count()
 end
 
--- Returns true if the user has manually closed aerial.
--- Will become false if the user opens aerial again.
+---Returns true if the user has manually closed aerial.
+---Will become false if the user opens aerial again.
+---@param default? boolean
+---@return boolean|nil
 M.was_closed = function(default)
   if was_closed == nil then
     return default

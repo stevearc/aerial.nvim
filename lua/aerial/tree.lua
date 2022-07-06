@@ -13,25 +13,6 @@ local function _get_target(bufdata, action, item, bubble)
   return item
 end
 
-M.close_all = function(bufdata)
-  bufdata:visit(function(item)
-    if bufdata:is_collapsable(item) then
-      bufdata:set_collapsed(item, true)
-    end
-  end)
-end
-
-M.open_all = function(bufdata)
-  bufdata.collapsed = {}
-end
-
-M.set_collapse_level = function(bufdata, level)
-  bufdata:visit(function(item)
-    local collapsed = bufdata:is_collapsable(item) and level <= item.level
-    bufdata:set_collapsed(item, collapsed)
-  end)
-end
-
 M.edit_tree_node = function(bufdata, action, index, opts)
   opts = vim.tbl_extend("keep", opts or {}, {
     bubble = true,
@@ -49,7 +30,7 @@ M.edit_tree_node = function(bufdata, action, index, opts)
     if action == "open" then
       did_update = did_update or is_collapsed
       bufdata:set_collapsed(item, false)
-      if opts.recurse then
+      if opts.recurse and item.children then
         for _, child in ipairs(item.children) do
           do_action(child)
         end

@@ -1,6 +1,24 @@
 local util = require("aerial.util")
 local config = require("aerial.config")
 
+---@class aerial.BufData
+---@field items aerial.Symbol[]
+---@field positions any
+---@field last_win integer
+---@field collapsed table<string, boolean>
+---@field collapse_level integer
+
+---@class aerial.Symbol
+---@field kind string
+---@field name string
+---@field level integer
+---@field parent? aerial.Symbol
+---@field lnum integer
+---@field end_lnum integer
+---@field col integer
+---@field end_col integer
+---@field children? aerial.Symbol[]
+
 local BufData = {
   new = function(t)
     local new = {
@@ -8,6 +26,7 @@ local BufData = {
       positions = {},
       last_win = -1,
       collapsed = {},
+      collapse_level = 99,
     }
     setmetatable(new, { __index = t })
     return new
@@ -45,18 +64,19 @@ local BufData = {
     return key
   end,
 
+  clear_collapsed = function(self)
+    self.collapsed = {}
+  end,
+
   is_collapsed = function(self, item)
     local key = self:_get_item_key(item)
     return self.collapsed[key]
+      or (self.collapse_level <= item.level and self.collapsed[key] ~= false)
   end,
 
   set_collapsed = function(self, item, collapsed)
     local key = self:_get_item_key(item)
-    if collapsed then
-      self.collapsed[key] = true
-    else
-      self.collapsed[key] = nil
-    end
+    self.collapsed[key] = collapsed
   end,
 
   is_collapsable = function(_, item)

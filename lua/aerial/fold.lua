@@ -154,6 +154,10 @@ M.sync_tree_folds = function(winid)
   vim.fn.winrestview(view)
 end
 
+---@param winid integer
+---@param action "open"|"close"|"toggle"
+---@param lnum integer
+---@param recurse boolean
 local function win_do_action(winid, action, lnum, recurse)
   util.go_win_no_au(winid)
   if vim.fn.foldlevel(lnum) == 0 then
@@ -181,6 +185,9 @@ local function win_do_action(winid, action, lnum, recurse)
   vim.fn.winrestview(view)
 end
 
+---@param action "open"|"close"|"toggle"
+---@param lnum integer
+---@param opts { recurse?: boolean }?
 M.fold_action = function(action, lnum, opts)
   opts = vim.tbl_extend("keep", opts or {}, {
     recurse = false,
