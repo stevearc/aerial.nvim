@@ -2,6 +2,8 @@ local backends = require("aerial.backends")
 local config = require("aerial.config")
 local language_kind_map = require("aerial.backends.treesitter.language_kind_map")
 local util = require("aerial.backends.util")
+
+---@type aerial.Backend
 local M = {}
 
 -- Custom capture groups:
@@ -87,6 +89,7 @@ M.fetch_symbols_sync = function(bufnr)
     else
       name = "<Anonymous>"
     end
+    ---@type aerial.Symbol
     local item = {
       kind = kind,
       name = name,
