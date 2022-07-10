@@ -212,6 +212,21 @@ M.rst = {
   end,
 }
 
+M.typescript = {
+  postprocess = function(bufnr, item, match)
+    local value_node = (utils.get_at_path(match, "var_type") or {}).node
+    if value_node then
+      if value_node:type() == "arrow_function" then
+        item.kind = "Function"
+      end
+    end
+  end,
+}
+
+-- tsx needs the same transformations as typescript for now.
+-- This may not always be the case.
+M.tsx = M.typescript
+
 for _, lang in pairs(M) do
   setmetatable(lang, { __index = default_methods })
 end

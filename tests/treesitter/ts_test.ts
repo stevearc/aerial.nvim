@@ -11,3 +11,6 @@ class Cl_1 {
 type Type1 = {};
 
 const fn_3 = () => {};
+
+const const_var = 'value';
+let let_var = 'value';
