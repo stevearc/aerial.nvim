@@ -88,12 +88,8 @@ end
 
 function M:get_status_normal()
   local symbols = aerial.get_location(self.options.exact)
-  local status = format_status(
-    symbols,
-    self.options.depth,
-    self.options.sep,
-    self.options.icons_enabled
-  )
+  local status =
+    format_status(symbols, self.options.depth, self.options.sep, self.options.icons_enabled)
   return status
 end
 

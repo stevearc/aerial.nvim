@@ -73,15 +73,17 @@ local function aerial_picker(opts)
       table.insert(results, item)
     end)
   end
-  pickers.new(opts, {
-    prompt_title = "Document Symbols",
-    finder = finders.new_table({
-      results = results,
-      entry_maker = make_entry,
-    }),
-    sorter = conf.generic_sorter(opts),
-    previewer = conf.qflist_previewer(opts),
-  }):find()
+  pickers
+    .new(opts, {
+      prompt_title = "Document Symbols",
+      finder = finders.new_table({
+        results = results,
+        entry_maker = make_entry,
+      }),
+      sorter = conf.generic_sorter(opts),
+      previewer = conf.qflist_previewer(opts),
+    })
+    :find()
 end
 
 return telescope.register_extension({

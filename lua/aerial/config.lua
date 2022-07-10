@@ -384,10 +384,8 @@ M.setup = function(opts)
     M[k] = v
   end
   M.backends = create_filetype_opt_getter(M.backends, default_options.backends)
-  local get_filter_kind_list = create_filetype_opt_getter(
-    M.filter_kind,
-    default_options.filter_kind
-  )
+  local get_filter_kind_list =
+    create_filetype_opt_getter(M.filter_kind, default_options.filter_kind)
   M.get_filter_kind_map = function(bufnr)
     local fk = get_filter_kind_list(bufnr)
     if fk == false or fk == 0 then

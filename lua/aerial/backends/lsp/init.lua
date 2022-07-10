@@ -62,12 +62,8 @@ M.fetch_symbols_sync = function(bufnr, opts)
     timeout = 4000,
   })
   local params = { textDocument = vim.lsp.util.make_text_document_params() }
-  local lsp_results, err = vim.lsp.buf_request_sync(
-    bufnr,
-    "textDocument/documentSymbol",
-    params,
-    opts.timeout
-  )
+  local lsp_results, err =
+    vim.lsp.buf_request_sync(bufnr, "textDocument/documentSymbol", params, opts.timeout)
   if err then
     vim.api.nvim_err_writeln("Error when finding document symbols: " .. err)
   else
