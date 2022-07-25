@@ -23,7 +23,8 @@ local function process_symbols(symbols, bufnr)
       end
       local include_item = range and include_kind[kind]
 
-      if include_item then
+      -- Check symbol.name because some LSP servers return a nil name
+      if include_item and symbol.name then
         local name = symbol.name
         -- Some LSP servers return multiline symbols with newlines
         local nl = string.find(symbol.name, "\n")
