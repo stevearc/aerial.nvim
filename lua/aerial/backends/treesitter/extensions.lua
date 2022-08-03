@@ -139,7 +139,7 @@ M.ruby = {
     local method = (utils.get_at_path(match, "method") or {}).node
     if method then
       local fn = get_node_text(method, bufnr) or "<parse error>"
-      if fn ~= "before" and fn ~= "after" then
+      if fn ~= item.name then
         item.name = fn .. " " .. item.name
       end
     end
