@@ -93,7 +93,7 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
       vim.api.nvim_win_set_var(winid, "relative", new_config.relative)
     else
       local modifier
-      if config.placement_editor_edge then
+      if config.layout.placement_editor_edge then
         modifier = direction == "left" and "topleft" or "botright"
       else
         local winids = util.get_fixed_wins(bufnr)

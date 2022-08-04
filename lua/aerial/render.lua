@@ -35,7 +35,7 @@ local function resize_all_wins(aer_bufnr, preferred_width, preferred_height)
       if pw then
         pw = pw + gutter
       end
-      local width = layout.calculate_width(relative, pw, config, parent_win)
+      local width = layout.calculate_width(relative, pw, config.layout, parent_win)
       -- Subtract the gutter here because it is passed back to be used for
       -- padding out whitespace. The gutter needs to adjust the total window
       -- size, but it doesn't take space away from the content.
