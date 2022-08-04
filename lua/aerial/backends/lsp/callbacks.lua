@@ -9,6 +9,34 @@ local function get_symbol_kind_name(kind_number)
   return protocol.SymbolKind[kind_number] or "Unknown"
 end
 
+local function convert_range(range)
+  if not range then
+    return {}
+  end
+  return {
+    lnum = range.start.line + 1,
+    col = range.start.character,
+    end_lnum = range["end"].line + 1,
+    end_col = range["end"].character,
+  }
+end
+
+local function symbols_at_same_position(a, b)
+  if a.lnum ~= b.lnum or a.col ~= b.col then
+    return false
+  elseif type(a.selection_range) ~= type(b.selection_range) then
+    return false
+  elseif a.selection_range then
+    if
+      a.selection_range.lnum ~= b.selection_range.lnum
+      or a.selection_range.col ~= b.selection_range.col
+    then
+      return false
+    end
+  end
+  return true
+end
+
 local function process_symbols(symbols, bufnr)
   local include_kind = config.get_filter_kind_map(bufnr)
   local max_line = vim.api.nvim_buf_line_count(bufnr)
@@ -31,16 +59,13 @@ local function process_symbols(symbols, bufnr)
         if nl then
           name = string.sub(name, 1, nl - 1)
         end
-        local item = {
+        local item = vim.tbl_deep_extend("error", {
           kind = kind,
           name = name,
           level = level,
           parent = parent,
-          lnum = range.start.line + 1,
-          col = range.start.character,
-          end_lnum = range["end"].line + 1,
-          end_col = range["end"].character,
-        }
+          selection_range = convert_range(symbol.selectionRange),
+        }, convert_range(range))
         -- Some language servers give number values that are wildly incorrect
         -- See https://github.com/stevearc/aerial.nvim/issues/101
         item.end_lnum = math.min(item.end_lnum, max_line)
@@ -49,7 +74,7 @@ local function process_symbols(symbols, bufnr)
         -- This can happen on C++ macros
         -- (see https://github.com/stevearc/aerial.nvim/issues/13)
         local last_item = vim.tbl_isempty(list) and {} or list[#list]
-        if last_item.lnum ~= item.lnum or last_item.col ~= item.col then
+        if not symbols_at_same_position(last_item, item) then
           if symbol.children then
             item.children = _process_symbols(symbol.children, item, {}, level + 1)
           end

@@ -8,6 +8,12 @@ local config = require("aerial.config")
 ---@field collapsed table<string, boolean>
 ---@field collapse_level integer
 
+---@class aerial.Range
+---@field lnum integer
+---@field end_lnum integer
+---@field col integer
+---@field end_col integer
+
 ---@class aerial.Symbol
 ---@field kind string
 ---@field name string
@@ -17,6 +23,7 @@ local config = require("aerial.config")
 ---@field end_lnum integer
 ---@field col integer
 ---@field end_col integer
+---@field selection_range? aerial.Range
 ---@field children? aerial.Symbol[]
 
 local BufData = {
