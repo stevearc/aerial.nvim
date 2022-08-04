@@ -21,9 +21,11 @@ local default_options = {
     -- different buffer in the way of the preferred direction
     default_direction = "prefer_right",
 
-    -- Set to true to only open aerial at the far right/left of the editor
-    -- Default behavior opens aerial relative to current window
-    placement_editor_edge = false,
+    -- Enum: edge, group, window
+    --   edge   - open aerial at the far right/left of the editor
+    --   group  - open aerial to the right/left of the group of windows containing the current buffer
+    --   window - open aerial to the right/left of the current window
+    placement = "window",
   },
 
   -- Enum: persist, close, auto, global
@@ -326,10 +328,15 @@ M.setup = function(opts)
   opts = opts or {}
 
   -- For backwards compatibility
+  opts.layout = opts.layout or {}
   compat_move_option(opts, "max_width", "layout")
   compat_move_option(opts, "width", "layout")
   compat_move_option(opts, "min_width", "layout")
   compat_move_option(opts, "default_direction", "layout")
+  if opts.placement_editor_edge ~= nil then
+    -- TODO: deprecation warning
+    opts.layout.placement = opts.placement_editor_edge and "edge" or "window"
+  end
   compat_move_option(opts, "placement_editor_edge", "layout")
 
   local newconf = vim.tbl_deep_extend("force", default_options, opts)

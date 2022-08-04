@@ -232,7 +232,7 @@ M.detect_split_direction = function(bufnr)
   end
   local wins = M.get_fixed_wins()
   local left_available, right_available
-  if config.layout.placement_editor_edge then
+  if config.layout.placement == "edge" then
     left_available = not M.is_aerial_buffer(vim.api.nvim_win_get_buf(wins[1]))
     right_available = not M.is_aerial_buffer(vim.api.nvim_win_get_buf(wins[#wins]))
   else
