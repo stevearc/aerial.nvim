@@ -41,6 +41,26 @@ M.is_supported = function(bufnr, name)
   end
 end
 
+---@param bufnr integer
+---@return string[]
+M.get_status_lines = function(bufnr)
+  local ret = {}
+  for _, name in ipairs(config.backends(bufnr)) do
+    local line = "  " .. name
+    local supported, err = M.is_supported(bufnr, name)
+    if supported then
+      line = line .. " (supported)"
+    else
+      line = line .. " (not supported) [" .. err .. "]"
+    end
+    if M.is_backend_attached(bufnr, name) then
+      line = line .. " (attached)"
+    end
+    table.insert(ret, line)
+  end
+  return ret
+end
+
 ---@param bufnr? integer
 ---@return aerial.Backend?
 ---@return string?
@@ -58,13 +78,13 @@ local function get_best_backend(bufnr)
   return nil, nil
 end
 
----@param bufnr integer
+---@param bufnr? integer
 ---@param backend string
 local function set_backend(bufnr, backend)
-  vim.api.nvim_buf_set_var(bufnr, "aerial_backend", backend)
+  vim.api.nvim_buf_set_var(bufnr or 0, "aerial_backend", backend)
 end
 
----@param bufnr integer
+---@param bufnr? integer
 ---@param backend? aerial.Backend
 ---@param name? string
 ---@param existing_backend_name? string
@@ -82,27 +102,32 @@ local function attach(bufnr, backend, name, existing_backend_name)
   else
     require("aerial.autocommands").attach_autocommands(bufnr)
     require("aerial.fold").add_fold_mappings(bufnr)
+    local data = require("aerial.data")
+    local loading = require("aerial.loading")
+    local util = require("aerial.util")
+    local aer_bufnr = util.get_aerial_buffer(bufnr)
+    loading.set_loading(aer_bufnr, not data:has_received_data(bufnr))
   end
   if not existing_backend_name and config.on_attach then
     config.on_attach(bufnr)
   end
 end
 
----@param bufnr integer
+---@param bufnr? integer
 ---@return aerial.Backend?
 M.get = function(bufnr)
   local existing_backend_name = M.get_attached_backend(bufnr)
   if existing_backend_name then
-    return M.get_backend_by_name(existing_backend_name)
+    return M.get_backend_by_name(existing_backend_name), existing_backend_name
   end
   local backend, name = get_best_backend(bufnr)
   if backend and name then
     attach(bufnr, backend, name, existing_backend_name)
   end
-  return backend
+  return backend, name
 end
 
----@param bufnr integer
+---@param bufnr? integer
 ---@param items aerial.Symbol[]
 M.set_symbols = function(bufnr, items)
   if not bufnr or bufnr == 0 then
@@ -127,7 +152,12 @@ M.set_symbols = function(bufnr, items)
   if not had_symbols then
     fold.maybe_set_foldmethod(bufnr)
     if bufnr == vim.api.nvim_get_current_buf() then
-      window.maybe_open_automatic(bufnr)
+      -- When switching buffers, this can complete before the BufEnter autocmd since it's throttled.
+      -- We need that autocmd to complete first so that it reallocates the existing aerial windows,
+      -- thus the defer. It's a bit of a hack :/
+      vim.defer_fn(function()
+        window.maybe_open_automatic(bufnr)
+      end, 15)
     end
     if config.on_first_symbols then
       config.on_first_symbols(bufnr)
@@ -139,7 +169,7 @@ M.log_support_err = function()
   vim.api.nvim_err_writeln("Aerial could find no supported backend")
 end
 
----@param bufnr integer
+---@param bufnr? integer
 ---@param backend string
 ---@return boolean?
 M.is_backend_attached = function(bufnr, backend)
@@ -147,14 +177,14 @@ M.is_backend_attached = function(bufnr, backend)
   return b and (b == backend or backend == nil)
 end
 
----@param bufnr integer
+---@param bufnr? integer
 ---@return string?
 M.get_attached_backend = function(bufnr)
   local ok, val = pcall(vim.api.nvim_buf_get_var, bufnr or 0, "aerial_backend")
   return ok and val or nil
 end
 
----@param bufnr integer
+---@param bufnr? integer
 ---@param refresh? boolean
 M.attach = function(bufnr, refresh)
   if refresh then

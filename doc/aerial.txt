@@ -372,6 +372,16 @@ replicate the old behavior you could get with `open_automatic_min_lines` and
         }
 <
 
+                                                            *aerial-close-behavior*
+The `close_behavior` config option has been replaced by a combination of
+`attach_mode` and `close_automatic_events`. I would recommend reading the docs
+for each of these, but a migration cheat-sheet is provided below.
+>
+    close_behavior = "global"  -->  attach_mode = "global"
+    close_behavior = "persist" -->  this is the new effective default
+    close_behavior = "auto"    -->  close_automatic_events = { "unsupported" }
+    close_behavior = "close"   -->  close_automatic_events = { "switch_buffer" }
+<
 
                                                               *SymbolKind* *symbol*
 A quick note on SymbolKind. An authoritative list of valid SymbolKinds can be

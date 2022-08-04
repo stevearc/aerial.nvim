@@ -1,3 +1,4 @@
+local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local layout = require("aerial.layout")
@@ -74,8 +75,13 @@ M.update_aerial_buffer = function(buf)
   end
   if not data:has_symbols(bufnr) then
     local lines = { "No symbols" }
-    if config.lsp.filter_kind ~= false then
-      table.insert(lines, ":help aerial-filter")
+    if backends.get(bufnr) then
+      if config.lsp.filter_kind ~= false then
+        table.insert(lines, ":help aerial-filter")
+      end
+    else
+      table.insert(lines, "")
+      vim.list_extend(lines, backends.get_status_lines(bufnr))
     end
     resize_all_wins(aer_bufnr)
     util.render_centered_text(aer_bufnr, lines)
