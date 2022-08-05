@@ -7,7 +7,7 @@ module Mod
 end
 
 describe 'UnitTest' do
-  before do
+  before :all do
   end
   after do
   end
@@ -27,4 +27,16 @@ end
 module Long::Mod::Name
   class Long::Class::Name
   end
+end
+
+context "Shoulda Context" do
+  setup do
+  end
+  teardown do
+  end
+  should "test something" do
+  end
+  should_eventually "actually work" do
+  end
+  should_not validate_presence_of(:title)
 end
