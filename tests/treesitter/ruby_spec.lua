@@ -54,7 +54,7 @@ describe("treesitter ruby", function()
         children = {
           {
             kind = "Method",
-            name = "before",
+            name = "before :all",
             level = 1,
             lnum = 10,
             col = 2,

@@ -7,7 +7,7 @@ module Mod
 end
 
 describe 'UnitTest' do
-  before do
+  before :all do
   end
   after do
   end
