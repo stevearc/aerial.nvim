@@ -69,7 +69,7 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   if not existing_win then
     if direction == "float" then
       local rel = config.float.relative
-      local width = layout.calculate_width(rel, nil, config)
+      local width = layout.calculate_width(rel, nil, config.layout)
       local height = layout.calculate_height(rel, nil, config.float)
       local row = layout.calculate_row(rel, height)
       local col = layout.calculate_col(rel, width)

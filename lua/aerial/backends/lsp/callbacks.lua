@@ -138,6 +138,10 @@ M.symbol_callback = function(_err, result, context, _config)
   then
     return
   end
+  if bufnr == 1 then
+    print(string.format("symbol callback %s", bufnr))
+    print(string.format("%s", vim.inspect(process_symbols(result, bufnr))))
+  end
 
   -- Debounce this callback to avoid unnecessary re-rendering
   if results[bufnr] == nil then
@@ -163,6 +167,7 @@ M.on_publish_diagnostics = function(_err, result, ctx, _config)
   then
     return
   end
+  -- print(string.format("Set symbols %s: %s", result.uri, bufnr))
 
   -- Don't update if there are diagnostics errors, unless config option is set
   -- or we have no symbols for this buffer
