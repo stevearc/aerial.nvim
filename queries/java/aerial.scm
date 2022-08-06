@@ -9,3 +9,8 @@
 
 (enum_declaration
   name: (identifier) @name) @type
+
+(field_declaration
+  declarator: (variable_declarator
+    name: (identifier) @name)) @type
+
