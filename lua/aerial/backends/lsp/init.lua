@@ -52,7 +52,7 @@ end
 
 M.fetch_symbols = function(bufnr)
   bufnr = bufnr or 0
-  local params = { textDocument = vim.lsp.util.make_text_document_params() }
+  local params = { textDocument = vim.lsp.util.make_text_document_params(bufnr) }
   vim.lsp.buf_request(bufnr, "textDocument/documentSymbol", params, callbacks.symbol_callback)
 end
 
@@ -61,7 +61,7 @@ M.fetch_symbols_sync = function(bufnr, opts)
   opts = vim.tbl_extend("keep", opts or {}, {
     timeout = 4000,
   })
-  local params = { textDocument = vim.lsp.util.make_text_document_params() }
+  local params = { textDocument = vim.lsp.util.make_text_document_params(bufnr) }
   local lsp_results, err =
     vim.lsp.buf_request_sync(bufnr, "textDocument/documentSymbol", params, opts.timeout)
   if err then
