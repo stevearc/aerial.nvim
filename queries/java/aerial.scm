@@ -10,6 +10,8 @@
 (enum_declaration
   name: (identifier) @name) @type
 
-(field_declarator
-  name: (identifier) @name) @type
+(field_declaration
+  type: [(integral_type) (type_identifier) (boolean_type)] @java_type
+  declarator: (variable_declarator
+    name: (identifier) @name)) @type
 
