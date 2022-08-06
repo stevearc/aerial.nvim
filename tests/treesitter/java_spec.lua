@@ -57,7 +57,7 @@ describe("treesitter java", function()
             lnum = 8,
             col = 2,
             end_lnum = 8,
-            end_col = 21,
+            end_col = 24,
           },
         },
       },
