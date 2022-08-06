@@ -41,6 +41,7 @@ return {
     enum_declaration = "Enum",
     interface_declaration = "Interface",
     method_declaration = "Method",
+    field_declaration = "Field",
   },
   javascript = {
     call_expression = "Function",

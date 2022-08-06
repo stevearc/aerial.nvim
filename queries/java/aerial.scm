@@ -9,3 +9,7 @@
 
 (enum_declaration
   name: (identifier) @name) @type
+
+(field_declarator
+  name: (identifier) @name) @type
+
