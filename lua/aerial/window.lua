@@ -154,7 +154,7 @@ M.close = function()
   local aer_bufnr = util.get_aerial_buffer()
   if aer_bufnr == -1 then
     -- No aerial buffer for this buffer.
-    local backend = backends.get()
+    local backend = backends.get(0)
     -- If this buffer has no supported symbols backend or no symbols,
     -- look for other aerial windows and close the first
     if backend == nil or not data:has_symbols(0) then
@@ -210,7 +210,7 @@ M.open = function(focus, direction, opts)
   opts = vim.tbl_extend("keep", opts or {}, {
     winid = nil,
   })
-  local backend = backends.get()
+  local backend = backends.get(0)
   if not backend then
     backends.log_support_err()
     return
@@ -273,11 +273,28 @@ M.toggle = function(focus, direction)
   end
 end
 
+---@param bufnr? integer
+---@param winid? integer
+---@return aerial.CursorPosition
 M.get_position_in_win = function(bufnr, winid)
   local cursor = api.nvim_win_get_cursor(winid or 0)
   local lnum = cursor[1]
   local col = cursor[2]
-  local bufdata = data[bufnr]
+  local bufdata = data:get_or_create(bufnr)
+  return M.get_symbol_position(bufdata, lnum, col)
+end
+
+---@class aerial.CursorPosition
+---@field lnum integer
+---@field closest_symbol aerial.Symbol
+---@field exact_symbol aerial.Symbol|nil
+---@field relative "exact"|"below"|"above"
+
+---@param bufdata aerial.BufData
+---@param lnum integer
+---@param col integer
+---@return aerial.CursorPosition
+M.get_symbol_position = function(bufdata, lnum, col)
   local selected = 0
   local relative = "above"
   local prev = nil

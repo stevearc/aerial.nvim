@@ -177,6 +177,11 @@ local Data = setmetatable({}, {
   end,
 })
 
+---@return aerial.BufData
+function Data.create()
+  return BufData:new()
+end
+
 ---@param buf integer
 ---@return aerial.BufData
 function Data:get_or_create(buf)
@@ -189,6 +194,21 @@ function Data:get_or_create(buf)
     end
   end
   return bufdata
+end
+
+---@param buf integer
+---@param items aerial.Symbol[]
+function Data:set_symbols(buf, items)
+  local bufdata = self:get_or_create(buf)
+  bufdata.items = items
+end
+
+---@param buf integer
+function Data:delete_buf(buf)
+  local bufnr, _ = util.get_buffers(buf)
+  if bufnr then
+    self[bufnr] = nil
+  end
 end
 
 ---@param bufnr integer
