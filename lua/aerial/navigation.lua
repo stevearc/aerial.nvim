@@ -185,7 +185,7 @@ M.select = function(opts)
     opts.index = opts.index or 1
   end
 
-  local item = data[0]:item(opts.index)
+  local item = data:get_or_create(0):item(opts.index)
   if not item then
     error(string.format("Symbol %s is outside the bounds", opts.index))
     return
@@ -206,7 +206,9 @@ M.select = function(opts)
   end
   local bufnr, _ = util.get_buffers()
   vim.api.nvim_win_set_buf(winid, bufnr)
-  vim.api.nvim_win_set_cursor(winid, { item.lnum, item.col })
+  local lnum = item.selection_range and item.selection_range.lnum or item.lnum
+  local col = item.selection_range and item.selection_range.col or item.col
+  vim.api.nvim_win_set_cursor(winid, { lnum, col })
   local cmd = config.post_jump_cmd
   if cmd and cmd ~= "" then
     vim.fn.win_execute(winid, cmd, true)
@@ -221,7 +223,7 @@ M.select = function(opts)
     window.update_position(winid)
   end
   if config.highlight_on_jump then
-    util.flash_highlight(bufnr, item.lnum, config.highlight_on_jump)
+    util.flash_highlight(bufnr, lnum, config.highlight_on_jump)
   end
 end
 

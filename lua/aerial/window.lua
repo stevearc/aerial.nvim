@@ -284,6 +284,28 @@ M.get_position_in_win = function(bufnr, winid)
   return M.get_symbol_position(bufdata, lnum, col)
 end
 
+---Returns -1 if item is before position, 0 if equal, 1 if after
+---@param range aerial.Range
+---@param lnum integer
+---@param col integer
+---@return integer
+---@return boolean True when position is fully inside the range
+local function compare(range, lnum, col)
+  if range.lnum > lnum then
+    return 1, false
+  elseif range.lnum == lnum then
+    if range.col > col then
+      return 1, false
+    elseif range.col == col then
+      return 0, true
+    else
+      return -1, range.end_lnum > lnum or (range.end_lnum == lnum and range.end_col >= col)
+    end
+  else
+    return -1, range.end_lnum > lnum or (range.end_lnum == lnum and range.end_col >= col)
+  end
+end
+
 ---@class aerial.CursorPosition
 ---@field lnum integer
 ---@field closest_symbol aerial.Symbol
@@ -298,21 +320,23 @@ M.get_symbol_position = function(bufdata, lnum, col)
   local selected = 0
   local relative = "above"
   local prev = nil
+  local exact_symbol
   local symbol = bufdata:visit(function(item)
-    if item.lnum > lnum then
-      return prev or item
-    elseif item.lnum == lnum then
-      if item.col > col then
-        return prev or item
-      elseif item.col == col then
-        selected = selected + 1
-        relative = "exact"
-        return item
-      else
-        relative = "below"
+    local cmp, inside = compare(item, lnum, col)
+    if inside then
+      exact_symbol = item
+      if item.selection_range then
+        cmp = compare(item.selection_range, lnum, col)
       end
-    else
+    end
+    if cmp < 0 then
       relative = "below"
+    elseif cmp == 0 then
+      selected = selected + 1
+      relative = "exact"
+      return item
+    else
+      return prev or item
     end
     prev = item
     selected = selected + 1
@@ -320,18 +344,6 @@ M.get_symbol_position = function(bufdata, lnum, col)
   -- Check if we're on the last symbol
   if symbol == nil then
     symbol = prev
-  end
-  local exact_symbol = symbol
-  while
-    exact_symbol
-    and (
-      exact_symbol.lnum > lnum
-      or exact_symbol.end_lnum < lnum
-      or (exact_symbol.lnum == lnum and exact_symbol.col > col)
-      or (exact_symbol.end_lnum == lnum and exact_symbol.end_col < col)
-    )
-  do
-    exact_symbol = exact_symbol.parent
   end
   return {
     lnum = math.max(1, selected),

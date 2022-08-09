@@ -100,4 +100,43 @@ describe("config", function()
       ret
     )
   end)
+  it("uses selection_range to detect position", function()
+    local var1 = {
+      kind = "Variable",
+      name = "var1",
+      level = 1,
+      lnum = 8,
+      end_lnum = 11,
+      col = 0,
+      end_col = 3,
+      selection_range = {
+        lnum = 9,
+        col = 0,
+        end_lnum = 9,
+        end_col = 12,
+      },
+    }
+    local var2 = {
+      kind = "Variable",
+      name = "var2",
+      level = 1,
+      lnum = 8,
+      end_lnum = 11,
+      col = 0,
+      end_col = 3,
+      selection_range = {
+        lnum = 10,
+        col = 0,
+        end_lnum = 10,
+        end_col = 12,
+      },
+    }
+    local bufdata = data.create()
+    bufdata.items = { var1, var2 }
+    local ret = window.get_symbol_position(bufdata, 10, 6)
+    assert.are.same(
+      { lnum = 2, closest_symbol = var2, exact_symbol = var2, relative = "below" },
+      ret
+    )
+  end)
 end)
