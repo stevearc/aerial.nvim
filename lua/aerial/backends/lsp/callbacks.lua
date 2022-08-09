@@ -11,7 +11,7 @@ end
 
 local function convert_range(range)
   if not range then
-    return {}
+    return nil
   end
   return {
     lnum = range.start.line + 1,
