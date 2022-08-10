@@ -93,6 +93,8 @@ local function process_symbols(symbols, bufnr)
       end
     end
     table.sort(list, function(a, b)
+      a = a.selection_range and a.selection_range or a
+      b = b.selection_range and b.selection_range or b
       if a.lnum == b.lnum then
         return a.col < b.col
       else
