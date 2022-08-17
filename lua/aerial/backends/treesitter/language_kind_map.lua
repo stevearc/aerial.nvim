@@ -113,6 +113,13 @@ return {
     struct_item = "Struct",
     trait_item = "Interface",
   },
+  scala = {
+    trait_definition = "Interface",
+    object_definition = "Class",
+    class_definition = "Class",
+    function_declaration = "Function",
+    function_definition = "Function",
+  },
   teal = {
     function_statement = "Function",
     anon_function = "Function",
