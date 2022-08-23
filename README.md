@@ -139,6 +139,7 @@ automatically fetch symbols from treesitter.
 - rst
 - ruby
 - rust
+- scala
 - teal
 - tsx
 - typescript
