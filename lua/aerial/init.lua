@@ -150,6 +150,8 @@ M.get_location = function(exact)
       kind = item.kind,
       icon = config.get_icon(0, item.kind),
       name = item.name,
+      lnum = item.selection_range and item.selection_range.lnum or item.lnum,
+      col = item.selection_range and item.selection_range.col or item.col,
     })
     item = item.parent
   end
