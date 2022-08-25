@@ -1,6 +1,3 @@
-local HAS_DEVICONS = pcall(require, "nvim-web-devicons")
-local HAS_LSPKIND, lspkind = pcall(require, "lspkind")
-
 local default_options = {
   -- Priority list of preferred backends for aerial.
   -- This can be a filetype map (see :help aerial-filetype-map)
@@ -341,7 +338,9 @@ M.setup = function(opts)
 
   local newconf = vim.tbl_deep_extend("force", default_options, opts)
   if newconf.nerd_font == "auto" then
-    newconf.nerd_font = HAS_DEVICONS or HAS_LSPKIND
+    local has_devicons = pcall(require, "nvim-web-devicons")
+    local has_lspkind = pcall(require, "lspkind")
+    newconf.nerd_font = has_devicons or has_lspkind
   end
 
   -- Undocumented use_lspkind option for tests. End users can simply provide
@@ -466,7 +465,8 @@ M.get_icon = function(bufnr, kind, collapsed)
     end
   end
 
-  if HAS_LSPKIND and M.use_lspkind and not collapsed then
+  local has_lspkind, lspkind = pcall(require, "lspkind")
+  if has_lspkind and M.use_lspkind and not collapsed then
     icon = lspkind.symbolic(kind, { with_text = false })
     if icon and icon ~= "" then
       return icon
