@@ -94,6 +94,11 @@ return {
     function_definition = "Function",
     class_definition = "Class",
   },
+  r = {
+    left_assignment = "Function",
+    function_definition = "Function",
+    comment = "Interface",
+  },
   rst = {
     section = "Interface",
   },
