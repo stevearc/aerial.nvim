@@ -135,6 +135,7 @@ automatically fetch symbols from treesitter.
 - norg
 - org
 - php
+- proto
 - python
 - rst
 - ruby

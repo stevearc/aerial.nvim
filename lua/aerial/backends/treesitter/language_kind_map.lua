@@ -90,6 +90,10 @@ return {
     method_declaration = "Method",
     trait_declaration = "Class",
   },
+  proto = {
+    message = "Class",
+    enum = "Enum",
+  },
   python = {
     function_definition = "Function",
     class_definition = "Class",
