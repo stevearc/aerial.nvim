@@ -3,6 +3,7 @@ local bindings = require("aerial.bindings")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local layout = require("aerial.layout")
+local loading = require("aerial.loading")
 local render = require("aerial.render")
 local util = require("aerial.util")
 
@@ -49,6 +50,9 @@ local function create_aerial_buffer(bufnr)
     aer_bufnr,
     aer_bufnr
   ))
+  if not data:has_symbols(bufnr) then
+    loading.set_loading(aer_bufnr, true)
+  end
   return aer_bufnr
 end
 
