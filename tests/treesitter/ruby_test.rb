@@ -4,6 +4,8 @@ module Mod
   end
 
   def meth_2() end
+
+  def name=(value) end
 end
 
 describe 'UnitTest' do
