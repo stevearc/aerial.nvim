@@ -49,17 +49,19 @@ local function update_aerial_windows()
         window.open_aerial_in_win(0, 0, winid)
       elseif config.attach_mode == "window" then
         local src_win = util.get_source_win(winid)
-        local src_buf = vim.api.nvim_win_get_buf(src_win)
+        if src_win then
+          local src_buf = vim.api.nvim_win_get_buf(src_win)
 
-        -- Close the aerial window if its source window has switched buffers
-        if config.close_automatic_events.switch_buffer then
-          if src_buf ~= util.get_source_buffer(winbuf) then
-            close = true
+          -- Close the aerial window if its source window has switched buffers
+          if config.close_automatic_events.switch_buffer then
+            if src_buf ~= util.get_source_buffer(winbuf) then
+              close = true
+            end
           end
-        end
 
-        if util.get_source_win(winid) == vim.api.nvim_get_current_win() then
-          window.open_aerial_in_win(src_buf, src_win, winid)
+          if util.get_source_win(winid) == vim.api.nvim_get_current_win() then
+            window.open_aerial_in_win(src_buf, src_win, winid)
+          end
         end
       end
 
