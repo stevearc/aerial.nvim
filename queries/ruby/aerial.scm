@@ -4,6 +4,10 @@
 (method
   name: (identifier) @name) @type
 
+(method
+  name: (setter
+    name: (identifier)) @name) @type
+
 (singleton_method
   name: (identifier) @name) @type
 
