@@ -393,10 +393,6 @@ M.setup = function(opts)
   newconf.highlight_mode =
     assert_enum(newconf.highlight_mode, { "split_width", "full_width", "last", "none" })
 
-  if newconf.auto_close ~= "persist" and newconf.auto_attach == "global" then
-    newconf.auto_close = "persist"
-  end
-
   if newconf.nerd_font == "auto" then
     local has_devicons = pcall(require, "nvim-web-devicons")
     local has_lspkind = pcall(require, "lspkind")
