@@ -9,17 +9,65 @@ local window = require("aerial.window")
 
 local M = {}
 
-local function is_sticky(behavior)
-  return behavior == "persist" or behavior == "global"
+local maybe_open_automatic = util.throttle(function()
+  window.maybe_open_automatic()
+end, { delay = 5, reset_timer_on_call = true })
+
+---@param aer_win integer
+---@return boolean
+local function should_close_aerial(aer_win)
+  local aer_buf = vim.api.nvim_win_get_buf(aer_win)
+  local src_win = util.get_source_win(aer_win)
+  -- If the aerial window has no valid source window, close it
+  if not src_win then
+    return true
+  end
+  local src_buf = util.get_source_buffer(aer_buf)
+
+  if config.close_automatic_events.unfocus then
+    -- Close the window if the aerial source win is not the current win
+    if src_win ~= vim.api.nvim_get_current_win() then
+      return true
+    end
+  end
+
+  -- Close the aerial window if its attached buffer is unsupported
+  if config.close_automatic_events.unsupported then
+    if not vim.api.nvim_buf_is_valid(src_buf) or not backends.get(src_buf) then
+      return true
+    end
+  end
+  return false
 end
 
-local function close_orphans()
-  local orphans = util.get_aerial_orphans()
-  for _, winid in ipairs(orphans) do
-    if is_sticky(config.close_behavior) then
-      render.clear_buffer(vim.api.nvim_win_get_buf(winid))
-    else
-      vim.api.nvim_win_close(winid, true)
+local function update_aerial_windows()
+  for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    local winbuf = vim.api.nvim_win_get_buf(winid)
+    if util.is_aerial_buffer(winbuf) then
+      local close = false
+      if config.attach_mode == "global" then
+        window.open_aerial_in_win(0, 0, winid)
+      elseif config.attach_mode == "window" then
+        local src_win = util.get_source_win(winid)
+        if src_win then
+          local src_buf = vim.api.nvim_win_get_buf(src_win)
+
+          -- Close the aerial window if its source window has switched buffers
+          if config.close_automatic_events.switch_buffer then
+            if src_buf ~= util.get_source_buffer(winbuf) then
+              close = true
+            end
+          end
+
+          if util.get_source_win(winid) == vim.api.nvim_get_current_win() then
+            window.open_aerial_in_win(src_buf, src_win, winid)
+          end
+        end
+      end
+
+      if close or should_close_aerial(winid) then
+        vim.api.nvim_win_close(winid, true)
+      end
     end
   end
 end
@@ -31,47 +79,33 @@ M.on_enter_buffer = util.throttle(function()
   end
 
   local mybuf = vim.api.nvim_get_current_buf()
-  if not util.is_aerial_buffer(mybuf) then
-    if config.close_behavior == "close" then
-      close_orphans()
-    end
-
-    -- If we're not in supported buffer
-    local backend = backends.get()
-    if not backend then
-      fold.restore_foldmethod()
-      close_orphans()
-      return
-    end
-
-    fold.maybe_set_foldmethod()
-  end
 
   if util.is_aerial_buffer(mybuf) then
+    local source_win = util.get_source_win()
     if
-      (not is_sticky(config.close_behavior) and util.is_aerial_buffer_orphaned(mybuf))
-      or vim.tbl_count(vim.api.nvim_list_wins()) == 1
+      (not source_win and config.attach_mode ~= "global")
+      or vim.tbl_count(vim.api.nvim_tabpage_list_wins(0)) == 1
     then
       vim.cmd("quit")
     else
       -- Hack to ignore winwidth
       util.restore_width(0)
     end
-  elseif window.is_open() then
-    close_orphans()
-    render.update_aerial_buffer()
+    return
+  end
+
+  update_aerial_windows()
+
+  -- If we're not in supported buffer
+  local backend = backends.get()
+  if not backend then
+    fold.restore_foldmethod()
   else
-    local orphans = util.get_aerial_orphans()
-    if orphans[1] then
-      -- open our symbols in that window
-      vim.defer_fn(function()
-        window.open(false, nil, { winid = orphans[1] })
-      end, 5)
-    else
-      vim.defer_fn(function()
-        window.maybe_open_automatic()
-      end, 5)
-    end
+    fold.maybe_set_foldmethod()
+  end
+
+  if not window.is_open() then
+    maybe_open_automatic()
   end
 end, { delay = 10, reset_timer_on_call = true })
 

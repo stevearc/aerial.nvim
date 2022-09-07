@@ -20,7 +20,7 @@ M.setup = function(opts)
   vim.cmd([[
     aug AerialEnterBuffer
       au!
-      au BufEnter * lua require'aerial.autocommands'.on_enter_buffer()
+      au WinEnter,BufEnter * lua require'aerial.autocommands'.on_enter_buffer()
     aug END
   ]])
   command.create_commands()
@@ -285,22 +285,13 @@ end
 
 ---Print out debug information for aerial
 M.info = function()
-  local filetype = vim.api.nvim_buf_get_option(0, "filetype")
+  local bufnr = util.get_buffers(0)
+  local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
   print("Aerial Info")
   print("-----------")
   print(string.format("Filetype: %s", filetype))
   print("Configured backends:")
-  for _, name in ipairs(config.backends(0)) do
-    local line = "  " .. name
-    local supported, err = backends.is_supported(0, name)
-    if supported then
-      line = line .. " (supported)"
-    else
-      line = line .. " (not supported) [" .. err .. "]"
-    end
-    if backends.is_backend_attached(0, name) then
-      line = line .. " (attached)"
-    end
+  for _, line in ipairs(backends.get_status_lines(bufnr)) do
     print(line)
   end
   print(string.format("Show symbols: %s", config.get_filter_kind_map()))

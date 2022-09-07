@@ -20,6 +20,7 @@
 Aerial	aerial.txt	/*Aerial*
 SymbolKind	aerial.txt	/*SymbolKind*
 aerial	aerial.txt	/*aerial*
+aerial-close-behavior	aerial.txt	/*aerial-close-behavior*
 aerial-commands	aerial.txt	/*aerial-commands*
 aerial-contents	aerial.txt	/*aerial-contents*
 aerial-filetype-map	aerial.txt	/*aerial-filetype-map*

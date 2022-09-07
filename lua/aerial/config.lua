@@ -1,6 +1,3 @@
-local HAS_DEVICONS = pcall(require, "nvim-web-devicons")
-local HAS_LSPKIND, lspkind = pcall(require, "lspkind")
-
 local default_options = {
   -- Priority list of preferred backends for aerial.
   -- This can be a filetype map (see :help aerial-filetype-map)
@@ -15,26 +12,29 @@ local default_options = {
     width = nil,
     min_width = 10,
 
-    -- Enum: prefer_right, prefer_left, right, left, float
     -- Determines the default direction to open the aerial window. The 'prefer'
     -- options will open the window in the other direction *if* there is a
     -- different buffer in the way of the preferred direction
+    -- Enum: prefer_right, prefer_left, right, left, float
     default_direction = "prefer_right",
 
-    -- Enum: edge, group, window
+    -- Determines where the aerial window will be opened
     --   edge   - open aerial at the far right/left of the editor
     --   group  - open aerial to the right/left of the group of windows containing the current buffer
     --   window - open aerial to the right/left of the current window
     placement = "window",
   },
 
-  -- Enum: persist, close, auto, global
-  --   persist - aerial window will stay open until closed
-  --   close   - aerial window will close when original file is no longer visible
-  --   auto    - aerial window will stay open as long as there is a visible
-  --             buffer to attach to
-  --   global  - same as 'persist', and will always show symbols for the current buffer
-  close_behavior = "auto",
+  -- Determines how the aerial window decides which buffer to display symbols for
+  --   window - aerial window will display symbols for the buffer in the window from which it was opened
+  --   global - aerial window will display symbols for the current window
+  attach_mode = "window",
+
+  -- List of enum values that configure when to auto-close the aerial window
+  --   unfocus       - close aerial when you leave the original source window
+  --   switch_buffer - close aerial when you change buffers in the source window
+  --   unsupported   - close aerial when attaching to a buffer that has no symbol source
+  close_automatic_events = {},
 
   -- Set to false to remove the default keybindings for the aerial buffer
   default_bindings = true,
@@ -59,7 +59,6 @@ local default_options = {
     "Struct",
   },
 
-  -- Enum: split_width, full_width, last, none
   -- Determines line highlighting mode when multiple splits are visible.
   -- split_width   Each open window will have its cursor location marked in the
   --               aerial buffer. Each line will only be partially highlighted
@@ -90,7 +89,7 @@ local default_options = {
   icons = {},
 
   -- Control which windows and buffers aerial should ignore.
-  -- If close_behavior is "global", focusing an ignored window/buffer will
+  -- If attach_mode is "global", focusing an ignored window/buffer will
   -- not cause the aerial window to update.
   -- If open_automatic is true, focusing an ignored window/buffer will not
   -- cause an aerial window to open.
@@ -184,7 +183,7 @@ local default_options = {
     -- Controls border appearance. Passed to nvim_open_win
     border = "rounded",
 
-    -- Enum: cursor, editor, win
+    -- Determines location of floating window
     --   cursor - Opens float on top of the cursor
     --   editor - Opens float centered in the editor
     --   win    - Opens float centered in the window
@@ -324,6 +323,28 @@ local function compat_move_option(opts, key, nested_key)
   end
 end
 
+---@param value string
+---@param values string[]
+---@param opts? {allow_nil: boolean}
+local function assert_enum(value, values, opts)
+  opts = opts or {}
+  local valid
+  if value == nil then
+    valid = opts.allow_nil
+  else
+    valid = vim.tbl_contains(values, value)
+  end
+  if valid then
+    return value
+  else
+    vim.notify(
+      string.format("Aerial got '%s', expected one of %s", value, table.concat(values, ", ")),
+      vim.log.levels.WARN
+    )
+    return values[1]
+  end
+end
+
 M.setup = function(opts)
   opts = opts or {}
 
@@ -339,9 +360,48 @@ M.setup = function(opts)
   end
   compat_move_option(opts, "placement_editor_edge", "layout")
 
+  if opts.close_behavior then
+    if opts.close_behavior == "global" then
+      opts.attach_mode = "global"
+    elseif opts.close_behavior == "persist" then
+      -- pass
+    elseif opts.close_behavior == "close" then
+      opts.close_automatic_events = { "switch_buffer" }
+    elseif opts.close_behavior == "auto" then
+      opts.close_automatic_events = { "unsupported" }
+    end
+    opts.close_behavior = nil
+    vim.notify(
+      "Deprecated[aerial]: close_behavior is deprecated. See :help aerial-close-behavior",
+      vim.log.levels.WARN
+    )
+  end
+
   local newconf = vim.tbl_deep_extend("force", default_options, opts)
+
+  -- Asserts for all enum values
+  newconf.layout.default_direction = assert_enum(
+    newconf.layout.default_direction,
+    { "prefer_right", "prefer_left", "right", "left", "float" }
+  )
+  newconf.layout.placement = assert_enum(newconf.layout.placement, { "window", "edge", "group" })
+  newconf.attach_mode = assert_enum(newconf.attach_mode, { "window", "global" })
+  for i, v in ipairs(newconf.close_automatic_events) do
+    newconf.close_automatic_events[i] =
+      assert_enum(v, { "unfocus", "switch_buffer", "unsupported" })
+  end
+  newconf.highlight_mode =
+    assert_enum(newconf.highlight_mode, { "split_width", "full_width", "last", "none" })
+
   if newconf.nerd_font == "auto" then
-    newconf.nerd_font = HAS_DEVICONS or HAS_LSPKIND
+    local has_devicons = pcall(require, "nvim-web-devicons")
+    local has_lspkind = pcall(require, "lspkind")
+    newconf.nerd_font = has_devicons or has_lspkind
+  end
+
+  -- Add lookup to close_automatic_events
+  for i, v in ipairs(newconf.close_automatic_events) do
+    newconf.close_automatic_events[v] = i
   end
 
   -- Undocumented use_lspkind option for tests. End users can simply provide
@@ -466,7 +526,8 @@ M.get_icon = function(bufnr, kind, collapsed)
     end
   end
 
-  if HAS_LSPKIND and M.use_lspkind and not collapsed then
+  local has_lspkind, lspkind = pcall(require, "lspkind")
+  if has_lspkind and M.use_lspkind and not collapsed then
     icon = lspkind.symbolic(kind, { with_text = false })
     if icon and icon ~= "" then
       return icon

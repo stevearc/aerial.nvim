@@ -12,7 +12,7 @@ describe("config", function()
 
   it("falls back to default options", function()
     config.setup()
-    assert.equals(config.close_behavior, "auto")
+    assert.equals(config.attach_mode, "window")
   end)
 
   -- Filetype maps

@@ -61,17 +61,6 @@ M.go_buf_no_au = function(bufnr)
   vim.cmd(string.format("noau b %d", bufnr))
 end
 
-M.get_aerial_orphans = function()
-  local orphans = {}
-  for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-    local winbuf = vim.api.nvim_win_get_buf(winid)
-    if M.is_aerial_buffer(winbuf) and M.is_aerial_buffer_orphaned(winbuf) then
-      table.insert(orphans, winid)
-    end
-  end
-  return orphans
-end
-
 M.buf_first_win_in_tabpage = function(bufnr)
   for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
     if vim.api.nvim_win_get_buf(winid) == bufnr then
@@ -80,24 +69,41 @@ M.buf_first_win_in_tabpage = function(bufnr)
   end
 end
 
-M.is_aerial_buffer_orphaned = function(bufnr)
-  local sourcebuf = M.get_source_buffer(bufnr)
-  if sourcebuf == -1 then
-    return true
+---@param winid? integer
+---@return integer? Source window
+---@return integer? Aerial window
+M.get_winids = function(winid)
+  if winid == nil or winid == 0 then
+    winid = vim.api.nvim_get_current_win()
   end
-  if config.close_behavior == "global" and not M.is_aerial_buffer() then
-    return sourcebuf ~= vim.api.nvim_get_current_buf()
+  local bufnr = vim.api.nvim_win_get_buf(winid)
+  if M.is_aerial_buffer(bufnr) then
+    return M.get_source_win(winid), winid
+  else
+    return winid, M.get_aerial_win(winid)
   end
-  for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-    if vim.api.nvim_win_get_buf(winid) == sourcebuf then
-      return false
-    end
-  end
-  return true
 end
 
-M.get_aerial_buffer = function(bufnr)
-  return M.get_buffer_from_var(bufnr or 0, "aerial_buffer")
+---@param winid integer
+---@param varname string
+---@return integer?
+M.get_winid_from_var = function(winid, varname)
+  local status, result_winid = pcall(vim.api.nvim_win_get_var, winid, varname)
+  if status and result_winid ~= nil and vim.api.nvim_win_is_valid(result_winid) then
+    return result_winid
+  end
+end
+
+---@param winid? integer
+---@return integer?
+M.get_aerial_win = function(winid)
+  return M.get_winid_from_var(winid or 0, "aerial_win")
+end
+
+---@param winid? integer
+---@return integer?
+M.get_source_win = function(winid)
+  return M.get_winid_from_var(winid or 0, "source_win")
 end
 
 M.get_buffers = function(bufnr)
@@ -109,6 +115,10 @@ M.get_buffers = function(bufnr)
   else
     return bufnr, M.get_aerial_buffer(bufnr)
   end
+end
+
+M.get_aerial_buffer = function(bufnr)
+  return M.get_buffer_from_var(bufnr or 0, "aerial_buffer")
 end
 
 M.get_source_buffer = function(bufnr)
@@ -239,6 +249,8 @@ M.detect_split_direction = function(bufnr)
     if not bufnr or bufnr == 0 then
       bufnr = vim.api.nvim_get_current_buf()
     end
+    -- TODO make this smarter by accounting for placement = 'group' vs placement = 'window'
+    -- and also using winlayout()
     left_available = vim.api.nvim_win_get_buf(wins[1]) == bufnr
     right_available = vim.api.nvim_win_get_buf(wins[#wins]) == bufnr
   end
