@@ -256,7 +256,6 @@ require("aerial").setup({
 
     -- Determines where the aerial window will be opened
     --   edge   - open aerial at the far right/left of the editor
-    --   group  - open aerial to the right/left of the group of windows containing the current buffer
     --   window - open aerial to the right/left of the current window
     placement = "window",
   },
