@@ -27,10 +27,16 @@ M.setup = function(opts)
   highlight.create_highlight_groups()
 end
 
--- Returns true if aerial is open for the current buffer
--- (returns false inside an aerial buffer)
-M.is_open = function(bufnr)
-  return window.is_open(bufnr)
+---Returns true if aerial is open for the current buffer
+---(returns false inside an aerial buffer)
+---@param opts? {bufnr?: integer, winid?: integer}
+---@return boolean
+M.is_open = function(opts)
+  if type(opts) == "number" then
+    -- For backwards compatibility
+    opts = { bufnr = opts }
+  end
+  return window.is_open(opts)
 end
 
 -- Close the aerial window for the current buffer, or the current window if it

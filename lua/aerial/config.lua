@@ -20,7 +20,6 @@ local default_options = {
 
     -- Determines where the aerial window will be opened
     --   edge   - open aerial at the far right/left of the editor
-    --   group  - open aerial to the right/left of the group of windows containing the current buffer
     --   window - open aerial to the right/left of the current window
     placement = "window",
   },
@@ -385,6 +384,12 @@ M.setup = function(opts)
     { "prefer_right", "prefer_left", "right", "left", "float" }
   )
   newconf.layout.placement = assert_enum(newconf.layout.placement, { "window", "edge", "group" })
+  if newconf.layout.placement == "group" then
+    vim.notify(
+      "Deprecated: aerial.layout.placement = 'group'. If 'global' or 'window' do not fit your workflow, please file an issue https://github.com/stevearc/aerial.nvim/issues/new",
+      vim.log.levels.WARN
+    )
+  end
   newconf.attach_mode = assert_enum(newconf.attach_mode, { "window", "global" })
   for i, v in ipairs(newconf.close_automatic_events) do
     newconf.close_automatic_events[i] =

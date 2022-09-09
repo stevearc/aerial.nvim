@@ -21,15 +21,19 @@ M.remove_newlines = function(str)
   return string.gsub(str, "\n", " ")
 end
 
-M.restore_width = function(winid)
-  local ok, width = pcall(vim.api.nvim_win_get_var, winid or 0, "aerial_width")
+---@param winid integer Window to restore
+---@param bufnr integer Aerial buffer
+M.restore_width = function(winid, bufnr)
+  local ok, width = pcall(vim.api.nvim_buf_get_var, bufnr, "aerial_width")
   if ok then
-    vim.api.nvim_win_set_width(winid or 0, width)
+    vim.api.nvim_win_set_width(winid, width)
   end
 end
 
-M.save_width = function(winid, width)
-  vim.api.nvim_win_set_var(winid or 0, "aerial_width", width)
+---@param bufnr integer
+---@param width integer
+M.save_width = function(bufnr, width)
+  vim.api.nvim_buf_set_var(bufnr, "aerial_width", width)
 end
 
 M.win_get_gutter_width = function(winid)
@@ -249,10 +253,15 @@ M.detect_split_direction = function(bufnr)
     if not bufnr or bufnr == 0 then
       bufnr = vim.api.nvim_get_current_buf()
     end
-    -- TODO make this smarter by accounting for placement = 'group' vs placement = 'window'
-    -- and also using winlayout()
-    left_available = vim.api.nvim_win_get_buf(wins[1]) == bufnr
-    right_available = vim.api.nvim_win_get_buf(wins[#wins]) == bufnr
+    -- TODO make this smarter using winlayout()
+    if config.layout.placement == "group" then
+      left_available = vim.api.nvim_win_get_buf(wins[1]) == bufnr
+      right_available = vim.api.nvim_win_get_buf(wins[#wins]) == bufnr
+    elseif config.layout.placement == "window" then
+      local mywin = vim.api.nvim_get_current_win()
+      left_available = wins[1] == mywin
+      right_available = wins[#wins] == mywin
+    end
   end
 
   if default == "prefer_left" then

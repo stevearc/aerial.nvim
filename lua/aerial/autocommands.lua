@@ -89,7 +89,7 @@ M.on_enter_buffer = util.throttle(function()
       vim.cmd("quit")
     else
       -- Hack to ignore winwidth
-      util.restore_width(0)
+      util.restore_width(0, 0)
     end
     return
   end
