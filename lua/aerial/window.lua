@@ -160,6 +160,10 @@ M.open_aerial_in_win = function(src_bufnr, src_winid, aer_winid)
   end
   setup_aerial_win(src_winid, aer_winid, aer_bufnr)
   vim.api.nvim_win_set_buf(aer_winid, aer_bufnr)
+  local backend = backends.get(src_bufnr)
+  if backend and not data:has_symbols(src_bufnr) then
+    backend.fetch_symbols(src_bufnr)
+  end
 end
 
 ---@param bufnr? integer
