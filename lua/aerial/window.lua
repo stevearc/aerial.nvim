@@ -65,7 +65,7 @@ local function setup_aerial_win(src_winid, aer_winid, aer_bufnr)
   if aer_winid == 0 then
     aer_winid = vim.api.nvim_get_current_win()
   end
-  vim.api.nvim_win_set_option(aer_winid, "listchars", "tab:> ")
+  vim.api.nvim_win_set_option(aer_winid, "list", false)
   vim.api.nvim_win_set_option(aer_winid, "winfixwidth", true)
   vim.api.nvim_win_set_option(aer_winid, "number", false)
   vim.api.nvim_win_set_option(aer_winid, "signcolumn", "no")
