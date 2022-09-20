@@ -67,7 +67,7 @@ end
 
 M.buf_first_win_in_tabpage = function(bufnr)
   for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-    if vim.api.nvim_win_get_buf(winid) == bufnr then
+    if vim.api.nvim_win_is_valid(winid) and vim.api.nvim_win_get_buf(winid) == bufnr then
       return winid
     end
   end
@@ -160,7 +160,11 @@ end
 M.get_fixed_wins = function(bufnr)
   local wins = {}
   for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-    if not M.is_floating_win(winid) and (not bufnr or vim.api.nvim_win_get_buf(winid) == bufnr) then
+    if
+      vim.api.nvim_win_is_valid(winid)
+      and not M.is_floating_win(winid)
+      and (not bufnr or vim.api.nvim_win_get_buf(winid) == bufnr)
+    then
       table.insert(wins, winid)
     end
   end

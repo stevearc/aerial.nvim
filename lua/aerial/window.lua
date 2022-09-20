@@ -203,10 +203,12 @@ M.close = function()
     -- look for other aerial windows and close the first
     if backend == nil or not data:has_symbols(0) then
       for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-        local winbuf = vim.api.nvim_win_get_buf(winid)
-        if util.is_aerial_buffer(winbuf) then
-          vim.api.nvim_win_close(winid, false)
-          break
+        if vim.api.nvim_win_is_valid(winid) then
+          local winbuf = vim.api.nvim_win_get_buf(winid)
+          if util.is_aerial_buffer(winbuf) then
+            vim.api.nvim_win_close(winid, false)
+            break
+          end
         end
       end
     end
@@ -215,7 +217,9 @@ end
 
 M.close_all = function()
   for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-    if util.is_aerial_buffer(vim.api.nvim_win_get_buf(winid)) then
+    if
+      vim.api.nvim_win_is_valid(winid) and util.is_aerial_buffer(vim.api.nvim_win_get_buf(winid))
+    then
       vim.api.nvim_win_close(winid, false)
     end
   end
@@ -224,9 +228,11 @@ end
 M.close_all_but_current = function()
   local _, aer_winid = util.get_winids(0)
   for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-    local bufnr = vim.api.nvim_win_get_buf(winid)
-    if winid ~= aer_winid and util.is_aerial_buffer(bufnr) then
-      vim.api.nvim_win_close(winid, false)
+    if vim.api.nvim_win_is_valid(winid) then
+      local bufnr = vim.api.nvim_win_get_buf(winid)
+      if winid ~= aer_winid and util.is_aerial_buffer(bufnr) then
+        vim.api.nvim_win_close(winid, false)
+      end
     end
   end
 end
@@ -279,7 +285,11 @@ M.open_all = function()
     return M.open()
   end
   for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-    if not util.is_ignored_win(winid) and not util.is_floating_win(winid) then
+    if
+      vim.api.nvim_win_is_valid(winid)
+      and not util.is_ignored_win(winid)
+      and not util.is_floating_win(winid)
+    then
       vim.api.nvim_win_call(winid, function()
         M.open()
       end)

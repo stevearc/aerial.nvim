@@ -39,7 +39,7 @@ local function get_target_win()
     end
     if winid == nil then
       for _, tabwin in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-        if vim.api.nvim_win_get_buf(tabwin) == bufnr then
+        if vim.api.nvim_win_is_valid(tabwin) and vim.api.nvim_win_get_buf(tabwin) == bufnr then
           winid = tabwin
           break
         end

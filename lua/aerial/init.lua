@@ -172,7 +172,7 @@ local function _post_tree_mutate(bufnr, new_cursor_pos)
   local _, aer_bufnr = util.get_buffers(bufnr)
   if new_cursor_pos then
     for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-      if vim.api.nvim_win_get_buf(winid) == aer_bufnr then
+      if vim.api.nvim_win_is_valid(winid) and vim.api.nvim_win_get_buf(winid) == aer_bufnr then
         vim.api.nvim_win_set_cursor(winid, { new_cursor_pos, 0 })
       end
     end
