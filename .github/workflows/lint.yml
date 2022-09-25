@@ -23,10 +23,10 @@ jobs:
     name: StyLua
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Stylua
-      uses: JohnnyMorganz/stylua-action@1.0.0
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        args: --check .
-
+      - uses: actions/checkout@v2
+      - name: Stylua
+        uses: JohnnyMorganz/stylua-action@1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: v0.14.3
+          args: --check .
