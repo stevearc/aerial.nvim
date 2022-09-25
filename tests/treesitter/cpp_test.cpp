@@ -9,6 +9,7 @@ enum en_1 {};
 
 class cl_1 {
   ~cl_1() {}
+
 public:
   void meth_1() {}
 };
@@ -19,4 +20,9 @@ int *fn_2() {}
 
 int **fn_3() {}
 
-bool operator < (int, int) {}
+bool operator<(int, int) {}
+
+void fn_4() {
+  struct Point p1;                     // This should not show up as a symbol
+  struct Point *p2 = new struct Point; // This should not show up as a symbol
+}
