@@ -20,6 +20,8 @@ return {
     struct_declaration = "Struct",
     enum_declaration = "Enum",
     constructor_declaration = "Constructor",
+    property_declaration = "Property",
+    field_declaration = "Field",
   },
   dart = {
     class_definition = "Class",
