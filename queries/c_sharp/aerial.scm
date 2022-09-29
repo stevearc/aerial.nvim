@@ -15,3 +15,11 @@
 
 (constructor_declaration
   name: (identifier) @name) @type
+
+(property_declaration
+  name: (identifier) @name) @type
+
+(field_declaration
+   (variable_declaration
+    (variable_declarator
+       (identifier) @name))) @type
