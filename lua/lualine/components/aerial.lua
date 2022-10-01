@@ -28,6 +28,9 @@
 --   The separator to be used to separate symbols in dense mode. Normally does
 --   not contain spaces to increase density.
 --
+-- *colored* (default: true)
+--   Color the symbol icons.
+--
 -- ## Examples
 --
 -- { "aerial" }
@@ -50,7 +53,15 @@ local default_options = {
   exact = true,
 }
 
-local function format_status(symbols, depth, separator, icons_enabled)
+local function color_icon(symbol_kind, icon, colored)
+  if colored then
+    return string.format("%%#%s#%s%%##", "Aerial" .. symbol_kind .. "Icon", icon)
+  else
+    return icon
+  end
+end
+
+local function format_status(symbols, depth, separator, icons_enabled, colored)
   local parts = {}
   depth = depth or #symbols
 
@@ -62,7 +73,8 @@ local function format_status(symbols, depth, separator, icons_enabled)
 
   for _, symbol in ipairs(symbols) do
     if icons_enabled then
-      table.insert(parts, string.format("%s %s", symbol.icon, symbol.name))
+      local icon = color_icon(symbol.kind, symbol.icon, colored)
+      table.insert(parts, string.format("%s %s", icon, symbol.name))
     else
       table.insert(parts, symbol.name)
     end
@@ -75,6 +87,9 @@ function M:init(options)
   M.super.init(self, options)
 
   self.options = vim.tbl_deep_extend("keep", self.options or {}, default_options)
+  if self.options.colored == nil then
+    self.options.colored = true
+  end
   self.get_status = self.get_status_normal
 
   if self.options.dense then
@@ -88,8 +103,13 @@ end
 
 function M:get_status_normal()
   local symbols = aerial.get_location(self.options.exact)
-  local status =
-    format_status(symbols, self.options.depth, self.options.sep, self.options.icons_enabled)
+  local status = format_status(
+    symbols,
+    self.options.depth,
+    self.options.sep,
+    self.options.icons_enabled,
+    self.options.colored
+  )
   return status
 end
 
@@ -105,7 +125,9 @@ function M:get_status_dense()
   )
 
   if self.options.icons_enabled and not vim.tbl_isempty(symbols) then
-    status = string.format("%s %s", symbols[#symbols].icon, status)
+    local symbol = symbols[#symbols]
+    local icon = color_icon(symbol.kind, symbol.icon, self.options.colored)
+    status = string.format("%s %s", icon, status)
   end
   return status
 end

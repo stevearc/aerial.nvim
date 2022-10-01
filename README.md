@@ -575,6 +575,9 @@ require("lualine").setup({
 
       -- The separator to be used to separate symbols in dense mode.
       dense_sep = '.',
+
+      -- Color the symbol icons.
+      colored = true,
     },
   },
 })
