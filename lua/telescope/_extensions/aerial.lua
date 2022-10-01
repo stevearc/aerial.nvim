@@ -9,13 +9,22 @@ local pickers = require("telescope.pickers")
 local telescope = require("telescope")
 
 local ext_config = {
-  show_nesting = true,
+  show_nesting = {
+    ["_"] = false,
+    json = true,
+    yaml = true,
+  },
 }
 
 local function aerial_picker(opts)
   opts = opts or {}
   local bufnr = vim.api.nvim_get_current_buf()
   local filename = vim.api.nvim_buf_get_name(0)
+  local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
+  local show_nesting = ext_config.show_nesting[filetype]
+  if show_nesting == nil then
+    show_nesting = ext_config.show_nesting["_"]
+  end
   local backend = backends.get()
 
   if not backend then
@@ -49,7 +58,7 @@ local function aerial_picker(opts)
 
   local function make_entry(item)
     local name = item.name
-    if ext_config.show_nesting then
+    if show_nesting then
       local cur = item.parent
       while cur do
         name = string.format("%s.%s", cur.name, name)
@@ -89,6 +98,11 @@ end
 return telescope.register_extension({
   setup = function(user_config)
     ext_config = vim.tbl_extend("force", ext_config, user_config or {})
+    if type(ext_config.show_nesting) ~= "table" then
+      ext_config.show_nesting = {
+        ["_"] = ext_config.show_nesting,
+      }
+    end
   end,
   exports = {
     aerial = aerial_picker,
