@@ -33,6 +33,7 @@ M.keys = {
   { "}", "<cmd>AerialNext<CR>", "Jump to the next symbol" },
   { "[[", "<cmd>AerialPrevUp<CR>", "Jump up the tree, moving backwards" },
   { "]]", "<cmd>AerialNextUp<CR>", "Jump up the tree, moving forwards" },
+  { "r", "<cmd>lua require'aerial'.rename()<CR>", "Rename the current symbol" },
   { "q", "<cmd>AerialClose<CR>", "Close the aerial window" },
   {
     { "o", "za" },
