@@ -55,7 +55,7 @@ local default_options = {
 
 local function color_icon(symbol_kind, icon, colored)
   if colored then
-    return string.format("%%#%s#%s%%##", "Aerial" .. symbol_kind .. "Icon", icon.." ")
+    return string.format("%%#%s#%s", "LuaLineAerial" .. symbol_kind .. "Icon", icon)
   else
     return icon
   end
@@ -63,7 +63,7 @@ end
 
 local function color(symbol_kind, text, colored)
   if colored then
-    return string.format("%%#%s#%s", "Aerial" .. symbol_kind, text )
+    return string.format("%%#%s#%s", "LuaLineAerial" .. symbol_kind, text)
   else
     return text
   end
@@ -80,12 +80,11 @@ local function format_status(symbols, depth, separator, icons_enabled, colored)
   end
 
   for _, symbol in ipairs(symbols) do
+    local name = color(symbol.kind, symbol.name, colored)
     if icons_enabled then
       local icon = color_icon(symbol.kind, symbol.icon, colored)
-      local name = color(symbol.kind, symbol.name, colored)
-      table.insert(parts, string.format("%s%s", icon, name))
+      table.insert(parts, string.format("%s %s", icon, name))
     else
-      local name = color(symbol.kind, symbol.name, colored)
       table.insert(parts, name)
     end
   end
