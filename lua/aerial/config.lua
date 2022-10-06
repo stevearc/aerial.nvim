@@ -308,7 +308,11 @@ local function create_filetype_opt_getter(option, default)
           return option[ft]
         end
       end
-      return option["_"] and option["_"] or default
+      if option["_"] ~= nil then
+        return option["_"]
+      else
+        return default
+      end
     end
   end
 end
