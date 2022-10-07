@@ -74,63 +74,36 @@ M.create_highlight_groups = function()
     highlight default link AerialTypeParameter NONE
     highlight default link AerialVariable      NONE
 
-
-    " The icon displayed to the left of the symbol in lualine
-    highlight default link LuaLineAerialArrayIcon AerialArrayIcon
-    highlight default link LuaLineAerialBooleanIcon AerialBooleanIcon
-    highlight default link LuaLineAerialClassIcon AerialClassIcon
-    highlight default link LuaLineAerialConstantIcon AerialConstantIcon
-    highlight default link LuaLineAerialConstructorIcon AerialConstructorIcon
-    highlight default link LuaLineAerialEnumIcon AerialEnumIcon
-    highlight default link LuaLineAerialEnumMemberIcon AerialEnumMemberIcon
-    highlight default link LuaLineAerialEventIcon AerialEventIcon
-    highlight default link LuaLineAerialFieldIcon AerialFieldIcon
-    highlight default link LuaLineAerialFileIcon AerialFileIcon
-    highlight default link LuaLineAerialFunctionIcon AerialFunctionIcon
-    highlight default link LuaLineAerialInterfaceIcon AerialInterfaceIcon
-    highlight default link LuaLineAerialKeyIcon AerialKeyIcon
-    highlight default link LuaLineAerialMethodIcon AerialMethodIcon
-    highlight default link LuaLineAerialModuleIcon AerialModuleIcon
-    highlight default link LuaLineAerialNamespaceIcon AerialNamespaceIcon
-    highlight default link LuaLineAerialNullIcon AerialNullIcon
-    highlight default link LuaLineAerialNumberIcon AerialNumberIcon
-    highlight default link LuaLineAerialObjectIcon AerialObjectIcon
-    highlight default link LuaLineAerialOperatorIcon AerialOperatorIcon
-    highlight default link LuaLineAerialPackageIcon AerialPackageIcon
-    highlight default link LuaLineAerialPropertyIcon AerialPropertyIcon
-    highlight default link LuaLineAerialStringIcon AerialStringIcon
-    highlight default link LuaLineAerialStructIcon AerialStructIcon
-    highlight default link LuaLineAerialTypeParameterIcon AerialTypeParameterIcon
-    highlight default link LuaLineAerialVariableIcon AerialVariableIcon
-
-    " The name of the symbol in lualine
-    highlight default link LuaLineAerialArray AerialArray
-    highlight default link LuaLineAerialBoolean AerialBoolean
-    highlight default link LuaLineAerialClass AerialClass
-    highlight default link LuaLineAerialConstant AerialConstant
-    highlight default link LuaLineAerialConstructor AerialConstructor
-    highlight default link LuaLineAerialEnum AerialEnum
-    highlight default link LuaLineAerialEnumMember AerialEnumMember
-    highlight default link LuaLineAerialEvent AerialEvent
-    highlight default link LuaLineAerialField AerialField
-    highlight default link LuaLineAerialFile AerialFile
-    highlight default link LuaLineAerialFunction AerialFunction
-    highlight default link LuaLineAerialInterface AerialInterface
-    highlight default link LuaLineAerialKey AerialKey
-    highlight default link LuaLineAerialMethod AerialMethod
-    highlight default link LuaLineAerialModule AerialModule
-    highlight default link LuaLineAerialNamespace AerialNamespace
-    highlight default link LuaLineAerialNull AerialNull
-    highlight default link LuaLineAerialNumber AerialNumber
-    highlight default link LuaLineAerialObject AerialObject
-    highlight default link LuaLineAerialOperator AerialOperator
-    highlight default link LuaLineAerialPackage AerialPackage
-    highlight default link LuaLineAerialProperty AerialProperty
-    highlight default link LuaLineAerialString AerialString
-    highlight default link LuaLineAerialStruct AerialStruct
-    highlight default link LuaLineAerialTypeParameter AerialTypeParameter
-    highlight default link LuaLineAerialVariable AerialVariable
   ]])
 end
+
+M.identifiers = {
+  "Array",
+  "Boolean",
+  "Class",
+  "Constant",
+  "Constructor",
+  "Enum",
+  "EnumMember",
+  "Event",
+  "Field",
+  "File",
+  "Function",
+  "Interface",
+  "Key",
+  "Method",
+  "Module",
+  "Namespace",
+  "Null",
+  "Number",
+  "Object",
+  "Operator",
+  "Package",
+  "Property",
+  "String",
+  "Struct",
+  "TypeParameter",
+  "Variable",
+}
 
 return M
