@@ -39,11 +39,12 @@ local function create_aerial_buffer(bufnr)
     vim.api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
   end)
   -- We create an autocmd to render the first time this buffer is displayed in a window
+  -- Defer it so we have time to set window options and variables on the float first
   vim.cmd(string.format(
     [[
     au CursorMoved <buffer=%d> lua require('aerial.autocommands').on_cursor_move(true)
     au BufLeave <buffer=%d> lua require('aerial.autocommands').on_leave_aerial_buf()
-    au BufWinEnter <buffer=%d> ++nested ++once lua require('aerial.render').update_aerial_buffer(%d)
+    au BufWinEnter <buffer=%d> ++nested ++once lua vim.defer_fn(function() require('aerial.render').update_aerial_buffer(%d) end, 1)
   ]],
     aer_bufnr,
     aer_bufnr,
@@ -112,7 +113,7 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
       if rel == "win" then
         win_config.win = vim.api.nvim_get_current_win()
       end
-      local new_config = config.float.override(win_config) or win_config
+      local new_config = config.float.override(win_config, my_winid) or win_config
       aer_winid = vim.api.nvim_open_win(aer_bufnr, false, new_config)
       -- We store this as a window variable because relative=cursor gets
       -- turned into relative=win when checking nvim_win_get_config()

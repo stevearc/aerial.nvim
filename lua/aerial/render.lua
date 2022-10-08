@@ -57,7 +57,8 @@ local function resize_all_wins(aer_bufnr, preferred_width, preferred_height)
             relative = relative,
             win = parent_win,
           }
-          local new_conf = config.float.override(win_conf)
+          local source_winid = util.get_source_win(winid)
+          local new_conf = config.float.override(win_conf, source_winid)
           vim.api.nvim_win_set_config(winid, new_conf or win_conf)
         end
       end
