@@ -432,7 +432,7 @@ require("aerial").setup({
     height = nil,
     min_height = { 8, 0.1 },
 
-    override = function(conf)
+    override = function(conf, source_winid)
       -- This is the config that will be passed to nvim_open_win.
       -- Change values here to customize the layout
       return conf
