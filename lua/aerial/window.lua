@@ -137,7 +137,7 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
       else
         modifier = direction == "left" and "leftabove" or "rightbelow"
       end
-      vim.cmd(string.format("noau vertical %s split", modifier))
+      vim.cmd(string.format("noau vertical %s 1split", modifier))
       aer_winid = vim.api.nvim_get_current_win()
       util.go_win_no_au(my_winid)
     end
