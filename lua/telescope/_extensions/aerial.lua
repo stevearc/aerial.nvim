@@ -77,9 +77,17 @@ local function aerial_picker(opts)
   end
 
   local results = {}
+  local default_selection_index = 1
   if data:has_symbols(0) then
-    data[0]:visit(function(item)
+    local symbols = data:get_or_create(0)
+    local position = symbols.positions[symbols.last_win]
+    local i = 1
+    symbols:visit(function(item)
+      if item == position.closest_symbol then
+        default_selection_index = i
+      end
       table.insert(results, item)
+      i = i + 1
     end)
   end
   pickers
@@ -89,6 +97,7 @@ local function aerial_picker(opts)
         results = results,
         entry_maker = make_entry,
       }),
+      default_selection_index = default_selection_index,
       sorter = conf.generic_sorter(opts),
       previewer = conf.qflist_previewer(opts),
     })
