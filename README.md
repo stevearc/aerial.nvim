@@ -491,6 +491,7 @@ which you can use as a reference if you want to set your own bindings.
 | `}`             | Jump to the next symbol                                        |
 | `[[`            | Jump up the tree, moving backwards                             |
 | `]]`            | Jump up the tree, moving forwards                              |
+| `r`             | Rename the current symbol                                      |
 | `q`             | Close the aerial window                                        |
 | `o`/`za`        | Toggle the symbol under the cursor open/closed                 |
 | `O`/`zA`        | Recursive toggle the symbol under the cursor open/closed       |
