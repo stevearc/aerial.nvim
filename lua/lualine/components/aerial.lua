@@ -55,52 +55,17 @@ local default_options = {
   exact = true,
 }
 
-function M:get_highlight(name)
-  if vim.fn.hlexists(name) ~= 1 then
-    return {}
-  end
-  local hl_test = vim.api.nvim_get_hl_by_name(name, true)
-  -- Linked to NONE
-  if hl_test[true] == 6 then
-    return {}
-  end
-  for _, key in pairs({ "foreground", "background", "special" }) do
-    if hl_test[key] then
-      hl_test[key] = string.format("%06x", hl_test[key])
-    end
-  end
-  return hl_test
-end
-
 function M:color_for_lualine()
   self.highlight_groups = {}
   for _, symbol_kind in ipairs(identifiers) do
-    hl = "Aerial" .. symbol_kind
-    hl_icon = "Aerial" .. symbol_kind .. "Icon"
-    local color = { fg = self:get_highlight(hl).foreground }
-    local color_icon = { fg = self:get_highlight(hl_icon).foreground }
+    local hl = "Aerial" .. symbol_kind
+    local hl_icon = "Aerial" .. symbol_kind .. "Icon"
+    local color = { fg = utils.extract_highlight_colors(hl, "fg") }
+    local color_icon = { fg = utils.extract_highlight_colors(hl_icon, "fg") }
     self.highlight_groups[symbol_kind] = {
       icon = self:create_hl(color_icon, symbol_kind .. "Icon"),
       text = self:create_hl(color, symbol_kind),
     }
-  end
-end
-
-function M:color_icon(symbol_kind, icon, colored)
-  if colored then
-    local hl = self:format_hl(self.highlight_groups[symbol_kind].icon)
-    return string.format("%s%s", hl, icon)
-  else
-    return icon
-  end
-end
-
-function M:color(symbol_kind, text, colored)
-  if colored then
-    local hl = self:format_hl(self.highlight_groups[symbol_kind].text)
-    return string.format("%s%s", hl, text)
-  else
-    return text
   end
 end
 
@@ -115,9 +80,15 @@ function M:format_status(symbols, depth, separator, icons_enabled, colored)
   end
 
   for _, symbol in ipairs(symbols) do
-    local name = self:color(symbol.kind, symbol.name, colored)
+    local name = symbol.name
+    if colored then
+      name = self:format_hl(self.highlight_groups[symbol.kind].text) .. name
+    end
     if icons_enabled then
-      local icon = self:color_icon(symbol.kind, symbol.icon, colored)
+      local icon = symbol.icon
+      if colored then
+        icon = self:format_hl(self.highlight_groups[symbol.kind].icon) .. icon
+      end
       table.insert(parts, string.format("%s %s", icon, name))
     else
       table.insert(parts, name)
@@ -176,12 +147,16 @@ function M:get_status_dense()
     self.options.dense_sep,
     -- In dense mode icons aren't rendered togeter with symbols. A single icon
     -- at the beginning of status line is rendered instead. See below.
-    false
+    false,
+    self.options.colored
   )
 
   if self.options.icons_enabled and not vim.tbl_isempty(symbols) then
     local symbol = symbols[#symbols]
-    local icon = color_icon(symbol.kind, symbol.icon, self.options.colored)
+    local icon = symbol.icon
+    if self.options.colored then
+      icon = self:format_hl(self.highlight_groups[symbol.kind].icon) .. icon
+    end
     status = string.format("%s %s", icon, status)
   end
   return status
