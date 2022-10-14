@@ -7,6 +7,13 @@
 (method_definition
   name: (property_identifier) @name) @type
 
+; const fn = () => {}
+(lexical_declaration
+  (variable_declarator
+    name: (identifier) @name
+    value: [(arrow_function) (function)] @type
+  )) @start
+
 ; describe("Unit test")
 (call_expression
   function: (identifier) @method @name (#any-of? @method "describe" "it" "test" "afterAll" "afterEach" "beforeAll" "beforeEach")

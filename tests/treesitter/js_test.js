@@ -17,3 +17,6 @@ describe("UnitTest", () => {
     test.each([])("runs multiple times", () => {});
   });
 });
+
+const fn_2 = () => {};
+const fn_3 = function () {};

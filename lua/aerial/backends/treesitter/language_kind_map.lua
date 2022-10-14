@@ -46,8 +46,10 @@ return {
     field_declaration = "Field",
   },
   javascript = {
+    arrow_function = "Function",
     call_expression = "Function",
     class_declaration = "Class",
+    ["function"] = "Function",
     function_declaration = "Function",
     method_definition = "Method",
   },
