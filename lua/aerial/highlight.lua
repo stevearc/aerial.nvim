@@ -73,7 +73,37 @@ M.create_highlight_groups = function()
     highlight default link AerialStruct        NONE
     highlight default link AerialTypeParameter NONE
     highlight default link AerialVariable      NONE
+
   ]])
 end
+
+M.identifiers = {
+  "Array",
+  "Boolean",
+  "Class",
+  "Constant",
+  "Constructor",
+  "Enum",
+  "EnumMember",
+  "Event",
+  "Field",
+  "File",
+  "Function",
+  "Interface",
+  "Key",
+  "Method",
+  "Module",
+  "Namespace",
+  "Null",
+  "Number",
+  "Object",
+  "Operator",
+  "Package",
+  "Property",
+  "String",
+  "Struct",
+  "TypeParameter",
+  "Variable",
+}
 
 return M

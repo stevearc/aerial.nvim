@@ -44,6 +44,8 @@
 
 local M = require("lualine.component"):extend()
 local aerial = require("aerial")
+local utils = require("lualine.utils.utils")
+local identifiers = require("aerial.highlight").identifiers
 
 local default_options = {
   sep = " ⟩ ",
@@ -53,15 +55,21 @@ local default_options = {
   exact = true,
 }
 
-local function color_icon(symbol_kind, icon, colored)
-  if colored then
-    return string.format("%%#%s#%s%%##", "Aerial" .. symbol_kind .. "Icon", icon)
-  else
-    return icon
+function M:color_for_lualine()
+  self.highlight_groups = {}
+  for _, symbol_kind in ipairs(identifiers) do
+    local hl = "Aerial" .. symbol_kind
+    local hl_icon = "Aerial" .. symbol_kind .. "Icon"
+    local color = { fg = utils.extract_highlight_colors(hl, "fg") }
+    local color_icon = { fg = utils.extract_highlight_colors(hl_icon, "fg") }
+    self.highlight_groups[symbol_kind] = {
+      icon = self:create_hl(color_icon, symbol_kind .. "Icon"),
+      text = self:create_hl(color, symbol_kind),
+    }
   end
 end
 
-local function format_status(symbols, depth, separator, icons_enabled, colored)
+function M:format_status(symbols, depth, separator, icons_enabled, colored)
   local parts = {}
   depth = depth or #symbols
 
@@ -72,14 +80,20 @@ local function format_status(symbols, depth, separator, icons_enabled, colored)
   end
 
   for _, symbol in ipairs(symbols) do
+    local name = symbol.name
+    if colored then
+      name = self:format_hl(self.highlight_groups[symbol.kind].text) .. name
+    end
     if icons_enabled then
-      local icon = color_icon(symbol.kind, symbol.icon, colored)
-      table.insert(parts, string.format("%s %s", icon, symbol.name))
+      local icon = symbol.icon
+      if colored then
+        icon = self:format_hl(self.highlight_groups[symbol.kind].icon) .. icon
+      end
+      table.insert(parts, string.format("%s %s", icon, name))
     else
-      table.insert(parts, symbol.name)
+      table.insert(parts, name)
     end
   end
-
   return table.concat(parts, separator)
 end
 
@@ -89,6 +103,18 @@ function M:init(options)
   self.options = vim.tbl_deep_extend("keep", self.options or {}, default_options)
   if self.options.colored == nil then
     self.options.colored = true
+  end
+  if self.options.colored then
+    require("aerial.highlight").create_highlight_groups()
+    self:color_for_lualine()
+    vim.api.nvim_create_autocmd("ColorScheme", {
+      desc = "Update lualine aerial component colors",
+      pattern = "*",
+      callback = function()
+        require("aerial.highlight").create_highlight_groups()
+        self:color_for_lualine()
+      end,
+    })
   end
   self.get_status = self.get_status_normal
 
@@ -103,7 +129,7 @@ end
 
 function M:get_status_normal()
   local symbols = aerial.get_location(self.options.exact)
-  local status = format_status(
+  local status = self:format_status(
     symbols,
     self.options.depth,
     self.options.sep,
@@ -115,18 +141,22 @@ end
 
 function M:get_status_dense()
   local symbols = aerial.get_location(self.options.exact)
-  local status = format_status(
+  local status = self:format_status(
     symbols,
     self.options.depth,
     self.options.dense_sep,
     -- In dense mode icons aren't rendered togeter with symbols. A single icon
     -- at the beginning of status line is rendered instead. See below.
-    false
+    false,
+    self.options.colored
   )
 
   if self.options.icons_enabled and not vim.tbl_isempty(symbols) then
     local symbol = symbols[#symbols]
-    local icon = color_icon(symbol.kind, symbol.icon, self.options.colored)
+    local icon = symbol.icon
+    if self.options.colored then
+      icon = self:format_hl(self.highlight_groups[symbol.kind].icon) .. icon
+    end
     status = string.format("%s %s", icon, status)
   end
   return status
