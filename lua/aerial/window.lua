@@ -362,8 +362,9 @@ end
 ---@param bufdata aerial.BufData
 ---@param lnum integer
 ---@param col integer
+---@param include_hidden nil|boolean
 ---@return aerial.CursorPosition
-M.get_symbol_position = function(bufdata, lnum, col)
+M.get_symbol_position = function(bufdata, lnum, col, include_hidden)
   local selected = 0
   local relative = "above"
   local prev = nil
@@ -387,7 +388,7 @@ M.get_symbol_position = function(bufdata, lnum, col)
     end
     prev = item
     selected = selected + 1
-  end)
+  end, { incl_hidden = include_hidden })
   -- Check if we're on the last symbol
   if symbol == nil then
     symbol = prev

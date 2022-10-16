@@ -140,7 +140,8 @@ M.get_location = function(exact)
   end
   local winid = vim.api.nvim_get_current_win()
   local bufdata = data[0]
-  local pos = bufdata.positions[winid]
+  local cur = vim.api.nvim_win_get_cursor(winid)
+  local pos = window.get_symbol_position(bufdata, cur[1], cur[2], true)
   if not pos then
     return {}
   end
