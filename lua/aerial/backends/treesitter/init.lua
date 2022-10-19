@@ -42,7 +42,6 @@ M.fetch_symbols_sync = function(bufnr)
       return ts_utils.get_node_text(node, buf)[1]
     end
   end
-  local utils = require("nvim-treesitter.utils")
   local include_kind = config.get_filter_kind_map(bufnr)
   local parser = parsers.get_parser(bufnr)
   local items = {}
