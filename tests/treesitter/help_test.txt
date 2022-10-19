@@ -1,0 +1,9 @@
+*help_test.txt* *help_test*
+--------------------------------------------------------------------------------
+TEST INTRO                                                            *test-intro*
+
+SomeCommand                                                         *:SomeCommand*
+    Description of the command
+
+================================================================================
+vim:tw=80:ts=2:ft=help:norl:syntax=help:

@@ -38,6 +38,11 @@ return {
     method_declaration = "Method",
     struct_type = "Struct",
   },
+  help = {
+    h1 = "Interface",
+    h2 = "Interface",
+    tag = "Interface",
+  },
   java = {
     class_declaration = "Class",
     enum_declaration = "Enum",

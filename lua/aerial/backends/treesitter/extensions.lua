@@ -119,6 +119,62 @@ M.markdown = {
   end,
 }
 
+M.help = {
+  _get_level = function(node)
+    local level_str = node:type():match("^h(%d+)$")
+    if level_str then
+      return tonumber(level_str)
+    else
+      return 99
+    end
+  end,
+  get_parent = function(stack, match, node)
+    -- Fix the symbol nesting
+    local level = M.help._get_level(node)
+    for i = #stack, 1, -1 do
+      local last = stack[i]
+      if M.help._get_level(last.node) < level then
+        return last.item, last.node, i
+      else
+        table.remove(stack, i)
+      end
+    end
+    return nil, nil, 0
+  end,
+  postprocess = function(bufnr, item, match)
+    -- The name node of headers only captures the final node.
+    -- We need to get _all_ word nodes
+    local pieces = {}
+    local node = match.name.node
+    if vim.startswith(match.type.node:type(), "h") then
+      while node and node:type() == "word" do
+        local row, col = node:start()
+        table.insert(pieces, 1, get_node_text(node, bufnr))
+        node = node:prev_sibling()
+        item.lnum = row + 1
+        item.col = col
+      end
+      item.name = table.concat(pieces, " ")
+    end
+  end,
+  postprocess_symbols = function(bufnr, items)
+    -- Sometimes helpfiles have a bunch of tags at the top in the same line. Collapse them.
+    while #items > 1 and items[1].lnum == items[2].lnum do
+      table.remove(items, 2)
+    end
+    -- Remove the first tag under a header IF that tag appears on the same line
+    for _, item in ipairs(items) do
+      if item.children and item.children[1] then
+        local child = item.children[1]
+        if child.lnum == item.lnum then
+          table.remove(item.children, 1)
+        end
+        M.help.postprocess_symbols(bufnr, item.children)
+      end
+    end
+  end,
+}
+
 M.rust = {
   postprocess = function(bufnr, item, match)
     if item.kind == "Class" then

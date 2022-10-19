@@ -62,12 +62,12 @@ M.fetch_symbols_sync = function(bufnr)
   local ext = extensions[lang]
   local kind_map = language_kind_map[lang]
   for match in query.iter_group_results(bufnr, "aerial", syntax_tree:root(), lang) do
-    local name_node = (utils.get_at_path(match, "name") or {}).node
-    local type_node = (utils.get_at_path(match, "type") or {}).node
+    local name_node = (match.name or {}).node
+    local type_node = (match.type or {}).node
     -- The location capture groups are optional. We default to the
     -- location of the @type capture
-    local start_node = (utils.get_at_path(match, "start") or {}).node or type_node
-    local end_node = (utils.get_at_path(match, "end") or {}).node or start_node
+    local start_node = (match.start or {}).node or type_node
+    local end_node = (match["end"] or {}).node or start_node
     local parent_item, parent_node, level = ext.get_parent(stack, match, type_node)
     -- Sometimes our queries will match the same node twice.
     -- Detect that (type_node == parent_node), and skip dupes.
