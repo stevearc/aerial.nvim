@@ -1,7 +1,7 @@
 local default_options = {
   -- Priority list of preferred backends for aerial.
   -- This can be a filetype map (see :help aerial-filetype-map)
-  backends = { "treesitter", "lsp", "markdown" },
+  backends = { "treesitter", "lsp", "markdown", "man" },
 
   layout = {
     -- These control the width of the aerial window.
@@ -222,6 +222,11 @@ local default_options = {
   },
 
   markdown = {
+    -- How long to wait (in ms) after a buffer change before updating
+    update_delay = 300,
+  },
+
+  man = {
     -- How long to wait (in ms) after a buffer change before updating
     update_delay = 300,
   },
