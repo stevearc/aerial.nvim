@@ -125,6 +125,7 @@ automatically fetch symbols from treesitter.
 - dart
 - elixir
 - go
+- help
 - java
 - javascript
 - json
