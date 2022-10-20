@@ -107,14 +107,6 @@ function M:init(options)
   if self.options.colored then
     require("aerial.highlight").create_highlight_groups()
     self:color_for_lualine()
-    vim.api.nvim_create_autocmd("ColorScheme", {
-      desc = "Update lualine aerial component colors",
-      pattern = "*",
-      callback = function()
-        require("aerial.highlight").create_highlight_groups()
-        self:color_for_lualine()
-      end,
-    })
   end
   self.get_status = self.get_status_normal
 
