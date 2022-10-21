@@ -14,7 +14,7 @@ local commands = {
     cmd = "AerialToggle",
     args = "`left/right/float`",
     func = "toggle",
-    def = {
+    defn = {
       desc = "Open or close the aerial window. With `!` cursor stays in current window",
       nargs = "?",
       bang = true,
@@ -25,7 +25,7 @@ local commands = {
     cmd = "AerialOpen",
     args = "`left/right/float`",
     func = "open",
-    def = {
+    defn = {
       desc = "Open the aerial window. With `!` cursor stays in current window",
       nargs = "?",
       bang = true,
@@ -35,21 +35,21 @@ local commands = {
   {
     cmd = "AerialOpenAll",
     func = "open_all",
-    def = {
+    defn = {
       desc = "Open an aerial window for each visible window.",
     },
   },
   {
     cmd = "AerialClose",
     func = "close",
-    def = {
+    defn = {
       desc = "Close the aerial window.",
     },
   },
   {
     cmd = "AerialCloseAll",
     func = "close_all",
-    def = {
+    defn = {
       desc = "Close all visible aerial windows.",
     },
   },
@@ -60,14 +60,14 @@ local commands = {
       alternative = "aerial.close_all_but_current()",
       help = "aerial.close_all_but_current",
     },
-    def = {
+    defn = {
       desc = "Close all visible aerial windows except for the one currently focused or for the currently focused window.",
     },
   },
   {
     cmd = "AerialNext",
     func = "next",
-    def = {
+    defn = {
       desc = "Jump forwards {count} symbols (default 1).",
       count = 1,
     },
@@ -75,7 +75,7 @@ local commands = {
   {
     cmd = "AerialPrev",
     func = "prev",
-    def = {
+    defn = {
       desc = "Jump backwards [count] symbols (default 1).",
       count = 1,
     },
@@ -87,7 +87,7 @@ local commands = {
       alternative = "aerial.up()",
       help = "aerial.up",
     },
-    def = {
+    defn = {
       desc = "Jump up the tree [count] levels, moving forwards in the file (default 1).",
       count = 1,
     },
@@ -99,7 +99,7 @@ local commands = {
       alternative = "aerial.up()",
       help = "aerial.up",
     },
-    def = {
+    defn = {
       desc = "Jump up the tree [count] levels, moving backwards in the file (default 1).",
       count = 1,
     },
@@ -107,12 +107,13 @@ local commands = {
   {
     cmd = "AerialGo",
     func = "go",
-    def = {
-      desc = 'Jump to the [count] symbol (default 1). If with [!] and inside aerial window, the cursor will stay in the aerial window. [split] can be "v" to open a new vertical split, or "h" to open a horizontal split. [split] can also be a raw vim command, such as "belowright split". This command respects switchbuf=uselast',
+    defn = {
+      desc = "Jump to the [count] symbol (default 1).",
       count = 1,
       bang = true,
       nargs = "?",
     },
+    long_desc = 'If with [!] and inside aerial window, the cursor will stay in the aerial window. [split] can be "v" to open a new vertical split, or "h" to open a horizontal split. [split] can also be a raw vim command, such as "belowright split". This command respects |switchbuf|=uselast',
   },
   {
     cmd = "AerialTreeOpen",
@@ -121,7 +122,7 @@ local commands = {
       alternative = "aerial.tree_open()",
       help = "aerial.tree_cmd",
     },
-    def = {
+    defn = {
       desc = "Expand the tree at the current location. If with [!] then will expand recursively.",
       bang = true,
     },
@@ -133,7 +134,7 @@ local commands = {
       alternative = "aerial.tree_close()",
       help = "aerial.tree_close",
     },
-    def = {
+    defn = {
       desc = "Collapse the tree at the current location. If with [!] then will collapse recursively.",
       bang = true,
     },
@@ -145,7 +146,7 @@ local commands = {
       alternative = "aerial.tree_toggle()",
       help = "aerial.tree_toggle",
     },
-    def = {
+    defn = {
       desc = "Toggle the tree at the current location. If with [!] then will toggle recursively.",
       bang = true,
     },
@@ -157,7 +158,7 @@ local commands = {
       alternative = "aerial.tree_open_all()",
       help = "aerial.tree_open_all",
     },
-    def = {
+    defn = {
       desc = "Expand all the tree nodes.",
     },
   },
@@ -168,7 +169,7 @@ local commands = {
       alternative = "aerial.tree_close_all()",
       help = "aerial.tree_close_all",
     },
-    def = {
+    defn = {
       desc = "Collapse all the tree nodes.",
     },
   },
@@ -179,18 +180,19 @@ local commands = {
       alternative = "aerial.tree_sync_folds()",
       help = "aerial.tree_sync_folds",
     },
-    def = {
+    defn = {
       desc = "Sync code folding with current tree state. This ignores the link_tree_to_folds setting.",
     },
   },
   {
     cmd = "AerialTreeSetCollapseLevel",
     func = "tree_set_collapse_level",
+    args = "N",
     deprecated = {
       alternative = "aerial.tree_set_collapse_level()",
       help = "aerial.tree_set_collapse_level",
     },
-    def = {
+    defn = {
       desc = "Collapse symbols at a depth greater than N (0 collapses all)",
       nargs = 1,
     },
@@ -198,7 +200,7 @@ local commands = {
   {
     cmd = "AerialInfo",
     func = "info",
-    def = {
+    defn = {
       desc = "Print out debug info related to aerial.",
     },
   },
@@ -234,7 +236,7 @@ local function create_commands()
         lazy("command", v.func)(...)
       end
     end
-    vim.api.nvim_create_user_command(v.cmd, callback, v.def)
+    vim.api.nvim_create_user_command(v.cmd, callback, v.defn)
   end
 end
 
@@ -307,8 +309,7 @@ M.setup = function(opts)
   end
 end
 
----Returns true if aerial is open for the current window or buffer
----(returns false inside an aerial buffer)
+---Returns true if aerial is open for the current window or buffer (returns false inside an aerial buffer)
 ---@param opts nil|table
 ---    bufnr nil|integer
 ---    winid nil|integer
@@ -448,11 +449,11 @@ end
 ---@param exact nil|boolean If true, only return symbols if we are exactly inside the hierarchy. When false, will return the closest symbol.
 ---@return table[]
 ---@note
----Returns empty list if none found or in an invalid buffer.
----Items have the following keys:
----    name   The name of the symbol
----    kind   The SymbolKind of the symbol
----    icon   The icon that represents the symbol
+--- Returns empty list if none found or in an invalid buffer.
+--- Items have the following keys:
+---     name   The name of the symbol
+---     kind   The SymbolKind of the symbol
+---     icon   The icon that represents the symbol
 M.get_location = function(exact)
   do_setup()
   local config = require("aerial.config")
@@ -530,8 +531,9 @@ M.tree_close = lazy("tree", "close")
 M.tree_toggle = lazy("tree", "toggle")
 
 ---Sync code folding with the current tree state.
----Ignores the 'link_tree_to_folds' config option.
 ---@param bufnr integer
+---@note
+--- Ignores the 'link_tree_to_folds' config option.
 M.sync_folds = function(bufnr)
   do_setup()
   local fold = require("aerial.fold")
@@ -583,10 +585,9 @@ M.num_symbols = function(bufnr)
   end
 end
 
----Returns true if the user has manually closed aerial.
----Will become false if the user opens aerial again.
----@param default? boolean
----@return boolean|nil
+---Returns true if the user has manually closed aerial. Will become false if the user opens aerial again.
+---@param default nil|boolean
+---@return nil|boolean
 M.was_closed = function(default)
   if was_closed == nil then
     return default
@@ -596,5 +597,20 @@ M.was_closed = function(default)
 end
 
 _G.aerial_foldexpr = lazy("fold", "foldexpr")
+
+---Used for documentation generation
+---@private
+M.get_all_commands = function()
+  local cmds = vim.deepcopy(commands)
+  for _, v in ipairs(cmds) do
+    -- Remove all function values from the command definition so we can serialize it
+    for k, param in pairs(v.defn) do
+      if type(param) == "function" then
+        v.defn[k] = nil
+      end
+    end
+  end
+  return cmds
+end
 
 return M

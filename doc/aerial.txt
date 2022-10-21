@@ -1,109 +1,16 @@
 *aerial.txt*
 *Aerial* *aerial* *aerial.nvim*
-===============================================================================
-CONTENTS                                                        *aerial-contents*
+--------------------------------------------------------------------------------
+CONTENTS                                                         *aerial-contents*
 
-    1. Commands........................................|aerial-commands|
-    2. Options.........................................|aerial-options|
-    3. Notes...........................................|aerial-notes|
+  1. Options..................................................|aerial-options|
+  2. Commands................................................|aerial-commands|
+  3. Api..........................................................|aerial-api|
+  4. Notes......................................................|aerial-notes|
 
-===============================================================================
-COMMANDS                                                        *aerial-commands*
+--------------------------------------------------------------------------------
+OPTIONS                                                           *aerial-options*
 
-                                                                  *:AerialToggle*
-:AerialToggle[!] [direction]
-        Open or close the aerial window. [direction] can be `left`,
-        `right`, or `float`. If without [!] the cursor will jump to the aerial
-        window if it was opened.
-
-                                                                    *:AerialOpen*
-:AerialOpen[!] [direction]
-        Open the aerial window. [direction] can be either `left`, `right`, or
-        `float`. If without [!] the cursor will jump to the aerial window.
-
-                                                                 *:AerialOpenAll*
-:AerialOpenAll
-        Open an aerial window for each visible window.
-
-                                                                   *:AerialClose*
-:AerialClose
-        Close the aerial window.
-
-                                                                *:AerialCloseAll*
-:AerialCloseAll
-        Close all visible aerial windows.
-
-                                                      *:AerialCloseAllButCurrent*
-:AerialCloseAllButCurrent
-        Close all visible aerial windows except for the one currently focused
-        or for the currently focused window.
-
-                                                                    *:AerialInfo*
-:AerialInfo
-        Print out debug info related to aerial.
-
-                                                                    *:AerialNext*
-:[count]AerialNext
-        Jump forwards [count] symbols (default 1).
-
-                                                                    *:AerialPrev*
-:[count]AerialPrev
-        Jump backwards [count] symbols (default 1).
-
-                                                                  *:AerialNextUp*
-:[count]AerialNextUp
-        Jump up the tree [count] levels, moving forwards in the file
-        (default 1).
-
-                                                                  *:AerialPrevUp*
-:[count]AerialPrevUp
-        Jump up the tree [count] levels, moving backwards in the file
-        (default 1).
-
-                                                                      *:AerialGo*
-:[count]AerialGo[!] [split]
-        Jump to the [count] symbol (default 1). If with [!] and inside aerial
-        window, the cursor will stay in the aerial window. [split] can be "v"
-        to open a new vertical split, or "h" to open a horizontal split.
-        [split] can also be a raw vim command, such as "belowright split".
-        This command respects |switchbuf|=uselast
-
-                                                                *:AerialTreeOpen*
-:AerialTreeOpen[!]
-        Expand the tree at the current location. If with [!] then will expand
-        recursively.
-
-                                                               *:AerialTreeClose*
-:AerialTreeClose
-        Collapse the tree at the current location. If with [!] then will
-        collapse recursively.
-
-                                                              *:AerialTreeToggle*
-:AerialTreeToggle
-        Toggle the tree at the current location. If with [!] then will toggle
-        recursively.
-
-                                                             *:AerialTreeOpenAll*
-:AerialTreeOpenAll
-        Expand all the tree nodes.
-
-                                                            *:AerialTreeCloseAll*
-:AerialTreeCloseAll
-        Collapse all the tree nodes.
-
-                                                    *:AerialTreeSetCollapseLevel*
-:AerialTreeSetCollapseLevel
-        Collapse symbols at a depth greater than N (0 collapses all)
-
-                                                           *:AerialTreeSyncFolds*
-:AerialTreeSyncFolds
-        Sync code folding with current tree state. This ignores the
-        link_tree_to_folds setting.
-
-===============================================================================
-OPTIONS                                                          *aerial-options*
-
-Configure aerial by calling the setup() function.
 >
     require("aerial").setup({
       -- Priority list of preferred backends for aerial.
@@ -142,8 +49,46 @@ Configure aerial by calling the setup() function.
       --   unsupported   - close aerial when attaching to a buffer that has no symbol source
       close_automatic_events = {},
     
-      -- Set to false to remove the default keybindings for the aerial buffer
-      default_bindings = true,
+      -- Keymaps in aerial window. Can be any value that `vim.keymap.set` accepts.
+      -- Additionally, if it is a string that matches "aerial.<name>",
+      -- it will use the function at require("aerial.action").<name>
+      -- Set to `false` to remove a keymap
+      keymaps = {
+        ["?"] = "actions.show_help",
+        ["g?"] = "actions.show_help",
+        ["<CR>"] = "actions.jump",
+        ["<2-LeftMouse>"] = "actions.jump",
+        ["<C-v>"] = "actions.jump_vsplit",
+        ["<C-s>"] = "actions.jump_split",
+        ["p"] = "actions.scroll",
+        ["<C-j>"] = "actions.down_and_scroll",
+        ["<C-k>"] = "actions.up_and_scroll",
+        ["{"] = "actions.prev",
+        ["}"] = "actions.next",
+        ["[["] = "actions.prev_up",
+        ["]]"] = "actions.next_up",
+        ["q"] = "actions.close",
+        ["o"] = "actions.tree_toggle",
+        ["za"] = "actions.tree_toggle",
+        ["O"] = "actions.tree_toggle_recursive",
+        ["zA"] = "actions.tree_toggle_recursive",
+        ["l"] = "actions.tree_open",
+        ["zo"] = "actions.tree_open",
+        ["L"] = "actions.tree_open_recursive",
+        ["zO"] = "actions.tree_open_recursive",
+        ["h"] = "actions.tree_close",
+        ["zc"] = "actions.tree_close",
+        ["H"] = "actions.tree_close_recursive",
+        ["zC"] = "actions.tree_close_recursive",
+        ["zR"] = "actions.tree_open_all",
+        ["zM"] = "actions.tree_close_all",
+        ["zx"] = "actions.tree_sync_folds",
+        ["zX"] = "actions.tree_sync_folds",
+      },
+    
+      -- When true, don't load aerial until a command or function is called
+      -- Defaults to true, unless `on_attach` is provided, then it defaults to false
+      lazy_load = true,
     
       -- Disable aerial on files with this many lines
       disable_max_lines = 10000,
@@ -249,12 +194,11 @@ Configure aerial by calling the setup() function.
       nerd_font = "auto",
     
       -- Call this function when aerial attaches to a buffer.
-      -- Useful for setting keymaps. Takes a single `bufnr` argument.
-      on_attach = nil,
+      on_attach = function(bufnr) end,
     
       -- Call this function when aerial first sets symbols on a buffer.
       -- Takes a single `bufnr` argument.
-      on_first_symbols = nil,
+      on_first_symbols = function(bufnr) end,
     
       -- Automatically open aerial when entering supported buffers.
       -- This can be a function (see :help aerial-open-automatic)
@@ -340,8 +284,239 @@ Configure aerial by calling the setup() function.
     })
 <
 
-===============================================================================
-NOTES                                                              *aerial-notes*
+--------------------------------------------------------------------------------
+COMMANDS                                                         *aerial-commands*
+
+AerialToggle[!] `left/right/float`                                   *:AerialToggle*
+    Open or close the aerial window. With `!` cursor stays in current window
+
+AerialOpen[!] `left/right/float`                                       *:AerialOpen*
+    Open the aerial window. With `!` cursor stays in current window
+
+AerialOpenAll                                                     *:AerialOpenAll*
+    Open an aerial window for each visible window.
+
+AerialClose                                                         *:AerialClose*
+    Close the aerial window.
+
+AerialCloseAll                                                   *:AerialCloseAll*
+    Close all visible aerial windows.
+
+[count]AerialNext                                                    *:AerialNext*
+    Jump forwards {count} symbols (default 1).
+
+[count]AerialPrev                                                    *:AerialPrev*
+    Jump backwards [count] symbols (default 1).
+
+[count]AerialGo[!]                                                     *:AerialGo*
+    Jump to the [count] symbol (default 1).
+    If with [!] and inside aerial window, the cursor will stay in the aerial
+    window. [split] can be "v" to open a new vertical split, or "h" to open a
+    horizontal split. [split] can also be a raw vim command, such as "belowright
+    split". This command respects |switchbuf|=uselast
+
+AerialInfo                                                           *:AerialInfo*
+    Print out debug info related to aerial.
+
+--------------------------------------------------------------------------------
+API                                                                   *aerial-api*
+
+setup({opts})                                                       *aerial.setup*
+    Initialize aerial
+
+    Parameters:
+      {opts} `nil|table`
+
+is_open({opts}): boolean                                          *aerial.is_open*
+    Returns true if aerial is open for the current window or buffer (returns
+    false inside an aerial buffer)
+
+    Parameters:
+      {opts} `nil|table`
+          {bufnr} `nil|integer`
+          {winid} `nil|integer`
+
+close()                                                             *aerial.close*
+    Close the aerial window.
+
+
+close_all()                                                     *aerial.close_all*
+    Close all visible aerial windows.
+
+
+close_all_but_current()                             *aerial.close_all_but_current*
+    Close all visible aerial windows except for the one currently focused or for
+    the currently focused window.
+
+
+open({opts})                                                         *aerial.open*
+    Open the aerial window for the current buffer.
+
+    Parameters:
+      {opts} `nil|table`
+          {focus}     `boolean` If true, jump to aerial window if it is opened
+                      (default true)
+          {direction} `"left"|"right"|"float"` Direction to open aerial window
+
+open_all()                                                       *aerial.open_all*
+    Open an aerial window for each visible window.
+
+
+focus()                                                             *aerial.focus*
+    Jump to the aerial window for the current buffer, if it is open
+
+
+toggle({opts})                                                     *aerial.toggle*
+    Open or close the aerial window for the current buffer.
+
+    Parameters:
+      {opts} `nil|table`
+          {focus}     `boolean` If true, jump to aerial window if it is opened
+                      (default true)
+          {direction} `"left"|"right"|"float"` Direction to open aerial window
+
+select({opts})                                                     *aerial.select*
+    Jump to a specific symbol.
+
+    Parameters:
+      {opts} `nil|table`
+          {index} `nil|integer` The symbol to jump to. If nil, will jump to the
+                  symbol under the cursor (in the aerial buffer)
+          {split} `nil|string` Jump to the symbol in a new split. Can be "v" for
+                  vertical or "h" for horizontal. Can also be a raw command to
+                  execute (e.g. "belowright split")
+          {jump}  `nil|boolean` If false and in the aerial window, do not leave
+                  the aerial window. (Default true)
+
+next({step})                                                         *aerial.next*
+    Jump forwards in the symbol list.
+
+    Parameters:
+      {step} `nil|integer` Number of symbols to jump by (default 1)
+
+prev({step})                                                         *aerial.prev*
+    Jump backwards in the symbol list.
+
+    Parameters:
+      {step} `nil|integer` Number of symbols to jump by (default 1)
+
+next_up({count})                                                  *aerial.next_up*
+    Jump to a symbol higher in the tree, moving forwards
+
+    Parameters:
+      {count} `nil|integer` How many levels to jump up (default 1)
+
+prev_up({count})                                                  *aerial.prev_up*
+    Jump to a symbol higher in the tree, moving backwards
+
+    Parameters:
+      {count} `nil|integer` How many levels to jump up (default 1)
+
+get_location({exact}): table                                 *aerial.get_location*
+    Get a list representing the symbol path to the current location.
+
+    Parameters:
+      {exact} `nil|boolean` If true, only return symbols if we are exactly
+              inside the hierarchy. When false, will return the closest symbol.
+    Returns:
+      `table` []
+
+    Note:
+      Returns empty list if none found or in an invalid buffer.
+      Items have the following keys:
+          name   The name of the symbol
+          kind   The SymbolKind of the symbol
+          icon   The icon that represents the symbol
+
+tree_close_all({bufnr})                                    *aerial.tree_close_all*
+    Collapse all nodes in the symbol tree
+
+    Parameters:
+      {bufnr} `nil|integer`
+
+tree_open_all({bufnr})                                      *aerial.tree_open_all*
+    Expand all nodes in the symbol tree
+
+    Parameters:
+      {bufnr} `nil|integer`
+
+tree_set_collapse_level({bufnr}, {level})         *aerial.tree_set_collapse_level*
+    Set the collapse level of the symbol tree
+
+    Parameters:
+      {bufnr} `integer`
+      {level} `integer` 0 is all closed, use 99 to open all
+
+tree_open({opts})                                               *aerial.tree_open*
+    Open the tree at the selected location
+
+    Parameters:
+      {opts} `nil|table`
+          {index}   `nil|integer` The index of the symbol to perform the action
+                    on. Defaults to cursor location.
+          {fold}    `nil|boolean` If false, do not modify folds regardless of
+                    'link_tree_to_folds' setting. (default true)
+          {recurse} `nil|boolean` If true, perform the action recursively on all
+                    children (default false)
+          {bubble}  `nil|boolean` If true and current symbol has no children,
+                    perform the action on the nearest parent (default true)
+
+tree_close({opts})                                             *aerial.tree_close*
+    Collapse the tree at the selected location
+
+    Parameters:
+      {opts} `nil|table`
+          {index}   `nil|integer` The index of the symbol to perform the action
+                    on. Defaults to cursor location.
+          {fold}    `nil|boolean` If false, do not modify folds regardless of
+                    'link_tree_to_folds' setting. (default true)
+          {recurse} `nil|boolean` If true, perform the action recursively on all
+                    children (default false)
+          {bubble}  `nil|boolean` If true and current symbol has no children,
+                    perform the action on the nearest parent (default true)
+
+tree_toggle({opts})                                           *aerial.tree_toggle*
+    Toggle the collapsed state at the selected location
+
+    Parameters:
+      {opts} `nil|table`
+          {index}   `nil|integer` The index of the symbol to perform the action
+                    on. Defaults to cursor location.
+          {fold}    `nil|boolean` If false, do not modify folds regardless of
+                    'link_tree_to_folds' setting. (default true)
+          {recurse} `nil|boolean` If true, perform the action recursively on all
+                    children (default false)
+          {bubble}  `nil|boolean` If true and current symbol has no children,
+                    perform the action on the nearest parent (default true)
+
+sync_folds({bufnr})                                            *aerial.sync_folds*
+    Sync code folding with the current tree state.
+
+    Parameters:
+      {bufnr} `integer`
+
+    Note:
+      Ignores the 'link_tree_to_folds' config option.
+
+info(): table                                                        *aerial.info*
+    Get debug info for aerial
+
+
+num_symbols({bufnr}): integer                                 *aerial.num_symbols*
+    Returns the number of symbols for the buffer
+
+    Parameters:
+      {bufnr} `integer`
+
+was_closed({default}): nil|boolean                             *aerial.was_closed*
+    Returns true if the user has manually closed aerial. Will become false if
+    the user opens aerial again.
+
+    Parameters:
+      {default} `nil|boolean`
+
+--------------------------------------------------------------------------------
+NOTES                                                               *aerial-notes*
 
                                                             *aerial-filetype-map*
 Certain options can be configured per-filetype by passing in a table. "_" will
@@ -422,5 +597,5 @@ Struct
 TypeParameter
 Variable
 
-===============================================================================
-vim:ft=help:et:ts=2:sw=2:sts=2:norl
+================================================================================
+vim:tw=80:ts=2:ft=help:norl:syntax=help:
