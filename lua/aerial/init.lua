@@ -56,6 +56,10 @@ local commands = {
   {
     cmd = "AerialCloseAllButCurrent",
     func = "close_all_but_current",
+    deprecated = {
+      alternative = "aerial.close_all_but_current()",
+      help = "aerial.close_all_but_current",
+    },
     def = {
       desc = "Close all visible aerial windows except for the one currently focused or for the currently focused window.",
     },
@@ -79,6 +83,10 @@ local commands = {
   {
     cmd = "AerialNextUp",
     func = "next_up",
+    deprecated = {
+      alternative = "aerial.up()",
+      help = "aerial.up",
+    },
     def = {
       desc = "Jump up the tree [count] levels, moving forwards in the file (default 1).",
       count = 1,
@@ -87,6 +95,10 @@ local commands = {
   {
     cmd = "AerialPrevUp",
     func = "next_up",
+    deprecated = {
+      alternative = "aerial.up()",
+      help = "aerial.up",
+    },
     def = {
       desc = "Jump up the tree [count] levels, moving backwards in the file (default 1).",
       count = 1,
@@ -105,6 +117,10 @@ local commands = {
   {
     cmd = "AerialTreeOpen",
     func = "tree_open",
+    deprecated = {
+      alternative = "aerial.tree_open()",
+      help = "aerial.tree_cmd",
+    },
     def = {
       desc = "Expand the tree at the current location. If with [!] then will expand recursively.",
       bang = true,
@@ -113,6 +129,10 @@ local commands = {
   {
     cmd = "AerialTreeClose",
     func = "tree_close",
+    deprecated = {
+      alternative = "aerial.tree_close()",
+      help = "aerial.tree_close",
+    },
     def = {
       desc = "Collapse the tree at the current location. If with [!] then will collapse recursively.",
       bang = true,
@@ -121,6 +141,10 @@ local commands = {
   {
     cmd = "AerialTreeToggle",
     func = "tree_toggle",
+    deprecated = {
+      alternative = "aerial.tree_toggle()",
+      help = "aerial.tree_toggle",
+    },
     def = {
       desc = "Toggle the tree at the current location. If with [!] then will toggle recursively.",
       bang = true,
@@ -129,6 +153,10 @@ local commands = {
   {
     cmd = "AerialTreeOpenAll",
     func = "tree_open_all",
+    deprecated = {
+      alternative = "aerial.tree_open_all()",
+      help = "aerial.tree_open_all",
+    },
     def = {
       desc = "Expand all the tree nodes.",
     },
@@ -136,6 +164,10 @@ local commands = {
   {
     cmd = "AerialTreeCloseAll",
     func = "tree_close_all",
+    deprecated = {
+      alternative = "aerial.tree_close_all()",
+      help = "aerial.tree_close_all",
+    },
     def = {
       desc = "Collapse all the tree nodes.",
     },
@@ -143,6 +175,10 @@ local commands = {
   {
     cmd = "AerialTreeSyncFolds",
     func = "tree_sync_folds",
+    deprecated = {
+      alternative = "aerial.tree_sync_folds()",
+      help = "aerial.tree_sync_folds",
+    },
     def = {
       desc = "Sync code folding with current tree state. This ignores the link_tree_to_folds setting.",
     },
@@ -150,6 +186,10 @@ local commands = {
   {
     cmd = "AerialTreeSetCollapseLevel",
     func = "tree_set_collapse_level",
+    deprecated = {
+      alternative = "aerial.tree_set_collapse_level()",
+      help = "aerial.tree_set_collapse_level",
+    },
     def = {
       desc = "Collapse symbols at a depth greater than N (0 collapses all)",
       nargs = 1,
@@ -177,7 +217,24 @@ end
 
 local function create_commands()
   for _, v in pairs(commands) do
-    vim.api.nvim_create_user_command(v.cmd, lazy("command", v.func), v.def)
+    local callback = lazy("command", v.func)
+    if v.deprecated then
+      local msg = string.format(":%s is deprecated.", v.cmd)
+      if type(v.deprecated) == "table" then
+        if v.deprecated.alternative then
+          msg = string.format("%s Please use %s instead", msg, v.deprecated.alternative)
+        end
+        if v.deprecated.help then
+          msg = string.format("%s (see :help %s)", msg, v.deprecated.help)
+        end
+      end
+      msg = msg .. "\nThis command will be removed on 2023-02-01"
+      callback = function(...)
+        vim.notify_once(msg, vim.log.levels.WARN)
+        lazy("command", v.func)(...)
+      end
+    end
+    vim.api.nvim_create_user_command(v.cmd, callback, v.def)
   end
 end
 
@@ -426,7 +483,38 @@ M.tree_open_all = lazy("tree", "open_all")
 ---@param level integer 0 is all closed, use 99 to open all
 M.tree_set_collapse_level = lazy("tree", "set_collapse_level")
 
-M.tree_cmd = lazy("tree", "tree_cmd")
+---Open the tree at the selected location
+---@param opts nil|table
+---    index nil|integer The index of the symbol to perform the action on. Defaults to cursor location.
+---    fold nil|boolean If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)
+---    recurse nil|boolean If true, perform the action recursively on all children (default false)
+---    bubble nil|boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
+M.tree_open = function(opts)
+  do_setup()
+  require("aerial.tree").tree_cmd("open", opts)
+end
+
+---Collapse the tree at the selected location
+---@param opts nil|table
+---    index nil|integer The index of the symbol to perform the action on. Defaults to cursor location.
+---    fold nil|boolean If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)
+---    recurse nil|boolean If true, perform the action recursively on all children (default false)
+---    bubble nil|boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
+M.tree_close = function(opts)
+  do_setup()
+  require("aerial.tree").tree_cmd("close", opts)
+end
+
+---Toggle the collapsed state at the selected location
+---@param opts nil|table
+---    index nil|integer The index of the symbol to perform the action on. Defaults to cursor location.
+---    fold nil|boolean If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)
+---    recurse nil|boolean If true, perform the action recursively on all children (default false)
+---    bubble nil|boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
+M.tree_toggle = function(opts)
+  do_setup()
+  require("aerial.tree").tree_cmd("toggle", opts)
+end
 
 ---Sync code folding with the current tree state.
 ---Ignores the 'link_tree_to_folds' config option.

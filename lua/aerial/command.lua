@@ -64,15 +64,15 @@ M.go = function(params)
 end
 
 M.tree_open = function(params)
-  require("aerial").tree_cmd("open", { recurse = params.bang })
+  require("aerial").tree_open({ recurse = params.bang })
 end
 
 M.tree_close = function(params)
-  require("aerial").tree_cmd("close", { recurse = params.bang })
+  require("aerial").tree_close({ recurse = params.bang })
 end
 
 M.tree_toggle = function(params)
-  require("aerial").tree_cmd("toggle", { recurse = params.bang })
+  require("aerial").tree_toggle({ recurse = params.bang })
 end
 
 M.tree_open_all = function(params)
