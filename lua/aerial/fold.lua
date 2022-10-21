@@ -3,22 +3,20 @@ local data = require("aerial.data")
 local util = require("aerial.util")
 local M = {}
 
+---@param bufnr nil|integer
 M.add_fold_mappings = function(bufnr)
+  bufnr = bufnr or 0
   if config.link_folds_to_tree then
-    local function map(key, cmd)
-      vim.api.nvim_buf_set_keymap(bufnr or 0, "n", key, cmd, { silent = true, noremap = true })
-    end
-
-    map("za", [[<cmd>AerialTreeToggle<CR>]])
-    map("zA", [[<cmd>AerialTreeToggle!<CR>]])
-    map("zo", [[<cmd>AerialTreeOpen<CR>]])
-    map("zO", [[<cmd>AerialTreeOpen!<CR>]])
-    map("zc", [[<cmd>AerialTreeClose<CR>]])
-    map("zC", [[<cmd>AerialTreeClose!<CR>]])
-    map("zM", [[<cmd>AerialTreeCloseAll<CR>]])
-    map("zR", [[<cmd>AerialTreeOpenAll<CR>]])
-    map("zx", [[<cmd>AerialTreeSyncFolds<CR>]])
-    map("zX", [[<cmd>AerialTreeSyncFolds<CR>]])
+    vim.keymap.set("n", "za", [[<cmd>AerialTreeToggle<CR>]], { buffer = bufnr })
+    vim.keymap.set("n", "zA", [[<cmd>AerialTreeToggle!<CR>]], { buffer = bufnr })
+    vim.keymap.set("n", "zo", [[<cmd>AerialTreeOpen<CR>]], { buffer = bufnr })
+    vim.keymap.set("n", "zO", [[<cmd>AerialTreeOpen!<CR>]], { buffer = bufnr })
+    vim.keymap.set("n", "zc", [[<cmd>AerialTreeClose<CR>]], { buffer = bufnr })
+    vim.keymap.set("n", "zC", [[<cmd>AerialTreeClose!<CR>]], { buffer = bufnr })
+    vim.keymap.set("n", "zM", [[<cmd>AerialTreeCloseAll<CR>]], { buffer = bufnr })
+    vim.keymap.set("n", "zR", [[<cmd>AerialTreeOpenAll<CR>]], { buffer = bufnr })
+    vim.keymap.set("n", "zx", [[<cmd>AerialTreeSyncFolds<CR>]], { buffer = bufnr })
+    vim.keymap.set("n", "zX", [[<cmd>AerialTreeSyncFolds<CR>]], { buffer = bufnr })
   end
 end
 

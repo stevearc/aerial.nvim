@@ -22,7 +22,7 @@ local function create_aerial_buffer(bufnr)
         keys = { keys }
       end
       for _, key in ipairs(keys) do
-        vim.api.nvim_buf_set_keymap(aer_bufnr, "n", key, command, { silent = true, noremap = true })
+        vim.keymap.set("n", key, command, { buffer = aer_bufnr })
       end
     end
   end
