@@ -15,6 +15,13 @@ local M = {}
 
 local was_closed = nil
 M.setup = function(opts)
+  if vim.fn.has("nvim-0.8") == 0 then
+    vim.notify_once(
+      "aerial is deprecated for Neovim <0.8. Please use the nvim-0.5 branch or upgrade Neovim",
+      vim.log.levels.ERROR
+    )
+    return
+  end
   config.setup(opts)
   autocommands.on_enter_buffer()
   local group = vim.api.nvim_create_augroup("AerialSetup", {})
