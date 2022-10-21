@@ -129,6 +129,13 @@ M.up = function(direction, count)
   end
 end
 
+M.prev = function(step)
+  if step then
+    step = -1 * step
+  end
+  M.next(step)
+end
+
 M.next = function(step)
   step = step or 1
   local winid = get_target_win()

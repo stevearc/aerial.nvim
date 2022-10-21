@@ -1,14 +1,8 @@
-local autocommands = require("aerial.autocommands")
-local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local fold = require("aerial.fold")
-local highlight = require("aerial.highlight")
-local nav = require("aerial.navigation")
-local render = require("aerial.render")
 local tree = require("aerial.tree")
 local util = require("aerial.util")
-local window = require("aerial.window")
 
 local M = {}
 
@@ -176,11 +170,13 @@ local commands = {
   },
 }
 
+local do_setup
+
 ---@param mod string Name of aerial module
 ---@param fn string Name of function to wrap
 local function lazy(mod, fn)
   return function(...)
-    -- do_setup()
+    do_setup()
     return require(string.format("aerial.%s", mod))[fn](...)
   end
 end
@@ -191,6 +187,20 @@ local function create_commands()
   end
 end
 
+local pending_opts
+local initialized = false
+do_setup = function()
+  if not pending_opts then
+    return
+  end
+  config.setup(pending_opts)
+  require("aerial.highlight").create_highlight_groups()
+  pending_opts = nil
+  initialized = true
+end
+
+---Initialize aerial
+---@param opts nil|table
 M.setup = function(opts)
   if vim.fn.has("nvim-0.8") == 0 then
     vim.notify_once(
@@ -199,14 +209,21 @@ M.setup = function(opts)
     )
     return
   end
-  config.setup(opts)
-  autocommands.on_enter_buffer()
+  pending_opts = opts or {}
+  create_commands()
+
+  -- TODO remove this call once we can make everything lazy
+  do_setup()
+
+  require("aerial.autocommands").on_enter_buffer()
   local group = vim.api.nvim_create_augroup("AerialSetup", {})
   vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
     desc = "Aerial update windows and attach backends",
     pattern = "*",
     group = group,
     callback = function()
+      -- TODO do we want to allow lazy loading this?
+      do_setup()
       require("aerial.autocommands").on_enter_buffer()
     end,
   })
@@ -215,6 +232,8 @@ M.setup = function(opts)
     pattern = "*",
     group = group,
     callback = function(args)
+      -- TODO do we want to allow lazy loading this?
+      do_setup()
       local client = vim.lsp.get_client_by_id(args.data.client_id)
       require("aerial.backends.lsp").on_attach(client, args.buf)
     end,
@@ -227,32 +246,41 @@ M.setup = function(opts)
       require("aerial.backends.lsp").on_detach(args.data.client_id, args.buf)
     end,
   })
-  create_commands()
-  highlight.create_highlight_groups()
+
+  if initialized then
+    do_setup()
+  end
 end
 
----Returns true if aerial is open for the current buffer
+---Returns true if aerial is open for the current window or buffer
 ---(returns false inside an aerial buffer)
----@param opts? {bufnr?: integer, winid?: integer}
+---@param opts nil|table
+---    bufnr nil|integer
+---    winid nil|integer
 ---@return boolean
 M.is_open = function(opts)
   if type(opts) == "number" then
     -- For backwards compatibility
     opts = { bufnr = opts }
+    vim.notify_once(
+      "Deprecated(aerial.is_open): The parameters to this function have changed (see :help aerial.is_open)\nThese parameters will be unsupported on 2023-02-01",
+      vim.log.levels.WARN
+    )
   end
-  return window.is_open(opts)
+  return require("aerial.window").is_open(opts)
 end
 
--- Close the aerial window for the current buffer, or the current window if it
--- is an aerial buffer
+---Close the aerial window.
 M.close = function()
   was_closed = true
-  window.close()
+  require("aerial.window").close()
 end
 
-M.close_all = window.close_all
+---Close all visible aerial windows.
+M.close_all = lazy("window", "close_all")
 
-M.close_all_but_current = window.close_all_but_current
+---Close all visible aerial windows except for the one currently focused or for the currently focused window.
+M.close_all_but_current = lazy("window", "close_all_but_current")
 
 ---Open the aerial window for the current buffer.
 ---@param opts nil|table
@@ -281,15 +309,14 @@ M.open = function(opts, old_direction)
       focus = true,
     })
   end
-  window.open(opts.focus, opts.direction)
+  require("aerial.window").open(opts.focus, opts.direction)
 end
 
-M.open_all = window.open_all
+---Open an aerial window for each visible window.
+M.open_all = lazy("window", "open_all")
 
--- Jump to the aerial window for the current buffer, if it is open
-M.focus = function()
-  window.focus()
-end
+---Jump to the aerial window for the current buffer, if it is open
+M.focus = lazy("window", "focus")
 
 ---Open or close the aerial window for the current buffer.
 ---@param opts nil|table
@@ -318,35 +345,30 @@ M.toggle = function(opts, old_direction)
     })
   end
 
-  local opened = window.toggle(opts.focus, opts.direction)
+  local opened = require("aerial.window").toggle(opts.focus, opts.direction)
   was_closed = not opened
   return opened
 end
 
--- Jump to a specific symbol. "opts" can have the following keys:
--- index (int): The symbol to jump to. If nil, will jump to the symbol under
---              the cursor (in the aerial buffer)
--- split (str): Jump to the symbol in a new split. Can be "v" for vertical or
---              "h" for horizontal. Can also be a raw command to execute (e.g.
---              "belowright split")
--- jump (bool): If false and in the aerial window, do not leave the aerial
---              window. (Default true)
-M.select = function(opts)
-  nav.select(opts)
-end
+---Jump to a specific symbol.
+---@param opts nil|table
+---    index nil|integer The symbol to jump to. If nil, will jump to the symbol under the cursor (in the aerial buffer)
+---    split nil|string Jump to the symbol in a new split. Can be "v" for vertical or "h" for horizontal. Can also be a raw command to execute (e.g. "belowright split")
+---    jump nil|boolean If false and in the aerial window, do not leave the aerial window. (Default true)
+M.select = lazy("navigation", select)
 
--- Jump forwards or backwards in the symbol list.
--- step (int): Number of symbols to jump by (default 1)
-M.next = function(step)
-  nav.next(step)
-end
+---Jump forwards in the symbol list.
+---@param step nil|integer Number of symbols to jump by (default 1)
+M.next = lazy("navigation", "next")
 
--- Jump up the tree
--- direction (int): -1 for backwards or 1 for forwards
--- count (int): How many levels to jump up (default 1)
-M.up = function(direction, count)
-  nav.up(direction, count)
-end
+---Jump backwards in the symbol list.
+---@param step nil|integer Number of symbols to jump by (default 1)
+M.prev = lazy("navigation", "prev")
+
+---Jump to a symbol higher in the tree
+---@param direction integer -1 for backwards or 1 for forwards
+---@param count nil|integer How many levels to jump up (default 1)
+M.up = lazy("navigation", "up")
 
 ---@deprecated
 M.on_attach = function(...)
@@ -356,15 +378,17 @@ M.on_attach = function(...)
   )
 end
 
--- Returns a list representing the symbol path to the current location.
--- exact (bool): If true, only return symbols if we are exactly inside the
---               hierarchy. When false, will return the closest symbol.
--- Returns empty list if none found or in an invalid buffer.
--- Items have the following keys:
---     name   The name of the symbol
---     kind   The SymbolKind of the symbol
---     icon   The icon that represents the symbol
+---Get a list representing the symbol path to the current location.
+---@param exact nil|boolean If true, only return symbols if we are exactly inside the hierarchy. When false, will return the closest symbol.
+---@return table[]
+---@note
+---Returns empty list if none found or in an invalid buffer.
+---Items have the following keys:
+---    name   The name of the symbol
+---    kind   The SymbolKind of the symbol
+---    icon   The icon that represents the symbol
 M.get_location = function(exact)
+  local window = require("aerial.window")
   -- exact defaults to true
   if exact == nil then
     exact = true
@@ -401,7 +425,8 @@ end
 
 local function _post_tree_mutate(bufnr, new_cursor_pos)
   bufnr = bufnr or 0
-  render.update_aerial_buffer(bufnr)
+  local window = require("aerial.window")
+  require("aerial.render").update_aerial_buffer(bufnr)
   local mywin = vim.api.nvim_get_current_win()
   window.update_all_positions(bufnr, mywin)
   local _, aer_bufnr = util.get_buffers(bufnr)
@@ -415,7 +440,7 @@ local function _post_tree_mutate(bufnr, new_cursor_pos)
 end
 
 ---Collapse all nodes in the symbol tree
----@param bufnr integer
+---@param bufnr nil|integer
 M.tree_close_all = function(bufnr)
   bufnr = util.get_buffers(bufnr or 0)
   if not data:has_symbols(bufnr) then
@@ -426,7 +451,7 @@ M.tree_close_all = function(bufnr)
 end
 
 ---Expand all nodes in the symbol tree
----@param bufnr integer
+---@param bufnr nil|integer
 M.tree_open_all = function(bufnr)
   bufnr = util.get_buffers(bufnr or 0)
   if not data:has_symbols(bufnr) then
@@ -436,9 +461,9 @@ M.tree_open_all = function(bufnr)
   M.tree_set_collapse_level(bufnr, 99)
 end
 
----0 is all closed, use 99 to open all
+---Set the collapse level of the symbol tree
 ---@param bufnr integer
----@param level integer
+---@param level integer 0 is all closed, use 99 to open all
 M.tree_set_collapse_level = function(bufnr, level)
   bufnr = util.get_buffers(bufnr or 0)
   if not data:has_symbols(bufnr) then
@@ -474,6 +499,7 @@ M.tree_cmd = function(action, opts)
     index = nil,
     fold = true,
   })
+  local window = require("aerial.window")
   local index
   local item
   if opts.index then
@@ -515,7 +541,8 @@ M.sync_folds = function(bufnr)
   util.go_win_no_au(mywin)
 end
 
--- Register a callback to be called when aerial is attached to a buffer.
+---Register a callback to be called when aerial is attached to a buffer.
+---@deprecated
 M.register_attach_cb = function(callback)
   vim.notify_once(
     "Deprecated(aerial.register_attach_cb): pass `on_attach` to aerial.setup() instead (see :help aerial)\nThis function will be removed on 2023-02-01",
@@ -524,18 +551,16 @@ M.register_attach_cb = function(callback)
   config.on_attach = callback
 end
 
----Print out debug information for aerial
+---Get debug info for aerial
+---@return table
 M.info = function()
   local bufnr = util.get_buffers(0)
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
-  print("Aerial Info")
-  print("-----------")
-  print(string.format("Filetype: %s", filetype))
-  print("Configured backends:")
-  for _, line in ipairs(backends.get_status_lines(bufnr)) do
-    print(line)
-  end
-  print(string.format("Show symbols: %s", config.get_filter_kind_map()))
+  return {
+    filetype = filetype,
+    filter_kind_map = require("aerial.config").get_filter_kind_map(),
+    backends = require("aerial.backends").get_status(bufnr),
+  }
 end
 
 ---Returns the number of symbols for the buffer
@@ -543,10 +568,11 @@ end
 ---@return integer
 M.num_symbols = function(bufnr)
   bufnr = bufnr or 0
-  if not data:has_symbols(bufnr) then
+  if data:has_symbols(bufnr) then
+    return data[bufnr]:count()
+  else
     return 0
   end
-  return data[bufnr]:count()
 end
 
 ---Returns true if the user has manually closed aerial.
@@ -561,6 +587,6 @@ M.was_closed = function(default)
   end
 end
 
-_G.aerial_foldexpr = fold.foldexpr
+_G.aerial_foldexpr = lazy("fold", "foldexpr")
 
 return M

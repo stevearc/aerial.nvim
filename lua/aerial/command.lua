@@ -43,7 +43,7 @@ M.next = function(params)
 end
 
 M.prev = function(params)
-  require("aerial").next(-1 * params.count)
+  require("aerial").prev(params.count)
 end
 
 M.next_up = function(params)
@@ -92,7 +92,24 @@ M.tree_set_collapse_level = function(params)
 end
 
 M.info = function(params)
-  require("aerial").info()
+  local data = require("aerial").info()
+  print("Aerial Info")
+  print("-----------")
+  print(string.format("Filetype: %s", data.filetype))
+  print("Configured backends:")
+  for _, status in ipairs(data.backends) do
+    local line = "  " .. status.name
+    if status.supported then
+      line = line .. " (supported)"
+    else
+      line = line .. " (not supported) [" .. status.error .. "]"
+    end
+    if status.attached then
+      line = line .. " (attached)"
+    end
+    print(line)
+  end
+  print(string.format("Show symbols: %s", data.filter_kind_map))
 end
 
 return M

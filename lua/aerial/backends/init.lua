@@ -42,21 +42,17 @@ M.is_supported = function(bufnr, name)
 end
 
 ---@param bufnr integer
----@return string[]
-M.get_status_lines = function(bufnr)
+---@return table[]
+M.get_status = function(bufnr)
   local ret = {}
   for _, name in ipairs(config.backends(bufnr)) do
-    local line = "  " .. name
     local supported, err = M.is_supported(bufnr, name)
-    if supported then
-      line = line .. " (supported)"
-    else
-      line = line .. " (not supported) [" .. err .. "]"
-    end
-    if M.is_backend_attached(bufnr, name) then
-      line = line .. " (attached)"
-    end
-    table.insert(ret, line)
+    table.insert(ret, {
+      name = name,
+      supported = supported,
+      error = err,
+      attached = M.is_backend_attached(bufnr, name),
+    })
   end
   return ret
 end
