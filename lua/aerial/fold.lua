@@ -7,16 +7,18 @@ local M = {}
 M.add_fold_mappings = function(bufnr)
   bufnr = bufnr or 0
   if config.link_folds_to_tree then
-    vim.keymap.set("n", "za", [[<cmd>AerialTreeToggle<CR>]], { buffer = bufnr })
-    vim.keymap.set("n", "zA", [[<cmd>AerialTreeToggle!<CR>]], { buffer = bufnr })
-    vim.keymap.set("n", "zo", [[<cmd>AerialTreeOpen<CR>]], { buffer = bufnr })
-    vim.keymap.set("n", "zO", [[<cmd>AerialTreeOpen!<CR>]], { buffer = bufnr })
-    vim.keymap.set("n", "zc", [[<cmd>AerialTreeClose<CR>]], { buffer = bufnr })
-    vim.keymap.set("n", "zC", [[<cmd>AerialTreeClose!<CR>]], { buffer = bufnr })
-    vim.keymap.set("n", "zM", [[<cmd>AerialTreeCloseAll<CR>]], { buffer = bufnr })
-    vim.keymap.set("n", "zR", [[<cmd>AerialTreeOpenAll<CR>]], { buffer = bufnr })
-    vim.keymap.set("n", "zx", [[<cmd>AerialTreeSyncFolds<CR>]], { buffer = bufnr })
-    vim.keymap.set("n", "zX", [[<cmd>AerialTreeSyncFolds<CR>]], { buffer = bufnr })
+    local aerial = require("aerial")
+    local tree = require("aerial.tree")
+    vim.keymap.set("n", "za", tree.toggle, { buffer = bufnr })
+    vim.keymap.set("n", "zA", util.partial(tree.toggle, { recurse = true }), { buffer = bufnr })
+    vim.keymap.set("n", "zo", tree.open, { buffer = bufnr })
+    vim.keymap.set("n", "zO", util.partial(tree.open, { recurse = true }), { buffer = bufnr })
+    vim.keymap.set("n", "zc", tree.close, { buffer = bufnr })
+    vim.keymap.set("n", "zC", util.partial(tree.close, { recurse = true }), { buffer = bufnr })
+    vim.keymap.set("n", "zM", aerial.tree_close_all, { buffer = bufnr })
+    vim.keymap.set("n", "zR", aerial.tree_open_all, { buffer = bufnr })
+    vim.keymap.set("n", "zx", aerial.sync_folds, { buffer = bufnr })
+    vim.keymap.set("n", "zX", aerial.sync_folds, { buffer = bufnr })
   end
 end
 

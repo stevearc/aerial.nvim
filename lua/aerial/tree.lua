@@ -84,7 +84,7 @@ end
 ---    fold    nil|boolean If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)
 ---    recurse nil|boolean If true, perform the action recursively on all children (default false)
 ---    bubble  nil|boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
-M.tree_cmd = function(action, opts)
+local function tree_cmd(action, opts)
   opts = vim.tbl_extend("keep", opts or {}, {
     index = nil,
     fold = true,
@@ -116,6 +116,18 @@ M.tree_cmd = function(action, opts)
     end
     _post_tree_mutate(0, new_cursor_pos)
   end
+end
+
+M.open = function(opts)
+  tree_cmd("open", opts)
+end
+
+M.close = function(opts)
+  tree_cmd("close", opts)
+end
+
+M.toggle = function(opts)
+  tree_cmd("toggle", opts)
 end
 
 ---Set the collapse level of the symbol tree

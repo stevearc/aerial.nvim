@@ -489,10 +489,7 @@ M.tree_set_collapse_level = lazy("tree", "set_collapse_level")
 ---    fold nil|boolean If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)
 ---    recurse nil|boolean If true, perform the action recursively on all children (default false)
 ---    bubble nil|boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
-M.tree_open = function(opts)
-  do_setup()
-  require("aerial.tree").tree_cmd("open", opts)
-end
+M.tree_open = lazy("tree", "open")
 
 ---Collapse the tree at the selected location
 ---@param opts nil|table
@@ -500,10 +497,7 @@ end
 ---    fold nil|boolean If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)
 ---    recurse nil|boolean If true, perform the action recursively on all children (default false)
 ---    bubble nil|boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
-M.tree_close = function(opts)
-  do_setup()
-  require("aerial.tree").tree_cmd("close", opts)
-end
+M.tree_close = lazy("tree", "close")
 
 ---Toggle the collapsed state at the selected location
 ---@param opts nil|table
@@ -511,10 +505,7 @@ end
 ---    fold nil|boolean If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)
 ---    recurse nil|boolean If true, perform the action recursively on all children (default false)
 ---    bubble nil|boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
-M.tree_toggle = function(opts)
-  do_setup()
-  require("aerial.tree").tree_cmd("toggle", opts)
-end
+M.tree_toggle = lazy("tree", "toggle")
 
 ---Sync code folding with the current tree state.
 ---Ignores the 'link_tree_to_folds' config option.

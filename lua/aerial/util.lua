@@ -390,6 +390,16 @@ M.throttle = function(func, opts)
   end
 end
 
+M.partial = function(func, ...)
+  -- TODO this doesn't account for nil arguments
+  local args = { ... }
+  return function(...)
+    local params = vim.list_extend({}, args)
+    params = vim.list_extend(params, { ... })
+    return func(unpack(params))
+  end
+end
+
 M.get_filetypes = config.get_filetypes
 
 return M

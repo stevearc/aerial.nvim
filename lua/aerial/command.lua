@@ -84,7 +84,7 @@ M.tree_close_all = function(params)
 end
 
 M.tree_sync_folds = function(params)
-  require("aerial").tree_sync_folds()
+  require("aerial").sync_folds()
 end
 
 M.tree_set_collapse_level = function(params)
