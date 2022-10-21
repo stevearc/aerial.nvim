@@ -38,19 +38,35 @@ local function create_aerial_buffer(bufnr)
   vim.api.nvim_buf_call(aer_bufnr, function()
     vim.api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
   end)
-  -- We create an autocmd to render the first time this buffer is displayed in a window
-  -- Defer it so we have time to set window options and variables on the float first
-  vim.cmd(string.format(
-    [[
-    au CursorMoved <buffer=%d> lua require('aerial.autocommands').on_cursor_move(true)
-    au BufLeave <buffer=%d> lua require('aerial.autocommands').on_leave_aerial_buf()
-    au BufWinEnter <buffer=%d> ++nested ++once lua require('aerial.autocommands').on_first_load(%d)
-  ]],
-    aer_bufnr,
-    aer_bufnr,
-    aer_bufnr,
-    aer_bufnr
-  ))
+
+  if config.highlight_on_hover then
+    vim.api.nvim_create_autocmd("CursorMoved", {
+      desc = "Aerial update highlights in the source buffer",
+      buffer = aer_bufnr,
+      callback = function()
+        render.update_highlights(bufnr)
+      end,
+    })
+    vim.api.nvim_create_autocmd("BufLeave", {
+      desc = "Aerial clear highlights in the source buffer",
+      buffer = aer_bufnr,
+      callback = function(params)
+        render.clear_highlights(bufnr)
+      end,
+    })
+  end
+  vim.api.nvim_create_autocmd("BufWinEnter", {
+    desc = "Aerial render symbols after buffer loads in window",
+    buffer = aer_bufnr,
+    callback = function(params)
+      -- Defer it so we have time to set window options and variables on the float first
+      vim.defer_fn(function()
+        render.update_aerial_buffer(aer_bufnr)
+        M.update_all_positions(bufnr, 0)
+      end, 1)
+    end,
+  })
+
   if not data:has_symbols(bufnr) then
     loading.set_loading(aer_bufnr, true)
   end

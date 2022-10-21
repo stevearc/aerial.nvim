@@ -17,12 +17,15 @@ local was_closed = nil
 M.setup = function(opts)
   config.setup(opts)
   autocommands.on_enter_buffer()
-  vim.cmd([[
-    aug AerialEnterBuffer
-      au!
-      au WinEnter,BufEnter * lua require'aerial.autocommands'.on_enter_buffer()
-    aug END
-  ]])
+  local group = vim.api.nvim_create_augroup("AerialSetup", {})
+  vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
+    desc = "Aerial update windows and attach backends",
+    pattern = "*",
+    group = group,
+    callback = function()
+      require("aerial.autocommands").on_enter_buffer()
+    end,
+  })
   command.create_commands()
   highlight.create_highlight_groups()
 end
