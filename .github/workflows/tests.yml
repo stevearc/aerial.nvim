@@ -52,10 +52,6 @@ jobs:
         run: |
           npm install -g tree-sitter-cli
 
-      - name: Ensure TS parsers installed
-        run: |
-          nvim --headless -c "TSInstallSync $(ls queries)" -c "q"
-
       - name: Run tests
         run: |
           bash ./run_tests.sh

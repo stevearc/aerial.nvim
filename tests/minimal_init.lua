@@ -1,6 +1,4 @@
 vim.cmd([[set runtimepath+=.]])
-vim.cmd([[runtime! plugin/plenary.vim]])
-vim.cmd([[runtime! plugin/nvim-treesitter.vim]])
 -- Force load the nvim-treesitter query predicates
 require("nvim-treesitter.query_predicates")
 
@@ -19,4 +17,5 @@ for lang, _ in vim.fs.dir("queries") do
 end
 require("nvim-treesitter.configs").setup({
   ensure_installed = langs,
+  sync_install = true,
 })
