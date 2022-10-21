@@ -1,3 +1,9 @@
+local config = require("aerial.config")
+local data = require("aerial.data")
+local fold = require("aerial.fold")
+local render = require("aerial.render")
+local util = require("aerial.util")
+local window = require("aerial.window")
 local M = {}
 
 local function _get_target(bufdata, action, item, bubble)
@@ -13,7 +19,22 @@ local function _get_target(bufdata, action, item, bubble)
   return item
 end
 
-M.edit_tree_node = function(bufdata, action, index, opts)
+local function _post_tree_mutate(bufnr, new_cursor_pos)
+  bufnr = bufnr or 0
+  render.update_aerial_buffer(bufnr)
+  local mywin = vim.api.nvim_get_current_win()
+  window.update_all_positions(bufnr, mywin)
+  local _, aer_bufnr = util.get_buffers(bufnr)
+  if new_cursor_pos then
+    for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+      if vim.api.nvim_win_is_valid(winid) and vim.api.nvim_win_get_buf(winid) == aer_bufnr then
+        vim.api.nvim_win_set_cursor(winid, { new_cursor_pos, 0 })
+      end
+    end
+  end
+end
+
+local function edit_tree_node(bufdata, action, index, opts)
   opts = vim.tbl_extend("keep", opts or {}, {
     bubble = true,
     recurse = false,
@@ -51,6 +72,93 @@ M.edit_tree_node = function(bufdata, action, index, opts)
   local target = _get_target(bufdata, action, current_item, opts.bubble)
   local item = do_action(target)
   return did_update, bufdata:indexof(item)
+end
+
+-- Perform an action on the symbol tree.
+-- action (enum): can be one of the following:
+--   open    Open the tree at the selected location
+--   close   Collapse the tree at the selected location
+--   toggle  Toggle the collapsed state at the selected location
+-- opts (table): can contain the following values:
+--   index    The index of the symbol to perform the action on.
+--            Defaults to cursor location.
+--   fold     If false, do not modify folds regardless of
+--            'link_tree_to_folds' setting. (default true)
+--   recurse  If true, perform the action recursively on all children
+--            (default false)
+--   bubble   If true and current symbol has no children, perform the
+--            action on the nearest parent (default true)
+M.tree_cmd = function(action, opts)
+  opts = vim.tbl_extend("keep", opts or {}, {
+    index = nil,
+    fold = true,
+  })
+  local index
+  local item
+  if opts.index then
+    index = opts.index
+  elseif util.is_aerial_buffer() then
+    index = vim.api.nvim_win_get_cursor(0)[1]
+  else
+    local pos = window.get_position_in_win()
+    index = pos.lnum
+    item = pos.exact_symbol
+  end
+  if item == nil then
+    item = data[0]:item(index)
+  end
+  if not item then
+    return
+  end
+  local lnum = item.lnum
+  local did_update, new_cursor_pos = edit_tree_node(data[0], action, index, opts)
+  if did_update then
+    if config.link_tree_to_folds and opts.fold then
+      fold.fold_action(action, lnum, {
+        recurse = opts.recurse,
+      })
+    end
+    _post_tree_mutate(0, new_cursor_pos)
+  end
+end
+
+---Set the collapse level of the symbol tree
+---@param bufnr integer
+---@param level integer 0 is all closed, use 99 to open all
+M.set_collapse_level = function(bufnr, level)
+  bufnr = util.get_buffers(bufnr or 0)
+  if not data:has_symbols(bufnr) then
+    return
+  end
+  data[bufnr].collapse_level = level
+  if config.link_tree_to_folds then
+    for _, winid in ipairs(vim.api.nvim_list_wins()) do
+      if vim.api.nvim_win_get_buf(winid) == bufnr then
+        vim.api.nvim_win_set_option(winid, "foldlevel", level)
+      end
+    end
+  end
+  _post_tree_mutate(bufnr)
+end
+
+M.open_all = function(bufnr)
+  bufnr = util.get_buffers(bufnr or 0)
+  if not data:has_symbols(bufnr) then
+    return
+  end
+  data[bufnr]:clear_collapsed()
+  M.tree_set_collapse_level(bufnr, 99)
+end
+
+---Collapse all nodes in the symbol tree
+---@param bufnr nil|integer
+M.close_all = function(bufnr)
+  bufnr = util.get_buffers(bufnr or 0)
+  if not data:has_symbols(bufnr) then
+    return
+  end
+  data[bufnr]:clear_collapsed()
+  M.tree_set_collapse_level(bufnr, 0)
 end
 
 return M

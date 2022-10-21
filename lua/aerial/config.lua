@@ -3,6 +3,9 @@ local default_options = {
   -- This can be a filetype map (see :help aerial-filetype-map)
   backends = { "treesitter", "lsp", "markdown", "man" },
 
+  -- When true, don't load aerial until a command or function is called
+  lazy_load = false,
+
   layout = {
     -- These control the width of the aerial window.
     -- They can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)

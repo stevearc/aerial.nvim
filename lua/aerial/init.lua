@@ -1,9 +1,3 @@
-local config = require("aerial.config")
-local data = require("aerial.data")
-local fold = require("aerial.fold")
-local tree = require("aerial.tree")
-local util = require("aerial.util")
-
 local M = {}
 
 local was_closed = nil
@@ -187,14 +181,48 @@ local function create_commands()
   end
 end
 
+local function create_autocmds()
+  local group = vim.api.nvim_create_augroup("AerialSetup", {})
+  vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
+    desc = "Aerial update windows and attach backends",
+    pattern = "*",
+    group = group,
+    callback = function()
+      do_setup()
+      require("aerial.autocommands").on_enter_buffer()
+    end,
+  })
+  vim.api.nvim_create_autocmd("LspAttach", {
+    desc = "Aerial mark LSP backend as available",
+    pattern = "*",
+    group = group,
+    callback = function(args)
+      do_setup()
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+      require("aerial.backends.lsp").on_attach(client, args.buf)
+    end,
+  })
+  vim.api.nvim_create_autocmd("LspDetach", {
+    desc = "Aerial mark LSP backend as unavailable",
+    pattern = "*",
+    group = group,
+    callback = function(args)
+      do_setup()
+      require("aerial.backends.lsp").on_detach(args.data.client_id, args.buf)
+    end,
+  })
+end
+
 local pending_opts
 local initialized = false
 do_setup = function()
   if not pending_opts then
     return
   end
-  config.setup(pending_opts)
+  require("aerial.config").setup(pending_opts)
+  create_autocmds()
   require("aerial.highlight").create_highlight_groups()
+  require("aerial.autocommands").on_enter_buffer()
   pending_opts = nil
   initialized = true
 end
@@ -212,40 +240,10 @@ M.setup = function(opts)
   pending_opts = opts or {}
   create_commands()
 
-  -- TODO remove this call once we can make everything lazy
-  do_setup()
-
-  require("aerial.autocommands").on_enter_buffer()
-  local group = vim.api.nvim_create_augroup("AerialSetup", {})
-  vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
-    desc = "Aerial update windows and attach backends",
-    pattern = "*",
-    group = group,
-    callback = function()
-      -- TODO do we want to allow lazy loading this?
-      do_setup()
-      require("aerial.autocommands").on_enter_buffer()
-    end,
-  })
-  vim.api.nvim_create_autocmd("LspAttach", {
-    desc = "Aerial mark LSP backend as available",
-    pattern = "*",
-    group = group,
-    callback = function(args)
-      -- TODO do we want to allow lazy loading this?
-      do_setup()
-      local client = vim.lsp.get_client_by_id(args.data.client_id)
-      require("aerial.backends.lsp").on_attach(client, args.buf)
-    end,
-  })
-  vim.api.nvim_create_autocmd("LspDetach", {
-    desc = "Aerial mark LSP backend as unavailable",
-    pattern = "*",
-    group = group,
-    callback = function(args)
-      require("aerial.backends.lsp").on_detach(args.data.client_id, args.buf)
-    end,
-  })
+  local is_lazy = pending_opts.lazy_load == true
+  if not is_lazy then
+    create_autocmds()
+  end
 
   if initialized then
     do_setup()
@@ -259,6 +257,7 @@ end
 ---    winid nil|integer
 ---@return boolean
 M.is_open = function(opts)
+  do_setup()
   if type(opts) == "number" then
     -- For backwards compatibility
     opts = { bufnr = opts }
@@ -272,6 +271,7 @@ end
 
 ---Close the aerial window.
 M.close = function()
+  do_setup()
   was_closed = true
   require("aerial.window").close()
 end
@@ -282,16 +282,14 @@ M.close_all = lazy("window", "close_all")
 ---Close all visible aerial windows except for the one currently focused or for the currently focused window.
 M.close_all_but_current = lazy("window", "close_all_but_current")
 
----Open the aerial window for the current buffer.
----@param opts nil|table
----    focus boolean If true, jump to aerial window if it is opened (default true)
----    direction "left"|"right"|"float" Direction to open aerial window
-M.open = function(opts, old_direction)
-  was_closed = false
-  opts = opts or {}
+local function convert_open_args(fn_name, opts, old_direction)
   if type(opts) ~= "table" then
     vim.notify_once(
-      "Deprecated(aerial.open): The parameters to this function have changed (see :help aerial.open)\nThese parameters will be unsupported on 2023-02-01",
+      string.format(
+        "Deprecated(%s): The parameters to this function have changed (see :help %s)\nThese parameters will be unsupported on 2023-02-01",
+        fn_name,
+        fn_name
+      ),
       vim.log.levels.WARN
     )
     local focus = opts
@@ -300,15 +298,24 @@ M.open = function(opts, old_direction)
     elseif focus == "!" then
       focus = false
     end
-    opts = {
+    return {
       focus = focus,
       direction = old_direction,
     }
   else
-    opts = vim.tbl_extend("keep", opts, {
+    return vim.tbl_extend("keep", opts, {
       focus = true,
     })
   end
+end
+---Open the aerial window for the current buffer.
+---@param opts nil|table
+---    focus boolean If true, jump to aerial window if it is opened (default true)
+---    direction "left"|"right"|"float" Direction to open aerial window
+M.open = function(opts, old_direction)
+  do_setup()
+  was_closed = false
+  opts = convert_open_args("aerial.open", opts or {}, old_direction)
   require("aerial.window").open(opts.focus, opts.direction)
 end
 
@@ -323,28 +330,8 @@ M.focus = lazy("window", "focus")
 ---    focus boolean If true, jump to aerial window if it is opened (default true)
 ---    direction "left"|"right"|"float" Direction to open aerial window
 M.toggle = function(opts, old_direction)
-  opts = opts or {}
-  if type(opts) ~= "table" then
-    vim.notify_once(
-      "Deprecated(aerial.toggle): The parameters to this function have changed (see :help aerial.toggle)\nThese parameters will be unsupported on 2023-02-01",
-      vim.log.levels.WARN
-    )
-    local focus = opts
-    if focus == "" then
-      focus = true
-    elseif focus == "!" then
-      focus = false
-    end
-    opts = {
-      focus = focus,
-      direction = old_direction,
-    }
-  else
-    opts = vim.tbl_extend("keep", opts, {
-      focus = true,
-    })
-  end
-
+  do_setup()
+  opts = convert_open_args("aerial.toggle", opts or {}, old_direction)
   local opened = require("aerial.window").toggle(opts.focus, opts.direction)
   was_closed = not opened
   return opened
@@ -388,6 +375,9 @@ end
 ---    kind   The SymbolKind of the symbol
 ---    icon   The icon that represents the symbol
 M.get_location = function(exact)
+  do_setup()
+  local config = require("aerial.config")
+  local data = require("aerial.data")
   local window = require("aerial.window")
   -- exact defaults to true
   if exact == nil then
@@ -397,7 +387,7 @@ M.get_location = function(exact)
     return {}
   end
   local winid = vim.api.nvim_get_current_win()
-  local bufdata = data[0]
+  local bufdata = data:get_or_create(0)
   local cur = vim.api.nvim_win_get_cursor(winid)
   local pos = window.get_symbol_position(bufdata, cur[1], cur[2], true)
   if not pos then
@@ -423,116 +413,28 @@ M.get_location = function(exact)
   return ret
 end
 
-local function _post_tree_mutate(bufnr, new_cursor_pos)
-  bufnr = bufnr or 0
-  local window = require("aerial.window")
-  require("aerial.render").update_aerial_buffer(bufnr)
-  local mywin = vim.api.nvim_get_current_win()
-  window.update_all_positions(bufnr, mywin)
-  local _, aer_bufnr = util.get_buffers(bufnr)
-  if new_cursor_pos then
-    for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-      if vim.api.nvim_win_is_valid(winid) and vim.api.nvim_win_get_buf(winid) == aer_bufnr then
-        vim.api.nvim_win_set_cursor(winid, { new_cursor_pos, 0 })
-      end
-    end
-  end
-end
-
 ---Collapse all nodes in the symbol tree
 ---@param bufnr nil|integer
-M.tree_close_all = function(bufnr)
-  bufnr = util.get_buffers(bufnr or 0)
-  if not data:has_symbols(bufnr) then
-    return
-  end
-  data[bufnr]:clear_collapsed()
-  M.tree_set_collapse_level(bufnr, 0)
-end
+M.tree_close_all = lazy("tree", "close_all")
 
 ---Expand all nodes in the symbol tree
 ---@param bufnr nil|integer
-M.tree_open_all = function(bufnr)
-  bufnr = util.get_buffers(bufnr or 0)
-  if not data:has_symbols(bufnr) then
-    return
-  end
-  data[bufnr]:clear_collapsed()
-  M.tree_set_collapse_level(bufnr, 99)
-end
+M.tree_open_all = lazy("tree", "open_all")
 
 ---Set the collapse level of the symbol tree
 ---@param bufnr integer
 ---@param level integer 0 is all closed, use 99 to open all
-M.tree_set_collapse_level = function(bufnr, level)
-  bufnr = util.get_buffers(bufnr or 0)
-  if not data:has_symbols(bufnr) then
-    return
-  end
-  data[bufnr].collapse_level = level
-  if config.link_tree_to_folds then
-    for _, winid in ipairs(vim.api.nvim_list_wins()) do
-      if vim.api.nvim_win_get_buf(winid) == bufnr then
-        vim.api.nvim_win_set_option(winid, "foldlevel", level)
-      end
-    end
-  end
-  _post_tree_mutate(bufnr)
-end
+M.tree_set_collapse_level = lazy("tree", "set_collapse_level")
 
--- Perform an action on the symbol tree.
--- action (enum): can be one of the following:
---   open    Open the tree at the selected location
---   close   Collapse the tree at the selected location
---   toggle  Toggle the collapsed state at the selected location
--- opts (table): can contain the following values:
---   index    The index of the symbol to perform the action on.
---            Defaults to cursor location.
---   fold     If false, do not modify folds regardless of
---            'link_tree_to_folds' setting. (default true)
---   recurse  If true, perform the action recursively on all children
---            (default false)
---   bubble   If true and current symbol has no children, perform the
---            action on the nearest parent (default true)
-M.tree_cmd = function(action, opts)
-  opts = vim.tbl_extend("keep", opts or {}, {
-    index = nil,
-    fold = true,
-  })
-  local window = require("aerial.window")
-  local index
-  local item
-  if opts.index then
-    index = opts.index
-  elseif util.is_aerial_buffer() then
-    index = vim.api.nvim_win_get_cursor(0)[1]
-  else
-    local pos = window.get_position_in_win()
-    index = pos.lnum
-    item = pos.exact_symbol
-  end
-  if item == nil then
-    item = data[0]:item(index)
-  end
-  if not item then
-    return
-  end
-  local lnum = item.lnum
-  local did_update, new_cursor_pos = tree.edit_tree_node(data[0], action, index, opts)
-  if did_update then
-    if config.link_tree_to_folds and opts.fold then
-      fold.fold_action(action, lnum, {
-        recurse = opts.recurse,
-      })
-    end
-    _post_tree_mutate(0, new_cursor_pos)
-  end
-end
+M.tree_cmd = lazy("tree", "tree_cmd")
 
 ---Sync code folding with the current tree state.
 ---Ignores the 'link_tree_to_folds' config option.
 ---@param bufnr integer
 M.sync_folds = function(bufnr)
+  do_setup()
+  local fold = require("aerial.fold")
+  local util = require("aerial.util")
   local mywin = vim.api.nvim_get_current_win()
   local source_buf, _ = util.get_buffers(bufnr)
   for _, winid in ipairs(util.get_fixed_wins(source_buf)) do
@@ -544,16 +446,19 @@ end
 ---Register a callback to be called when aerial is attached to a buffer.
 ---@deprecated
 M.register_attach_cb = function(callback)
+  do_setup()
   vim.notify_once(
     "Deprecated(aerial.register_attach_cb): pass `on_attach` to aerial.setup() instead (see :help aerial)\nThis function will be removed on 2023-02-01",
     vim.log.levels.WARN
   )
-  config.on_attach = callback
+  require("aerial.config").on_attach = callback
 end
 
 ---Get debug info for aerial
 ---@return table
 M.info = function()
+  do_setup()
+  local util = require("aerial.util")
   local bufnr = util.get_buffers(0)
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
   return {
@@ -567,9 +472,11 @@ end
 ---@param bufnr integer
 ---@return integer
 M.num_symbols = function(bufnr)
+  do_setup()
   bufnr = bufnr or 0
+  local data = require("aerial.data")
   if data:has_symbols(bufnr) then
-    return data[bufnr]:count()
+    return data:get_or_create(bufnr):count()
   else
     return 0
   end
