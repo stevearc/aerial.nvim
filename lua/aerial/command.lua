@@ -1,50 +1,98 @@
 local M = {}
 
-M.create_commands = function()
-  function _G.aerial_complete_open_direction(arg_lead, _cmd_line, _cursor_pos)
-    local opts = { "right", "left", "float" }
-    return vim.tbl_filter(function(opt)
-      return string.sub(opt, 1, string.len(arg_lead)) == arg_lead
-    end, opts)
+M.toggle = function(params)
+  local direction
+  if params.args ~= "" then
+    direction = params.args
   end
-
-  vim.cmd([[
-command! -bang -complete=customlist,v:lua.aerial_complete_open_direction -nargs=? AerialToggle call luaeval("require'aerial'.toggle(_A[1], _A[2])", [expand('<bang>'), expand('<args>')])
-command! -bang -complete=customlist,v:lua.aerial_complete_open_direction -nargs=? AerialOpen call luaeval("require'aerial'.open(_A[1], _A[2])", [expand('<bang>'), expand('<args>')])
-command! -bang AerialOpenAll lua require('aerial').open_all()
-command! AerialClose lua require'aerial'.close()
-command! AerialCloseAll lua require'aerial'.close_all()
-command! AerialCloseAllButCurrent lua require'aerial'.close_all_but_current()
-command! -count=1 AerialNext call luaeval("require'aerial'.next(tonumber(_A))", expand('<count>'))
-command! -count=1 AerialPrev call luaeval("require'aerial'.next(-1*tonumber(_A))", expand('<count>'))
-command! -count=1 AerialNextUp call luaeval("require'aerial'.up(1, tonumber(_A))", expand('<count>'))
-command! -count=1 AerialPrevUp call luaeval("require'aerial'.up(-1, tonumber(_A))", expand('<count>'))
-command! -bang -count=1 -nargs=? AerialGo call luaeval('require("aerial.command")._go(_A[1], _A[2], _A[3])', [<q-bang>, <count>, <q-args>])
-command! -bang AerialTreeOpen call luaeval('require("aerial.command")._tree_cmd("open", _A)', <q-bang>)
-command! -bang AerialTreeClose call luaeval('require("aerial.command")._tree_cmd("close", _A)', <q-bang>)
-command! -bang AerialTreeToggle call luaeval('require("aerial.command")._tree_cmd("toggle", _A)', <q-bang>)
-command! AerialTreeOpenAll lua require'aerial'.tree_open_all()
-command! AerialTreeCloseAll lua require'aerial'.tree_close_all()
-command! AerialTreeSyncFolds lua require'aerial'.sync_folds()
-command! -nargs=1 AerialTreeSetCollapseLevel call luaeval('require("aerial").tree_set_collapse_level(0, tonumber(_A))', <q-args>)
-command! AerialInfo lua require'aerial'.info()
-  ]])
+  require("aerial").toggle({
+    focus = not params.bang,
+    direction = direction,
+  })
 end
 
-M._go = function(bang, count, split)
+M.open = function(params)
+  local direction
+  if params.args ~= "" then
+    direction = params.args
+  end
+  require("aerial").open({
+    focus = not params.bang,
+    direction = direction,
+  })
+end
+
+M.open_all = function(params)
+  require("aerial").open_all()
+end
+
+M.close = function(params)
+  require("aerial").close()
+end
+
+M.close_all = function(params)
+  require("aerial").close_all()
+end
+
+M.close_all_but_current = function(params)
+  require("aerial").close_all_but_current()
+end
+
+M.next = function(params)
+  require("aerial").next(params.count)
+end
+
+M.prev = function(params)
+  require("aerial").next(-1 * params.count)
+end
+
+M.next_up = function(params)
+  require("aerial").up(1, params.count)
+end
+
+M.prev_up = function(params)
+  require("aerial").up(-1, params.count)
+end
+
+M.go = function(params)
   local opts = {
-    jump = bang == "",
-    index = count,
-    split = split,
+    jump = not params.bang,
+    index = params.count,
+    split = params.args,
   }
   require("aerial").select(opts)
 end
 
-M._tree_cmd = function(cmd, bang)
-  local opts = {
-    recurse = bang == "!",
-  }
-  require("aerial").tree_cmd(cmd, opts)
+M.tree_open = function(params)
+  require("aerial").tree_cmd("open", { recurse = params.bang })
+end
+
+M.tree_close = function(params)
+  require("aerial").tree_cmd("close", { recurse = params.bang })
+end
+
+M.tree_toggle = function(params)
+  require("aerial").tree_cmd("toggle", { recurse = params.bang })
+end
+
+M.tree_open_all = function(params)
+  require("aerial").tree_open_all()
+end
+
+M.tree_close_all = function(params)
+  require("aerial").tree_close_all()
+end
+
+M.tree_sync_folds = function(params)
+  require("aerial").tree_sync_folds()
+end
+
+M.tree_set_collapse_level = function(params)
+  require("aerial").tree_set_collapse_level(0, tonumber(params.args))
+end
+
+M.info = function(params)
+  require("aerial").info()
 end
 
 return M

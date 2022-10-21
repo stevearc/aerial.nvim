@@ -1,6 +1,5 @@
 local autocommands = require("aerial.autocommands")
 local backends = require("aerial.backends")
-local command = require("aerial.command")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local fold = require("aerial.fold")
@@ -14,6 +13,184 @@ local window = require("aerial.window")
 local M = {}
 
 local was_closed = nil
+
+local function list_complete(choices)
+  return function(arg)
+    return vim.tbl_filter(function(dir)
+      return vim.startswith(dir, arg)
+    end, choices)
+  end
+end
+local commands = {
+  {
+    cmd = "AerialToggle",
+    args = "`left/right/float`",
+    func = "toggle",
+    def = {
+      desc = "Open or close the aerial window. With `!` cursor stays in current window",
+      nargs = "?",
+      bang = true,
+      complete = list_complete({ "left", "right", "float" }),
+    },
+  },
+  {
+    cmd = "AerialOpen",
+    args = "`left/right/float`",
+    func = "open",
+    def = {
+      desc = "Open the aerial window. With `!` cursor stays in current window",
+      nargs = "?",
+      bang = true,
+      complete = list_complete({ "left", "right", "float" }),
+    },
+  },
+  {
+    cmd = "AerialOpenAll",
+    func = "open_all",
+    def = {
+      desc = "Open an aerial window for each visible window.",
+    },
+  },
+  {
+    cmd = "AerialClose",
+    func = "close",
+    def = {
+      desc = "Close the aerial window.",
+    },
+  },
+  {
+    cmd = "AerialCloseAll",
+    func = "close_all",
+    def = {
+      desc = "Close all visible aerial windows.",
+    },
+  },
+  {
+    cmd = "AerialCloseAllButCurrent",
+    func = "close_all_but_current",
+    def = {
+      desc = "Close all visible aerial windows except for the one currently focused or for the currently focused window.",
+    },
+  },
+  {
+    cmd = "AerialNext",
+    func = "next",
+    def = {
+      desc = "Jump forwards {count} symbols (default 1).",
+      count = 1,
+    },
+  },
+  {
+    cmd = "AerialPrev",
+    func = "prev",
+    def = {
+      desc = "Jump backwards [count] symbols (default 1).",
+      count = 1,
+    },
+  },
+  {
+    cmd = "AerialNextUp",
+    func = "next_up",
+    def = {
+      desc = "Jump up the tree [count] levels, moving forwards in the file (default 1).",
+      count = 1,
+    },
+  },
+  {
+    cmd = "AerialPrevUp",
+    func = "next_up",
+    def = {
+      desc = "Jump up the tree [count] levels, moving backwards in the file (default 1).",
+      count = 1,
+    },
+  },
+  {
+    cmd = "AerialGo",
+    func = "go",
+    def = {
+      desc = 'Jump to the [count] symbol (default 1). If with [!] and inside aerial window, the cursor will stay in the aerial window. [split] can be "v" to open a new vertical split, or "h" to open a horizontal split. [split] can also be a raw vim command, such as "belowright split". This command respects switchbuf=uselast',
+      count = 1,
+      bang = true,
+      nargs = "?",
+    },
+  },
+  {
+    cmd = "AerialTreeOpen",
+    func = "tree_open",
+    def = {
+      desc = "Expand the tree at the current location. If with [!] then will expand recursively.",
+      bang = true,
+    },
+  },
+  {
+    cmd = "AerialTreeClose",
+    func = "tree_close",
+    def = {
+      desc = "Collapse the tree at the current location. If with [!] then will collapse recursively.",
+      bang = true,
+    },
+  },
+  {
+    cmd = "AerialTreeToggle",
+    func = "tree_toggle",
+    def = {
+      desc = "Toggle the tree at the current location. If with [!] then will toggle recursively.",
+      bang = true,
+    },
+  },
+  {
+    cmd = "AerialTreeOpenAll",
+    func = "tree_open_all",
+    def = {
+      desc = "Expand all the tree nodes.",
+    },
+  },
+  {
+    cmd = "AerialTreeCloseAll",
+    func = "tree_close_all",
+    def = {
+      desc = "Collapse all the tree nodes.",
+    },
+  },
+  {
+    cmd = "AerialTreeSyncFolds",
+    func = "tree_sync_folds",
+    def = {
+      desc = "Sync code folding with current tree state. This ignores the link_tree_to_folds setting.",
+    },
+  },
+  {
+    cmd = "AerialTreeSetCollapseLevel",
+    func = "tree_set_collapse_level",
+    def = {
+      desc = "Collapse symbols at a depth greater than N (0 collapses all)",
+      nargs = 1,
+    },
+  },
+  {
+    cmd = "AerialInfo",
+    func = "info",
+    def = {
+      desc = "Print out debug info related to aerial.",
+    },
+  },
+}
+
+---@param mod string Name of aerial module
+---@param fn string Name of function to wrap
+local function lazy(mod, fn)
+  return function(...)
+    -- do_setup()
+    return require(string.format("aerial.%s", mod))[fn](...)
+  end
+end
+
+local function create_commands()
+  for _, v in pairs(commands) do
+    vim.api.nvim_create_user_command(v.cmd, lazy("command", v.func), v.def)
+  end
+end
+
 M.setup = function(opts)
   if vim.fn.has("nvim-0.8") == 0 then
     vim.notify_once(
@@ -50,7 +227,7 @@ M.setup = function(opts)
       require("aerial.backends.lsp").on_detach(args.data.client_id, args.buf)
     end,
   })
-  command.create_commands()
+  create_commands()
   highlight.create_highlight_groups()
 end
 
@@ -77,21 +254,34 @@ M.close_all = window.close_all
 
 M.close_all_but_current = window.close_all_but_current
 
--- Open the aerial window for the current buffer.
--- focus (bool): If true, jump to aerial window
--- direction (enum): "left", "right", or "float"
-M.open = function(focus, direction)
+---Open the aerial window for the current buffer.
+---@param opts nil|table
+---    focus boolean If true, jump to aerial window if it is opened (default true)
+---    direction "left"|"right"|"float" Direction to open aerial window
+M.open = function(opts, old_direction)
   was_closed = false
-  -- We get empty strings from the vim command
-  if focus == "" then
-    focus = true
-  elseif focus == "!" then
-    focus = false
+  opts = opts or {}
+  if type(opts) ~= "table" then
+    vim.notify_once(
+      "Deprecated(aerial.open): The parameters to this function have changed (see :help aerial.open)\nThese parameters will be unsupported on 2023-02-01",
+      vim.log.levels.WARN
+    )
+    local focus = opts
+    if focus == "" then
+      focus = true
+    elseif focus == "!" then
+      focus = false
+    end
+    opts = {
+      focus = focus,
+      direction = old_direction,
+    }
+  else
+    opts = vim.tbl_extend("keep", opts, {
+      focus = true,
+    })
   end
-  if direction == "" then
-    direction = nil
-  end
-  window.open(focus, direction)
+  window.open(opts.focus, opts.direction)
 end
 
 M.open_all = window.open_all
@@ -101,20 +291,34 @@ M.focus = function()
   window.focus()
 end
 
--- Open or close the aerial window for the current buffer.
--- focus (bool): If true, jump to aerial window if it is opened
--- direction (enum): "left", "right", or "float"
-M.toggle = function(focus, direction)
-  -- We get empty strings from the vim command
-  if focus == "" then
-    focus = true
-  elseif focus == "!" then
-    focus = false
+---Open or close the aerial window for the current buffer.
+---@param opts nil|table
+---    focus boolean If true, jump to aerial window if it is opened (default true)
+---    direction "left"|"right"|"float" Direction to open aerial window
+M.toggle = function(opts, old_direction)
+  opts = opts or {}
+  if type(opts) ~= "table" then
+    vim.notify_once(
+      "Deprecated(aerial.toggle): The parameters to this function have changed (see :help aerial.toggle)\nThese parameters will be unsupported on 2023-02-01",
+      vim.log.levels.WARN
+    )
+    local focus = opts
+    if focus == "" then
+      focus = true
+    elseif focus == "!" then
+      focus = false
+    end
+    opts = {
+      focus = focus,
+      direction = old_direction,
+    }
+  else
+    opts = vim.tbl_extend("keep", opts, {
+      focus = true,
+    })
   end
-  if direction == "" then
-    direction = nil
-  end
-  local opened = window.toggle(focus, direction)
+
+  local opened = window.toggle(opts.focus, opts.direction)
   was_closed = not opened
   return opened
 end
