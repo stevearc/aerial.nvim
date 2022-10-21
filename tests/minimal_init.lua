@@ -13,6 +13,10 @@ vim.cmd([[autocmd BufRead,BufNewFile *.org setfiletype org]])
 -- Neovim doesn't have built-in norg filetype detection
 vim.cmd([[autocmd BufRead,BufNewFile *.norg setfiletype norg]])
 
+local langs = {}
+for lang, _ in vim.fs.dir("queries") do
+  table.insert(langs, lang)
+end
 require("nvim-treesitter.configs").setup({
-  ensure_installed = "all",
+  ensure_installed = langs,
 })

@@ -54,7 +54,7 @@ jobs:
 
       - name: Ensure TS parsers installed
         run: |
-          nvim --headless -c "TSInstallSync all" -c "q"
+          nvim --headless -c "TSInstallSync $(ls queries)" -c "q"
 
       - name: Run tests
         run: |
