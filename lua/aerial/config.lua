@@ -73,7 +73,8 @@ local default_options = {
   },
 
   -- When true, don't load aerial until a command or function is called
-  lazy_load = false,
+  -- Defaults to true, unless `on_attach` is provided, then it defaults to false
+  lazy_load = true,
 
   -- Disable aerial on files with this many lines
   disable_max_lines = 10000,
@@ -179,12 +180,11 @@ local default_options = {
   nerd_font = "auto",
 
   -- Call this function when aerial attaches to a buffer.
-  -- Useful for setting keymaps. Takes a single `bufnr` argument.
-  on_attach = nil,
+  on_attach = function(bufnr) end,
 
   -- Call this function when aerial first sets symbols on a buffer.
   -- Takes a single `bufnr` argument.
-  on_first_symbols = nil,
+  on_first_symbols = function(bufnr) end,
 
   -- Automatically open aerial when entering supported buffers.
   -- This can be a function (see :help aerial-open-automatic)

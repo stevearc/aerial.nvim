@@ -300,6 +300,8 @@ M.setup = function(opts)
   create_commands()
 
   local is_lazy = pending_opts.lazy_load == true
+    or (pending_opts.lazy_load == nil and pending_opts.on_attach == nil)
+  pending_opts.lazy_load = is_lazy
   if not is_lazy then
     create_autocmds()
   end
