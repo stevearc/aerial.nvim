@@ -44,7 +44,7 @@ local function create_aerial_buffer(bufnr)
     [[
     au CursorMoved <buffer=%d> lua require('aerial.autocommands').on_cursor_move(true)
     au BufLeave <buffer=%d> lua require('aerial.autocommands').on_leave_aerial_buf()
-    au BufWinEnter <buffer=%d> ++nested ++once lua vim.defer_fn(function() require('aerial.render').update_aerial_buffer(%d) end, 1)
+    au BufWinEnter <buffer=%d> ++nested ++once lua require('aerial.autocommands').on_first_load(%d)
   ]],
     aer_bufnr,
     aer_bufnr,
@@ -183,7 +183,7 @@ M.is_open = function(opts)
     opts = { winid = 0 }
   end
   if opts.winid then
-    return util.get_aerial_win(opts.bufnr) ~= nil
+    return util.get_aerial_win(opts.winid) ~= nil
   else
     return get_aerial_win_for_buf(opts.bufnr) ~= nil
   end
@@ -274,8 +274,6 @@ M.open = function(focus, direction, opts)
   if not data:has_symbols(bufnr) then
     backend.fetch_symbols(bufnr)
   end
-  local my_winid = vim.api.nvim_get_current_win()
-  M.update_position(nil, my_winid)
   if focus then
     vim.api.nvim_set_current_win(aer_winid)
   end
@@ -410,10 +408,9 @@ end
 
 -- Update the cursor position for one or more windows
 -- winids can be nil, a winid, or a list of winids
+---@param winids nil|integer|integer[]
+---@param last_focused_win nil|integer
 M.update_position = function(winids, last_focused_win)
-  if not config.highlight_mode or config.highlight_mode == "none" then
-    return
-  end
   if winids == nil or winids == 0 then
     winids = { vim.api.nvim_get_current_win() }
   elseif type(winids) ~= "table" then
@@ -421,6 +418,14 @@ M.update_position = function(winids, last_focused_win)
   end
   if #winids == 0 then
     return
+  end
+  if last_focused_win == 0 then
+    last_focused_win = vim.api.nvim_get_current_win()
+  end
+  -- If the last_focused_win is actually an aerial window, instead use the source window for that
+  -- aerial win (if any)
+  if last_focused_win and util.is_aerial_win(last_focused_win) then
+    last_focused_win = util.get_source_win(last_focused_win)
   end
   local win_bufnr = vim.api.nvim_win_get_buf(winids[1])
   local bufnr, aer_bufnr = util.get_buffers(win_bufnr)
@@ -436,7 +441,7 @@ M.update_position = function(winids, last_focused_win)
     local pos = M.get_position_in_win(bufnr, target_win)
     if pos ~= nil then
       bufdata.positions[target_win] = pos
-      if last_focused_win and (last_focused_win == true or last_focused_win == target_win) then
+      if last_focused_win == target_win then
         bufdata.last_win = target_win
       end
     end
@@ -444,15 +449,15 @@ M.update_position = function(winids, last_focused_win)
 
   render.update_highlights(bufnr)
   if last_focused_win then
-    local aer_winid = util.buf_first_win_in_tabpage(aer_bufnr)
+    local aer_winid = util.get_aerial_win(last_focused_win)
     if aer_winid then
       local last_position = bufdata.positions[bufdata.last_win]
-      local lines = vim.api.nvim_buf_line_count(aer_bufnr)
+      local num_lines = vim.api.nvim_buf_line_count(aer_bufnr)
 
       -- When aerial window is global, the items can change and cursor will move
       -- before the symbols are published, which causes the line number to be
       -- invalid.
-      if last_position and lines >= last_position.lnum then
+      if last_position and num_lines >= last_position.lnum then
         vim.api.nvim_win_set_cursor(aer_winid, { last_position.lnum, 0 })
       end
     end

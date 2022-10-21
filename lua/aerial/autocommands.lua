@@ -122,8 +122,15 @@ M.on_cursor_move = function(is_aerial_buf)
   if is_aerial_buf then
     render.update_highlights(util.get_source_buffer())
   else
-    window.update_position(0, true)
+    window.update_position(0, 0)
   end
+end
+
+M.on_first_load = function(bufnr)
+  vim.defer_fn(function()
+    render.update_aerial_buffer(bufnr)
+    window.update_all_positions(bufnr, 0)
+  end, 1)
 end
 
 M.on_leave_aerial_buf = function()

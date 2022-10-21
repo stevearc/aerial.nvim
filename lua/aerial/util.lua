@@ -2,6 +2,10 @@ local config = require("aerial.config")
 
 local M = {}
 
+---@param str string
+---@param length integer
+---@param padchar nil|string
+---@return string
 M.rpad = function(str, length, padchar)
   local strlen = vim.api.nvim_strwidth(str)
   if strlen < length then
@@ -10,6 +14,10 @@ M.rpad = function(str, length, padchar)
   return str
 end
 
+---@param str string
+---@param length integer
+---@param padchar nil|string
+---@return string
 M.lpad = function(str, length, padchar)
   if string.len(str) < length then
     return string.rep(padchar or " ", length - string.len(str)) .. str
@@ -17,6 +25,8 @@ M.lpad = function(str, length, padchar)
   return str
 end
 
+---@param str string
+---@return string
 M.remove_newlines = function(str)
   return string.gsub(str, "\n", " ")
 end
@@ -36,6 +46,8 @@ M.save_width = function(bufnr, width)
   vim.api.nvim_buf_set_var(bufnr, "aerial_width", width)
 end
 
+---@param winid nil|integer
+---@return integer
 M.win_get_gutter_width = function(winid)
   winid = winid or 0
   if
@@ -48,23 +60,39 @@ M.win_get_gutter_width = function(winid)
   end
 end
 
+---@param bufnr nil|integer
+---@return boolean
 M.is_aerial_buffer = function(bufnr)
   local ft = vim.api.nvim_buf_get_option(bufnr or 0, "filetype")
   return ft == "aerial"
 end
 
+---@param winid nil|integer
+---@return boolean
+M.is_aerial_win = function(winid)
+  local bufnr = vim.api.nvim_win_get_buf(winid or 0)
+  return M.is_aerial_buffer(bufnr)
+end
+
+---@param winid nil|integer
 M.go_win_no_au = function(winid)
-  if winid == nil or winid == vim.api.nvim_get_current_win() then
+  if winid == nil or winid == 0 or winid == vim.api.nvim_get_current_win() then
     return
   end
   local winnr = vim.api.nvim_win_get_number(winid)
   vim.cmd(string.format("noau %dwincmd w", winnr))
 end
 
+---@param bufnr nil|integer
 M.go_buf_no_au = function(bufnr)
+  if bufnr == nil or bufnr == 0 or bufnr == vim.api.nvim_get_current_buf() then
+    return
+  end
   vim.cmd(string.format("noau b %d", bufnr))
 end
 
+---@param bufnr integer
+---@return nil|integer
 M.buf_first_win_in_tabpage = function(bufnr)
   for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
     if vim.api.nvim_win_is_valid(winid) and vim.api.nvim_win_get_buf(winid) == bufnr then
@@ -177,15 +205,21 @@ M.get_non_ignored_fixed_wins = function(bufnr)
   end, M.get_fixed_wins(bufnr))
 end
 
+---@param winid nil|integer
+---@return boolean
 M.is_floating_win = function(winid)
   return vim.api.nvim_win_get_config(winid or 0).relative ~= ""
 end
 
+---@param filetype string
+---@return boolean
 M.is_ignored_filetype = function(filetype)
   local ignore = config.ignore
   return ignore.filetypes and vim.tbl_contains(ignore.filetypes, filetype)
 end
 
+---@param bufnr nil|integer
+---@return boolean
 M.is_ignored_buf = function(bufnr)
   bufnr = bufnr or 0
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
@@ -219,6 +253,8 @@ M.is_ignored_buf = function(bufnr)
   return false
 end
 
+---@param winid nil|integer
+---@return boolean
 M.is_ignored_win = function(winid)
   winid = winid or 0
   local bufnr = vim.api.nvim_win_get_buf(winid)
@@ -239,6 +275,8 @@ M.is_ignored_win = function(winid)
   return false
 end
 
+---@param winid nil|integer
+---@return boolean
 M.is_managing_folds = function(winid)
   return vim.api.nvim_win_get_option(winid or 0, "foldexpr") == "v:lua.aerial_foldexpr()"
 end
