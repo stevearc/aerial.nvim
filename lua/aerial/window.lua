@@ -1,5 +1,5 @@
 local backends = require("aerial.backends")
-local bindings = require("aerial.bindings")
+local keymap_util = require("aerial.keymap_util")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local layout = require("aerial.layout")
@@ -15,17 +15,7 @@ local function create_aerial_buffer(bufnr)
   end
   local aer_bufnr = vim.api.nvim_create_buf(false, true)
 
-  if config.default_bindings then
-    for _, binding in ipairs(bindings.keys) do
-      local keys, command, _ = unpack(binding)
-      if type(keys) == "string" then
-        keys = { keys }
-      end
-      for _, key in ipairs(keys) do
-        vim.keymap.set("n", key, command, { buffer = aer_bufnr })
-      end
-    end
-  end
+  keymap_util.set_keymaps("", config.keymaps, aer_bufnr)
   vim.api.nvim_buf_set_var(bufnr, "aerial_buffer", aer_bufnr)
   -- Set buffer options
   vim.api.nvim_buf_set_var(aer_bufnr, "source_buffer", bufnr)

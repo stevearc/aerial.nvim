@@ -3,9 +3,6 @@ local default_options = {
   -- This can be a filetype map (see :help aerial-filetype-map)
   backends = { "treesitter", "lsp", "markdown", "man" },
 
-  -- When true, don't load aerial until a command or function is called
-  lazy_load = false,
-
   layout = {
     -- These control the width of the aerial window.
     -- They can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
@@ -38,8 +35,45 @@ local default_options = {
   --   unsupported   - close aerial when attaching to a buffer that has no symbol source
   close_automatic_events = {},
 
-  -- Set to false to remove the default keybindings for the aerial buffer
-  default_bindings = true,
+  -- Keymaps in aerial window. Can be any value that `vim.keymap.set` accepts.
+  -- Additionally, if it is a string that matches "aerial.<name>",
+  -- it will use the function at require("aerial.action").<name>
+  -- Set to `false` to remove a keymap
+  keymaps = {
+    ["?"] = "actions.show_help",
+    ["g?"] = "actions.show_help",
+    ["<CR>"] = "actions.jump",
+    ["<2-LeftMouse>"] = "actions.jump",
+    ["<C-v>"] = "actions.jump_vsplit",
+    ["<C-s>"] = "actions.jump_split",
+    ["p"] = "actions.scroll",
+    ["<C-j>"] = "actions.down_and_scroll",
+    ["<C-k>"] = "actions.up_and_scroll",
+    ["{"] = "actions.prev",
+    ["}"] = "actions.next",
+    ["[["] = "actions.prev_up",
+    ["]]"] = "actions.next_up",
+    ["q"] = "actions.close",
+    ["o"] = "actions.tree_toggle",
+    ["za"] = "actions.tree_toggle",
+    ["O"] = "actions.tree_toggle_recursive",
+    ["zA"] = "actions.tree_toggle_recursive",
+    ["l"] = "actions.tree_open",
+    ["zo"] = "actions.tree_open",
+    ["L"] = "actions.tree_open_recursive",
+    ["zO"] = "actions.tree_open_recursive",
+    ["h"] = "actions.tree_close",
+    ["zc"] = "actions.tree_close",
+    ["H"] = "actions.tree_close_recursive",
+    ["zC"] = "actions.tree_close_recursive",
+    ["zR"] = "actions.tree_open_all",
+    ["zM"] = "actions.tree_close_all",
+    ["zx"] = "actions.tree_sync_folds",
+    ["zX"] = "actions.tree_sync_folds",
+  },
+
+  -- When true, don't load aerial until a command or function is called
+  lazy_load = false,
 
   -- Disable aerial on files with this many lines
   disable_max_lines = 10000,
@@ -326,11 +360,19 @@ local function create_filetype_opt_getter(option, default)
 end
 
 local function compat_move_option(opts, key, nested_key)
-  -- TODO: deprecation warning for users to move the option
   if opts[key] ~= nil then
     opts[nested_key] = opts[nested_key] or {}
     opts[nested_key][key] = opts[key]
     opts[key] = nil
+    vim.notify_once(
+      string.format(
+        "Deprecated(aerial.config.%s) has moved to config.%s.%s\nSupport will be removed on 2023-02-01",
+        key,
+        nested_key,
+        key
+      ),
+      vim.log.levels.WARN
+    )
   end
 end
 
@@ -366,8 +408,11 @@ M.setup = function(opts)
   compat_move_option(opts, "min_width", "layout")
   compat_move_option(opts, "default_direction", "layout")
   if opts.placement_editor_edge ~= nil then
-    -- TODO: deprecation warning
     opts.layout.placement = opts.placement_editor_edge and "edge" or "window"
+    vim.notify_once(
+      "Deprecated(aerial.config.placement_editor_edge) has moved to config.layout.placement\nSupport will be removed on 2023-02-01",
+      vim.log.levels.WARN
+    )
   end
   compat_move_option(opts, "placement_editor_edge", "layout")
 
@@ -382,10 +427,18 @@ M.setup = function(opts)
       opts.close_automatic_events = { "unsupported" }
     end
     opts.close_behavior = nil
-    vim.notify(
-      "Deprecated[aerial]: close_behavior is deprecated. See :help aerial-close-behavior",
+    vim.notify_once(
+      "Deprecated(aerial.config.close_behavior): See :help aerial-close-behavior.\nThis option will be removed on 2023-02-01",
       vim.log.levels.WARN
     )
+  end
+
+  if opts.default_bindings == false then
+    vim.notify_once(
+      "Deprecated(aerial.config.default_bindings): Use config.keymaps to adjust aerial window keymaps.\nThis option will be removed on 2023-02-01",
+      vim.log.levels.WARN
+    )
+    opts.keymaps = {}
   end
 
   local newconf = vim.tbl_deep_extend("force", default_options, opts)
@@ -397,8 +450,8 @@ M.setup = function(opts)
   )
   newconf.layout.placement = assert_enum(newconf.layout.placement, { "window", "edge", "group" })
   if newconf.layout.placement == "group" then
-    vim.notify(
-      "Deprecated: aerial.layout.placement = 'group'. If 'global' or 'window' do not fit your workflow, please file an issue https://github.com/stevearc/aerial.nvim/issues/new",
+    vim.notify_once(
+      "Deprecated(aerial.config.layout.placement = 'group'). If 'global' or 'window' do not fit your workflow, please file an issue https://github.com/stevearc/aerial.nvim/issues/new\nOtherwise, this option will be removed on 2023-02-01",
       vim.log.levels.WARN
     )
   end
@@ -451,8 +504,8 @@ M.setup = function(opts)
     or newconf.open_automatic_min_symbols
     or type(newconf.open_automatic) == "table"
   then
-    vim.notify(
-      "Deprecated: open_automatic should be a boolean or function. See :help aerial-open-automatic",
+    vim.notify_once(
+      "Deprecated(aerial.config.open_automatic) should be a boolean or function. See :help aerial-open-automatic.\nThis will be required as of 2023-02-01",
       vim.log.levels.WARN
     )
     newconf.open_automatic_min_symbols = nil
@@ -477,8 +530,8 @@ M.setup = function(opts)
   end
 
   if newconf.float.row or newconf.float.col then
-    vim.notify(
-      "Deprecated: Aerial float.row and float.col are no longer used. Use float.override to customize layout",
+    vim.notify_once(
+      "Deprecated(aerial.config.float) float.row and float.col are no longer used. Use float.override to customize layout.\nThis message will be removed on 2023-02-01",
       vim.log.levels.WARN
     )
   end

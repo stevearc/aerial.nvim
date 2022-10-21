@@ -47,11 +47,11 @@ M.prev = function(params)
 end
 
 M.next_up = function(params)
-  require("aerial").up(1, params.count)
+  require("aerial").next_up(params.count)
 end
 
 M.prev_up = function(params)
-  require("aerial").up(-1, params.count)
+  require("aerial").prev_up(params.count)
 end
 
 M.go = function(params)

@@ -8,7 +8,6 @@ A code outline window for skimming and quick navigation
   - [Keymaps](#keymaps)
 - [Commands](#commands)
 - [Options](#options)
-- [Default keybindings](#default-keybindings)
 - [Third-party integrations](#third-party-integrations)
   - [Telescope](#telescope)
   - [Fzf](#fzf)
@@ -428,39 +427,6 @@ All possible SymbolKind values can be found [in the LSP
 spec](https://microsoft.github.io/language-server-protocol/specifications/specification-3-17/#symbolKind).
 These are the values used for configuring icons, highlight groups, and
 filtering.
-
-## Default Keybindings
-
-The default keybindings in the aerial window. You can add your own in
-`ftplugin/aerial.vim`, and remove these by setting `default_bindings = false`.
-The default bindings are set in
-[bindings.lua](https://github.com/stevearc/aerial.nvim/blob/master/lua/aerial/bindings.lua#L4),
-which you can use as a reference if you want to set your own bindings.
-
-| Key             | Command                                                        |
-| --------------- | -------------------------------------------------------------- |
-| `?`/`g?`        | Show default keymaps                                           |
-| `<CR>`          | Jump to the symbol under the cursor                            |
-| `<C-v>`         | Jump to the symbol in a vertical split                         |
-| `<C-s>`         | Jump to the symbol in a horizontal split                       |
-| `p`             | Scroll to the symbol (stay in aerial buffer)                   |
-| `<C-j>`         | Go down one line and scroll to that symbol                     |
-| `<C-k>`         | Go up one line and scroll to that symbol                       |
-| `{`             | Jump to the previous symbol                                    |
-| `}`             | Jump to the next symbol                                        |
-| `[[`            | Jump up the tree, moving backwards                             |
-| `]]`            | Jump up the tree, moving forwards                              |
-| `q`             | Close the aerial window                                        |
-| `o`/`za`        | Toggle the symbol under the cursor open/closed                 |
-| `O`/`zA`        | Recursive toggle the symbol under the cursor open/closed       |
-| `l`/`zo`        | Expand the symbol under the cursor                             |
-| `L`/`zO`        | Recursive expand the symbol under the cursor                   |
-| `h`/`zc`        | Collapse the symbol under the cursor                           |
-| `H`/`zC`        | Recursive collapse the symbol under the cursor                 |
-| `zR`            | Expand all nodes in the tree                                   |
-| `zM`            | Collapse all nodes in the tree                                 |
-| `zx`/`zX`       | Sync code folding to the tree (useful if they get out of sync) |
-| `<2-LeftMouse>` | Jump to the symbol under the cursor                            |
 
 ## Third-party integrations
 

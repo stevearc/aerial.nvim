@@ -399,7 +399,7 @@ end
 ---    index nil|integer The symbol to jump to. If nil, will jump to the symbol under the cursor (in the aerial buffer)
 ---    split nil|string Jump to the symbol in a new split. Can be "v" for vertical or "h" for horizontal. Can also be a raw command to execute (e.g. "belowright split")
 ---    jump nil|boolean If false and in the aerial window, do not leave the aerial window. (Default true)
-M.select = lazy("navigation", select)
+M.select = lazy("navigation", "select")
 
 ---Jump forwards in the symbol list.
 ---@param step nil|integer Number of symbols to jump by (default 1)
@@ -410,9 +410,31 @@ M.next = lazy("navigation", "next")
 M.prev = lazy("navigation", "prev")
 
 ---Jump to a symbol higher in the tree
+---@deprecated
 ---@param direction integer -1 for backwards or 1 for forwards
 ---@param count nil|integer How many levels to jump up (default 1)
-M.up = lazy("navigation", "up")
+M.up = function(...)
+  do_setup()
+  vim.notify_once(
+    "Deprecated(aerial.up): use aerial.next_up and aerial.prev_up instead\nThis function will be removed on 2023-02-01",
+    vim.log.levels.WARN
+  )
+  require("aerial.navigation").up(...)
+end
+
+---Jump to a symbol higher in the tree, moving forwards
+---@param count nil|integer How many levels to jump up (default 1)
+M.next_up = function(count)
+  do_setup()
+  require("aerial.navigation").up(1, count)
+end
+
+---Jump to a symbol higher in the tree, moving backwards
+---@param count nil|integer How many levels to jump up (default 1)
+M.prev_up = function(count)
+  do_setup()
+  require("aerial.navigation").up(-1, count)
+end
 
 ---@deprecated
 M.on_attach = function(...)
