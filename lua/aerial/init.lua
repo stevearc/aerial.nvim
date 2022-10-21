@@ -33,6 +33,23 @@ M.setup = function(opts)
       require("aerial.autocommands").on_enter_buffer()
     end,
   })
+  vim.api.nvim_create_autocmd("LspAttach", {
+    desc = "Aerial mark LSP backend as available",
+    pattern = "*",
+    group = group,
+    callback = function(args)
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+      require("aerial.backends.lsp").on_attach(client, args.buf)
+    end,
+  })
+  vim.api.nvim_create_autocmd("LspDetach", {
+    desc = "Aerial mark LSP backend as unavailable",
+    pattern = "*",
+    group = group,
+    callback = function(args)
+      require("aerial.backends.lsp").on_detach(args.data.client_id, args.buf)
+    end,
+  })
   command.create_commands()
   highlight.create_highlight_groups()
 end
@@ -127,9 +144,12 @@ M.up = function(direction, count)
   nav.up(direction, count)
 end
 
--- This LSP on_attach function must be called in order to use the LSP backend
+---@deprecated
 M.on_attach = function(...)
-  require("aerial.backends.lsp").on_attach(...)
+  vim.notify_once(
+    "Deprecated(aerial.on_attach): you no longer need to call this function\nThis function will be removed on 2023-02-01",
+    vim.log.levels.WARN
+  )
 end
 
 -- Returns a list representing the symbol path to the current location.
@@ -293,8 +313,8 @@ end
 
 -- Register a callback to be called when aerial is attached to a buffer.
 M.register_attach_cb = function(callback)
-  vim.notify(
-    "Deprecated(register_attach_cb): pass `on_attach` to aerial.setup() instead (see :help aerial)",
+  vim.notify_once(
+    "Deprecated(aerial.register_attach_cb): pass `on_attach` to aerial.setup() instead (see :help aerial)\nThis function will be removed on 2023-02-01",
     vim.log.levels.WARN
   )
   config.on_attach = callback

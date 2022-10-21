@@ -5,9 +5,6 @@ A code outline window for skimming and quick navigation
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Setup](#setup)
-  - [Treesitter](#treesitter)
-  - [LSP](#lsp)
-  - [Markdown](#markdown)
   - [Keymaps](#keymaps)
 - [Commands](#commands)
 - [Options](#options)
@@ -103,20 +100,10 @@ Somewhere in your init.lua you will need to call `aerial.setup()`. See below for
 require('aerial').setup({})
 ```
 
-In addition, you will need to follow the setup steps for at least one of the
-symbol sources listed below. You can configure your preferred source(s) with the
-`backends` option (see [Options](#options)). The default is to prefer Treesitter
-when it's available and fall back to LSP.
-
-### Treesitter
-
-First ensure you have
-[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) installed
-and configured for all languages you want to support. That's all! Aerial will
-automatically fetch symbols from treesitter.
+In addition, you will need to have either Treesitter or a working LSP client. You can configure your preferred source(s) with the `backends` option (see [Options](#options)). The default is to prefer Treesitter when it's available and fall back to LSP.
 
 <details>
-  <summary>Supported languages</summary>
+  <summary>Supported treesitter languages</summary>
 
 - bash
 - c
@@ -152,40 +139,6 @@ Don't see your language here? [Request support for
 it](https://github.com/stevearc/aerial.nvim/issues/new?assignees=stevearc&labels=enhancement&template=feature-request--treesitter-language-.md&title=)
 
 </details>
-
-### LSP
-
-First ensure you have a functioning LSP setup (see
-[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)). Once complete, add
-the aerial `on_attach` callback to your config:
-
-```lua
--- Set up your LSP clients here, using the aerial on_attach method
-require("lspconfig").vimls.setup{
-  on_attach = require("aerial").on_attach,
-}
--- Repeat this for each language server you have configured
-```
-
-If you have your own custom `on_attach` function, call aerial's `on_attach` from
-inside it:
-
-```lua
-local function my_custom_attach(client, bufnr)
-  -- your code here
-  require("aerial").on_attach(client, bufnr)
-end
-```
-
-### Markdown
-
-There is a simple custom backend that does rudimentary parsing of markdown
-headers. It should work well enough in most cases, but does not parse the full
-markdown spec.
-
-There is now an experimental [treesitter parser for
-markdown](https://github.com/nvim-treesitter/nvim-treesitter/issues/872), so you
-can install that and try the treesitter backend instead.
 
 ### Keymaps
 
