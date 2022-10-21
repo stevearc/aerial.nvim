@@ -30,7 +30,7 @@ local function aerial_picker(opts)
   if not backend then
     backends.log_support_err()
     return
-  elseif not data:has_symbols(0) then
+  elseif not data.has_symbols(0) then
     backend.fetch_symbols_sync(0, opts)
   end
 
@@ -78,8 +78,8 @@ local function aerial_picker(opts)
 
   local results = {}
   local default_selection_index = 1
-  if data:has_symbols(0) then
-    local symbols = data:get_or_create(0)
+  if data.has_symbols(0) then
+    local symbols = data.get_or_create(0)
     local position = symbols.positions[symbols.last_win]
     local i = 1
     symbols:visit(function(item)

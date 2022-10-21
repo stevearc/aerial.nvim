@@ -135,7 +135,7 @@ M.symbol_callback = function(_err, result, context, _config)
   -- or we have no symbols for this buffer
   if
     not config.lsp.update_when_errors
-    and data:has_symbols(bufnr)
+    and data.has_symbols(bufnr)
     and get_error_count(bufnr, client_id) > 0
   then
     return
@@ -168,7 +168,7 @@ M.on_publish_diagnostics = function(_err, result, ctx, _config)
 
   -- Don't update if there are diagnostics errors, unless config option is set
   -- or we have no symbols for this buffer
-  if not config.lsp.update_when_errors and data:has_symbols(bufnr) then
+  if not config.lsp.update_when_errors and data.has_symbols(bufnr) then
     for _, diagnostic in ipairs(result.diagnostics) do
       local severity = diagnostic.severity
       if type(severity) == "string" then

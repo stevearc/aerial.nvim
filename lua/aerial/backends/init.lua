@@ -102,7 +102,7 @@ local function attach(bufnr, backend, name, existing_backend_name)
     local loading = require("aerial.loading")
     local util = require("aerial.util")
     local aer_bufnr = util.get_aerial_buffer(bufnr)
-    loading.set_loading(aer_bufnr, not data:has_received_data(bufnr))
+    loading.set_loading(aer_bufnr, not data.has_received_data(bufnr))
   end
   if not existing_backend_name and config.on_attach then
     config.on_attach(bufnr)
@@ -139,8 +139,8 @@ M.set_symbols = function(bufnr, items)
   local util = require("aerial.util")
   local window = require("aerial.window")
 
-  local had_symbols = data:has_symbols(bufnr)
-  data[bufnr].items = items
+  local had_symbols = data.has_symbols(bufnr)
+  data.set_symbols(bufnr, items)
   loading.set_loading(util.get_aerial_buffer(bufnr), false)
 
   render.update_aerial_buffer(bufnr)

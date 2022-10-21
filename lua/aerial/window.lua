@@ -67,7 +67,7 @@ local function create_aerial_buffer(bufnr)
     end,
   })
 
-  if not data:has_symbols(bufnr) then
+  if not data.has_symbols(bufnr) then
     loading.set_loading(aer_bufnr, true)
   end
   return aer_bufnr
@@ -178,7 +178,7 @@ M.open_aerial_in_win = function(src_bufnr, src_winid, aer_winid)
   setup_aerial_win(src_winid, aer_winid, aer_bufnr)
   vim.api.nvim_win_set_buf(aer_winid, aer_bufnr)
   local backend = backends.get(src_bufnr)
-  if backend and not data:has_symbols(src_bufnr) then
+  if backend and not data.has_symbols(src_bufnr) then
     backend.fetch_symbols(src_bufnr)
   end
 end
@@ -218,7 +218,7 @@ M.close = function()
     local backend = backends.get(0)
     -- If this buffer has no supported symbols backend or no symbols,
     -- look for other aerial windows and close the first
-    if backend == nil or not data:has_symbols(0) then
+    if backend == nil or not data.has_symbols(0) then
       for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
         if vim.api.nvim_win_is_valid(winid) then
           local winbuf = vim.api.nvim_win_get_buf(winid)
@@ -287,7 +287,7 @@ M.open = function(focus, direction, opts)
   end
   direction = direction or util.detect_split_direction()
   local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction, opts.winid or aerial_win)
-  if not data:has_symbols(bufnr) then
+  if not data.has_symbols(bufnr) then
     backend.fetch_symbols(bufnr)
   end
   if focus then
@@ -341,7 +341,7 @@ M.get_position_in_win = function(bufnr, winid)
   local cursor = vim.api.nvim_win_get_cursor(winid or 0)
   local lnum = cursor[1]
   local col = cursor[2]
-  local bufdata = data:get_or_create(bufnr)
+  local bufdata = data.get_or_create(bufnr)
   return M.get_symbol_position(bufdata, lnum, col)
 end
 
@@ -445,14 +445,14 @@ M.update_position = function(winids, last_focused_win)
   end
   local win_bufnr = vim.api.nvim_win_get_buf(winids[1])
   local bufnr, aer_bufnr = util.get_buffers(win_bufnr)
-  if not data:has_symbols(bufnr) then
+  if not data.has_symbols(bufnr) then
     return
   end
   if util.is_aerial_buffer(win_bufnr) then
     winids = util.get_non_ignored_fixed_wins(bufnr)
   end
 
-  local bufdata = data[bufnr]
+  local bufdata = data.get_or_create(bufnr)
   for _, target_win in ipairs(winids) do
     local pos = M.get_position_in_win(bufnr, target_win)
     if pos ~= nil then

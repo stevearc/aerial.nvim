@@ -23,7 +23,7 @@ end
 local fold_cache = {}
 
 local function compute_folds(bufnr)
-  local bufdata = data[bufnr]
+  local bufdata = data.get_or_create(bufnr)
   local fold_levels = {}
   local line_no = 1
 
@@ -62,7 +62,7 @@ M.foldexpr = function()
   if util.is_aerial_buffer() then
     return "0"
   end
-  if not data:has_symbols(0) then
+  if not data.has_symbols(0) then
     return "0"
   end
   local bufnr = vim.api.nvim_get_current_buf()
@@ -100,7 +100,7 @@ M.maybe_set_foldmethod = function(bufnr)
   if not manage_folds then
     return
   end
-  if not data:has_symbols(bufnr) then
+  if not data.has_symbols(bufnr) then
     return
   end
   local winids
@@ -137,7 +137,7 @@ M.sync_tree_folds = function(winid)
   util.go_win_no_au(winid)
   local view = vim.fn.winsaveview()
   vim.cmd("normal! zxzR")
-  local bufdata = data[0]
+  local bufdata = data.get_or_create(0)
   local items = bufdata:flatten(nil, { incl_hidden = true })
   table.sort(items, function(a, b)
     return a.level > b.level

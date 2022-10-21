@@ -74,7 +74,7 @@ M.update_aerial_buffer = function(buf)
     resize_all_wins(aer_bufnr)
     return
   end
-  if not data:has_symbols(bufnr) then
+  if not data.has_symbols(bufnr) then
     local lines = { "No symbols" }
     if backends.get(bufnr) then
       if config.lsp.filter_kind ~= false then
@@ -99,7 +99,7 @@ M.update_aerial_buffer = function(buf)
       return len
     end,
   })
-  data[bufnr]:visit(function(item, conf)
+  data.get_or_create(bufnr):visit(function(item, conf)
     local kind = config.get_icon(bufnr, item.kind, conf.collapsed)
     local spacing
     if config.show_guides then
@@ -177,10 +177,10 @@ M.update_highlights = function(buf)
     return
   end
   local bufnr, aer_bufnr = util.get_buffers(buf)
-  if not data:has_symbols(bufnr) or aer_bufnr == -1 then
+  if not data.has_symbols(bufnr) or aer_bufnr == -1 then
     return
   end
-  local bufdata = data[bufnr]
+  local bufdata = data.get_or_create(bufnr)
   local winids = util.get_fixed_wins(bufnr)
   -- Take out any winids that don't have position data
   winids = vim.tbl_filter(function(wid)
@@ -224,7 +224,7 @@ M.update_highlights = function(buf)
   if config.highlight_on_hover and aer_bufnr == vim.api.nvim_get_current_buf() then
     M.clear_highlights(bufnr)
     local cursor = vim.api.nvim_win_get_cursor(0)
-    local item = data[0]:item(cursor[1])
+    local item = data.get_or_create(0):item(cursor[1])
     vim.api.nvim_buf_add_highlight(bufnr, ns, "AerialLine", item.lnum - 1, 0, -1)
   end
 end

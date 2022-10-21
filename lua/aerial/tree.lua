@@ -105,13 +105,13 @@ M.tree_cmd = function(action, opts)
     item = pos.exact_symbol
   end
   if item == nil then
-    item = data[0]:item(index)
+    item = data.get_or_create(0):item(index)
   end
   if not item then
     return
   end
   local lnum = item.lnum
-  local did_update, new_cursor_pos = edit_tree_node(data[0], action, index, opts)
+  local did_update, new_cursor_pos = edit_tree_node(data.get_or_create(0), action, index, opts)
   if did_update then
     if config.link_tree_to_folds and opts.fold then
       fold.fold_action(action, lnum, {
@@ -127,10 +127,10 @@ end
 ---@param level integer 0 is all closed, use 99 to open all
 M.set_collapse_level = function(bufnr, level)
   bufnr = util.get_buffers(bufnr or 0)
-  if not data:has_symbols(bufnr) then
+  if not data.has_symbols(bufnr) then
     return
   end
-  data[bufnr].collapse_level = level
+  data.get_or_create(bufnr).collapse_level = level
   if config.link_tree_to_folds then
     for _, winid in ipairs(vim.api.nvim_list_wins()) do
       if vim.api.nvim_win_get_buf(winid) == bufnr then
@@ -143,10 +143,10 @@ end
 
 M.open_all = function(bufnr)
   bufnr = util.get_buffers(bufnr or 0)
-  if not data:has_symbols(bufnr) then
+  if not data.has_symbols(bufnr) then
     return
   end
-  data[bufnr]:clear_collapsed()
+  data.get_or_create(bufnr):clear_collapsed()
   M.tree_set_collapse_level(bufnr, 99)
 end
 
@@ -154,10 +154,10 @@ end
 ---@param bufnr nil|integer
 M.close_all = function(bufnr)
   bufnr = util.get_buffers(bufnr or 0)
-  if not data:has_symbols(bufnr) then
+  if not data.has_symbols(bufnr) then
     return
   end
-  data[bufnr]:clear_collapsed()
+  data.get_or_create(bufnr):clear_collapsed()
   M.tree_set_collapse_level(bufnr, 0)
 end
 

@@ -12,8 +12,8 @@ describe("config", function()
       col = 0,
       end_col = 3,
     }
-    local bufdata = data.create()
-    bufdata.items = { sym }
+    data.set_symbols(0, {sym})
+    local bufdata = data.get_or_create(0)
     local ret = window.get_symbol_position(bufdata, 1, 0)
     assert.are.same({ lnum = 1, closest_symbol = sym, relative = "above" }, ret)
   end)
@@ -27,8 +27,8 @@ describe("config", function()
       col = 0,
       end_col = 3,
     }
-    local bufdata = data.create()
-    bufdata.items = { sym }
+    data.set_symbols(0, {sym})
+    local bufdata = data.get_or_create(0)
     local ret = window.get_symbol_position(bufdata, 12, 0)
     assert.are.same({ lnum = 1, closest_symbol = sym, relative = "below" }, ret)
   end)
@@ -51,8 +51,8 @@ describe("config", function()
       col = 0,
       end_col = 3,
     }
-    local bufdata = data.create()
-    bufdata.items = { sym, sym2 }
+    data.set_symbols(0, {sym, sym2})
+    local bufdata = data.get_or_create(0)
     local ret = window.get_symbol_position(bufdata, 12, 0)
     assert.are.same({ lnum = 1, closest_symbol = sym, relative = "below" }, ret)
   end)
@@ -66,8 +66,8 @@ describe("config", function()
       col = 0,
       end_col = 3,
     }
-    local bufdata = data.create()
-    bufdata.items = { sym }
+    data.set_symbols(0, {sym)
+    local bufdata = data.get_or_create(0)
     local ret = window.get_symbol_position(bufdata, 8, 0)
     assert.are.same({ lnum = 1, closest_symbol = sym, exact_symbol = sym, relative = "exact" }, ret)
   end)
@@ -92,8 +92,8 @@ describe("config", function()
       children = { sym },
     }
     sym.parent = parent
-    local bufdata = data.create()
-    bufdata.items = { parent }
+    data.set_symbols(0, {parent})
+    local bufdata = data.get_or_create(0)
     local ret = window.get_symbol_position(bufdata, 11, 0)
     assert.are.same(
       { lnum = 2, closest_symbol = sym, exact_symbol = parent, relative = "below" },
@@ -131,8 +131,8 @@ describe("config", function()
         end_col = 12,
       },
     }
-    local bufdata = data.create()
-    bufdata.items = { var1, var2 }
+    data.set_symbols(0, {var1, var2})
+    local bufdata = data.get_or_create(0)
     local ret = window.get_symbol_position(bufdata, 10, 6)
     assert.are.same(
       { lnum = 2, closest_symbol = var2, exact_symbol = var2, relative = "below" },

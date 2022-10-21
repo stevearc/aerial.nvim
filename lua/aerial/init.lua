@@ -383,11 +383,11 @@ M.get_location = function(exact)
   if exact == nil then
     exact = true
   end
-  if not data:has_symbols(0) then
+  if not data.has_symbols(0) then
     return {}
   end
   local winid = vim.api.nvim_get_current_win()
-  local bufdata = data:get_or_create(0)
+  local bufdata = data.get_or_create(0)
   local cur = vim.api.nvim_win_get_cursor(winid)
   local pos = window.get_symbol_position(bufdata, cur[1], cur[2], true)
   if not pos then
@@ -475,8 +475,8 @@ M.num_symbols = function(bufnr)
   do_setup()
   bufnr = bufnr or 0
   local data = require("aerial.data")
-  if data:has_symbols(bufnr) then
-    return data:get_or_create(bufnr):count()
+  if data.has_symbols(bufnr) then
+    return data.get_or_create(bufnr):count()
   else
     return 0
   end

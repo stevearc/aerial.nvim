@@ -35,7 +35,7 @@ M.test_file_symbols = function(backend_name, filename, expected)
   vim.cmd(string.format("edit %s", filename))
   local backend = backends.get(0)
   backend.fetch_symbols_sync()
-  local items = data[0].items
+  local items = data.get_or_create(0).items
   vim.api.nvim_buf_delete(0, { force = true })
   M.assert_tree_equals(items, expected)
 end

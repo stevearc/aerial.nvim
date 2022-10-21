@@ -7,8 +7,8 @@ local M = {}
 
 local function _get_current_lnum(winid)
   local bufnr = vim.api.nvim_get_current_buf()
-  if data:has_symbols(bufnr) then
-    local bufdata = data[bufnr]
+  if data.has_symbols(bufnr) then
+    local bufdata = data.get_or_create(bufnr)
     local cached_lnum = bufdata.positions[winid]
     if cached_lnum then
       return cached_lnum
@@ -18,7 +18,7 @@ local function _get_current_lnum(winid)
   if util.is_aerial_buffer(bufnr) then
     bufnr = util.get_source_buffer()
   end
-  if data:has_symbols(bufnr) then
+  if data.has_symbols(bufnr) then
     return window.get_position_in_win(bufnr, winid)
   else
     return nil
@@ -64,7 +64,7 @@ M.up = function(direction, count)
     return
   end
   local bufnr, _ = util.get_buffers()
-  local bufdata = data[bufnr]
+  local bufdata = data.get_or_create(bufnr)
 
   local index = 1
   -- We're going up and BACKWARDS
@@ -149,7 +149,7 @@ M.next = function(step)
   end
   local bufnr, _ = util.get_buffers()
 
-  local count = data[bufnr]:count()
+  local count = data.get_or_create(bufnr):count()
   -- If we're not *exactly* on a location, make sure we hit the nearest location
   -- first even if we're currently considered to be "on" it
   if step < 0 and pos.relative == "below" then
@@ -186,13 +186,13 @@ M.select = function(opts)
     if util.is_aerial_buffer() then
       opts.index = vim.api.nvim_win_get_cursor(0)[1]
     else
-      local bufdata = data[0]
+      local bufdata = data.get_or_create(0)
       opts.index = bufdata.positions[winid].lnum
     end
     opts.index = opts.index or 1
   end
 
-  local item = data:get_or_create(0):item(opts.index)
+  local item = data.get_or_create(0):item(opts.index)
   if not item then
     error(string.format("Symbol %s is outside the bounds", opts.index))
     return

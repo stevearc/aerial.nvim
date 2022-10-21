@@ -1,20 +1,17 @@
 -- Functions that are called in response to autocommands
-local backends = require("aerial.backends")
-local config = require("aerial.config")
-local data = require("aerial.data")
-local fold = require("aerial.fold")
 local util = require("aerial.util")
-local window = require("aerial.window")
 
 local M = {}
 
 local maybe_open_automatic = util.throttle(function()
-  window.maybe_open_automatic()
+  require("aerial.window").maybe_open_automatic()
 end, { delay = 5, reset_timer_on_call = true })
 
 ---@param aer_win integer
 ---@return boolean
 local function should_close_aerial(aer_win)
+  local backends = require("aerial.backends")
+  local config = require("aerial.config")
   local aer_buf = vim.api.nvim_win_get_buf(aer_win)
   local src_win = util.get_source_win(aer_win)
   -- If the aerial window has no valid source window, close it
@@ -40,6 +37,8 @@ local function should_close_aerial(aer_win)
 end
 
 local function update_aerial_windows()
+  local config = require("aerial.config")
+  local window = require("aerial.window")
   for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
     if not vim.api.nvim_win_is_valid(winid) then
       goto continue
@@ -77,6 +76,10 @@ local function update_aerial_windows()
 end
 
 M.on_enter_buffer = util.throttle(function()
+  local backends = require("aerial.backends")
+  local config = require("aerial.config")
+  local fold = require("aerial.fold")
+  local window = require("aerial.window")
   backends.attach()
   if util.is_ignored_win() then
     return
@@ -114,10 +117,16 @@ M.on_enter_buffer = util.throttle(function()
 end, { delay = 10, reset_timer_on_call = true })
 
 M.attach_autocommands = function(bufnr)
+  local data = require("aerial.data")
+  local window = require("aerial.window")
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  local group = vim.api.nvim_create_augroup("AerialBuffer", {})
+  local group = vim.api.nvim_create_augroup("AerialBuffer", { clear = false })
+  vim.api.nvim_clear_autocmds({
+    buffer = bufnr,
+    group = group,
+  })
   vim.api.nvim_create_autocmd("CursorMoved", {
     desc = "Aerial update highlights in window when cursor moves",
     buffer = bufnr,
@@ -131,7 +140,7 @@ M.attach_autocommands = function(bufnr)
     buffer = bufnr,
     group = group,
     callback = function()
-      data[bufnr] = nil
+      data.delete_buf(bufnr)
     end,
   })
 end

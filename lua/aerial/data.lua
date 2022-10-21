@@ -68,7 +68,7 @@ end
 
 ---@param item aerial.Symbol
 ---@return string
-function BufData:_get_item_key(item)
+local function _get_item_key(item)
   local key = string.format("%s:%s", item.kind, item.name)
   while item.parent do
     item = item.parent
@@ -84,14 +84,14 @@ end
 ---@param item aerial.Symbol
 ---@return boolean
 function BufData:is_collapsed(item)
-  local key = self:_get_item_key(item)
+  local key = _get_item_key(item)
   return self.collapsed[key] or (self.collapse_level <= item.level and self.collapsed[key] ~= false)
 end
 
 ---@param item aerial.Symbol
 ---@param collapsed boolean
 function BufData:set_collapsed(item, collapsed)
-  local key = self:_get_item_key(item)
+  local key = _get_item_key(item)
   self.collapsed[key] = collapsed
 end
 
@@ -99,15 +99,6 @@ end
 ---@return boolean
 function BufData:is_collapsable(item)
   return config.manage_folds or (item.children and not vim.tbl_isempty(item.children))
-end
-
----@param item aerial.Symbol
----@return aerial.Symbol
-function BufData:get_root_of(item)
-  while item.parent do
-    item = item.parent
-  end
-  return item
 end
 
 ---@generic T
@@ -171,64 +162,63 @@ function BufData:count(incl_hidden)
   return count
 end
 
-local Data = setmetatable({}, {
-  __index = function(t, buf)
-    return t:get_or_create(buf)
-  end,
-})
+local buf_to_symbols = {}
+
+local M = {}
 
 ---@return aerial.BufData
-function Data.create()
-  return BufData:new()
+function M.create()
+  return BufData.new()
 end
 
----@param buf integer
+---@param buf nil|integer
 ---@return aerial.BufData
-function Data:get_or_create(buf)
+function M.get_or_create(buf)
+  buf = buf or 0
   local bufnr, _ = util.get_buffers(buf)
-  local bufdata = rawget(self, bufnr)
+  local bufdata = buf_to_symbols[bufnr]
   if not bufdata then
-    bufdata = BufData:new()
+    bufdata = BufData.new()
     if bufnr then
-      self[bufnr] = bufdata
+      buf_to_symbols[bufnr] = bufdata
     end
   end
   return bufdata
 end
 
----@param buf integer
+---@param buf nil|integer
 ---@param items aerial.Symbol[]
-function Data:set_symbols(buf, items)
-  local bufdata = self:get_or_create(buf)
+function M.set_symbols(buf, items)
+  local bufdata = M.get_or_create(buf)
   bufdata.items = items
 end
 
----@param buf integer
-function Data:delete_buf(buf)
+---@param buf nil|integer
+function M.delete_buf(buf)
   local bufnr, _ = util.get_buffers(buf)
   if bufnr then
-    self[bufnr] = nil
+    buf_to_symbols[bufnr] = nil
   end
 end
 
 ---@param bufnr integer
 ---@return boolean
-function Data:has_received_data(bufnr)
+function M.has_received_data(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  local bufdata = rawget(self, bufnr)
+  local bufdata = buf_to_symbols[bufnr]
   return bufdata ~= nil
 end
 
 ---@param bufnr integer
 ---@return boolean
-function Data:has_symbols(bufnr)
+function M.has_symbols(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  local bufdata = rawget(self, bufnr)
+  local bufdata = buf_to_symbols[bufnr]
   return bufdata ~= nil and bufdata.items[1] ~= nil
 end
 
-return Data
+return M
