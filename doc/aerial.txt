@@ -197,7 +197,6 @@ OPTIONS                                                           *aerial-option
       on_attach = function(bufnr) end,
     
       -- Call this function when aerial first sets symbols on a buffer.
-      -- Takes a single `bufnr` argument.
       on_first_symbols = function(bufnr) end,
     
       -- Automatically open aerial when entering supported buffers.
@@ -210,11 +209,11 @@ OPTIONS                                                           *aerial-option
       -- When true, aerial will automatically close after jumping to a symbol
       close_on_select = false,
     
-      -- Show box drawing characters for the tree hierarchy
-      show_guides = false,
-    
       -- The autocmds that trigger symbols update (not used for LSP backend)
       update_events = "TextChanged,InsertLeave",
+    
+      -- Show box drawing characters for the tree hierarchy
+      show_guides = false,
     
       -- Customize the characters used when show_guides = true
       guides = {
