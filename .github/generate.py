@@ -1,31 +1,24 @@
-import json
 import os
 import os.path
 import re
-import subprocess
 from functools import lru_cache
 from typing import List
 
 from nvim_doc_tools import (
     Command,
-    LuaParam,
     Vimdoc,
     VimdocSection,
     commands_from_json,
-    dedent,
     format_md_commands,
-    format_md_table,
     format_vimdoc_commands,
     generate_md_toc,
     indent,
-    leftright,
     parse_functions,
     read_nvim_json,
     read_section,
     render_md_api,
     render_vimdoc_api,
     replace_section,
-    wrap,
 )
 
 HERE = os.path.dirname(__file__)
@@ -60,6 +53,13 @@ def update_config_options():
     )
 
 
+def add_md_link_path(path: str, lines: List[str]) -> List[str]:
+    ret = []
+    for line in lines:
+        ret.append(re.sub(r"(\(#)", "(" + path + "#", line))
+    return ret
+
+
 def update_md_api():
     funcs = parse_functions(os.path.join(ROOT, "lua", "aerial", "init.lua"))
     lines = ["\n"] + render_md_api(funcs, 2) + ["\n"]
@@ -77,6 +77,7 @@ def update_md_api():
         r"^<!-- /TOC -->$",
         toc,
     )
+    toc = add_md_link_path("doc/api.md", toc)
     replace_section(
         README,
         r"^<!-- API -->$",
