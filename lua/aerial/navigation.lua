@@ -130,10 +130,8 @@ M.up = function(direction, count)
 end
 
 M.prev = function(step)
-  if step then
-    step = -1 * step
-  end
-  M.next(step)
+  step = step or 1
+  M.next(-1 * step)
 end
 
 M.next = function(step)
