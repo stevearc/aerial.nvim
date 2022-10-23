@@ -155,7 +155,7 @@ M.open_all = function(bufnr)
     return
   end
   data.get_or_create(bufnr):clear_collapsed()
-  M.tree_set_collapse_level(bufnr, 99)
+  M.set_collapse_level(bufnr, 99)
 end
 
 ---Collapse all nodes in the symbol tree
@@ -166,7 +166,7 @@ M.close_all = function(bufnr)
     return
   end
   data.get_or_create(bufnr):clear_collapsed()
-  M.tree_set_collapse_level(bufnr, 0)
+  M.set_collapse_level(bufnr, 0)
 end
 
 return M
