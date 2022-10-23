@@ -6,7 +6,7 @@ local M = {}
 ---@param bufnr nil|integer
 M.add_fold_mappings = function(bufnr)
   bufnr = bufnr or 0
-  if config.link_folds_to_tree then
+  if config.manage_folds(bufnr) and config.link_folds_to_tree then
     local aerial = require("aerial")
     local tree = require("aerial.tree")
     vim.keymap.set("n", "za", tree.toggle, { buffer = bufnr })
@@ -98,7 +98,7 @@ M.restore_foldmethod = function()
 end
 
 M.maybe_set_foldmethod = function(bufnr)
-  local manage_folds = config.manage_folds
+  local manage_folds = config.manage_folds(bufnr)
   if not manage_folds then
     return
   end

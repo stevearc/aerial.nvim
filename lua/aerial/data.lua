@@ -20,6 +20,7 @@ local config = require("aerial.config")
 ---@field children? aerial.Symbol[]
 
 ---@class aerial.BufData
+---@field bufnr integer
 ---@field items aerial.Symbol[]
 ---@field positions any
 ---@field last_win integer
@@ -27,14 +28,18 @@ local config = require("aerial.config")
 ---@field collapse_level integer
 local BufData = {}
 
-function BufData.new()
+---@param bufnr integer
+function BufData.new(bufnr)
   local new = {
+    bufnr = bufnr,
     items = {},
     positions = {},
     last_win = -1,
     collapsed = {},
     collapse_level = 99,
   }
+  -- cache the evaluation of managing folds
+  new.manage_folds = config.manage_folds(bufnr)
   setmetatable(new, { __index = BufData })
   return new
 end
@@ -98,7 +103,7 @@ end
 ---@param item aerial.Symbol
 ---@return boolean
 function BufData:is_collapsable(item)
-  return config.manage_folds or (item.children and not vim.tbl_isempty(item.children))
+  return self.manage_folds or (item.children and not vim.tbl_isempty(item.children))
 end
 
 ---@generic T
@@ -166,11 +171,6 @@ local buf_to_symbols = {}
 
 local M = {}
 
----@return aerial.BufData
-function M.create()
-  return BufData.new()
-end
-
 ---@param buf nil|integer
 ---@return aerial.BufData
 function M.get_or_create(buf)
@@ -178,7 +178,7 @@ function M.get_or_create(buf)
   local bufnr, _ = util.get_buffers(buf)
   local bufdata = buf_to_symbols[bufnr]
   if not bufdata then
-    bufdata = BufData.new()
+    bufdata = BufData.new(bufnr)
     if bufnr then
       buf_to_symbols[bufnr] = bufdata
     end

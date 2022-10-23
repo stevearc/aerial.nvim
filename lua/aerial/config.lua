@@ -163,6 +163,11 @@ local default_options = {
     wintypes = "special",
   },
 
+  -- Use symbol tree for folding. Set to true or false to enable/disable
+  -- Set to "auto" to manage folds if your previous foldmethod was 'manual'
+  -- This can be a filetype map (see :help aerial-filetype-map)
+  manage_folds = false,
+
   -- When you fold code with za, zo, or zc, update the aerial tree as well.
   -- Only works when manage_folds = true
   link_folds_to_tree = false,
@@ -170,10 +175,6 @@ local default_options = {
   -- Fold code when you open/collapse symbols in the tree.
   -- Only works when manage_folds = true
   link_tree_to_folds = true,
-
-  -- Use symbol tree for folding. Set to true or false to enable/disable
-  -- 'auto' will manage folds if your previous foldmethod was 'manual'
-  manage_folds = false,
 
   -- Set default symbol icons to use patched font icons (see https://www.nerdfonts.com/)
   -- "auto" will set it to true if nvim-web-devicons or lspkind-nvim is installed.
@@ -479,12 +480,6 @@ M.setup = function(opts)
     newconf.use_lspkind = true
   end
 
-  -- If not managing folds, don't link either direction
-  if newconf.manage_folds == false then
-    newconf.link_tree_to_folds = false
-    newconf.link_folds_to_tree = false
-  end
-
   -- for backwards compatibility
   for k, _ in pairs(default_options.lsp) do
     if newconf[k] ~= nil then
@@ -538,6 +533,7 @@ M.setup = function(opts)
   for k, v in pairs(newconf) do
     M[k] = v
   end
+  M.manage_folds = create_filetype_opt_getter(M.manage_folds, default_options.manage_folds)
   M.backends = create_filetype_opt_getter(M.backends, default_options.backends)
   local get_filter_kind_list =
     create_filetype_opt_getter(M.filter_kind, default_options.filter_kind)
