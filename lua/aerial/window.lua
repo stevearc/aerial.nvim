@@ -53,6 +53,19 @@ local function create_aerial_buffer(bufnr)
       vim.defer_fn(function()
         render.update_aerial_buffer(aer_bufnr)
         M.update_all_positions(bufnr, 0)
+        -- Center the current symbol after the first render
+        local bufdata = data.get_or_create(bufnr)
+        local last_position = bufdata.positions[bufdata.last_win]
+        local lnum = last_position.lnum
+        if vim.api.nvim_win_is_valid(bufdata.last_win) then
+          local height = vim.api.nvim_win_get_height(bufdata.last_win)
+          local max_topline = vim.api.nvim_buf_line_count(aer_bufnr) - height
+          local topline = math.max(1, math.min(max_topline, lnum - math.floor(height / 2)))
+          local aerial_win = util.buf_first_win_in_tabpage(aer_bufnr)
+          vim.api.nvim_win_call(aerial_win, function()
+            vim.fn.winrestview({ lnum = lnum, topline = topline })
+          end)
+        end
       end, 1)
     end,
   })
