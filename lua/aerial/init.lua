@@ -84,8 +84,8 @@ local commands = {
     cmd = "AerialNextUp",
     func = "next_up",
     deprecated = {
-      alternative = "aerial.up()",
-      help = "aerial.up",
+      alternative = "aerial.next_up()",
+      help = "aerial.next_up",
     },
     defn = {
       desc = "Jump up the tree [count] levels, moving forwards in the file (default 1).",
@@ -96,8 +96,8 @@ local commands = {
     cmd = "AerialPrevUp",
     func = "next_up",
     deprecated = {
-      alternative = "aerial.up()",
-      help = "aerial.up",
+      alternative = "aerial.prev_up()",
+      help = "aerial.prev_up",
     },
     defn = {
       desc = "Jump up the tree [count] levels, moving backwards in the file (default 1).",
