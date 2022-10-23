@@ -22,6 +22,7 @@ local config = require("aerial.config")
 ---@class aerial.BufData
 ---@field bufnr integer
 ---@field items aerial.Symbol[]
+---@field flat_items aerial.Symbol[]
 ---@field positions any
 ---@field last_win integer
 ---@field collapsed table<string, boolean>
@@ -33,6 +34,7 @@ function BufData.new(bufnr)
   local new = {
     bufnr = bufnr,
     items = {},
+    flat_items = {},
     positions = {},
     last_win = -1,
     collapsed = {},
@@ -71,17 +73,6 @@ function BufData:indexof(target)
   end)
 end
 
----@param item aerial.Symbol
----@return string
-local function _get_item_key(item)
-  local key = string.format("%s:%s", item.kind, item.name)
-  while item.parent do
-    item = item.parent
-    key = string.format("%s:%s", item.name, key)
-  end
-  return key
-end
-
 function BufData:clear_collapsed()
   self.collapsed = {}
 end
@@ -89,15 +80,14 @@ end
 ---@param item aerial.Symbol
 ---@return boolean
 function BufData:is_collapsed(item)
-  local key = _get_item_key(item)
-  return self.collapsed[key] or (self.collapse_level <= item.level and self.collapsed[key] ~= false)
+  return self.collapsed[item.id]
+    or (self.collapse_level <= item.level and self.collapsed[item.id] ~= false)
 end
 
 ---@param item aerial.Symbol
 ---@param collapsed boolean
 function BufData:set_collapsed(item, collapsed)
-  local key = _get_item_key(item)
-  self.collapsed[key] = collapsed
+  self.collapsed[item.id] = collapsed
 end
 
 ---@param item aerial.Symbol
@@ -160,6 +150,9 @@ end
 ---@param incl_hidden boolean
 ---@return integer
 function BufData:count(incl_hidden)
+  if incl_hidden then
+    return #self.flat_items
+  end
   local count = 0
   self:visit(function(_)
     count = count + 1
@@ -170,6 +163,14 @@ end
 local buf_to_symbols = {}
 
 local M = {}
+
+---@param buf nil|integer
+---@return nil|aerial.BufData
+function M.get(buf)
+  buf = buf or 0
+  local bufnr, _ = util.get_buffers(buf)
+  return buf_to_symbols[bufnr]
+end
 
 ---@param buf nil|integer
 ---@return aerial.BufData
@@ -191,6 +192,10 @@ end
 function M.set_symbols(buf, items)
   local bufdata = M.get_or_create(buf)
   bufdata.items = items
+  bufdata.flat_items = bufdata:flatten(nil, { incl_hidden = true })
+  for i, item in ipairs(bufdata.flat_items) do
+    item.id = string.format("%d:%s", i, item.name)
+  end
 end
 
 ---@param buf nil|integer
@@ -201,23 +206,18 @@ function M.delete_buf(buf)
   end
 end
 
+---Return true if the backend has finished fetching symbols
 ---@param bufnr integer
 ---@return boolean
 function M.has_received_data(bufnr)
-  if not bufnr or bufnr == 0 then
-    bufnr = vim.api.nvim_get_current_buf()
-  end
-  local bufdata = buf_to_symbols[bufnr]
-  return bufdata ~= nil
+  return M.get(bufnr) ~= nil
 end
 
+---Return true if the buffer has any symbols
 ---@param bufnr integer
 ---@return boolean
 function M.has_symbols(bufnr)
-  if not bufnr or bufnr == 0 then
-    bufnr = vim.api.nvim_get_current_buf()
-  end
-  local bufdata = buf_to_symbols[bufnr]
+  local bufdata = M.get(bufnr)
   return bufdata ~= nil and bufdata.items[1] ~= nil
 end
 
