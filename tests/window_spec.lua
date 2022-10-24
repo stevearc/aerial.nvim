@@ -1,7 +1,11 @@
+local config = require("aerial.config")
 local data = require("aerial.data")
 local window = require("aerial.window")
 
 describe("config", function()
+  before_each(function()
+    config.setup()
+  end)
   it("cursor above first symbol", function()
     local sym = {
       kind = "Function",
