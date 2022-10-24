@@ -117,6 +117,20 @@ M.tree_close_recursive = {
   end,
 }
 
+M.tree_increase_fold_level = {
+  desc = "Increase the fold level of the tree",
+  callback = function()
+    aerial.tree_increase_fold_level(0, vim.v.count)
+  end,
+}
+
+M.tree_decrease_fold_level = {
+  desc = "Decrease the fold level of the tree",
+  callback = function(params)
+    aerial.tree_decrease_fold_level(0, vim.v.count)
+  end,
+}
+
 M.tree_open_all = {
   desc = "Expand all nodes in the tree",
   callback = aerial.tree_open_all,

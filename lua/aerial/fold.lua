@@ -6,34 +6,72 @@ local M = {}
 ---@param bufnr nil|integer
 M.add_fold_mappings = function(bufnr)
   bufnr = bufnr or 0
+  if bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
   if config.manage_folds(bufnr) and config.link_folds_to_tree then
     local aerial = require("aerial")
-    vim.keymap.set("n", "za", aerial.tree_toggle, { buffer = bufnr, desc = "[aerial] toggle fold" })
-    vim.keymap.set("n", "zA", function()
-      aerial.tree_toggle({ recurse = true })
-    end, { buffer = bufnr, desc = "[aerial] toggle fold recursively" })
-    vim.keymap.set("n", "zo", aerial.tree_open, { buffer = bufnr, desc = "[aerial] open fold" })
-    vim.keymap.set("n", "zO", function()
-      aerial.tree_open({ recurse = true })
-    end, { buffer = bufnr, desc = "[aerial] open fold recursively" })
-    vim.keymap.set("n", "zc", aerial.tree_close, { buffer = bufnr, desc = "[aerial] close fold" })
-    vim.keymap.set("n", "zC", function()
-      aerial.tree_close({ recurse = true })
-    end, { buffer = bufnr, desc = "[aerial] close fold recursively" })
-    vim.keymap.set(
-      "n",
-      "zM",
-      aerial.tree_close_all,
-      { buffer = bufnr, desc = "[aerial] close all folds" }
-    )
-    vim.keymap.set(
-      "n",
-      "zR",
-      aerial.tree_open_all,
-      { buffer = bufnr, desc = "[aerial] open all folds" }
-    )
-    vim.keymap.set("n", "zx", aerial.sync_folds, { buffer = bufnr, desc = "[aerial] sync folds" })
-    vim.keymap.set("n", "zX", aerial.sync_folds, { buffer = bufnr, desc = "[aerial] sync folds" })
+
+    local maps = {
+      za = { aerial.tree_toggle, "[aerial] toggle fold" },
+      zA = {
+        function()
+          aerial.tree_toggle({ recurse = true })
+        end,
+        "[aerial] toggle fold recursively",
+      },
+      zo = { aerial.tree_open, "[aerial] open fold" },
+      zO = {
+        function()
+          aerial.tree_open({ recurse = true })
+        end,
+        "[aerial] open fold recursively",
+      },
+      zc = { aerial.tree_close, "[aerial] close fold" },
+      zC = {
+        function()
+          aerial.tree_close({ recurse = true })
+        end,
+        "[aerial] close fold recursively",
+      },
+      zm = {
+        function()
+          aerial.tree_decrease_fold_level(0, vim.v.count)
+        end,
+        "[aerial] decrease fold level",
+      },
+      zM = { aerial.tree_close_all, "[aerial] close all folds" },
+      zr = {
+        function()
+          aerial.tree_increase_fold_level(0, vim.v.count)
+        end,
+        "[aerial] increase fold level",
+      },
+      zR = { aerial.tree_open_all, "[aerial] open all folds" },
+      zx = { aerial.sync_folds, "[aerial] sync folds" },
+      zX = { aerial.sync_folds, "[aerial] sync folds" },
+    }
+    for lhs, v in pairs(maps) do
+      local callback, desc = unpack(v)
+      if not config.link_tree_to_folds then
+        local orig_cb = callback
+        callback = function()
+          vim.cmd(string.format("normal! %s", lhs))
+          orig_cb()
+        end
+      end
+      vim.keymap.set("n", lhs, callback, { buffer = bufnr, desc = desc })
+    end
+
+    local group = vim.api.nvim_create_augroup("AerialFoldListener", {})
+    vim.api.nvim_create_autocmd("OptionSet", {
+      pattern = "foldlevel",
+      group = group,
+      desc = "Aerial update tree folds based on foldlevel",
+      callback = function()
+        aerial.tree_set_collapse_level(0, tonumber(vim.v.option_new))
+      end,
+    })
   end
 end
 
@@ -211,8 +249,15 @@ M.fold_action = function(action, lnum, opts)
   })
   local my_winid = vim.api.nvim_get_current_win()
   local wins
-  local bufnr, _ = util.get_buffers()
-  wins = util.get_fixed_wins(bufnr)
+  if config.attach_mode == "global" then
+    local bufnr = util.get_buffers()
+    wins = vim.tbl_filter(function(winid)
+      return vim.api.nvim_win_is_valid(winid) and vim.api.nvim_win_get_buf(winid) == bufnr
+    end, vim.api.nvim_list_wins())
+  else
+    local source_win = util.get_winids(my_winid)
+    wins = { source_win }
+  end
   for _, winid in ipairs(wins) do
     if util.is_managing_folds(winid) then
       win_do_action(winid, action, lnum, opts.recurse)

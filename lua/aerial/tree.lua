@@ -138,15 +138,53 @@ M.set_collapse_level = function(bufnr, level)
   if not data.has_symbols(bufnr) then
     return
   end
-  data.get_or_create(bufnr).collapse_level = level
+  local bufdata = data.get_or_create(bufnr)
+  level = bufdata:set_fold_level(level)
   if config.link_tree_to_folds then
-    for _, winid in ipairs(vim.api.nvim_list_wins()) do
-      if vim.api.nvim_win_get_buf(winid) == bufnr then
-        vim.api.nvim_win_set_option(winid, "foldlevel", level)
+    local wins
+    if config.attach_mode == "global" then
+      wins = vim.tbl_filter(function(winid)
+        return vim.api.nvim_win_is_valid(winid) and vim.api.nvim_win_get_buf(winid) == bufnr
+      end, vim.api.nvim_list_wins())
+    else
+      local source_win = util.get_winids(0)
+      if vim.api.nvim_win_get_buf(source_win) == bufnr then
+        wins = { source_win }
+      else
+        wins = util.get_fixed_wins(bufnr)
+        -- Hacky way to only use the first window found
+        wins[2] = nil
       end
+    end
+
+    for _, winid in ipairs(wins) do
+      vim.api.nvim_win_set_option(winid, "foldlevel", level)
     end
   end
   _post_tree_mutate(bufnr)
+end
+
+M.increase_fold_level = function(bufnr, count)
+  count = math.max(1, count or 1)
+  bufnr = util.get_buffers(bufnr or 0)
+  if not data.has_symbols(bufnr) then
+    return
+  end
+  local bufdata = data.get_or_create(bufnr)
+  M.set_collapse_level(bufnr, bufdata.collapse_level + count)
+end
+
+M.decrease_fold_level = function(bufnr, count)
+  count = math.max(1, count or 1)
+  bufnr = util.get_buffers(bufnr or 0)
+  if not data.has_symbols(bufnr) then
+    return
+  end
+  local bufdata = data.get_or_create(bufnr)
+  -- If the current level is 99, start the decrement from the max level instead
+  -- (+1 because the leaves can actually be folded/collapsed)
+  local start = math.min(bufdata.collapse_level, bufdata.max_level + 1)
+  M.set_collapse_level(bufnr, start - count)
 end
 
 M.open_all = function(bufnr)

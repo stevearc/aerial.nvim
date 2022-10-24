@@ -27,6 +27,7 @@ local config = require("aerial.config")
 ---@field last_win integer
 ---@field collapsed table<string, boolean>
 ---@field collapse_level integer
+---@field max_level integer
 local BufData = {}
 
 ---@param bufnr integer
@@ -76,11 +77,7 @@ end
 ---@param item aerial.Symbol
 ---@return boolean
 function BufData:is_collapsed(item)
-  return item
-    and (
-      self.collapsed[item.id]
-      or (self.collapse_level <= item.level and self.collapsed[item.id] ~= false)
-    )
+  return item and self.collapsed[item.id]
 end
 
 ---@param item aerial.Symbol
@@ -93,6 +90,16 @@ end
 ---@return boolean
 function BufData:is_collapsable(item)
   return self.manage_folds or (item.children and not vim.tbl_isempty(item.children))
+end
+
+---@param level integer
+function BufData:set_fold_level(level)
+  level = math.min(99, math.max(0, level))
+  self.collapse_level = level
+  for _, item in ipairs(self.flat_items) do
+    self:set_collapsed(item, level <= item.level)
+  end
+  return level
 end
 
 function BufData:_next_non_collapsed(item)
@@ -187,13 +194,16 @@ end
 ---@param buf nil|integer
 ---@param items aerial.Symbol[]
 function M.set_symbols(buf, items)
-  local bufdata = M.get_or_create(buf)
+  local bufnr = util.get_buffers(buf)
+  local bufdata = M.get_or_create(bufnr)
   bufdata.items = items
   bufdata.flat_items = {}
+  bufdata.max_level = 0
   local i = 1
   bufdata:visit(function(item)
     item.idx = i
     item.id = string.format("%d:%s", i, item.name)
+    bufdata.max_level = math.max(bufdata.max_level, item.level)
     table.insert(bufdata.flat_items, item)
     i = i + 1
     if item.children then

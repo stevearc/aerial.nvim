@@ -508,6 +508,16 @@ M.tree_open_all = lazy("tree", "open_all")
 ---@param level integer 0 is all closed, use 99 to open all
 M.tree_set_collapse_level = lazy("tree", "set_collapse_level")
 
+---Increase the fold level of the symbol tree
+---@param bufnr integer
+---@param count nil|integer
+M.tree_increase_fold_level = lazy("tree", "increase_fold_level")
+
+---Decrease the fold level of the symbol tree
+---@param bufnr integer
+---@param count nil|integer
+M.tree_decrease_fold_level = lazy("tree", "decrease_fold_level")
+
 ---Open the tree at the selected location
 ---@param opts nil|table
 ---    index nil|integer The index of the symbol to perform the action on. Defaults to cursor location.
