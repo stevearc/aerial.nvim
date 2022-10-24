@@ -40,6 +40,8 @@ aerial.sync_folds	aerial.txt	/*aerial.sync_folds*
 aerial.toggle	aerial.txt	/*aerial.toggle*
 aerial.tree_close	aerial.txt	/*aerial.tree_close*
 aerial.tree_close_all	aerial.txt	/*aerial.tree_close_all*
+aerial.tree_decrease_fold_level	aerial.txt	/*aerial.tree_decrease_fold_level*
+aerial.tree_increase_fold_level	aerial.txt	/*aerial.tree_increase_fold_level*
 aerial.tree_open	aerial.txt	/*aerial.tree_open*
 aerial.tree_open_all	aerial.txt	/*aerial.tree_open_all*
 aerial.tree_set_collapse_level	aerial.txt	/*aerial.tree_set_collapse_level*

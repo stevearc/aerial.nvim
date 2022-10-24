@@ -80,7 +80,9 @@ OPTIONS                                                           *aerial-option
         ["zc"] = "actions.tree_close",
         ["H"] = "actions.tree_close_recursive",
         ["zC"] = "actions.tree_close_recursive",
+        ["zr"] = "actions.tree_increase_fold_level",
         ["zR"] = "actions.tree_open_all",
+        ["zm"] = "actions.tree_decrease_fold_level",
         ["zM"] = "actions.tree_close_all",
         ["zx"] = "actions.tree_sync_folds",
         ["zX"] = "actions.tree_sync_folds",
@@ -446,6 +448,20 @@ tree_set_collapse_level({bufnr}, {level})         *aerial.tree_set_collapse_leve
     Parameters:
       {bufnr} `integer`
       {level} `integer` 0 is all closed, use 99 to open all
+
+tree_increase_fold_level({bufnr}, {count})       *aerial.tree_increase_fold_level*
+    Increase the fold level of the symbol tree
+
+    Parameters:
+      {bufnr} `integer`
+      {count} `nil|integer`
+
+tree_decrease_fold_level({bufnr}, {count})       *aerial.tree_decrease_fold_level*
+    Decrease the fold level of the symbol tree
+
+    Parameters:
+      {bufnr} `integer`
+      {count} `nil|integer`
 
 tree_open({opts})                                               *aerial.tree_open*
     Open the tree at the selected location

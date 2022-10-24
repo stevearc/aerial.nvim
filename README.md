@@ -240,7 +240,9 @@ require("aerial").setup({
     ["zc"] = "actions.tree_close",
     ["H"] = "actions.tree_close_recursive",
     ["zC"] = "actions.tree_close_recursive",
+    ["zr"] = "actions.tree_increase_fold_level",
     ["zR"] = "actions.tree_open_all",
+    ["zm"] = "actions.tree_decrease_fold_level",
     ["zM"] = "actions.tree_close_all",
     ["zx"] = "actions.tree_sync_folds",
     ["zX"] = "actions.tree_sync_folds",
@@ -577,6 +579,8 @@ hi AerialGuide2 guifg=Blue
 - [tree_close_all(bufnr)](doc/api.md#tree_close_allbufnr)
 - [tree_open_all(bufnr)](doc/api.md#tree_open_allbufnr)
 - [tree_set_collapse_level(bufnr, level)](doc/api.md#tree_set_collapse_levelbufnr-level)
+- [tree_increase_fold_level(bufnr, count)](doc/api.md#tree_increase_fold_levelbufnr-count)
+- [tree_decrease_fold_level(bufnr, count)](doc/api.md#tree_decrease_fold_levelbufnr-count)
 - [tree_open(opts)](doc/api.md#tree_openopts)
 - [tree_close(opts)](doc/api.md#tree_closeopts)
 - [tree_toggle(opts)](doc/api.md#tree_toggleopts)

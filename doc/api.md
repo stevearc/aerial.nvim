@@ -20,6 +20,8 @@
 - [tree_close_all(bufnr)](#tree_close_allbufnr)
 - [tree_open_all(bufnr)](#tree_open_allbufnr)
 - [tree_set_collapse_level(bufnr, level)](#tree_set_collapse_levelbufnr-level)
+- [tree_increase_fold_level(bufnr, count)](#tree_increase_fold_levelbufnr-count)
+- [tree_decrease_fold_level(bufnr, count)](#tree_decrease_fold_levelbufnr-count)
 - [tree_open(opts)](#tree_openopts)
 - [tree_close(opts)](#tree_closeopts)
 - [tree_toggle(opts)](#tree_toggleopts)
@@ -202,6 +204,26 @@ Set the collapse level of the symbol tree
 | ----- | --------- | ----------------------------------- |
 | bufnr | `integer` |                                     |
 | level | `integer` | 0 is all closed, use 99 to open all |
+
+## tree_increase_fold_level(bufnr, count)
+
+`tree_increase_fold_level(bufnr, count)` \
+Increase the fold level of the symbol tree
+
+| Param | Type           | Desc |
+| ----- | -------------- | ---- |
+| bufnr | `integer`      |      |
+| count | `nil\|integer` |      |
+
+## tree_decrease_fold_level(bufnr, count)
+
+`tree_decrease_fold_level(bufnr, count)` \
+Decrease the fold level of the symbol tree
+
+| Param | Type           | Desc |
+| ----- | -------------- | ---- |
+| bufnr | `integer`      |      |
+| count | `nil\|integer` |      |
 
 ## tree_open(opts)
 
