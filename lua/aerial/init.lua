@@ -581,7 +581,7 @@ M.num_symbols = function(bufnr)
   bufnr = bufnr or 0
   local data = require("aerial.data")
   if data.has_symbols(bufnr) then
-    return data.get_or_create(bufnr):count(true)
+    return data.get_or_create(bufnr):count({ skip_hidden = false })
   else
     return 0
   end

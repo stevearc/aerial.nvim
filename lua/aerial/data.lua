@@ -49,13 +49,11 @@ end
 ---@param idx integer
 ---@return aerial.Symbol|nil
 function BufData:item(idx)
-  local i = 1
-  return self:visit(function(item)
+  for _, item, i in self:iter({ skip_hidden = true }) do
     if i == idx then
       return item
     end
-    i = i + 1
-  end)
+  end
 end
 
 ---@param target? aerial.Symbol
@@ -64,13 +62,11 @@ function BufData:indexof(target)
   if target == nil then
     return nil
   end
-  local i = 1
-  return self:visit(function(item)
+  for _, item, i in self:iter({ skip_hidden = true }) do
     if item == target then
       return i
     end
-    i = i + 1
-  end)
+  end
 end
 
 function BufData:clear_collapsed()
@@ -80,8 +76,11 @@ end
 ---@param item aerial.Symbol
 ---@return boolean
 function BufData:is_collapsed(item)
-  return self.collapsed[item.id]
-    or (self.collapse_level <= item.level and self.collapsed[item.id] ~= false)
+  return item
+    and (
+      self.collapsed[item.id]
+      or (self.collapse_level <= item.level and self.collapsed[item.id] ~= false)
+    )
 end
 
 ---@param item aerial.Symbol
@@ -96,67 +95,65 @@ function BufData:is_collapsable(item)
   return self.manage_folds or (item.children and not vim.tbl_isempty(item.children))
 end
 
----@generic T
----@param callback fun(item: aerial.Symbol, ctx: {collapsed: boolean, is_last_by_level: boolean}): T
----@param opts? {incl_hidden: boolean|nil}
----@return T
-function BufData:visit(callback, opts)
-  opts = vim.tbl_extend("keep", opts or {}, {
-    incl_hidden = false,
-  })
-  -- Stack of bools where each one indicates if the item at that level is the
-  -- last of its siblings
-  local is_last_by_level = {}
-  local function visit_item(item)
-    local ret = callback(item, {
-      collapsed = self:is_collapsed(item),
-      is_last_by_level = is_last_by_level,
-    })
-    if ret then
-      return ret
+function BufData:_next_non_collapsed(item)
+  while item do
+    if item.next_sibling then
+      return item.next_sibling
     end
-    if item.children and (opts.incl_hidden or not self:is_collapsed(item)) then
-      local children_len = #item.children
-      for i, child in ipairs(item.children) do
-        is_last_by_level[child.level] = i == children_len
-        ret = visit_item(child)
-        if ret then
-          return ret
-        end
+    item = item.parent
+  end
+end
+
+function BufData:iter(opts)
+  opts = vim.tbl_extend("keep", opts or {}, {
+    skip_hidden = true,
+  })
+  local j = 0
+  return function(_, i, a, b)
+    i = i + 1
+    j = j + 1
+    local item = self.flat_items[i]
+    if opts.skip_hidden and item and self:is_collapsed(item.parent) then
+      item = self:_next_non_collapsed(item.parent)
+    end
+    if item then
+      return item.idx, item, j
+    else
+      return nil, nil, nil
+    end
+  end,
+    nil,
+    0
+end
+
+---@param callback fun(item: aerial.Symbol)
+function BufData:visit(callback)
+  local function visit_item(item)
+    callback(item)
+    if item.children then
+      for _, child in ipairs(item.children) do
+        visit_item(child)
       end
     end
   end
   for _, item in ipairs(self.items) do
-    local ret = visit_item(item)
-    if ret then
-      return ret
-    end
+    visit_item(item)
   end
 end
 
----@param filter fun(item: aerial.Symbol): boolean
----@param opts? {incl_hidden: boolean|nil}
----@return aerial.Symbol[]
-function BufData:flatten(filter, opts)
-  local items = {}
-  self:visit(function(item)
-    if not filter or filter(item) then
-      table.insert(items, item)
-    end
-  end, opts)
-  return items
-end
-
----@param incl_hidden boolean
+---@param include_hidden boolean
 ---@return integer
-function BufData:count(incl_hidden)
-  if incl_hidden then
+function BufData:count(opts)
+  opts = vim.tbl_extend("keep", opts or {}, {
+    skip_hidden = true,
+  })
+  if not opts.skip_hidden then
     return #self.flat_items
   end
   local count = 0
-  self:visit(function(_)
-    count = count + 1
-  end, { incl_hidden = incl_hidden })
+  for _, _, i in self:iter(opts) do
+    count = i
+  end
   return count
 end
 
@@ -192,10 +189,23 @@ end
 function M.set_symbols(buf, items)
   local bufdata = M.get_or_create(buf)
   bufdata.items = items
-  bufdata.flat_items = bufdata:flatten(nil, { incl_hidden = true })
-  for i, item in ipairs(bufdata.flat_items) do
+  bufdata.flat_items = {}
+  local i = 1
+  bufdata:visit(function(item)
+    item.idx = i
     item.id = string.format("%d:%s", i, item.name)
-  end
+    table.insert(bufdata.flat_items, item)
+    i = i + 1
+    if item.children then
+      local child
+      for _, next_sibling in ipairs(item.children) do
+        if child then
+          child.next_sibling = next_sibling
+        end
+        child = next_sibling
+      end
+    end
+  end)
 end
 
 ---@param buf nil|integer

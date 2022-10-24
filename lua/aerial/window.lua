@@ -386,7 +386,9 @@ M.get_symbol_position = function(bufdata, lnum, col, include_hidden)
   local relative = "above"
   local prev = nil
   local exact_symbol
-  local symbol = bufdata:visit(function(item)
+
+  local symbol
+  for _, item in bufdata:iter({ skip_hidden = not include_hidden }) do
     local cmp, inside = compare(item, lnum, col)
     if inside then
       exact_symbol = item
@@ -399,13 +401,15 @@ M.get_symbol_position = function(bufdata, lnum, col, include_hidden)
     elseif cmp == 0 then
       selected = selected + 1
       relative = "exact"
-      return item
+      symbol = item
+      break
     else
-      return prev or item
+      symbol = prev or item
+      break
     end
     prev = item
     selected = selected + 1
-  end, { incl_hidden = include_hidden })
+  end
   -- Check if we're on the last symbol
   if symbol == nil then
     symbol = prev

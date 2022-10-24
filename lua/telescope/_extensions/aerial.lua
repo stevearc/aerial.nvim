@@ -79,16 +79,14 @@ local function aerial_picker(opts)
   local results = {}
   local default_selection_index = 1
   if data.has_symbols(0) then
-    local symbols = data.get_or_create(0)
-    local position = symbols.positions[symbols.last_win]
-    local i = 1
-    symbols:visit(function(item)
-      if item == position.closest_symbol then
-        default_selection_index = i
-      end
+    local bufdata = data.get_or_create(0)
+    local position = bufdata.positions[bufdata.last_win]
+    for _, item in bufdata:iter({ skip_hidden = false }) do
       table.insert(results, item)
-      i = i + 1
-    end)
+      if item == position.closest_symbol then
+        default_selection_index = #results
+      end
+    end
   end
   pickers
     .new(opts, {

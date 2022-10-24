@@ -99,14 +99,18 @@ M.update_aerial_buffer = function(buf)
       return len
     end,
   })
-  data.get_or_create(bufnr):visit(function(item, conf)
-    local kind = config.get_icon(bufnr, item.kind, conf.collapsed)
+  local bufdata = data.get_or_create(bufnr)
+  local last_by_level = {}
+  for _, item in bufdata:iter({ skip_hidden = true }) do
+    last_by_level[item.level] = item.next_sibling == nil
+    local collapsed = bufdata:is_collapsed(item)
+    local kind = config.get_icon(bufnr, item.kind, collapsed)
     local spacing
     if config.show_guides then
       local last_spacing = 0
       local guides = {}
       for i = 1, item.level do
-        local is_last = conf.is_last_by_level[i]
+        local is_last = last_by_level[i]
         if i == item.level then
           if is_last then
             table.insert(guides, config.guides.last_item)
@@ -150,7 +154,7 @@ M.update_aerial_buffer = function(buf)
     max_len = math.max(max_len, text_cols)
     table.insert(lines, text)
     row = row + 1
-  end)
+  end
 
   local width = resize_all_wins(aer_bufnr, max_len, #lines)
 

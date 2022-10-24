@@ -8,17 +8,32 @@ M.add_fold_mappings = function(bufnr)
   bufnr = bufnr or 0
   if config.manage_folds(bufnr) and config.link_folds_to_tree then
     local aerial = require("aerial")
-    local tree = require("aerial.tree")
-    vim.keymap.set("n", "za", tree.toggle, { buffer = bufnr })
-    vim.keymap.set("n", "zA", util.partial(tree.toggle, { recurse = true }), { buffer = bufnr })
-    vim.keymap.set("n", "zo", tree.open, { buffer = bufnr })
-    vim.keymap.set("n", "zO", util.partial(tree.open, { recurse = true }), { buffer = bufnr })
-    vim.keymap.set("n", "zc", tree.close, { buffer = bufnr })
-    vim.keymap.set("n", "zC", util.partial(tree.close, { recurse = true }), { buffer = bufnr })
-    vim.keymap.set("n", "zM", aerial.tree_close_all, { buffer = bufnr })
-    vim.keymap.set("n", "zR", aerial.tree_open_all, { buffer = bufnr })
-    vim.keymap.set("n", "zx", aerial.sync_folds, { buffer = bufnr })
-    vim.keymap.set("n", "zX", aerial.sync_folds, { buffer = bufnr })
+    vim.keymap.set("n", "za", aerial.tree_toggle, { buffer = bufnr, desc = "[aerial] toggle fold" })
+    vim.keymap.set("n", "zA", function()
+      aerial.tree_toggle({ recurse = true })
+    end, { buffer = bufnr, desc = "[aerial] toggle fold recursively" })
+    vim.keymap.set("n", "zo", aerial.tree_open, { buffer = bufnr, desc = "[aerial] open fold" })
+    vim.keymap.set("n", "zO", function()
+      aerial.tree_open({ recurse = true })
+    end, { buffer = bufnr, desc = "[aerial] open fold recursively" })
+    vim.keymap.set("n", "zc", aerial.tree_close, { buffer = bufnr, desc = "[aerial] close fold" })
+    vim.keymap.set("n", "zC", function()
+      aerial.tree_close({ recurse = true })
+    end, { buffer = bufnr, desc = "[aerial] close fold recursively" })
+    vim.keymap.set(
+      "n",
+      "zM",
+      aerial.tree_close_all,
+      { buffer = bufnr, desc = "[aerial] close all folds" }
+    )
+    vim.keymap.set(
+      "n",
+      "zR",
+      aerial.tree_open_all,
+      { buffer = bufnr, desc = "[aerial] open all folds" }
+    )
+    vim.keymap.set("n", "zx", aerial.sync_folds, { buffer = bufnr, desc = "[aerial] sync folds" })
+    vim.keymap.set("n", "zX", aerial.sync_folds, { buffer = bufnr, desc = "[aerial] sync folds" })
   end
 end
 
@@ -40,7 +55,7 @@ local function compute_folds(bufnr)
     line_no = line_no + 1
   end
 
-  bufdata:visit(function(item)
+  for _, item in bufdata:iter({ skip_hidden = false }) do
     while item.lnum > line_no do
       add_no_symbol_fold_level()
     end
@@ -49,10 +64,9 @@ local function compute_folds(bufnr)
       fold_levels[lnum] = string.format("%d", item.level + 1)
     end
     line_no = math.max(line_no, item.end_lnum + 1)
-  end, {
-    incl_hidden = true,
-  })
-  while line_no <= vim.api.nvim_buf_line_count(bufnr) do
+  end
+  local num_buf_lines = vim.api.nvim_buf_line_count(bufnr)
+  while line_no <= num_buf_lines do
     add_no_symbol_fold_level()
   end
 
@@ -140,7 +154,10 @@ M.sync_tree_folds = function(winid)
   local view = vim.fn.winsaveview()
   vim.cmd("normal! zxzR")
   local bufdata = data.get_or_create(0)
-  local items = bufdata:flatten(nil, { incl_hidden = true })
+  local items = {}
+  for _, item in bufdata:iter({ skip_hidden = false }) do
+    table.insert(items, item)
+  end
   table.sort(items, function(a, b)
     return a.level > b.level
   end)

@@ -66,25 +66,24 @@ M.up = function(direction, count)
   local bufnr, _ = util.get_buffers()
   local bufdata = data.get_or_create(bufnr)
 
-  local index = 1
   -- We're going up and BACKWARDS
+  local index
   if direction < 0 then
     local prev_root_index
     local last_root_index
     local item
-    bufdata:visit(function(candidate)
+    for _, candidate, i in bufdata:iter({ skip_hidden = true }) do
       if candidate.level == 0 then
-        last_root_index = index
+        last_root_index = i
       end
       if not item then
-        if index == pos.lnum then
+        if i == pos.lnum then
           item = candidate
         elseif candidate.level == 0 then
-          prev_root_index = index
+          prev_root_index = i
         end
       end
-      index = index + 1
-    end)
+    end
     -- If we're already at the root, go to the previous root item
     -- or wrap back around to the last root item
     if item.level == 0 then
@@ -103,17 +102,18 @@ M.up = function(direction, count)
     -- We're going up and FORWARDS
     local target_level
     local start_level
-    local found = bufdata:visit(function(item)
-      if index == pos.lnum then
+    local found = false
+    for _, item, i in bufdata:iter({ skip_hidden = true }) do
+      if i == pos.lnum then
         start_level = item.level
         target_level = math.max(0, item.level - count)
       elseif target_level then
         if item.level == target_level or item.level < start_level then
-          return true
+          found = true
+          break
         end
       end
-      index = index + 1
-    end)
+    end
     -- If we didn't find a target, it's because we're at the end of the list.
     if not found then
       index = 1
@@ -147,7 +147,7 @@ M.next = function(step)
   end
   local bufnr, _ = util.get_buffers()
 
-  local count = data.get_or_create(bufnr):count()
+  local count = data.get_or_create(bufnr):count({ skip_hidden = true })
   -- If we're not *exactly* on a location, make sure we hit the nearest location
   -- first even if we're currently considered to be "on" it
   if step < 0 and pos.relative == "below" then
