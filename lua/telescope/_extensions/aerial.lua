@@ -1,6 +1,7 @@
 local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
+local util = require("aerial.util")
 
 local conf = require("telescope.config").values
 local entry_display = require("telescope.pickers.entry_display")
@@ -88,6 +89,10 @@ local function aerial_picker(opts)
       end
     end
   end
+
+  -- Reverse the symbols so they have the same top-to-bottom order as in the file
+  util.tbl_reverse(results)
+  default_selection_index = #results - (default_selection_index - 1)
   pickers
     .new(opts, {
       prompt_title = "Document Symbols",
