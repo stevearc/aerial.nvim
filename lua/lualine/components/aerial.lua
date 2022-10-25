@@ -94,7 +94,7 @@ function M:format_status(symbols, depth, separator, icons_enabled, colored)
       table.insert(parts, name)
     end
   end
-  return table.concat(parts, separator)
+  return table.concat(parts, self:get_default_hl() .. separator)
 end
 
 function M:init(options)
