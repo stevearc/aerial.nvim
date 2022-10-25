@@ -434,7 +434,7 @@ M.update_position = function(winids, last_focused_win)
     last_focused_win = util.get_source_win(last_focused_win)
   end
   local win_bufnr = vim.api.nvim_win_get_buf(winids[1])
-  local bufnr, aer_bufnr = util.get_buffers(win_bufnr)
+  local bufnr = util.get_buffers(win_bufnr)
   if not data:has_symbols(bufnr) then
     return
   end
@@ -458,6 +458,7 @@ M.update_position = function(winids, last_focused_win)
     local aer_winid = util.get_aerial_win(last_focused_win)
     if aer_winid then
       local last_position = bufdata.positions[bufdata.last_win]
+      local aer_bufnr = vim.api.nvim_win_get_buf(aer_winid)
       local num_lines = vim.api.nvim_buf_line_count(aer_bufnr)
 
       -- When aerial window is global, the items can change and cursor will move
