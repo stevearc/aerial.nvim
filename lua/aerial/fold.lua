@@ -3,29 +3,82 @@ local data = require("aerial.data")
 local util = require("aerial.util")
 local M = {}
 
+---@param bufnr nil|integer
 M.add_fold_mappings = function(bufnr)
-  if config.link_folds_to_tree then
-    local function map(key, cmd)
-      vim.api.nvim_buf_set_keymap(bufnr or 0, "n", key, cmd, { silent = true, noremap = true })
+  bufnr = bufnr or 0
+  if bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  if config.manage_folds(bufnr) and config.link_folds_to_tree then
+    local aerial = require("aerial")
+
+    local maps = {
+      za = { aerial.tree_toggle, "[aerial] toggle fold" },
+      zA = {
+        function()
+          aerial.tree_toggle({ recurse = true })
+        end,
+        "[aerial] toggle fold recursively",
+      },
+      zo = { aerial.tree_open, "[aerial] open fold" },
+      zO = {
+        function()
+          aerial.tree_open({ recurse = true })
+        end,
+        "[aerial] open fold recursively",
+      },
+      zc = { aerial.tree_close, "[aerial] close fold" },
+      zC = {
+        function()
+          aerial.tree_close({ recurse = true })
+        end,
+        "[aerial] close fold recursively",
+      },
+      zm = {
+        function()
+          aerial.tree_decrease_fold_level(0, vim.v.count)
+        end,
+        "[aerial] decrease fold level",
+      },
+      zM = { aerial.tree_close_all, "[aerial] close all folds" },
+      zr = {
+        function()
+          aerial.tree_increase_fold_level(0, vim.v.count)
+        end,
+        "[aerial] increase fold level",
+      },
+      zR = { aerial.tree_open_all, "[aerial] open all folds" },
+      zx = { aerial.sync_folds, "[aerial] sync folds" },
+      zX = { aerial.sync_folds, "[aerial] sync folds" },
+    }
+    for lhs, v in pairs(maps) do
+      local callback, desc = unpack(v)
+      if not config.link_tree_to_folds then
+        local orig_cb = callback
+        callback = function()
+          vim.cmd(string.format("normal! %s", lhs))
+          orig_cb()
+        end
+      end
+      vim.keymap.set("n", lhs, callback, { buffer = bufnr, desc = desc })
     end
 
-    map("za", [[<cmd>AerialTreeToggle<CR>]])
-    map("zA", [[<cmd>AerialTreeToggle!<CR>]])
-    map("zo", [[<cmd>AerialTreeOpen<CR>]])
-    map("zO", [[<cmd>AerialTreeOpen!<CR>]])
-    map("zc", [[<cmd>AerialTreeClose<CR>]])
-    map("zC", [[<cmd>AerialTreeClose!<CR>]])
-    map("zM", [[<cmd>AerialTreeCloseAll<CR>]])
-    map("zR", [[<cmd>AerialTreeOpenAll<CR>]])
-    map("zx", [[<cmd>AerialTreeSyncFolds<CR>]])
-    map("zX", [[<cmd>AerialTreeSyncFolds<CR>]])
+    local group = vim.api.nvim_create_augroup("AerialFoldListener", {})
+    vim.api.nvim_create_autocmd("OptionSet", {
+      pattern = "foldlevel",
+      group = group,
+      desc = "Aerial update tree folds based on foldlevel",
+      callback = function()
+        aerial.tree_set_collapse_level(0, tonumber(vim.v.option_new))
+      end,
+    })
   end
 end
 
 local fold_cache = {}
 
 local function compute_folds(bufnr)
-  local bufdata = data[bufnr]
+  local bufdata = data.get_or_create(bufnr)
   local fold_levels = {}
   local line_no = 1
 
@@ -40,7 +93,7 @@ local function compute_folds(bufnr)
     line_no = line_no + 1
   end
 
-  bufdata:visit(function(item)
+  for _, item in bufdata:iter({ skip_hidden = false }) do
     while item.lnum > line_no do
       add_no_symbol_fold_level()
     end
@@ -49,10 +102,9 @@ local function compute_folds(bufnr)
       fold_levels[lnum] = string.format("%d", item.level + 1)
     end
     line_no = math.max(line_no, item.end_lnum + 1)
-  end, {
-    incl_hidden = true,
-  })
-  while line_no <= vim.api.nvim_buf_line_count(bufnr) do
+  end
+  local num_buf_lines = vim.api.nvim_buf_line_count(bufnr)
+  while line_no <= num_buf_lines do
     add_no_symbol_fold_level()
   end
 
@@ -64,7 +116,7 @@ M.foldexpr = function()
   if util.is_aerial_buffer() then
     return "0"
   end
-  if not data:has_symbols(0) then
+  if not data.has_symbols(0) then
     return "0"
   end
   local bufnr = vim.api.nvim_get_current_buf()
@@ -98,11 +150,11 @@ M.restore_foldmethod = function()
 end
 
 M.maybe_set_foldmethod = function(bufnr)
-  local manage_folds = config.manage_folds
+  local manage_folds = config.manage_folds(bufnr)
   if not manage_folds then
     return
   end
-  if not data:has_symbols(bufnr) then
+  if not data.has_symbols(bufnr) then
     return
   end
   local winids
@@ -139,8 +191,11 @@ M.sync_tree_folds = function(winid)
   util.go_win_no_au(winid)
   local view = vim.fn.winsaveview()
   vim.cmd("normal! zxzR")
-  local bufdata = data[0]
-  local items = bufdata:flatten(nil, { incl_hidden = true })
+  local bufdata = data.get_or_create(0)
+  local items = {}
+  for _, item in bufdata:iter({ skip_hidden = false }) do
+    table.insert(items, item)
+  end
   table.sort(items, function(a, b)
     return a.level > b.level
   end)
@@ -194,8 +249,15 @@ M.fold_action = function(action, lnum, opts)
   })
   local my_winid = vim.api.nvim_get_current_win()
   local wins
-  local bufnr, _ = util.get_buffers()
-  wins = util.get_fixed_wins(bufnr)
+  if config.attach_mode == "global" then
+    local bufnr = util.get_buffers()
+    wins = vim.tbl_filter(function(winid)
+      return vim.api.nvim_win_is_valid(winid) and vim.api.nvim_win_get_buf(winid) == bufnr
+    end, vim.api.nvim_list_wins())
+  else
+    local source_win = util.get_winids(my_winid)
+    wins = { source_win }
+  end
   for _, winid in ipairs(wins) do
     if util.is_managing_folds(winid) then
       win_do_action(winid, action, lnum, opts.recurse)

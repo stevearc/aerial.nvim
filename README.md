@@ -2,22 +2,22 @@
 
 A code outline window for skimming and quick navigation
 
+<!-- TOC -->
+
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Setup](#setup)
-  - [Treesitter](#treesitter)
-  - [LSP](#lsp)
-  - [Markdown](#markdown)
-  - [Keymaps](#keymaps)
 - [Commands](#commands)
 - [Options](#options)
-- [Default keybindings](#default-keybindings)
 - [Third-party integrations](#third-party-integrations)
   - [Telescope](#telescope)
-  - [Fzf](#fzf)
+  - [fzf](#fzf)
   - [Lualine](#lualine)
 - [Highlight](#highlight)
+- [API](#api)
 - [FAQ](#faq)
+
+<!-- /TOC -->
 
 https://user-images.githubusercontent.com/506791/122652728-18688500-d0f5-11eb-80aa-910f7e6a5f46.mp4
 
@@ -100,23 +100,22 @@ Somewhere in your init.lua you will need to call `aerial.setup()`. See below for
 [a full list of options](#options).
 
 ```lua
-require('aerial').setup({})
+require('aerial').setup({
+  -- optionally use on_attach to set keymaps when aerial has attached to a buffer
+  on_attach = function(bufnr)
+    -- Jump forwards/backwards with '{' and '}'
+    vim.keymap.set('n', '{', '<cmd>AerialPrev<CR>', {buffer = bufnr})
+    vim.keymap.set('n', '}', '<cmd>AerialNext<CR>', {buffer = bufnr})
+  end
+})
+-- You probably also want to set a keymap to toggle aerial
+vim.keymap.set('n', '<leader>a', '<cmd>AerialToggle!<CR>')
 ```
 
-In addition, you will need to follow the setup steps for at least one of the
-symbol sources listed below. You can configure your preferred source(s) with the
-`backends` option (see [Options](#options)). The default is to prefer Treesitter
-when it's available and fall back to LSP.
-
-### Treesitter
-
-First ensure you have
-[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) installed
-and configured for all languages you want to support. That's all! Aerial will
-automatically fetch symbols from treesitter.
+In addition, you will need to have either Treesitter or a working LSP client. You can configure your preferred source(s) with the `backends` option (see [Options](#options)). The default is to prefer Treesitter when it's available and fall back to LSP.
 
 <details>
-  <summary>Supported languages</summary>
+  <summary>Supported treesitter languages</summary>
 
 - bash
 - c
@@ -153,83 +152,21 @@ it](https://github.com/stevearc/aerial.nvim/issues/new?assignees=stevearc&labels
 
 </details>
 
-### LSP
-
-First ensure you have a functioning LSP setup (see
-[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)). Once complete, add
-the aerial `on_attach` callback to your config:
-
-```lua
--- Set up your LSP clients here, using the aerial on_attach method
-require("lspconfig").vimls.setup{
-  on_attach = require("aerial").on_attach,
-}
--- Repeat this for each language server you have configured
-```
-
-If you have your own custom `on_attach` function, call aerial's `on_attach` from
-inside it:
-
-```lua
-local function my_custom_attach(client, bufnr)
-  -- your code here
-  require("aerial").on_attach(client, bufnr)
-end
-```
-
-### Markdown
-
-There is a simple custom backend that does rudimentary parsing of markdown
-headers. It should work well enough in most cases, but does not parse the full
-markdown spec.
-
-There is now an experimental [treesitter parser for
-markdown](https://github.com/nvim-treesitter/nvim-treesitter/issues/872), so you
-can install that and try the treesitter backend instead.
-
-### Keymaps
-
-While not required, you may want to add some keymaps for aerial. The best way to
-do this is with the `on_attach` option:
-
-```lua
-require("aerial").setup({
-  on_attach = function(bufnr)
-    -- Toggle the aerial window with <leader>a
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>a', '<cmd>AerialToggle!<CR>', {})
-    -- Jump forwards/backwards with '{' and '}'
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '{', '<cmd>AerialPrev<CR>', {})
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '}', '<cmd>AerialNext<CR>', {})
-    -- Jump up the tree with '[[' or ']]'
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '[[', '<cmd>AerialPrevUp<CR>', {})
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', ']]', '<cmd>AerialNextUp<CR>', {})
-  end
-})
-```
-
 ## Commands
 
-| Command                      | arg                    | description                                                                |
-| ---------------------------- | ---------------------- | -------------------------------------------------------------------------- |
-| `AerialToggle[!]`            | `left`/`right`/`float` | Open or close the aerial window. With `[!]` cursor stays in current window |
-| `AerialOpen[!]`              | `left`/`right`/`float` | Open the aerial window. With `[!]` cursor stays in current window          |
-| `AerialOpenAll`              |                        | Open an aerial window for each visible window                              |
-| `AerialClose`                |                        | Close the aerial window                                                    |
-| `AerialCloseAll`             |                        | Close all visible aerial windows                                           |
-| `AerialCloseAllButCurrent`   |                        | Close all visible aerial windows except for the focused one                |
-| `AerialPrev`                 | N=1                    | Jump backwards N symbols                                                   |
-| `AerialNext`                 | N=1                    | Jump forwards N symbols                                                    |
-| `AerialPrevUp`               | N=1                    | Jump up the tree N levels, moving backwards                                |
-| `AerialNextUp`               | N=1                    | Jump up the tree N levels, moving forwards                                 |
-| `AerialGo`                   | N=1, `v`/`h`           | Jump to the Nth symbol                                                     |
-| `AerialTreeOpen[!]`          |                        | Expand tree at current location. `[!]` makes it recursive.                 |
-| `AerialTreeClose[!]`         |                        | Collapse tree at current location. `[!]` makes it recursive.               |
-| `AerialTreeToggle[!]`        |                        | Toggle tree at current location. `[!]` makes it recursive.                 |
-| `AerialTreeOpenAll`          |                        | Open all tree nodes                                                        |
-| `AerialTreeCloseAll`         |                        | Collapse all tree nodes                                                    |
-| `AerialTreeSetCollapseLevel` | N                      | Collapse symbols at a depth greater than N (0 collapses all)               |
-| `AerialTreeSyncFolds`        |                        | Sync code folding with current tree state                                  |
-| `AerialInfo`                 |                        | Print out debug info related to aerial                                     |
+
+| Command              | Args               | Description                                                              |
+| -------------------- | ------------------ | ------------------------------------------------------------------------ |
+| `AerialToggle[!]`    | `left/right/float` | Open or close the aerial window. With `!` cursor stays in current window |
+| `AerialOpen[!]`      | `left/right/float` | Open the aerial window. With `!` cursor stays in current window          |
+| `AerialOpenAll`      |                    | Open an aerial window for each visible window.                           |
+| `AerialClose`        |                    | Close the aerial window.                                                 |
+| `AerialCloseAll`     |                    | Close all visible aerial windows.                                        |
+| `[count]AerialNext`  |                    | Jump forwards {count} symbols (default 1).                               |
+| `[count]AerialPrev`  |                    | Jump backwards [count] symbols (default 1).                              |
+| `[count]AerialGo[!]` |                    | Jump to the [count] symbol (default 1).                                  |
+| `AerialInfo`         |                    | Print out debug info related to aerial.                                  |
+
 
 ## Options
 
@@ -272,8 +209,48 @@ require("aerial").setup({
   --   unsupported   - close aerial when attaching to a buffer that has no symbol source
   close_automatic_events = {},
 
-  -- Set to false to remove the default keybindings for the aerial buffer
-  default_bindings = true,
+  -- Keymaps in aerial window. Can be any value that `vim.keymap.set` accepts.
+  -- Additionally, if it is a string that matches "aerial.<name>",
+  -- it will use the function at require("aerial.action").<name>
+  -- Set to `false` to remove a keymap
+  keymaps = {
+    ["?"] = "actions.show_help",
+    ["g?"] = "actions.show_help",
+    ["<CR>"] = "actions.jump",
+    ["<2-LeftMouse>"] = "actions.jump",
+    ["<C-v>"] = "actions.jump_vsplit",
+    ["<C-s>"] = "actions.jump_split",
+    ["p"] = "actions.scroll",
+    ["<C-j>"] = "actions.down_and_scroll",
+    ["<C-k>"] = "actions.up_and_scroll",
+    ["{"] = "actions.prev",
+    ["}"] = "actions.next",
+    ["[["] = "actions.prev_up",
+    ["]]"] = "actions.next_up",
+    ["q"] = "actions.close",
+    ["o"] = "actions.tree_toggle",
+    ["za"] = "actions.tree_toggle",
+    ["O"] = "actions.tree_toggle_recursive",
+    ["zA"] = "actions.tree_toggle_recursive",
+    ["l"] = "actions.tree_open",
+    ["zo"] = "actions.tree_open",
+    ["L"] = "actions.tree_open_recursive",
+    ["zO"] = "actions.tree_open_recursive",
+    ["h"] = "actions.tree_close",
+    ["zc"] = "actions.tree_close",
+    ["H"] = "actions.tree_close_recursive",
+    ["zC"] = "actions.tree_close_recursive",
+    ["zr"] = "actions.tree_increase_fold_level",
+    ["zR"] = "actions.tree_open_all",
+    ["zm"] = "actions.tree_decrease_fold_level",
+    ["zM"] = "actions.tree_close_all",
+    ["zx"] = "actions.tree_sync_folds",
+    ["zX"] = "actions.tree_sync_folds",
+  },
+
+  -- When true, don't load aerial until a command or function is called
+  -- Defaults to true, unless `on_attach` is provided, then it defaults to false
+  lazy_load = true,
 
   -- Disable aerial on files with this many lines
   disable_max_lines = 10000,
@@ -362,6 +339,11 @@ require("aerial").setup({
     wintypes = "special",
   },
 
+  -- Use symbol tree for folding. Set to true or false to enable/disable
+  -- Set to "auto" to manage folds if your previous foldmethod was 'manual'
+  -- This can be a filetype map (see :help aerial-filetype-map)
+  manage_folds = false,
+
   -- When you fold code with za, zo, or zc, update the aerial tree as well.
   -- Only works when manage_folds = true
   link_folds_to_tree = false,
@@ -370,21 +352,15 @@ require("aerial").setup({
   -- Only works when manage_folds = true
   link_tree_to_folds = true,
 
-  -- Use symbol tree for folding. Set to true or false to enable/disable
-  -- 'auto' will manage folds if your previous foldmethod was 'manual'
-  manage_folds = false,
-
   -- Set default symbol icons to use patched font icons (see https://www.nerdfonts.com/)
   -- "auto" will set it to true if nvim-web-devicons or lspkind-nvim is installed.
   nerd_font = "auto",
 
   -- Call this function when aerial attaches to a buffer.
-  -- Useful for setting keymaps. Takes a single `bufnr` argument.
-  on_attach = nil,
+  on_attach = function(bufnr) end,
 
   -- Call this function when aerial first sets symbols on a buffer.
-  -- Takes a single `bufnr` argument.
-  on_first_symbols = nil,
+  on_first_symbols = function(bufnr) end,
 
   -- Automatically open aerial when entering supported buffers.
   -- This can be a function (see :help aerial-open-automatic)
@@ -396,11 +372,11 @@ require("aerial").setup({
   -- When true, aerial will automatically close after jumping to a symbol
   close_on_select = false,
 
-  -- Show box drawing characters for the tree hierarchy
-  show_guides = false,
-
   -- The autocmds that trigger symbols update (not used for LSP backend)
   update_events = "TextChanged,InsertLeave",
+
+  -- Show box drawing characters for the tree hierarchy
+  show_guides = false,
 
   -- Customize the characters used when show_guides = true
   guides = {
@@ -475,39 +451,6 @@ All possible SymbolKind values can be found [in the LSP
 spec](https://microsoft.github.io/language-server-protocol/specifications/specification-3-17/#symbolKind).
 These are the values used for configuring icons, highlight groups, and
 filtering.
-
-## Default Keybindings
-
-The default keybindings in the aerial window. You can add your own in
-`ftplugin/aerial.vim`, and remove these by setting `default_bindings = false`.
-The default bindings are set in
-[bindings.lua](https://github.com/stevearc/aerial.nvim/blob/master/lua/aerial/bindings.lua#L4),
-which you can use as a reference if you want to set your own bindings.
-
-| Key             | Command                                                        |
-| --------------- | -------------------------------------------------------------- |
-| `?`/`g?`        | Show default keymaps                                           |
-| `<CR>`          | Jump to the symbol under the cursor                            |
-| `<C-v>`         | Jump to the symbol in a vertical split                         |
-| `<C-s>`         | Jump to the symbol in a horizontal split                       |
-| `p`             | Scroll to the symbol (stay in aerial buffer)                   |
-| `<C-j>`         | Go down one line and scroll to that symbol                     |
-| `<C-k>`         | Go up one line and scroll to that symbol                       |
-| `{`             | Jump to the previous symbol                                    |
-| `}`             | Jump to the next symbol                                        |
-| `[[`            | Jump up the tree, moving backwards                             |
-| `]]`            | Jump up the tree, moving forwards                              |
-| `q`             | Close the aerial window                                        |
-| `o`/`za`        | Toggle the symbol under the cursor open/closed                 |
-| `O`/`zA`        | Recursive toggle the symbol under the cursor open/closed       |
-| `l`/`zo`        | Expand the symbol under the cursor                             |
-| `L`/`zO`        | Recursive expand the symbol under the cursor                   |
-| `h`/`zc`        | Collapse the symbol under the cursor                           |
-| `H`/`zC`        | Recursive collapse the symbol under the cursor                 |
-| `zR`            | Expand all nodes in the tree                                   |
-| `zM`            | Collapse all nodes in the tree                                 |
-| `zx`/`zX`       | Sync code folding to the tree (useful if they get out of sync) |
-| `<2-LeftMouse>` | Jump to the symbol under the cursor                            |
 
 ## Third-party integrations
 
@@ -613,6 +556,40 @@ hi link AerialGuide Comment
 hi AerialGuide1 guifg=Red
 hi AerialGuide2 guifg=Blue
 ```
+
+## API
+
+<!-- API -->
+
+- [setup(opts)](doc/api.md#setupopts)
+- [is_open(opts)](doc/api.md#is_openopts)
+- [close()](doc/api.md#close)
+- [close_all()](doc/api.md#close_all)
+- [close_all_but_current()](doc/api.md#close_all_but_current)
+- [open(opts)](doc/api.md#openopts)
+- [open_all()](doc/api.md#open_all)
+- [focus()](doc/api.md#focus)
+- [toggle(opts)](doc/api.md#toggleopts)
+- [select(opts)](doc/api.md#selectopts)
+- [next(step)](doc/api.md#nextstep)
+- [prev(step)](doc/api.md#prevstep)
+- [next_up(count)](doc/api.md#next_upcount)
+- [prev_up(count)](doc/api.md#prev_upcount)
+- [get_location(exact)](doc/api.md#get_locationexact)
+- [tree_close_all(bufnr)](doc/api.md#tree_close_allbufnr)
+- [tree_open_all(bufnr)](doc/api.md#tree_open_allbufnr)
+- [tree_set_collapse_level(bufnr, level)](doc/api.md#tree_set_collapse_levelbufnr-level)
+- [tree_increase_fold_level(bufnr, count)](doc/api.md#tree_increase_fold_levelbufnr-count)
+- [tree_decrease_fold_level(bufnr, count)](doc/api.md#tree_decrease_fold_levelbufnr-count)
+- [tree_open(opts)](doc/api.md#tree_openopts)
+- [tree_close(opts)](doc/api.md#tree_closeopts)
+- [tree_toggle(opts)](doc/api.md#tree_toggleopts)
+- [sync_folds(bufnr)](doc/api.md#sync_foldsbufnr)
+- [info()](doc/api.md#info)
+- [num_symbols(bufnr)](doc/api.md#num_symbolsbufnr)
+- [was_closed(default)](doc/api.md#was_closeddefault)
+
+<!-- /API -->
 
 ## FAQ
 

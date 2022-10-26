@@ -71,13 +71,27 @@ M.fetch_symbols_sync = function(bufnr, opts)
   end
 end
 
-local function mark_lsp_attached(bufnr)
-  vim.api.nvim_buf_set_var(bufnr, "_aerial_lsp_attached", true)
+local function mark_lsp_attached(bufnr, attached)
+  vim.api.nvim_buf_set_var(bufnr, "_aerial_lsp_attached", attached)
 end
 
+---@param bufnr integer
+---@return boolean
 local function is_lsp_attached(bufnr)
   local ok, attached = pcall(vim.api.nvim_buf_get_var, bufnr, "_aerial_lsp_attached")
   return ok and attached
+end
+
+---@param bufnr integer
+---@param exclude_id nil|integer Client ID to exclude from calculation
+---@return boolean
+local function has_lsp_client(bufnr, exclude_id)
+  for _, client in pairs(vim.lsp.buf_get_clients(bufnr)) do
+    if client.id ~= exclude_id and client.server_capabilities.documentSymbolProvider then
+      return true
+    end
+  end
+  return false
 end
 
 M.is_supported = function(bufnr)
@@ -85,12 +99,11 @@ M.is_supported = function(bufnr)
     bufnr = vim.api.nvim_get_current_buf()
   end
   if not is_lsp_attached(bufnr) then
-    for _, client in pairs(vim.lsp.buf_get_clients(bufnr)) do
-      if client.server_capabilities.documentSymbolProvider then
-        return false, "LSP client not attached (did you call aerial.on_attach?)"
-      end
+    if has_lsp_client(bufnr) then
+      return false, "LSP client available, but not attached"
+    else
+      return false, "No LSP client found"
     end
-    return false, "LSP client not attached"
   end
   return true, nil
 end
@@ -105,7 +118,14 @@ M.on_attach = function(client, bufnr, opts)
   opts = opts or {}
   if client.server_capabilities.documentSymbolProvider then
     hook_handlers(opts.preserve_callback)
-    mark_lsp_attached(bufnr)
+    mark_lsp_attached(bufnr, true)
+    backends.attach(bufnr, true)
+  end
+end
+
+M.on_detach = function(client_id, bufnr)
+  if not has_lsp_client(bufnr, client_id) then
+    mark_lsp_attached(bufnr, false)
     backends.attach(bufnr, true)
   end
 end

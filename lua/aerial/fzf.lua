@@ -9,33 +9,30 @@ M.get_labels = function(opts)
   if not backend then
     backends.log_support_err()
     return nil
-  elseif not data:has_symbols(0) then
+  elseif not data.has_symbols(0) then
     backend.fetch_symbols_sync(0, opts)
   end
   local results = {}
-  if data:has_symbols(0) then
-    data[0]:visit(function(item)
-      local label = string.format("%d:%s", item.lnum, item.name)
+  if data.has_symbols(0) then
+    for _, item in data.get_or_create(0):iter({ skip_hidden = false }) do
+      local label = string.format("%d:%s", item.idx, item.name)
       table.insert(results, label)
-    end)
+    end
   end
   return results
 end
 
 M.goto_symbol = function(symbol)
-  local colon = string.find(symbol, ":")
-  local lnum = tonumber(string.sub(symbol, 1, colon - 1))
-  local name = string.sub(symbol, colon + 1)
-  local idx = 1
-  data[0]:visit(function(item)
-    if lnum == item.lnum and name == item.name then
+  local idx = tonumber(symbol:match("^(%d+)"))
+  -- FIXME this fails if the symbol is currently hidden in the tree
+  for i, _, symbol_idx in data.get_or_create(0):iter({ skip_hidden = true }) do
+    if idx == i then
       navigation.select({
-        index = idx,
+        index = symbol_idx,
       })
-      return true
+      break
     end
-    idx = idx + 1
-  end)
+  end
 end
 
 return M

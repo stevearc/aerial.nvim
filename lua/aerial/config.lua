@@ -35,8 +35,48 @@ local default_options = {
   --   unsupported   - close aerial when attaching to a buffer that has no symbol source
   close_automatic_events = {},
 
-  -- Set to false to remove the default keybindings for the aerial buffer
-  default_bindings = true,
+  -- Keymaps in aerial window. Can be any value that `vim.keymap.set` accepts.
+  -- Additionally, if it is a string that matches "aerial.<name>",
+  -- it will use the function at require("aerial.action").<name>
+  -- Set to `false` to remove a keymap
+  keymaps = {
+    ["?"] = "actions.show_help",
+    ["g?"] = "actions.show_help",
+    ["<CR>"] = "actions.jump",
+    ["<2-LeftMouse>"] = "actions.jump",
+    ["<C-v>"] = "actions.jump_vsplit",
+    ["<C-s>"] = "actions.jump_split",
+    ["p"] = "actions.scroll",
+    ["<C-j>"] = "actions.down_and_scroll",
+    ["<C-k>"] = "actions.up_and_scroll",
+    ["{"] = "actions.prev",
+    ["}"] = "actions.next",
+    ["[["] = "actions.prev_up",
+    ["]]"] = "actions.next_up",
+    ["q"] = "actions.close",
+    ["o"] = "actions.tree_toggle",
+    ["za"] = "actions.tree_toggle",
+    ["O"] = "actions.tree_toggle_recursive",
+    ["zA"] = "actions.tree_toggle_recursive",
+    ["l"] = "actions.tree_open",
+    ["zo"] = "actions.tree_open",
+    ["L"] = "actions.tree_open_recursive",
+    ["zO"] = "actions.tree_open_recursive",
+    ["h"] = "actions.tree_close",
+    ["zc"] = "actions.tree_close",
+    ["H"] = "actions.tree_close_recursive",
+    ["zC"] = "actions.tree_close_recursive",
+    ["zr"] = "actions.tree_increase_fold_level",
+    ["zR"] = "actions.tree_open_all",
+    ["zm"] = "actions.tree_decrease_fold_level",
+    ["zM"] = "actions.tree_close_all",
+    ["zx"] = "actions.tree_sync_folds",
+    ["zX"] = "actions.tree_sync_folds",
+  },
+
+  -- When true, don't load aerial until a command or function is called
+  -- Defaults to true, unless `on_attach` is provided, then it defaults to false
+  lazy_load = true,
 
   -- Disable aerial on files with this many lines
   disable_max_lines = 10000,
@@ -125,6 +165,11 @@ local default_options = {
     wintypes = "special",
   },
 
+  -- Use symbol tree for folding. Set to true or false to enable/disable
+  -- Set to "auto" to manage folds if your previous foldmethod was 'manual'
+  -- This can be a filetype map (see :help aerial-filetype-map)
+  manage_folds = false,
+
   -- When you fold code with za, zo, or zc, update the aerial tree as well.
   -- Only works when manage_folds = true
   link_folds_to_tree = false,
@@ -133,21 +178,15 @@ local default_options = {
   -- Only works when manage_folds = true
   link_tree_to_folds = true,
 
-  -- Use symbol tree for folding. Set to true or false to enable/disable
-  -- 'auto' will manage folds if your previous foldmethod was 'manual'
-  manage_folds = false,
-
   -- Set default symbol icons to use patched font icons (see https://www.nerdfonts.com/)
   -- "auto" will set it to true if nvim-web-devicons or lspkind-nvim is installed.
   nerd_font = "auto",
 
   -- Call this function when aerial attaches to a buffer.
-  -- Useful for setting keymaps. Takes a single `bufnr` argument.
-  on_attach = nil,
+  on_attach = function(bufnr) end,
 
   -- Call this function when aerial first sets symbols on a buffer.
-  -- Takes a single `bufnr` argument.
-  on_first_symbols = nil,
+  on_first_symbols = function(bufnr) end,
 
   -- Automatically open aerial when entering supported buffers.
   -- This can be a function (see :help aerial-open-automatic)
@@ -159,11 +198,11 @@ local default_options = {
   -- When true, aerial will automatically close after jumping to a symbol
   close_on_select = false,
 
-  -- Show box drawing characters for the tree hierarchy
-  show_guides = false,
-
   -- The autocmds that trigger symbols update (not used for LSP backend)
   update_events = "TextChanged,InsertLeave",
+
+  -- Show box drawing characters for the tree hierarchy
+  show_guides = false,
 
   -- Customize the characters used when show_guides = true
   guides = {
@@ -323,11 +362,19 @@ local function create_filetype_opt_getter(option, default)
 end
 
 local function compat_move_option(opts, key, nested_key)
-  -- TODO: deprecation warning for users to move the option
   if opts[key] ~= nil then
     opts[nested_key] = opts[nested_key] or {}
     opts[nested_key][key] = opts[key]
     opts[key] = nil
+    vim.notify_once(
+      string.format(
+        "Deprecated(aerial.config.%s) has moved to config.%s.%s\nSupport will be removed on 2023-02-01",
+        key,
+        nested_key,
+        key
+      ),
+      vim.log.levels.WARN
+    )
   end
 end
 
@@ -363,8 +410,11 @@ M.setup = function(opts)
   compat_move_option(opts, "min_width", "layout")
   compat_move_option(opts, "default_direction", "layout")
   if opts.placement_editor_edge ~= nil then
-    -- TODO: deprecation warning
     opts.layout.placement = opts.placement_editor_edge and "edge" or "window"
+    vim.notify_once(
+      "Deprecated(aerial.config.placement_editor_edge) has moved to config.layout.placement\nSupport will be removed on 2023-02-01",
+      vim.log.levels.WARN
+    )
   end
   compat_move_option(opts, "placement_editor_edge", "layout")
 
@@ -379,10 +429,18 @@ M.setup = function(opts)
       opts.close_automatic_events = { "unsupported" }
     end
     opts.close_behavior = nil
-    vim.notify(
-      "Deprecated[aerial]: close_behavior is deprecated. See :help aerial-close-behavior",
+    vim.notify_once(
+      "Deprecated(aerial.config.close_behavior): See :help aerial-close-behavior.\nThis option will be removed on 2023-02-01",
       vim.log.levels.WARN
     )
+  end
+
+  if opts.default_bindings == false then
+    vim.notify_once(
+      "Deprecated(aerial.config.default_bindings): Use config.keymaps to adjust aerial window keymaps.\nThis option will be removed on 2023-02-01",
+      vim.log.levels.WARN
+    )
+    opts.keymaps = {}
   end
 
   local newconf = vim.tbl_deep_extend("force", default_options, opts)
@@ -394,8 +452,8 @@ M.setup = function(opts)
   )
   newconf.layout.placement = assert_enum(newconf.layout.placement, { "window", "edge", "group" })
   if newconf.layout.placement == "group" then
-    vim.notify(
-      "Deprecated: aerial.layout.placement = 'group'. If 'global' or 'window' do not fit your workflow, please file an issue https://github.com/stevearc/aerial.nvim/issues/new",
+    vim.notify_once(
+      "Deprecated(aerial.config.layout.placement = 'group'). If 'global' or 'window' do not fit your workflow, please file an issue https://github.com/stevearc/aerial.nvim/issues/new\nOtherwise, this option will be removed on 2023-02-01",
       vim.log.levels.WARN
     )
   end
@@ -424,12 +482,6 @@ M.setup = function(opts)
     newconf.use_lspkind = true
   end
 
-  -- If not managing folds, don't link either direction
-  if newconf.manage_folds == false then
-    newconf.link_tree_to_folds = false
-    newconf.link_folds_to_tree = false
-  end
-
   -- for backwards compatibility
   for k, _ in pairs(default_options.lsp) do
     if newconf[k] ~= nil then
@@ -448,8 +500,8 @@ M.setup = function(opts)
     or newconf.open_automatic_min_symbols
     or type(newconf.open_automatic) == "table"
   then
-    vim.notify(
-      "Deprecated: open_automatic should be a boolean or function. See :help aerial-open-automatic",
+    vim.notify_once(
+      "Deprecated(aerial.config.open_automatic) should be a boolean or function. See :help aerial-open-automatic.\nThis will be required as of 2023-02-01",
       vim.log.levels.WARN
     )
     newconf.open_automatic_min_symbols = nil
@@ -474,8 +526,8 @@ M.setup = function(opts)
   end
 
   if newconf.float.row or newconf.float.col then
-    vim.notify(
-      "Deprecated: Aerial float.row and float.col are no longer used. Use float.override to customize layout",
+    vim.notify_once(
+      "Deprecated(aerial.config.float) float.row and float.col are no longer used. Use float.override to customize layout.\nThis message will be removed on 2023-02-01",
       vim.log.levels.WARN
     )
   end
@@ -483,6 +535,7 @@ M.setup = function(opts)
   for k, v in pairs(newconf) do
     M[k] = v
   end
+  M.manage_folds = create_filetype_opt_getter(M.manage_folds, default_options.manage_folds)
   M.backends = create_filetype_opt_getter(M.backends, default_options.backends)
   local get_filter_kind_list =
     create_filetype_opt_getter(M.filter_kind, default_options.filter_kind)

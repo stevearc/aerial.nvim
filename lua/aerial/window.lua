@@ -1,5 +1,5 @@
 local backends = require("aerial.backends")
-local bindings = require("aerial.bindings")
+local keymap_util = require("aerial.keymap_util")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local layout = require("aerial.layout")
@@ -15,17 +15,7 @@ local function create_aerial_buffer(bufnr)
   end
   local aer_bufnr = vim.api.nvim_create_buf(false, true)
 
-  if config.default_bindings then
-    for _, binding in ipairs(bindings.keys) do
-      local keys, command, _ = unpack(binding)
-      if type(keys) == "string" then
-        keys = { keys }
-      end
-      for _, key in ipairs(keys) do
-        vim.api.nvim_buf_set_keymap(aer_bufnr, "n", key, command, { silent = true, noremap = true })
-      end
-    end
-  end
+  keymap_util.set_keymaps("", config.keymaps, aer_bufnr)
   vim.api.nvim_buf_set_var(bufnr, "aerial_buffer", aer_bufnr)
   -- Set buffer options
   vim.api.nvim_buf_set_var(aer_bufnr, "source_buffer", bufnr)
@@ -38,20 +28,49 @@ local function create_aerial_buffer(bufnr)
   vim.api.nvim_buf_call(aer_bufnr, function()
     vim.api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
   end)
-  -- We create an autocmd to render the first time this buffer is displayed in a window
-  -- Defer it so we have time to set window options and variables on the float first
-  vim.cmd(string.format(
-    [[
-    au CursorMoved <buffer=%d> lua require('aerial.autocommands').on_cursor_move(true)
-    au BufLeave <buffer=%d> lua require('aerial.autocommands').on_leave_aerial_buf()
-    au BufWinEnter <buffer=%d> ++nested ++once lua require('aerial.autocommands').on_first_load(%d)
-  ]],
-    aer_bufnr,
-    aer_bufnr,
-    aer_bufnr,
-    aer_bufnr
-  ))
-  if not data:has_symbols(bufnr) then
+
+  if config.highlight_on_hover then
+    vim.api.nvim_create_autocmd("CursorMoved", {
+      desc = "Aerial update highlights in the source buffer",
+      buffer = aer_bufnr,
+      callback = function()
+        render.update_highlights(bufnr)
+      end,
+    })
+    vim.api.nvim_create_autocmd("BufLeave", {
+      desc = "Aerial clear highlights in the source buffer",
+      buffer = aer_bufnr,
+      callback = function(params)
+        render.clear_highlights(bufnr)
+      end,
+    })
+  end
+  vim.api.nvim_create_autocmd("BufWinEnter", {
+    desc = "Aerial render symbols after buffer loads in window",
+    buffer = aer_bufnr,
+    callback = function(params)
+      -- Defer it so we have time to set window options and variables on the float first
+      vim.defer_fn(function()
+        render.update_aerial_buffer(aer_bufnr)
+        M.update_all_positions(bufnr, 0)
+        -- Center the current symbol after the first render
+        local bufdata = data.get_or_create(bufnr)
+        local last_position = bufdata.positions[bufdata.last_win]
+        local lnum = last_position.lnum
+        if vim.api.nvim_win_is_valid(bufdata.last_win) then
+          local height = vim.api.nvim_win_get_height(bufdata.last_win)
+          local max_topline = vim.api.nvim_buf_line_count(aer_bufnr) - height
+          local topline = math.max(1, math.min(max_topline, lnum - math.floor(height / 2)))
+          local aerial_win = util.buf_first_win_in_tabpage(aer_bufnr)
+          vim.api.nvim_win_call(aerial_win, function()
+            vim.fn.winrestview({ lnum = lnum, topline = topline })
+          end)
+        end
+      end, 1)
+    end,
+  })
+
+  if not data.has_symbols(bufnr) then
     loading.set_loading(aer_bufnr, true)
   end
   return aer_bufnr
@@ -162,7 +181,7 @@ M.open_aerial_in_win = function(src_bufnr, src_winid, aer_winid)
   setup_aerial_win(src_winid, aer_winid, aer_bufnr)
   vim.api.nvim_win_set_buf(aer_winid, aer_bufnr)
   local backend = backends.get(src_bufnr)
-  if backend and not data:has_symbols(src_bufnr) then
+  if backend and not data.has_symbols(src_bufnr) then
     backend.fetch_symbols(src_bufnr)
   end
 end
@@ -202,7 +221,7 @@ M.close = function()
     local backend = backends.get(0)
     -- If this buffer has no supported symbols backend or no symbols,
     -- look for other aerial windows and close the first
-    if backend == nil or not data:has_symbols(0) then
+    if backend == nil or not data.has_symbols(0) then
       for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
         if vim.api.nvim_win_is_valid(winid) then
           local winbuf = vim.api.nvim_win_get_buf(winid)
@@ -250,12 +269,6 @@ M.maybe_open_automatic = function(bufnr)
 end
 
 M.open = function(focus, direction, opts)
-  if vim.fn.has("nvim-0.8") == 0 then
-    vim.notify_once(
-      "aerial is deprecated for Neovim <0.8. Please use the nvim-0.5 branch or upgrade Neovim",
-      vim.log.levels.WARN
-    )
-  end
   opts = vim.tbl_extend("keep", opts or {}, {
     winid = nil,
   })
@@ -277,7 +290,7 @@ M.open = function(focus, direction, opts)
   end
   direction = direction or util.detect_split_direction()
   local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction, opts.winid or aerial_win)
-  if not data:has_symbols(bufnr) then
+  if not data.has_symbols(bufnr) then
     backend.fetch_symbols(bufnr)
   end
   if focus then
@@ -331,7 +344,7 @@ M.get_position_in_win = function(bufnr, winid)
   local cursor = vim.api.nvim_win_get_cursor(winid or 0)
   local lnum = cursor[1]
   local col = cursor[2]
-  local bufdata = data:get_or_create(bufnr)
+  local bufdata = data.get_or_create(bufnr)
   return M.get_symbol_position(bufdata, lnum, col)
 end
 
@@ -373,7 +386,9 @@ M.get_symbol_position = function(bufdata, lnum, col, include_hidden)
   local relative = "above"
   local prev = nil
   local exact_symbol
-  local symbol = bufdata:visit(function(item)
+
+  local symbol
+  for _, item in bufdata:iter({ skip_hidden = not include_hidden }) do
     local cmp, inside = compare(item, lnum, col)
     if inside then
       exact_symbol = item
@@ -386,13 +401,15 @@ M.get_symbol_position = function(bufdata, lnum, col, include_hidden)
     elseif cmp == 0 then
       selected = selected + 1
       relative = "exact"
-      return item
+      symbol = item
+      break
     else
-      return prev or item
+      symbol = prev or item
+      break
     end
     prev = item
     selected = selected + 1
-  end, { incl_hidden = include_hidden })
+  end
   -- Check if we're on the last symbol
   if symbol == nil then
     symbol = prev
@@ -435,14 +452,14 @@ M.update_position = function(winids, last_focused_win)
   end
   local win_bufnr = vim.api.nvim_win_get_buf(winids[1])
   local bufnr = util.get_buffers(win_bufnr)
-  if not data:has_symbols(bufnr) then
+  if not data.has_symbols(bufnr) then
     return
   end
   if util.is_aerial_buffer(win_bufnr) then
     winids = util.get_non_ignored_fixed_wins(bufnr)
   end
 
-  local bufdata = data[bufnr]
+  local bufdata = data.get_or_create(bufnr)
   for _, target_win in ipairs(winids) do
     local pos = M.get_position_in_win(bufnr, target_win)
     if pos ~= nil then

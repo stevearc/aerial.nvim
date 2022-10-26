@@ -1,6 +1,7 @@
 local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
+local util = require("aerial.util")
 
 local conf = require("telescope.config").values
 local entry_display = require("telescope.pickers.entry_display")
@@ -30,7 +31,7 @@ local function aerial_picker(opts)
   if not backend then
     backends.log_support_err()
     return
-  elseif not data:has_symbols(0) then
+  elseif not data.has_symbols(0) then
     backend.fetch_symbols_sync(0, opts)
   end
 
@@ -78,18 +79,20 @@ local function aerial_picker(opts)
 
   local results = {}
   local default_selection_index = 1
-  if data:has_symbols(0) then
-    local symbols = data:get_or_create(0)
-    local position = symbols.positions[symbols.last_win]
-    local i = 1
-    symbols:visit(function(item)
-      if item == position.closest_symbol then
-        default_selection_index = i
-      end
+  if data.has_symbols(0) then
+    local bufdata = data.get_or_create(0)
+    local position = bufdata.positions[bufdata.last_win]
+    for _, item in bufdata:iter({ skip_hidden = false }) do
       table.insert(results, item)
-      i = i + 1
-    end)
+      if item == position.closest_symbol then
+        default_selection_index = #results
+      end
+    end
   end
+
+  -- Reverse the symbols so they have the same top-to-bottom order as in the file
+  util.tbl_reverse(results)
+  default_selection_index = #results - (default_selection_index - 1)
   pickers
     .new(opts, {
       prompt_title = "Document Symbols",

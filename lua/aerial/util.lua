@@ -390,6 +390,20 @@ M.throttle = function(func, opts)
   end
 end
 
+---@generic T : any
+---@param tbl T[]
+---@return T[]
+M.tbl_reverse = function(tbl)
+  local len = #tbl
+  for i = 1, math.floor(len / 2) do
+    local j = len - i + 1
+    local swp = tbl[i]
+    tbl[i] = tbl[j]
+    tbl[j] = swp
+  end
+  return tbl
+end
+
 M.get_filetypes = config.get_filetypes
 
 return M
