@@ -72,6 +72,15 @@ local function create_aerial_buffer(bufnr)
 
   if not data.has_symbols(bufnr) then
     loading.set_loading(aer_bufnr, true)
+    -- Give the backends 50ms to figure out if any of them are supported. If none are supported
+    -- after that timeout, assume that they won't be and reset the loading status.
+    vim.defer_fn(function()
+      local backend = backends.get(bufnr)
+      if not backend and loading.is_loading(aer_bufnr) then
+        loading.set_loading(aer_bufnr, false)
+        render.update_aerial_buffer(aer_bufnr)
+      end
+    end, 50)
   end
   return aer_bufnr
 end
