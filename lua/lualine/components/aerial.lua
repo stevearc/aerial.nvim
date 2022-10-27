@@ -45,7 +45,6 @@
 local M = require("lualine.component"):extend()
 local aerial = require("aerial")
 local utils = require("lualine.utils.utils")
-local identifiers = require("aerial.highlight").identifiers
 
 local default_options = {
   sep = " ⟩ ",
@@ -56,6 +55,7 @@ local default_options = {
 }
 
 function M:color_for_lualine()
+  local identifiers = require("aerial.highlight").identifiers
   self.highlight_groups = {}
   for _, symbol_kind in ipairs(identifiers) do
     local hl = "Aerial" .. symbol_kind
@@ -105,6 +105,7 @@ function M:init(options)
     self.options.colored = true
   end
   if self.options.colored then
+    aerial.sync_load()
     require("aerial.highlight").create_highlight_groups()
     self:color_for_lualine()
   end

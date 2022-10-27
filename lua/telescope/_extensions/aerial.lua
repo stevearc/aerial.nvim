@@ -1,8 +1,3 @@
-local backends = require("aerial.backends")
-local config = require("aerial.config")
-local data = require("aerial.data")
-local util = require("aerial.util")
-
 local conf = require("telescope.config").values
 local entry_display = require("telescope.pickers.entry_display")
 local finders = require("telescope.finders")
@@ -19,6 +14,12 @@ local ext_config = {
 
 local function aerial_picker(opts)
   opts = opts or {}
+  require("aerial").sync_load()
+  local backends = require("aerial.backends")
+  local config = require("aerial.config")
+  local data = require("aerial.data")
+  local util = require("aerial.util")
+
   local bufnr = vim.api.nvim_get_current_buf()
   local filename = vim.api.nvim_buf_get_name(0)
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")

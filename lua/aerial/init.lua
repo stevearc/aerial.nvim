@@ -311,6 +311,11 @@ M.setup = function(opts)
   end
 end
 
+---Synchronously complete setup (if lazy-loaded)
+M.sync_load = function()
+  do_setup()
+end
+
 ---Returns true if aerial is open for the current window or buffer (returns false inside an aerial buffer)
 ---@param opts nil|table
 ---    bufnr nil|integer
