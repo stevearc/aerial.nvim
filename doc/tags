@@ -37,6 +37,7 @@ aerial.prev_up	aerial.txt	/*aerial.prev_up*
 aerial.select	aerial.txt	/*aerial.select*
 aerial.setup	aerial.txt	/*aerial.setup*
 aerial.sync_folds	aerial.txt	/*aerial.sync_folds*
+aerial.sync_load	aerial.txt	/*aerial.sync_load*
 aerial.toggle	aerial.txt	/*aerial.toggle*
 aerial.tree_close	aerial.txt	/*aerial.tree_close*
 aerial.tree_close_all	aerial.txt	/*aerial.tree_close_all*

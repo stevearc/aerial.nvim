@@ -329,6 +329,10 @@ setup({opts})                                                       *aerial.setu
     Parameters:
       {opts} `nil|table`
 
+sync_load()                                                     *aerial.sync_load*
+    Synchronously complete setup (if lazy-loaded)
+
+
 is_open({opts}): boolean                                          *aerial.is_open*
     Returns true if aerial is open for the current window or buffer (returns
     false inside an aerial buffer)

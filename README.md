@@ -562,6 +562,7 @@ hi AerialGuide2 guifg=Blue
 <!-- API -->
 
 - [setup(opts)](doc/api.md#setupopts)
+- [sync_load()](doc/api.md#sync_load)
 - [is_open(opts)](doc/api.md#is_openopts)
 - [close()](doc/api.md#close)
 - [close_all()](doc/api.md#close_all)

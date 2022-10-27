@@ -3,6 +3,7 @@
 <!-- TOC -->
 
 - [setup(opts)](#setupopts)
+- [sync_load()](#sync_load)
 - [is_open(opts)](#is_openopts)
 - [close()](#close)
 - [close_all()](#close_all)
@@ -42,6 +43,12 @@ Initialize aerial
 | Param | Type         | Desc |
 | ----- | ------------ | ---- |
 | opts  | `nil\|table` |      |
+
+## sync_load()
+
+`sync_load()` \
+Synchronously complete setup (if lazy-loaded)
+
 
 ## is_open(opts)
 
