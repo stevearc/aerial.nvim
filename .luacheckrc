@@ -2,7 +2,7 @@ max_comment_line_length = false
 codes = true
 
 exclude_files = {
-  "tests/",
+  "tests/treesitter",
 }
 
 ignore = {
@@ -14,4 +14,6 @@ ignore = {
 
 read_globals = {
   "vim",
+  "a",
+  "assert",
 }
