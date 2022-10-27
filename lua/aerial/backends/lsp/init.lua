@@ -51,22 +51,22 @@ M.fetch_symbols_sync = function(bufnr, opts)
   end
 end
 
-local function mark_lsp_attached(bufnr, attached)
-  vim.api.nvim_buf_set_var(bufnr, "_aerial_lsp_attached", attached)
-end
-
 ---@param bufnr integer
 ---@return boolean
 local function is_lsp_attached(bufnr)
-  local ok, attached = pcall(vim.api.nvim_buf_get_var, bufnr, "_aerial_lsp_attached")
-  return ok and attached
+  for _, client in pairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
+    if client.server_capabilities.documentSymbolProvider then
+      return true
+    end
+  end
+  return false
 end
 
 ---@param bufnr integer
 ---@param exclude_id nil|integer Client ID to exclude from calculation
 ---@return boolean
 local function has_lsp_client(bufnr, exclude_id)
-  for _, client in pairs(vim.lsp.buf_get_clients(bufnr)) do
+  for _, client in pairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
     if client.id ~= exclude_id and client.server_capabilities.documentSymbolProvider then
       return true
     end
@@ -98,14 +98,15 @@ M.on_attach = function(client, bufnr, opts)
   opts = opts or {}
   if client.server_capabilities.documentSymbolProvider then
     hook_handlers(opts.preserve_callback)
-    mark_lsp_attached(bufnr, true)
-    backends.attach(bufnr, true)
+    -- This is called from the LspAttach autocmd
+    -- The client isn't fully attached until just after that autocmd completes, so we need to
+    -- schedule the attach
+    vim.schedule_wrap(backends.attach)(bufnr, true)
   end
 end
 
 M.on_detach = function(client_id, bufnr)
   if not has_lsp_client(bufnr, client_id) then
-    mark_lsp_attached(bufnr, false)
     backends.attach(bufnr, true)
   end
 end
