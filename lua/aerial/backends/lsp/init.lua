@@ -4,31 +4,11 @@ local config = require("aerial.config")
 local util = require("aerial.backends.util")
 local M = {}
 
--- callback args changed in Neovim 0.6. See:
--- https://github.com/neovim/neovim/pull/15504
-local function mk_handler(fn)
-  return function(...)
-    local config_or_client_id = select(4, ...)
-    local is_new = type(config_or_client_id) ~= "number"
-    if is_new then
-      fn(...)
-    else
-      local err = select(1, ...)
-      local method = select(2, ...)
-      local result = select(3, ...)
-      local client_id = select(4, ...)
-      local bufnr = select(5, ...)
-      local conf = select(6, ...)
-      fn(err, result, { method = method, client_id = client_id, bufnr = bufnr }, conf)
-    end
-  end
-end
-
 local function replace_handler(name, callback, preserve_callback)
   local old_callback = vim.lsp.handlers[name]
   local new_callback
   new_callback = function(...)
-    mk_handler(callback)(...)
+    callback(...)
     if preserve_callback then
       old_callback(...)
     end
