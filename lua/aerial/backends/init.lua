@@ -144,7 +144,7 @@ M.set_symbols = function(bufnr, items)
   loading.set_loading(util.get_aerial_buffer(bufnr), false)
 
   render.update_aerial_buffer(bufnr)
-  window.update_all_positions(bufnr, vim.api.nvim_get_current_win())
+  window.update_all_positions(bufnr, 0)
   if not had_symbols then
     fold.maybe_set_foldmethod(bufnr)
     if bufnr == vim.api.nvim_get_current_buf() then
@@ -155,6 +155,9 @@ M.set_symbols = function(bufnr, items)
         window.maybe_open_automatic(bufnr)
       end, 15)
     end
+
+    window.center_symbol_in_view(bufnr)
+
     if config.on_first_symbols then
       config.on_first_symbols(bufnr)
     end

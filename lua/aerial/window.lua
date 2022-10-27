@@ -44,24 +44,13 @@ local function create_aerial_buffer(bufnr)
   vim.api.nvim_create_autocmd("BufWinEnter", {
     desc = "Aerial render symbols after buffer loads in window",
     buffer = aer_bufnr,
+    once = true,
     callback = function(params)
       -- Defer it so we have time to set window options and variables on the float first
       vim.defer_fn(function()
         render.update_aerial_buffer(aer_bufnr)
         M.update_all_positions(bufnr, 0)
-        -- Center the current symbol after the first render
-        local bufdata = data.get_or_create(bufnr)
-        local last_position = bufdata.positions[bufdata.last_win]
-        local lnum = last_position.lnum
-        if vim.api.nvim_win_is_valid(bufdata.last_win) then
-          local height = vim.api.nvim_win_get_height(bufdata.last_win)
-          local max_topline = vim.api.nvim_buf_line_count(aer_bufnr) - height
-          local topline = math.max(1, math.min(max_topline, lnum - math.floor(height / 2)))
-          local aerial_win = util.buf_first_win_in_tabpage(aer_bufnr)
-          vim.api.nvim_win_call(aerial_win, function()
-            vim.fn.winrestview({ lnum = lnum, topline = topline })
-          end)
-        end
+        M.center_symbol_in_view(bufnr)
       end, 1)
     end,
   })
@@ -494,6 +483,27 @@ M.update_position = function(winids, last_focused_win)
       if last_position and num_lines >= last_position.lnum then
         vim.api.nvim_win_set_cursor(aer_winid, { last_position.lnum, 0 })
       end
+    end
+  end
+end
+
+M.center_symbol_in_view = function(buffer)
+  local bufnr, aer_bufnr = util.get_buffers(buffer)
+  if not data.has_symbols(bufnr) then
+    return
+  end
+  local bufdata = data.get_or_create(bufnr)
+  if vim.api.nvim_buf_is_valid(aer_bufnr) and vim.api.nvim_win_is_valid(bufdata.last_win) then
+    local last_position = bufdata.positions[bufdata.last_win]
+    if last_position then
+      local lnum = last_position.lnum
+      local height = vim.api.nvim_win_get_height(bufdata.last_win)
+      local max_topline = vim.api.nvim_buf_line_count(aer_bufnr) - height
+      local topline = math.max(1, math.min(max_topline, lnum - math.floor(height / 2)))
+      local aerial_win = util.buf_first_win_in_tabpage(aer_bufnr)
+      vim.api.nvim_win_call(aerial_win, function()
+        vim.fn.winrestview({ lnum = lnum, topline = topline })
+      end)
     end
   end
 end
