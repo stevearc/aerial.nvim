@@ -24,10 +24,6 @@ local function create_aerial_buffer(bufnr)
   vim.api.nvim_buf_set_option(aer_bufnr, "buflisted", false)
   vim.api.nvim_buf_set_option(aer_bufnr, "swapfile", false)
   vim.api.nvim_buf_set_option(aer_bufnr, "modifiable", false)
-  -- Set the filetype only after we enter the buffer so that ftplugins behave properly
-  vim.api.nvim_buf_call(aer_bufnr, function()
-    vim.api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
-  end)
 
   if config.highlight_on_hover then
     vim.api.nvim_create_autocmd("CursorMoved", {
@@ -94,6 +90,7 @@ local function setup_aerial_win(src_winid, aer_winid, aer_bufnr)
   if aer_winid == 0 then
     aer_winid = vim.api.nvim_get_current_win()
   end
+  vim.api.nvim_win_set_buf(aer_winid, aer_bufnr)
   vim.api.nvim_win_set_option(aer_winid, "list", false)
   vim.api.nvim_win_set_option(aer_winid, "winfixwidth", true)
   vim.api.nvim_win_set_option(aer_winid, "number", false)
@@ -106,6 +103,8 @@ local function setup_aerial_win(src_winid, aer_winid, aer_bufnr)
 
   vim.api.nvim_win_set_var(aer_winid, "source_win", src_winid)
   vim.api.nvim_win_set_var(src_winid, "aerial_win", aer_winid)
+  -- Set the filetype only after we enter the buffer so that ftplugins behave properly
+  vim.api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
   util.restore_width(aer_winid, aer_bufnr)
 end
 
@@ -167,14 +166,14 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
       end
       vim.cmd(string.format("noau vertical %s 1split", modifier))
       aer_winid = vim.api.nvim_get_current_win()
-      util.go_win_no_au(my_winid)
     end
   else
     aer_winid = existing_win
   end
 
+  util.go_win_no_au(aer_winid)
   setup_aerial_win(my_winid, aer_winid, aer_bufnr)
-  vim.api.nvim_win_set_buf(aer_winid, aer_bufnr)
+  util.go_win_no_au(my_winid)
 
   return aer_winid
 end
@@ -187,8 +186,10 @@ M.open_aerial_in_win = function(src_bufnr, src_winid, aer_winid)
   if aer_bufnr == -1 then
     aer_bufnr = create_aerial_buffer(src_bufnr)
   end
+  local my_winid = vim.api.nvim_get_current_win()
+  util.go_win_no_au(aer_winid)
   setup_aerial_win(src_winid, aer_winid, aer_bufnr)
-  vim.api.nvim_win_set_buf(aer_winid, aer_bufnr)
+  util.go_win_no_au(my_winid)
   local backend = backends.get(src_bufnr)
   if backend and not data.has_symbols(src_bufnr) then
     backend.fetch_symbols(src_bufnr)
