@@ -82,7 +82,11 @@ M.update_aerial_buffer = function(buf)
       end
     else
       table.insert(lines, "")
-      vim.list_extend(lines, backends.get_status_lines(bufnr))
+      for _, status in ipairs(backends.get_status(bufnr)) do
+        if not status.supported then
+          table.insert(lines, status.name .. " (not supported) [" .. status.error .. "]")
+        end
+      end
     end
     resize_all_wins(aer_bufnr)
     util.render_centered_text(aer_bufnr, lines)
