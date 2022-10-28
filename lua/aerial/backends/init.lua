@@ -20,6 +20,9 @@ end
 ---@return boolean
 ---@return string?
 M.is_supported = function(bufnr, name)
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return false, "Buffer is invalid"
+  end
   local max_lines = config.disable_max_lines
   if max_lines and max_lines > 0 and vim.api.nvim_buf_line_count(bufnr) > max_lines then
     return false, "File exceeds disable_max_lines size"

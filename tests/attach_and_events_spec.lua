@@ -28,14 +28,14 @@ a.describe("config", function()
       lazy_load = false,
       attach_mode = "window",
     })
-    vim.cmd("edit README.md")
+    vim.cmd.edit({ args = { "README.md" } })
     aerial.toggle({ focus = false })
     local aerial_win = util.get_aerial_win(0)
     assert.is_not_nil(aerial_win)
     -- Wait for symbols to populate
     sleep(1)
     assert.falsy(has_no_symbols(vim.api.nvim_win_get_buf(aerial_win)))
-    vim.cmd("edit LICENSE")
+    vim.cmd.edit({ args = { "LICENSE" } })
     -- Wait for autocmd to run and attached buffer to switch
     sleep(10)
     local aerial_buf = vim.api.nvim_win_get_buf(aerial_win)
@@ -44,4 +44,67 @@ a.describe("config", function()
     assert.falsy(loading.is_loading(aerial_buf))
     assert.truthy(has_no_symbols(vim.api.nvim_win_get_buf(aerial_win)))
   end)
+
+  a.it(
+    "close_automatic_events = 'unsupported' closes aerial when entering unsupported buffer",
+    function()
+      aerial.setup({
+        lazy_load = false,
+        attach_mode = "window",
+        close_automatic_events = { "unsupported" },
+      })
+      vim.cmd.edit({ args = { "README.md" } })
+      aerial.toggle({ focus = false })
+      local aerial_win = util.get_aerial_win(0)
+      assert.is_not_nil(aerial_win)
+      -- Wait for symbols to populate
+      sleep(1)
+      vim.cmd.edit({ args = { "LICENSE" } })
+      -- Wait for autocmd to run and attached buffer to switch
+      sleep(50)
+      assert.falsy(vim.api.nvim_win_is_valid(aerial_win))
+    end
+  )
+
+  a.it("close_automatic_events = 'unfocus' closes aerial when leaving window", function()
+    aerial.setup({
+      lazy_load = false,
+      attach_mode = "window",
+      close_automatic_events = { "unfocus" },
+    })
+    vim.cmd.edit({ args = { "README.md" } })
+    local main_win = vim.api.nvim_get_current_win()
+    aerial.toggle({ focus = true })
+    local aerial_win = vim.api.nvim_get_current_win()
+    assert.is_not.equals(main_win, aerial_win)
+    assert.truthy(vim.api.nvim_win_is_valid(aerial_win))
+    -- Wait for symbols to populate
+    sleep(1)
+    vim.api.nvim_set_current_win(main_win)
+    sleep(10)
+    assert.truthy(vim.api.nvim_win_is_valid(aerial_win))
+    vim.cmd.vsplit()
+    sleep(10)
+    assert.falsy(vim.api.nvim_win_is_valid(aerial_win))
+  end)
+
+  a.it(
+    "close_automatic_events = 'switch_buffer' closes aerial when buffer in window changes",
+    function()
+      aerial.setup({
+        lazy_load = false,
+        attach_mode = "window",
+        close_automatic_events = { "switch_buffer" },
+      })
+      vim.cmd.edit({ args = { "README.md" } })
+      aerial.toggle({ focus = false })
+      local aerial_win = util.get_aerial_win(0)
+      assert.truthy(vim.api.nvim_win_is_valid(aerial_win))
+      -- Wait for symbols to populate
+      sleep(1)
+      vim.cmd.edit({ args = { "doc/api.md" } })
+      sleep(10)
+      assert.falsy(vim.api.nvim_win_is_valid(aerial_win))
+    end
+  )
 end)

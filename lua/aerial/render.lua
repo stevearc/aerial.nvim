@@ -69,6 +69,10 @@ end
 
 -- Update the aerial buffer from cached symbols
 M.update_aerial_buffer = function(buf)
+  buf = buf or 0
+  if not vim.api.nvim_buf_is_valid(buf) then
+    return
+  end
   local bufnr, aer_bufnr = util.get_buffers(buf)
   if aer_bufnr == -1 or loading.is_loading(aer_bufnr) then
     resize_all_wins(aer_bufnr)
