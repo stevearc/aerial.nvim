@@ -88,6 +88,9 @@ local function setup_aerial_win(src_winid, aer_winid, aer_bufnr)
   vim.api.nvim_win_set_option(aer_winid, "relativenumber", false)
   vim.api.nvim_win_set_option(aer_winid, "wrap", false)
   vim.api.nvim_win_set_option(aer_winid, "spell", false)
+  for k, v in pairs(config.layout.win_opts) do
+    vim.api.nvim_win_set_option(aer_winid, k, v)
+  end
   vim.api.nvim_win_set_var(aer_winid, "is_aerial_win", true)
 
   vim.api.nvim_win_set_var(aer_winid, "source_win", src_winid)
