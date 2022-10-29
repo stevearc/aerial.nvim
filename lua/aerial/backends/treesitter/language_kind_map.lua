@@ -70,6 +70,15 @@ return {
     module_definition = "Module",
     struct_definition = "Class",
   },
+  latex = {
+    generic_environment = "Class",
+    new_command_definition = "Function",
+    section = "Method",
+    subsection = "Method",
+    subsubsection = "Method",
+    title_declaration = "Field",
+    author_declaration = "Field",
+  },
   lua = {
     function_declaration = "Function",
     function_definition = "Function",

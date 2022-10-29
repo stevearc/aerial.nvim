@@ -279,6 +279,18 @@ M.typescript = {
   end,
 }
 
+M.latex = {
+  postprocess = function(bufnr, item, match)
+    local type_node = (utils.get_at_path(match, "type") or {}).node
+    local base_type = type_node:type()
+    if base_type == "title_declaration" then
+      item.name = "Title: " .. item.name
+    elseif base_type == "author_declaration" then
+      item.name = "Authors: " .. item.name
+    end
+  end,
+}
+
 -- tsx needs the same transformations as typescript for now.
 -- This may not always be the case.
 M.tsx = M.typescript
