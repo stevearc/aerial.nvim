@@ -67,7 +67,6 @@ M.fetch_symbols = M.fetch_symbols_sync
 
 M.attach = function(bufnr)
   backend_util.add_change_watcher(bufnr, "man")
-  M.fetch_symbols(bufnr)
 end
 
 M.detach = function(bufnr)

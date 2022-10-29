@@ -96,6 +96,7 @@ local function attach(bufnr, backend, name, existing_backend_name)
   end
   set_backend(bufnr, name)
   backend.attach(bufnr)
+  backend.fetch_symbols(bufnr)
   if existing_backend_name then
     M.get_backend_by_name(existing_backend_name).detach(bufnr)
   else

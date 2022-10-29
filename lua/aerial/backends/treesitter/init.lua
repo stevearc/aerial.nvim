@@ -122,7 +122,6 @@ M.fetch_symbols = M.fetch_symbols_sync
 
 M.attach = function(bufnr)
   util.add_change_watcher(bufnr, "treesitter")
-  M.fetch_symbols(bufnr)
 end
 
 M.detach = function(bufnr)

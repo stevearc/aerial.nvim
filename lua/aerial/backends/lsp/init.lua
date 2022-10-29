@@ -118,7 +118,6 @@ M.attach = function(bufnr)
   if not config.lsp.diagnostics_trigger_update then
     util.add_change_watcher(bufnr, "lsp")
   end
-  M.fetch_symbols(bufnr)
 end
 
 M.detach = function(bufnr)
