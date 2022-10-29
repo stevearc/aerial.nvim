@@ -114,6 +114,7 @@ end
 
 ---@param bufnr? integer
 ---@return aerial.Backend?
+---@return string?
 M.get = function(bufnr)
   local existing_backend_name = M.get_attached_backend(bufnr)
   if existing_backend_name then

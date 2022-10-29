@@ -107,7 +107,10 @@ end
 
 M.on_detach = function(client_id, bufnr)
   if not has_lsp_client(bufnr, client_id) then
-    backends.attach(bufnr, true)
+    -- This is called from the LspDetach autocmd
+    -- The client isn't fully attached until just after that autocmd completes, so we need to
+    -- schedule the attach
+    vim.schedule_wrap(backends.attach)(bufnr, true)
   end
 end
 
