@@ -60,7 +60,7 @@ M.fetch_symbols_sync = function(bufnr)
     prev_line = line
   end
   finalize_header()
-  backends.set_symbols(bufnr, items)
+  backends.set_symbols("man", bufnr, items)
 end
 
 M.fetch_symbols = M.fetch_symbols_sync

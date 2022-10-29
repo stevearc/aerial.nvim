@@ -108,7 +108,7 @@ local function process_symbols(symbols, bufnr)
 end
 
 M.handle_symbols = function(result, bufnr)
-  backends.set_symbols(bufnr, process_symbols(result, bufnr))
+  backends.set_symbols("lsp", bufnr, process_symbols(result, bufnr))
 end
 
 local function get_error_count(bufnr, client_id)

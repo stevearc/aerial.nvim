@@ -86,8 +86,11 @@ end
 ---@param bufnr? integer
 ---@param backend? aerial.Backend
 ---@param name? string
----@param existing_backend_name? string
-local function attach(bufnr, backend, name, existing_backend_name)
+local function attach(bufnr, backend, name)
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  local existing_backend_name = M.get_attached_backend(bufnr)
   if not backend or not name or name == existing_backend_name then
     return
   end
@@ -96,7 +99,6 @@ local function attach(bufnr, backend, name, existing_backend_name)
   end
   set_backend(bufnr, name)
   backend.attach(bufnr)
-  backend.fetch_symbols(bufnr)
   if existing_backend_name then
     M.get_backend_by_name(existing_backend_name).detach(bufnr)
   else
@@ -107,7 +109,21 @@ local function attach(bufnr, backend, name, existing_backend_name)
     local util = require("aerial.util")
     local aer_bufnr = util.get_aerial_buffer(bufnr)
     loading.set_loading(aer_bufnr, not data.has_received_data(bufnr))
+
+    -- On first attach, fetch symbols from ALL possible backends so that they will race and the
+    -- fastest provider will display symbols (instead of just waiting for the prioritized backend
+    -- to come back with symbols)
+    local candidates = config.backends(bufnr)
+    for _, candidate_name in ipairs(candidates) do
+      if name ~= candidate_name and M.is_supported(bufnr, candidate_name) then
+        local other_backend = M.get_backend_by_name(candidate_name)
+        if other_backend then
+          other_backend.fetch_symbols(bufnr)
+        end
+      end
+    end
   end
+  backend.fetch_symbols(bufnr)
   if not existing_backend_name and config.on_attach then
     config.on_attach(bufnr)
   end
@@ -123,14 +139,15 @@ M.get = function(bufnr)
   end
   local backend, name = get_best_backend(bufnr)
   if backend and name then
-    attach(bufnr, backend, name, existing_backend_name)
+    attach(bufnr, backend, name)
   end
   return backend, name
 end
 
+---@param backend_name string
 ---@param bufnr? integer
 ---@param items aerial.Symbol[]
-M.set_symbols = function(bufnr, items)
+M.set_symbols = function(backend_name, bufnr, items)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -145,6 +162,11 @@ M.set_symbols = function(bufnr, items)
   local window = require("aerial.window")
 
   local had_symbols = data.has_symbols(bufnr)
+  -- Ignore symbols from non-attached backend IFF we already have symbols
+  if had_symbols and not M.is_backend_attached(bufnr, backend_name) then
+    return
+  end
+
   data.set_symbols(bufnr, items)
   loading.set_loading(util.get_aerial_buffer(bufnr), false)
 
@@ -192,9 +214,8 @@ end
 ---@param refresh? boolean
 M.attach = function(bufnr, refresh)
   if refresh then
-    local existing_backend_name = M.get_attached_backend(bufnr)
     local backend, name = get_best_backend()
-    attach(bufnr, backend, name, existing_backend_name)
+    attach(bufnr, backend, name)
   else
     M.get(bufnr)
   end

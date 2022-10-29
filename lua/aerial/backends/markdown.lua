@@ -49,7 +49,7 @@ M.fetch_symbols_sync = function(bufnr)
   end
   -- This sets the proper end_lnum and end_col
   extensions.markdown.postprocess_symbols(bufnr, items)
-  backends.set_symbols(bufnr, items)
+  backends.set_symbols("markdown", bufnr, items)
 end
 
 M.fetch_symbols = M.fetch_symbols_sync
