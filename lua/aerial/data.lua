@@ -200,21 +200,23 @@ function M.set_symbols(buf, items)
   bufdata.flat_items = {}
   bufdata.max_level = 0
   local i = 1
+  local prev_by_level = {}
+  local max_level = 0
   bufdata:visit(function(item)
     item.idx = i
     item.id = string.format("%d:%s", i, item.name)
+    local prev = prev_by_level[item.level]
+    if prev then
+      prev.next_sibling = item
+    end
+    for j = item.level + 1, max_level do
+      prev_by_level[j] = nil
+    end
+    max_level = item.level
+    prev_by_level[item.level] = item
     bufdata.max_level = math.max(bufdata.max_level, item.level)
     table.insert(bufdata.flat_items, item)
     i = i + 1
-    if item.children then
-      local child
-      for _, next_sibling in ipairs(item.children) do
-        if child then
-          child.next_sibling = next_sibling
-        end
-        child = next_sibling
-      end
-    end
   end)
 end
 
