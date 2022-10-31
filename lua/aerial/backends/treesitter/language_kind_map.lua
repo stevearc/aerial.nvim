@@ -72,7 +72,7 @@ return {
   },
   latex = {
     generic_environment = "Class",
-    new_command_definition = "Function",
+    new_command_definition = "Operator",
     section = "Method",
     subsection = "Method",
     subsubsection = "Method",

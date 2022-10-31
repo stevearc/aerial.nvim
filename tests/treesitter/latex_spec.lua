@@ -4,7 +4,7 @@ describe("treesitter latex", function()
   it("parses all symbols correctly", function()
     util.test_file_symbols("treesitter", "./tests/treesitter/latex_test.tex", {
       {
-        kind = "Function",
+        kind = "Operator",
         name = "\\abs",
         level = 0,
         lnum = 3,
