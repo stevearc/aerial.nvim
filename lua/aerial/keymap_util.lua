@@ -6,16 +6,18 @@ local function resolve(rhs)
   if type(rhs) == "string" and vim.startswith(rhs, "actions.") then
     return resolve(actions[vim.split(rhs, ".", true)[2]])
   elseif type(rhs) == "table" then
-    return rhs.callback, rhs.desc
+    local opts = vim.deepcopy(rhs)
+    opts.callback = nil
+    return rhs.callback, opts
   end
-  return rhs
+  return rhs, {}
 end
 
 M.set_keymaps = function(mode, keymaps, bufnr)
   for k, v in pairs(keymaps) do
-    local rhs, desc = resolve(v)
+    local rhs, opts = resolve(v)
     if rhs then
-      vim.keymap.set(mode, k, rhs, { buffer = bufnr, desc = desc })
+      vim.keymap.set(mode, k, rhs, vim.tbl_extend("keep", { buffer = bufnr }, opts))
     end
   end
 end
@@ -24,12 +26,14 @@ M.show_help = function(keymaps)
   local rhs_to_lhs = {}
   local lhs_to_all_lhs = {}
   for k, rhs in pairs(keymaps) do
-    if rhs_to_lhs[rhs] then
-      local first_lhs = rhs_to_lhs[rhs]
-      table.insert(lhs_to_all_lhs[first_lhs], k)
-    else
-      rhs_to_lhs[rhs] = k
-      lhs_to_all_lhs[k] = { k }
+    if rhs then
+      if rhs_to_lhs[rhs] then
+        local first_lhs = rhs_to_lhs[rhs]
+        table.insert(lhs_to_all_lhs[first_lhs], k)
+      else
+        rhs_to_lhs[rhs] = k
+        lhs_to_all_lhs[k] = { k }
+      end
     end
   end
 
@@ -39,11 +43,11 @@ M.show_help = function(keymaps)
   for k, rhs in pairs(keymaps) do
     local all_lhs = lhs_to_all_lhs[k]
     if all_lhs then
-      local _, desc = resolve(rhs)
+      local _, opts = resolve(rhs)
       local keystr = table.concat(all_lhs, "/")
       max_lhs = math.max(max_lhs, vim.api.nvim_strwidth(keystr))
       table.insert(col_left, { str = keystr, all_lhs = all_lhs })
-      table.insert(col_desc, desc or "")
+      table.insert(col_desc, opts.desc or "")
     end
   end
 
