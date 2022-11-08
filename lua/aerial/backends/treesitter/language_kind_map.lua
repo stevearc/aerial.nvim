@@ -64,10 +64,10 @@ return {
   julia = {
     const_statement = "Constant",
     abstract_definition = "Interface",
-    call_expression = "Function",
     function_definition = "Function",
     macro_definition = "Function",
     module_definition = "Module",
+    short_function_definition = "Function",
     struct_definition = "Class",
   },
   latex = {

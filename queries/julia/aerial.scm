@@ -4,9 +4,8 @@
 (function_definition
   name: (identifier) @name) @type
 
-(assignment_expression
-  . (call_expression
-    (identifier) @name) @type) @start
+(short_function_definition
+  name: (identifier) @name) @type
 
 (abstract_definition
   name: (identifier) @name) @type
