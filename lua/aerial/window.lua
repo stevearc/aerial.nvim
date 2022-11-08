@@ -175,6 +175,10 @@ end
 ---@param aer_winid integer aerial window
 M.open_aerial_in_win = function(src_bufnr, src_winid, aer_winid)
   local aer_bufnr = util.get_aerial_buffer(src_bufnr)
+  -- If aerial is already open in the window, early return
+  if aer_bufnr == vim.api.nvim_win_get_buf(aer_winid) then
+    return
+  end
   if aer_bufnr == -1 then
     aer_bufnr = create_aerial_buffer(src_bufnr)
   end
