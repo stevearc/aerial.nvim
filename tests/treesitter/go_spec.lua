@@ -30,6 +30,15 @@ describe("treesitter go", function()
         end_lnum = 7,
         end_col = 23,
       },
+      {
+        kind = "Interface",
+        name = "MyInterface",
+        level = 0,
+        lnum = 9,
+        col = 0,
+        end_lnum = 9,
+        end_col = 28,
+      },
     })
   end)
 end)

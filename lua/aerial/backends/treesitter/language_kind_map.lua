@@ -35,6 +35,7 @@ return {
   },
   go = {
     function_declaration = "Function",
+    interface_type = "Interface",
     method_declaration = "Method",
     struct_type = "Struct",
   },
