@@ -11,8 +11,17 @@ M.create_highlight_groups = function()
   link("AerialLine", "QuickFixLine")
   link("AerialLineNC", "AerialLine")
 
+  -- Use Comment colors for AerialGuide, while stripping bold/italic/etc
+  local comment_defn = vim.api.nvim_get_hl_by_name("Comment", true)
   -- The guides when show_guide = true
-  link("AerialGuide", "Comment")
+  vim.api.nvim_set_hl(0, "AerialGuide", {
+    fg = comment_defn.foreground,
+    bg = comment_defn.background,
+    ctermfg = comment_defn.ctermfg,
+    ctermbg = comment_defn.ctermbg,
+    blend = comment_defn.blend,
+    default = true,
+  })
   for i = 1, 9 do
     link(string.format("AerialGuide%d", i), "AerialGuide")
   end
