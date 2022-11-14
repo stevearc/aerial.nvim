@@ -422,14 +422,12 @@ prev_up({count})                                                  *aerial.prev_u
     Parameters:
       {count} `nil|integer` How many levels to jump up (default 1)
 
-get_location({exact}): table                                 *aerial.get_location*
+get_location({exact}): table[]                               *aerial.get_location*
     Get a list representing the symbol path to the current location.
 
     Parameters:
       {exact} `nil|boolean` If true, only return symbols if we are exactly
               inside the hierarchy. When false, will return the closest symbol.
-    Returns:
-      `table` []
 
     Note:
       Returns empty list if none found or in an invalid buffer.

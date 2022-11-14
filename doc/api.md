@@ -163,17 +163,12 @@ Jump to a symbol higher in the tree, moving backwards
 
 ## get_location(exact)
 
-`get_location(exact): table` \
+`get_location(exact): table[]` \
 Get a list representing the symbol path to the current location.
 
 | Param | Type           | Desc                                                                                                             |
 | ----- | -------------- | ---------------------------------------------------------------------------------------------------------------- |
 | exact | `nil\|boolean` | If true, only return symbols if we are exactly inside the hierarchy. When false, will return the closest symbol. |
-
-Returns:
-| Type  | Desc |
-| ----- | ---- |
-| table | []   |
 
 **Note:**
 <pre>
