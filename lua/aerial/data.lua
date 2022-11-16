@@ -7,15 +7,11 @@ local config = require("aerial.config")
 ---@field col integer
 ---@field end_col integer
 
----@class aerial.Symbol
+---@class aerial.Symbol : aerial.Range
 ---@field kind string
 ---@field name string
 ---@field level integer
 ---@field parent? aerial.Symbol
----@field lnum integer
----@field end_lnum integer
----@field col integer
----@field end_col integer
 ---@field selection_range? aerial.Range
 ---@field children? aerial.Symbol[]
 

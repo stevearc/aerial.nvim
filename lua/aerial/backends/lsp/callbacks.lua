@@ -37,7 +37,10 @@ local function symbols_at_same_position(a, b)
   return true
 end
 
-local function process_symbols(symbols, bufnr)
+---@param symbols table
+---@param bufnr integer
+---@param fix_start_col boolean
+local function process_symbols(symbols, bufnr, fix_start_col)
   local include_kind = config.get_filter_kind_map(bufnr)
   local max_line = vim.api.nvim_buf_line_count(bufnr)
   local function _process_symbols(symbols_, parent, list, level)
@@ -69,6 +72,14 @@ local function process_symbols(symbols, bufnr)
         -- Some language servers give number values that are wildly incorrect
         -- See https://github.com/stevearc/aerial.nvim/issues/101
         item.end_lnum = math.min(item.end_lnum, max_line)
+
+        if fix_start_col then
+          -- If the start col is off the end of the line, move it to the start of the line
+          local line = vim.api.nvim_buf_get_lines(bufnr, item.lnum - 1, item.lnum, false)[1]
+          if line and item.col >= vim.api.nvim_strwidth(line) then
+            item.col = line:match("^%s*"):len()
+          end
+        end
 
         -- Skip this symbol if it's in the same location as the last one.
         -- This can happen on C++ macros
@@ -107,8 +118,11 @@ local function process_symbols(symbols, bufnr)
   return _process_symbols(symbols, nil, {}, 0)
 end
 
-M.handle_symbols = function(result, bufnr)
-  backends.set_symbols("lsp", bufnr, process_symbols(result, bufnr))
+M.handle_symbols = function(result, bufnr, client_name)
+  -- Volar produces some symbols that start off the end of a line. We have to correct that or it
+  -- causes navigation problems.
+  local symbols = process_symbols(result, bufnr, client_name == "volar")
+  backends.set_symbols("lsp", bufnr, symbols)
 end
 
 local function get_error_count(bufnr, client_id)
@@ -141,12 +155,13 @@ M.symbol_callback = function(_err, result, context, _config)
     return
   end
 
+  local client = vim.lsp.get_client_by_id(context.client_id)
   -- Debounce this callback to avoid unnecessary re-rendering
   if results[bufnr] == nil then
     vim.defer_fn(function()
       local r = results[bufnr]
       results[bufnr] = nil
-      M.handle_symbols(r, bufnr)
+      M.handle_symbols(r, bufnr, client.name)
     end, 100)
   end
   results[bufnr] = result
