@@ -10,9 +10,13 @@ PLUGINS=".testenv/data/nvim/site/pack/plugins/start"
 
 if [ ! -e "$PLUGINS/plenary.nvim" ]; then
   git clone --depth=1 https://github.com/nvim-lua/plenary.nvim.git "$PLUGINS/plenary.nvim"
+else
+  (cd "$PLUGINS/plenary.nvim" && git pull)
 fi
 if [ ! -e "$PLUGINS/nvim-treesitter" ]; then
   git clone --depth=1 https://github.com/nvim-treesitter/nvim-treesitter.git "$PLUGINS/nvim-treesitter"
+else
+  (cd "$PLUGINS/nvim-treesitter" && git pull)
 fi
 
 XDG_CONFIG_HOME=".testenv/config" \
