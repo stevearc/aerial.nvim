@@ -63,6 +63,9 @@ end
 ---@param bufnr nil|integer
 ---@return boolean
 M.is_aerial_buffer = function(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr or 0) then
+    return false
+  end
   local ft = vim.api.nvim_buf_get_option(bufnr or 0, "filetype")
   return ft == "aerial"
 end

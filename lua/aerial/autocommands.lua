@@ -20,13 +20,6 @@ local function should_close_aerial(aer_win)
   end
   local src_buf = util.get_source_buffer(aer_buf)
 
-  if config.close_automatic_events.unfocus then
-    -- Close the window if the aerial source win is not the current win
-    if src_win ~= vim.api.nvim_get_current_win() then
-      return true
-    end
-  end
-
   -- Close the aerial window if its attached buffer is unsupported
   if config.close_automatic_events.unsupported then
     if not vim.api.nvim_buf_is_valid(src_buf) or not backends.get(src_buf) then
@@ -39,29 +32,38 @@ end
 local function update_aerial_windows()
   local config = require("aerial.config")
   local window = require("aerial.window")
+  local curwin = vim.api.nvim_get_current_win()
   for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-    if not vim.api.nvim_win_is_valid(winid) then
+    if not vim.api.nvim_win_is_valid(winid) or not util.is_aerial_win(winid) then
       goto continue
     end
     local winbuf = vim.api.nvim_win_get_buf(winid)
-    if not util.is_aerial_buffer(winbuf) then
-      goto continue
+    local src_win = util.get_source_win(winid)
+    local src_buf
+    if src_win then
+      src_buf = vim.api.nvim_win_get_buf(src_win)
     end
     local close = false
+
+    if config.close_automatic_events.unfocus and curwin ~= winid then
+      -- Close the window if the aerial source win is not the current win
+      if src_win ~= vim.api.nvim_get_current_win() then
+        close = true
+      end
+    end
+    if src_buf then
+      -- Close the aerial window if its source window has switched buffers
+      if config.close_automatic_events.switch_buffer then
+        if src_buf ~= util.get_source_buffer(winbuf) then
+          close = true
+        end
+      end
+    end
+
     if config.attach_mode == "global" then
       window.open_aerial_in_win(0, 0, winid)
     elseif config.attach_mode == "window" then
-      local src_win = util.get_source_win(winid)
-      if src_win then
-        local src_buf = vim.api.nvim_win_get_buf(src_win)
-
-        -- Close the aerial window if its source window has switched buffers
-        if config.close_automatic_events.switch_buffer then
-          if src_buf ~= util.get_source_buffer(winbuf) then
-            close = true
-          end
-        end
-
+      if src_win and src_buf then
         if util.get_source_win(winid) == vim.api.nvim_get_current_win() then
           window.open_aerial_in_win(src_buf, src_win, winid)
         end

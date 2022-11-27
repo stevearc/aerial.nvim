@@ -73,12 +73,6 @@ end
 ---@param src_winid integer
 ---@param aer_winid integer
 local function setup_aerial_win(src_winid, aer_winid, aer_bufnr)
-  if src_winid == 0 then
-    src_winid = vim.api.nvim_get_current_win()
-  end
-  if aer_winid == 0 then
-    aer_winid = vim.api.nvim_get_current_win()
-  end
   vim.api.nvim_win_set_buf(aer_winid, aer_bufnr)
   vim.api.nvim_win_set_option(aer_winid, "list", false)
   vim.api.nvim_win_set_option(aer_winid, "winfixwidth", true)
@@ -174,9 +168,19 @@ end
 ---@param src_winid integer window containing source buffer
 ---@param aer_winid integer aerial window
 M.open_aerial_in_win = function(src_bufnr, src_winid, aer_winid)
+  if src_winid == 0 then
+    src_winid = vim.api.nvim_get_current_win()
+  end
+  if aer_winid == 0 then
+    aer_winid = vim.api.nvim_get_current_win()
+  end
   local aer_bufnr = util.get_aerial_buffer(src_bufnr)
   -- If aerial is already open in the window, early return
   if aer_bufnr == vim.api.nvim_win_get_buf(aer_winid) then
+    -- Always update the source/aerial win pointers because attach_mode = "global" requires that
+    -- they be up to date. We may be calling open_aerial_in_win for same buffer but in a new win.
+    vim.api.nvim_win_set_var(aer_winid, "source_win", src_winid)
+    vim.api.nvim_win_set_var(src_winid, "aerial_win", aer_winid)
     return
   end
   if aer_bufnr == -1 then
