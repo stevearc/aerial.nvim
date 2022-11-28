@@ -73,7 +73,7 @@ M.fetch_symbols_sync = function(bufnr)
     if not type_node or type_node == parent_node then
       goto continue
     end
-    local kind = kind_map[type_node:type()]
+    local kind = match.kind or kind_map[type_node:type()]
     if not kind then
       vim.api.nvim_err_writeln(
         string.format("Missing entry in aerial treesitter kind_map: %s", type_node:type())

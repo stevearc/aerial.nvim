@@ -80,10 +80,6 @@ return {
     title_declaration = "Field",
     author_declaration = "Field",
   },
-  lua = {
-    function_declaration = "Function",
-    function_definition = "Function",
-  },
   make = {
     rule = "Interface",
   },
@@ -126,15 +122,6 @@ return {
     method = "Method",
     module = "Module",
     singleton_method = "Method",
-  },
-  rust = {
-    enum_item = "Enum",
-    function_item = "Function",
-    function_signature_item = "Function",
-    impl_item = "Class",
-    mod_item = "Module",
-    struct_item = "Struct",
-    trait_item = "Interface",
   },
   scala = {
     trait_definition = "Interface",
