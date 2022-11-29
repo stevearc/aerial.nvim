@@ -453,7 +453,7 @@ require("aerial").setup({
 ```
 
 All possible SymbolKind values can be found [in the LSP
-spec](https://microsoft.github.io/language-server-protocol/specifications/specification-3-17/#symbolKind).
+spec](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#symbolKind).
 These are the values used for configuring icons, highlight groups, and
 filtering.
 
