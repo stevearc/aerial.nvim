@@ -1,2 +1,4 @@
 (section
-  (title) @name) @type
+  (title) @name
+  (#set! "kind" "Interface")
+  ) @type

@@ -1,6 +1,5 @@
 local backends = require("aerial.backends")
 local config = require("aerial.config")
-local language_kind_map = require("aerial.backends.treesitter.language_kind_map")
 local util = require("aerial.backends.util")
 
 ---@type aerial.Backend
@@ -59,7 +58,6 @@ M.fetch_symbols_sync = function(bufnr)
   -- It is used to determine node parents for the tree structure.
   local stack = {}
   local ext = extensions[lang]
-  local kind_map = language_kind_map[lang]
   for match in query.iter_group_results(bufnr, "aerial", syntax_tree:root(), lang) do
     local name_node = (match.name or {}).node
     local type_node = (match.type or {}).node
@@ -73,10 +71,10 @@ M.fetch_symbols_sync = function(bufnr)
     if not type_node or type_node == parent_node then
       goto continue
     end
-    local kind = kind_map[type_node:type()]
+    local kind = match.kind
     if not kind then
       vim.api.nvim_err_writeln(
-        string.format("Missing entry in aerial treesitter kind_map: %s", type_node:type())
+        string.format("Missing 'kind' metadata in query file.")
       )
       break
     end
