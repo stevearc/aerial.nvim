@@ -15,4 +15,4 @@ Please provide a minimal file in your language that includes all of the language
 [minimal code here]
 ```
 
-If it is not obvious how each of the language constructs should map to a [LSP SymbolKind](https://microsoft.github.io/language-server-protocol/specifications/specification-3-17/#symbolKind), please specify which SymbolKind to use for each of them.
+If it is not obvious how each of the language constructs should map to a [LSP SymbolKind](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#symbolKind), please specify which SymbolKind to use for each of them.
