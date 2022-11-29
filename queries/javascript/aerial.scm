@@ -1,18 +1,26 @@
 (class_declaration
-  name: (identifier) @name) @type
+  name: (identifier) @name
+  (#set! "kind" "Class")
+  ) @type
 
 (function_declaration
-  name: (identifier) @name) @type
+  name: (identifier) @name
+  (#set! "kind" "Function")
+  ) @type
 
 (method_definition
-  name: (property_identifier) @name) @type
+  name: (property_identifier) @name
+  (#set! "kind" "Method")
+  ) @type
 
 ; const fn = () => {}
 (lexical_declaration
   (variable_declarator
     name: (identifier) @name
     value: [(arrow_function) (function)] @type
-  )) @start
+  )
+  (#set! "kind" "Function")
+  ) @start
 
 ; describe("Unit test")
 (call_expression
@@ -20,7 +28,8 @@
   arguments: (arguments
     (string
       (string_fragment) @name @string))?
-) @type
+  (#set! "kind" "Function")
+  ) @type
 
 ; test.skip("this test")
 (call_expression
@@ -31,7 +40,8 @@
   arguments: (arguments
     (string
       (string_fragment) @name @string))?
-) @type
+  (#set! "kind" "Function")
+  ) @type
 
 ; describe.each([])("Test suite")
 (call_expression
@@ -44,4 +54,5 @@
   arguments: (arguments
     (string
       (string_fragment) @name @string))?
-) @type
+  (#set! "kind" "Function")
+  ) @type

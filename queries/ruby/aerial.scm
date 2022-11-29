@@ -1,18 +1,28 @@
 (class
-  name: [(constant) (scope_resolution)] @name) @type
+  name: [(constant) (scope_resolution)] @name
+  (#set! "kind" "Class")
+  ) @type
 
 (method
-  name: (identifier) @name) @type
+  name: (identifier) @name
+  (#set! "kind" "Method")
+  ) @type
 
 (method
   name: (setter
-    name: (identifier)) @name) @type
+    name: (identifier)) @name
+  (#set! "kind" "Method")
+  ) @type
 
 (singleton_method
-  name: (identifier) @name) @type
+  name: (identifier) @name
+  (#set! "kind" "Method")
+  ) @type
 
 (module
-  name: [(constant) (scope_resolution)] @name) @type
+  name: [(constant) (scope_resolution)] @name
+  (#set! "kind" "Module")
+  ) @type
 
 ; For Rspec, Rake, and Shoulda
 (call
@@ -29,4 +39,5 @@
         key: [(string (string_content) @name) (hash_key_symbol) @name])
      (call) @name
     ])?
+  (#set! "kind" "Method")
 ) @type

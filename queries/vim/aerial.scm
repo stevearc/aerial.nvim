@@ -1,3 +1,5 @@
 (function_definition
   (function_declaration
-    name: [(identifier) (scoped_identifier)] @name)) @type
+    name: [(identifier) (scoped_identifier)] @name)
+  (#set! "kind" "Function")
+  ) @type

@@ -1,8 +1,12 @@
 (class_definition
-  name: (identifier) @name) @type
+  name: (identifier) @name
+  (#set! "kind" "Class")
+  ) @type
 
 (constructor_signature
-  name: (identifier) @name) @type
+  name: (identifier) @name
+  (#set! "kind" "Constructor")
+  ) @type
 
 (
   (method_signature
@@ -16,6 +20,7 @@
   ) @type
   .
   (function_body) @end
+  (#set! "kind" "Method")
 )
 
 (
@@ -23,7 +28,10 @@
     name: (identifier) @name) @type
   .
   (function_body) @end
+  (#set! "kind" "Function")
 )
 
 (enum_declaration
-  name: (identifier) @name) @type
+  name: (identifier) @name
+  (#set! "kind" "Enum")
+  ) @type

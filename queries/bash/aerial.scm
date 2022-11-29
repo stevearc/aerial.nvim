@@ -1,2 +1,4 @@
 (function_definition
-  name: (word) @name) @type
+  name: (word) @name
+  (#set! "kind" "Function")
+  ) @type
