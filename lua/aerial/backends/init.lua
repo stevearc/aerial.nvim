@@ -192,7 +192,7 @@ M.set_symbols = function(backend_name, bufnr, items)
 end
 
 M.log_support_err = function()
-  vim.api.nvim_err_writeln("Aerial could find no supported backend")
+  vim.notify("Aerial could find no supported backend", vim.log.levels.ERROR)
 end
 
 ---@param bufnr? integer

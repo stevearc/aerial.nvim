@@ -97,7 +97,6 @@ end
 local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   if direction ~= "left" and direction ~= "right" and direction ~= "float" then
     error("Expected direction to be 'left', 'right', or 'float'")
-    return
   end
 
   if aer_bufnr == -1 then
@@ -285,11 +284,6 @@ M.open = function(focus, direction, opts)
   if util.is_aerial_buffer(0) then
     return
   end
-  local backend = backends.get(0)
-  if not backend then
-    backends.log_support_err()
-    return
-  end
   local bufnr, aer_bufnr = util.get_buffers()
   local aerial_win = util.get_aerial_win()
   if aerial_win and aer_bufnr == vim.api.nvim_win_get_buf(aerial_win) then
@@ -300,7 +294,8 @@ M.open = function(focus, direction, opts)
   end
   direction = direction or util.detect_split_direction()
   local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction, opts.winid or aerial_win)
-  if not data.has_symbols(bufnr) then
+  local backend = backends.get(0)
+  if backend and not data.has_symbols(bufnr) then
     backend.fetch_symbols(bufnr)
   end
   if focus then
