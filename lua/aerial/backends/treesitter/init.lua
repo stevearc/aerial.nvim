@@ -73,9 +73,7 @@ M.fetch_symbols_sync = function(bufnr)
     end
     local kind = match.kind
     if not kind then
-      vim.api.nvim_err_writeln(
-        string.format("Missing 'kind' metadata in query file.")
-      )
+      vim.api.nvim_err_writeln(string.format("Missing 'kind' metadata in query file."))
       break
     end
     local row, col = start_node:start()
