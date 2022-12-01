@@ -2,7 +2,7 @@ local config = require("aerial.config")
 local data = require("aerial.data")
 local window = require("aerial.window")
 
-describe("config", function()
+describe("symbol positions", function()
   before_each(function()
     config.setup()
   end)

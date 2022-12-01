@@ -269,7 +269,8 @@ end
 ---@param bufnr? integer
 ---@return boolean
 M.maybe_open_automatic = function(bufnr)
-  if config.open_automatic(bufnr or 0) then
+  bufnr = bufnr or 0
+  if config.open_automatic(bufnr) and backends.get(bufnr) then
     M.open(false)
     return true
   else

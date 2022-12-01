@@ -239,4 +239,28 @@ a.describe("config attach_mode = 'global'", function()
       assert.falsy(vim.api.nvim_win_is_valid(aerial_win))
     end
   )
+
+  a.it("open_automatic = true opens aerial when entering supported buffer", function()
+    aerial.setup({
+      lazy_load = false,
+      attach_mode = "global",
+      open_automatic = true,
+    })
+    vim.cmd.edit({ args = { "README.md" } })
+    sleep(30)
+    local aerial_win = util.get_aerial_win(0)
+    assert.truthy(vim.api.nvim_win_is_valid(aerial_win))
+  end)
+
+  a.it("open_automatic = true does not open aerial when entering unsupported buffer", function()
+    aerial.setup({
+      lazy_load = false,
+      attach_mode = "global",
+      open_automatic = true,
+    })
+    vim.cmd.edit({ args = { "LICENSE" } })
+    sleep(30)
+    local aerial_win = util.get_aerial_win(0)
+    assert.is_nil(aerial_win)
+  end)
 end)

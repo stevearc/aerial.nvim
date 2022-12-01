@@ -225,6 +225,9 @@ end
 ---@return boolean
 M.is_ignored_buf = function(bufnr)
   bufnr = bufnr or 0
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return true
+  end
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
   -- Never ignore aerial buffers
   if filetype == "aerial" then

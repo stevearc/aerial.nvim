@@ -2,7 +2,7 @@ require("plenary.async").tests.add_to_env()
 local aerial = require("aerial")
 local test_util = require("tests.test_util")
 
-a.describe("config", function()
+a.describe("layout", function()
   after_each(function()
     test_util.reset_editor()
   end)
