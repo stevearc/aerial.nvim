@@ -5,15 +5,15 @@ on: push
 jobs:
   update-readme:
     name: Update docs
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
       - name: Install Neovim and dependencies
         env:
-          NVIM_TAG: v0.8.0
+          NVIM_TAG: v0.8.1
         run: |
           bash ./.github/workflows/install_nvim.sh
 
@@ -27,7 +27,7 @@ jobs:
           git config user.email "actions@github"
           git config user.name "Github Actions"
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          python -m pip install pyparsing
+          python -m pip install pyparsing==3.0.9
           python .github/main.py generate
           python .github/main.py lint
           nvim --headless -c 'set runtimepath+=.' -c 'helptags ALL' -c 'qall'
