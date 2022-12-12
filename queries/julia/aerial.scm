@@ -23,8 +23,8 @@
   (#set! "kind" "Class")
   ) @type
 
-(const_statement
-  (variable_declaration
+(const_declaration
+  (assignment
     . (identifier) @name)
   (#set! "kind" "Constant")
   ) @type
