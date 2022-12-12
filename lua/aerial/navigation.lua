@@ -196,6 +196,9 @@ M.select = function(opts)
     return
   end
 
+  if opts.jump and config.close_on_select then
+    window.close()
+  end
   if opts.split then
     local split = opts.split
     if split == "vertical" or split == "v" then
@@ -221,9 +224,6 @@ M.select = function(opts)
 
   if opts.jump then
     vim.api.nvim_set_current_win(winid)
-    if config.close_on_select then
-      window.close()
-    end
   else
     window.update_position(winid)
   end
