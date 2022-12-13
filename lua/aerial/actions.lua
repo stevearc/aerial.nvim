@@ -78,7 +78,13 @@ M.next_up = {
 
 M.close = {
   desc = "Close the aerial window",
-  callback = aerial.close,
+  callback = function()
+    local source_win = require("aerial.util").get_winids(0)
+    if source_win then
+      vim.api.nvim_set_current_win(source_win)
+    end
+    aerial.close()
+  end,
 }
 
 M.tree_toggle = {
