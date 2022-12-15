@@ -200,6 +200,9 @@ require("aerial").setup({
     --   edge   - open aerial at the far right/left of the editor
     --   window - open aerial to the right/left of the current window
     placement = "window",
+
+    -- Preserve window size equality with (:help CTRL-W_=)
+    preserve_equality = false,
   },
 
   -- Determines how the aerial window decides which buffer to display symbols for
