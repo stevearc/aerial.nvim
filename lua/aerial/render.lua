@@ -64,6 +64,9 @@ local function resize_all_wins(aer_bufnr, preferred_width, preferred_height)
       end
     end
   end
+  if config.layout.preserve_equality then
+    vim.cmd.wincmd({ args = { "=" } })
+  end
   return max_width
 end
 

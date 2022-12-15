@@ -92,6 +92,9 @@ local function setup_aerial_win(src_winid, aer_winid, aer_bufnr)
   -- Set the filetype only after we enter the buffer so that ftplugins behave properly
   vim.api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
   util.restore_width(aer_winid, aer_bufnr)
+  if config.layout.preserve_equality then
+    vim.cmd.wincmd({ args = { "=" } })
+  end
 end
 
 local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
@@ -220,27 +223,30 @@ end
 M.close = function()
   if util.is_aerial_buffer() then
     vim.api.nvim_win_close(0, false)
-    return
-  end
-  local aer_win = util.get_aerial_win()
-  if aer_win then
-    vim.api.nvim_win_close(aer_win, false)
   else
-    -- No aerial buffer for this buffer.
-    local backend = backends.get(0)
-    -- If this buffer has no supported symbols backend or no symbols,
-    -- look for other aerial windows and close the first
-    if backend == nil or not data.has_symbols(0) then
-      for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-        if vim.api.nvim_win_is_valid(winid) then
-          local winbuf = vim.api.nvim_win_get_buf(winid)
-          if util.is_aerial_buffer(winbuf) then
-            vim.api.nvim_win_close(winid, false)
-            break
+    local aer_win = util.get_aerial_win()
+    if aer_win then
+      vim.api.nvim_win_close(aer_win, false)
+    else
+      -- No aerial buffer for this buffer.
+      local backend = backends.get(0)
+      -- If this buffer has no supported symbols backend or no symbols,
+      -- look for other aerial windows and close the first
+      if backend == nil or not data.has_symbols(0) then
+        for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+          if vim.api.nvim_win_is_valid(winid) then
+            local winbuf = vim.api.nvim_win_get_buf(winid)
+            if util.is_aerial_buffer(winbuf) then
+              vim.api.nvim_win_close(winid, false)
+              break
+            end
           end
         end
       end
     end
+  end
+  if config.layout.preserve_equality then
+    vim.cmd.wincmd({ args = { "=" } })
   end
 end
 
