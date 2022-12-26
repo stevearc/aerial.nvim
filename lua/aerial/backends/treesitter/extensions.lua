@@ -111,6 +111,17 @@ M.markdown = {
   end,
 }
 
+M.go = {
+  postprocess = function(bufnr, item, match)
+    local receiver = (utils.get_at_path(match, "receiver") or {}).node
+    if receiver then
+      local receiver_text = vim.treesitter.query.get_node_text(receiver, bufnr) or "<parse error>"
+      item.name = string.format("%s %s", receiver_text, item.name)
+    end
+    return true
+  end,
+}
+
 M.help = {
   _get_level = function(node)
     local level_str = node:type():match("^h(%d+)$")

@@ -18,6 +18,7 @@
   ) @start
 
 (method_declaration
+  receiver: (_) @receiver
   name: (field_identifier) @name
   (#set! "kind" "Method")
   ) @type

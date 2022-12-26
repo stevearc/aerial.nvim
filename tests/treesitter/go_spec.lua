@@ -23,7 +23,7 @@ describe("treesitter go", function()
       },
       {
         kind = "Method",
-        name = "Meth_1",
+        name = "(st_1) Meth_1",
         level = 0,
         lnum = 7,
         col = 0,
