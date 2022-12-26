@@ -196,6 +196,7 @@ M.select = function(opts)
     return
   end
 
+  local bufnr, _ = util.get_buffers()
   if opts.jump and config.close_on_select then
     window.close()
   end
@@ -212,7 +213,6 @@ M.select = function(opts)
     winid = vim.api.nvim_get_current_win()
     util.go_win_no_au(my_winid)
   end
-  local bufnr, _ = util.get_buffers()
   vim.api.nvim_win_set_buf(winid, bufnr)
   local lnum = item.selection_range and item.selection_range.lnum or item.lnum
   local col = item.selection_range and item.selection_range.col or item.col
