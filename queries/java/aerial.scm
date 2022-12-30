@@ -8,6 +8,11 @@
   (#set! "kind" "Method")
   ) @type
 
+(constructor_declaration
+  name: (identifier) @name
+  (#set! "kind" "Constructor")
+  ) @type
+
 (class_declaration
   name: (identifier) @name
   (#set! "kind" "Class")
