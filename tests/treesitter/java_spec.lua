@@ -29,7 +29,7 @@ describe("treesitter java", function()
         level = 0,
         lnum = 5,
         col = 0,
-        end_lnum = 9,
+        end_lnum = 10,
         end_col = 1,
         children = {
           {
@@ -59,15 +59,24 @@ describe("treesitter java", function()
             end_lnum = 8,
             end_col = 24,
           },
+          {
+            kind = "Constructor",
+            name = "Cl_1",
+            level = 1,
+            lnum = 9,
+            col = 2,
+            end_lnum = 9,
+            end_col = 12,
+          },
         },
       },
       {
         kind = "Enum",
         name = "En_1",
         level = 0,
-        lnum = 11,
+        lnum = 12,
         col = 0,
-        end_lnum = 11,
+        end_lnum = 12,
         end_col = 13,
       },
     })
