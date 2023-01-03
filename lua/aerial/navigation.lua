@@ -230,6 +230,9 @@ M.select = function(opts)
   if config.highlight_on_jump then
     util.flash_highlight(bufnr, lnum, config.highlight_on_jump)
   end
+  if vim.o.splitkeep and vim.o.splitkeep ~= "cursor" then
+    vim.api.nvim_win_set_cursor(winid, { lnum, col })
+  end
 end
 
 return M
