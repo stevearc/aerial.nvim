@@ -471,7 +471,7 @@ difference being that it uses the aerial backend for the source (e.g. LSP,
 treesitter, etc) and that it filters out some symbols (see the `filter_kind`
 option).
 
-You can activate the picker with `:Telescope aerial`
+You can activate the picker with `:Telescope aerial` or `:lua require("telescope").extensions.aerial.aerial()`
 
 If you want the command to autocomplete, you can load the extension first:
 
