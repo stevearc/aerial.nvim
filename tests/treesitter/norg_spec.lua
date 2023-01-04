@@ -9,8 +9,8 @@ describe("treesitter neorg", function()
         level = 0,
         lnum = 1,
         col = 0,
-        end_lnum = 3,
-        end_col = 20,
+        end_lnum = 4,
+        end_col = 0,
         children = {
           {
             kind = "Interface",
@@ -18,8 +18,8 @@ describe("treesitter neorg", function()
             level = 1,
             lnum = 2,
             col = 1,
-            end_lnum = 3,
-            end_col = 20,
+            end_lnum = 4,
+            end_col = 0,
             children = {
               {
                 kind = "Interface",
@@ -27,8 +27,8 @@ describe("treesitter neorg", function()
                 level = 2,
                 lnum = 3,
                 col = 2,
-                end_lnum = 3,
-                end_col = 20,
+                end_lnum = 4,
+                end_col = 0,
               },
             },
           },
