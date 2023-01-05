@@ -19,7 +19,7 @@ body:
       placeholder: "MacOS 11.5"
     validations:
       required: true
-  - type: input
+  - type: textarea
     attributes:
       label: "Output of :AerialInfo"
     validations:
