@@ -98,6 +98,7 @@ M.reset_editor = function()
     end
   end
   vim.api.nvim_win_set_buf(0, vim.api.nvim_create_buf(false, true))
+  vim.bo.bufhidden = "wipe"
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_get_option(bufnr, "buflisted") then
       vim.api.nvim_buf_delete(bufnr, { force = true })
