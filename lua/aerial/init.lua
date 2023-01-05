@@ -306,7 +306,7 @@ M.setup = function(opts)
     create_autocmds()
   end
 
-  if initialized then
+  if not initialized then
     do_setup()
   end
 end
