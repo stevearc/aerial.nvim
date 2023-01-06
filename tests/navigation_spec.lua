@@ -1,7 +1,6 @@
 require("plenary.async").tests.add_to_env()
 local aerial = require("aerial")
 local backends = require("aerial.backends")
-local config = require("aerial.config")
 local test_util = require("tests.test_util")
 
 local markdown_content = [[
@@ -24,7 +23,12 @@ end
 
 a.describe("navigation", function()
   before_each(function()
-    config.setup()
+    aerial.setup({
+      ignore = {
+        buftypes = false,
+      },
+    })
+    aerial.sync_load()
   end)
   after_each(function()
     test_util.reset_editor()
