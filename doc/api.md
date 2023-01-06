@@ -271,9 +271,9 @@ Toggle the collapsed state at the selected location
 `sync_folds(bufnr)` \
 Sync code folding with the current tree state.
 
-| Param | Type      | Desc |
-| ----- | --------- | ---- |
-| bufnr | `integer` |      |
+| Param | Type           | Desc |
+| ----- | -------------- | ---- |
+| bufnr | `nil\|integer` |      |
 
 **Note:**
 <pre>
