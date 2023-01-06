@@ -80,7 +80,7 @@ function M:format_status(symbols, depth, separator, icons_enabled, colored)
   end
 
   for _, symbol in ipairs(symbols) do
-    local name = symbol.name
+    local name = utils.stl_escape(symbol.name)
     if colored then
       name = self:format_hl(self.highlight_groups[symbol.kind].text) .. name
     end
