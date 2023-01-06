@@ -96,6 +96,14 @@ M.info = function(params)
   print("Aerial Info")
   print("-----------")
   print(string.format("Filetype: %s", data.filetype))
+  if data.ignore.ignored then
+    print(
+      string.format(
+        "Aerial ignores this window: %s. See the 'ignore' config in :help aerial-options",
+        data.ignore.message
+      )
+    )
+  end
   print("Configured backends:")
   for _, status in ipairs(data.backends) do
     local line = "  " .. status.name

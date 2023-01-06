@@ -223,39 +223,42 @@ end
 
 ---@param bufnr nil|integer
 ---@return boolean
+---@return nil|string
 M.is_ignored_buf = function(bufnr)
   bufnr = bufnr or 0
   if not vim.api.nvim_buf_is_valid(bufnr) then
-    return true
+    return true, "Buffer is not valid"
   end
-  local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
+  local filetypes = M.get_filetypes(bufnr)
   -- Never ignore aerial buffers
-  if filetype == "aerial" then
+  if vim.tbl_contains(filetypes, "aerial") then
     return false
   end
   local ignore = config.ignore
   if ignore.unlisted_buffers and not vim.api.nvim_buf_get_option(bufnr, "buflisted") then
-    return true
+    return true, "Buffer is not listed"
   end
   if ignore.buftypes then
     local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
     if ignore.buftypes == "special" then
       if buftype ~= "" and buftype ~= "help" then
-        return true
+        return true, string.format("Buftype '%s' is \"special\"", buftype)
       end
     elseif type(ignore.buftypes) == "table" then
       if vim.tbl_contains(ignore.buftypes, buftype) then
-        return true
+        return true, string.format("Buftype '%s' is ignored", buftype)
       end
     elseif type(ignore.buftypes) == "function" then
       if ignore.buftypes(bufnr, buftype) then
-        return true
+        return true, string.format("Buftype '%s' is ignored", buftype)
       end
     end
   end
   if ignore.filetypes then
-    if M.is_ignored_filetype(filetype) then
-      return true
+    for _, filetype in ipairs(filetypes) do
+      if M.is_ignored_filetype(filetype) then
+        return true, string.format("Filetype '%s' is ignored", filetype)
+      end
     end
   end
   return false
@@ -263,20 +266,22 @@ end
 
 ---@param winid nil|integer
 ---@return boolean
+---@return nil|string
 M.is_ignored_win = function(winid)
   winid = winid or 0
   local bufnr = vim.api.nvim_win_get_buf(winid)
-  if M.is_ignored_buf(bufnr) then
-    return true
+  local ignore_buf, message = M.is_ignored_buf(bufnr)
+  if ignore_buf then
+    return ignore_buf, message
   end
   local ignore = config.ignore
   if ignore.wintypes then
     local wintype = vim.fn.win_gettype(winid)
     if ignore.wintypes == "special" and wintype ~= "" then
-      return true
+      return true, string.format("Wintype '%s' is \"special\"", wintype)
     elseif type(ignore.wintypes) == "table" then
       if vim.tbl_contains(ignore.wintypes, wintype) then
-        return true
+        return true, string.format("Wintype '%s' is ignored", wintype)
       end
     end
   end

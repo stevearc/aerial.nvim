@@ -552,7 +552,7 @@ M.tree_close = lazy("tree", "close")
 M.tree_toggle = lazy("tree", "toggle")
 
 ---Sync code folding with the current tree state.
----@param bufnr integer
+---@param bufnr nil|integer
 ---@note
 --- Ignores the 'link_tree_to_folds' config option.
 M.sync_folds = function(bufnr)
@@ -585,7 +585,12 @@ M.info = function()
   local util = require("aerial.util")
   local bufnr = util.get_buffers(0)
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
+  local ignored, message = util.is_ignored_win()
   return {
+    ignore = {
+      ignored = ignored,
+      message = message,
+    },
     filetype = filetype,
     filter_kind_map = require("aerial.config").get_filter_kind_map(),
     backends = require("aerial.backends").get_status(bufnr),
