@@ -135,16 +135,10 @@ local default_options = {
   icons = {},
 
   -- Control which windows and buffers aerial should ignore.
-  -- If attach_mode is "global", focusing an ignored window/buffer will
-  -- not cause the aerial window to update.
-  -- If open_automatic is true, focusing an ignored window/buffer will not
-  -- cause an aerial window to open.
-  -- If open_automatic is a function, ignore rules have no effect on aerial
-  -- window opening behavior; it's entirely handled by the open_automatic
-  -- function.
+  -- Aerial will not open when these are focused, and existing aerial windows will not be updated
   ignore = {
     -- Ignore unlisted buffers. See :help buflisted
-    unlisted_buffers = true,
+    unlisted_buffers = false,
 
     -- List of filetypes to ignore.
     filetypes = {},

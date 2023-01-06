@@ -230,9 +230,9 @@ M.close = function()
     else
       -- No aerial buffer for this buffer.
       local backend = backends.get(0)
-      -- If this buffer has no supported symbols backend or no symbols,
+      -- If this buffer has no supported symbols backend, or no symbols, or is ignored,
       -- look for other aerial windows and close the first
-      if backend == nil or not data.has_symbols(0) then
+      if backend == nil or not data.has_symbols(0) or util.is_ignored_win() then
         for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
           if vim.api.nvim_win_is_valid(winid) then
             local winbuf = vim.api.nvim_win_get_buf(winid)
@@ -288,7 +288,7 @@ M.open = function(focus, direction, opts)
   opts = vim.tbl_extend("keep", opts or {}, {
     winid = nil,
   })
-  if util.is_aerial_buffer(0) then
+  if util.is_aerial_buffer(0) or util.is_ignored_win() then
     return
   end
   local bufnr, aer_bufnr = util.get_buffers()
@@ -299,6 +299,7 @@ M.open = function(focus, direction, opts)
     end
     return
   end
+
   direction = direction or util.detect_split_direction()
   local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction, opts.winid or aerial_win)
   local backend = backends.get(0)
