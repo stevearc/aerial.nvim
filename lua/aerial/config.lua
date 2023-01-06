@@ -152,7 +152,7 @@ local default_options = {
     -- Ignored buftypes.
     -- Can be one of the following:
     -- false or nil - No buftypes are ignored.
-    -- "special"    - All buffers other than normal buffers are ignored.
+    -- "special"    - All buffers other than normal and help buffers are ignored.
     -- table        - A list of buftypes to ignore. See :help buftype for the
     --                possible values.
     -- function     - A function that returns true if the buffer should be

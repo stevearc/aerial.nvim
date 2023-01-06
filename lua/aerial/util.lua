@@ -239,8 +239,10 @@ M.is_ignored_buf = function(bufnr)
   end
   if ignore.buftypes then
     local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
-    if ignore.buftypes == "special" and buftype ~= "" then
-      return true
+    if ignore.buftypes == "special" then
+      if buftype ~= "" and buftype ~= "help" then
+        return true
+      end
     elseif type(ignore.buftypes) == "table" then
       if vim.tbl_contains(ignore.buftypes, buftype) then
         return true
