@@ -230,7 +230,9 @@ M.select = function(opts)
   if config.highlight_on_jump then
     util.flash_highlight(bufnr, lnum, config.highlight_on_jump)
   end
-  if vim.fn.exists("&splitkeep") == 1 and vim.o.splitkeep ~= "cursor" then
+  -- This option is only in nightly right now
+  local has_splitkeep, splitkeep = pcall(vim.api.nvim_get_option_value, "splitkeep")
+  if has_splitkeep and splitkeep ~= "cursor" then
     vim.api.nvim_win_set_cursor(winid, { lnum, col })
   end
 end
