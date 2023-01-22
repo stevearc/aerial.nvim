@@ -213,6 +213,12 @@ end
 ---@param bufnr? integer
 ---@param refresh? boolean
 M.attach = function(bufnr, refresh)
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
   if refresh then
     local backend, name = get_best_backend()
     attach(bufnr, backend, name)
