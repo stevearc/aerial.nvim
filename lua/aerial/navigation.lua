@@ -110,6 +110,7 @@ M.up = function(direction, count)
       elseif target_level then
         if item.level == target_level or item.level < start_level then
           found = true
+          index = bufdata:indexof(item)
           break
         end
       end
