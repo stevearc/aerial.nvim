@@ -35,7 +35,8 @@ describe("treesitter html", function()
                     level = 3,
                     lnum = 5,
                     name = "charset",
-                  } },
+                  },
+                },
                 col = 4,
                 end_col = 28,
                 end_lnum = 5,
@@ -152,7 +153,8 @@ describe("treesitter html", function()
                         level = 4,
                         lnum = 17,
                         name = "id",
-                      } },
+                      },
+                    },
                     col = 6,
                     end_col = 41,
                     end_lnum = 17,
@@ -211,7 +213,8 @@ describe("treesitter html", function()
                             level = 5,
                             lnum = 24,
                             name = "tr",
-                          } },
+                          },
+                        },
                         col = 8,
                         end_col = 16,
                         end_lnum = 25,
@@ -332,7 +335,7 @@ describe("treesitter html", function()
         kind = "Snippet",
         level = 0,
         lnum = 3,
-        name = "html"
+        name = "html",
       },
     })
   end)
