@@ -511,7 +511,7 @@ require("lualine").setup({
     lualine_x = { "aerial" },
 
     -- Or you can customize it
-    lualine_y = { "aerial",
+    lualine_y = {{ "aerial",
       -- The separator to be used to separate symbols in status line.
       sep = ' ) ',
 
@@ -530,7 +530,7 @@ require("lualine").setup({
 
       -- Color the symbol icons.
       colored = true,
-    },
+    }},
   },
 })
 ```
