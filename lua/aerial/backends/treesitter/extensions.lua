@@ -279,6 +279,17 @@ M.typescript = {
         item.kind = "Function"
       end
     end
+    local method = (utils.get_at_path(match, "method") or {}).node
+    local modifier = (utils.get_at_path(match, "modifier") or {}).node
+    local string = (utils.get_at_path(match, "string") or {}).node
+    if method and string then
+      local fn = vim.treesitter.query.get_node_text(method, bufnr) or "<parse error>"
+      if modifier then
+        fn = fn .. "." .. (vim.treesitter.query.get_node_text(modifier, bufnr) or "<parse error>")
+      end
+      local str = vim.treesitter.query.get_node_text(string, bufnr) or "<parse error>"
+      item.name = fn .. " " .. str
+    end
   end,
 }
 
