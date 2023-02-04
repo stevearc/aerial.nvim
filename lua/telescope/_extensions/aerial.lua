@@ -36,14 +36,15 @@ local function aerial_picker(opts)
     backend.fetch_symbols_sync(0, opts)
   end
 
-  local displayer = entry_display.create({
-    separator = " ",
-    items = {
-      { width = 4 },
-      { width = 30 },
-      { remaining = true },
-    },
-  })
+  local displayer = opts.displayer
+    or entry_display.create({
+      separator = " ",
+      items = {
+        { width = 4 },
+        { width = 30 },
+        { remaining = true },
+      },
+    })
 
   local function make_display(entry)
     local item = entry.value
@@ -60,11 +61,15 @@ local function aerial_picker(opts)
 
   local function make_entry(item)
     local name = item.name
-    if show_nesting then
-      local cur = item.parent
-      while cur do
-        name = string.format("%s.%s", cur.name, name)
-        cur = cur.parent
+    if opts.get_entry_text ~= nil then
+      name = opts.get_entry_text(item)
+    else
+      if show_nesting then
+        local cur = item.parent
+        while cur do
+          name = string.format("%s.%s", cur.name, name)
+          cur = cur.parent
+        end
       end
     end
     return {
