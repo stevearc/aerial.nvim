@@ -42,12 +42,13 @@ M.fetch_symbols_sync = function(bufnr, opts)
     timeout = 4000,
   })
   local params = { textDocument = vim.lsp.util.make_text_document_params(bufnr) }
-  local lsp_results, err =
+  local response_map, err =
     vim.lsp.buf_request_sync(bufnr, "textDocument/documentSymbol", params, opts.timeout)
-  if err then
-    vim.api.nvim_err_writeln("Error when finding document symbols: " .. err)
+  if err or vim.tbl_isempty(response_map) then
+    vim.notify(string.format("Error fetching document symbols: %s", err), vim.log.levels.ERROR)
   else
-    callbacks.handle_symbols(lsp_results[1].result, bufnr)
+    local _, response = next(response_map)
+    callbacks.handle_symbols(response.result, bufnr)
   end
 end
 
