@@ -23,6 +23,7 @@ defmodule Example.Behaviour do
 end
 
 defmodule Example.Struct do
+  @constant 5
   defstruct name: nil, age: nil
 end
 

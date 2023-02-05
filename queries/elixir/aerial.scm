@@ -25,6 +25,7 @@
   ) @type
 
 (unary_operator
+  operator: "@"
   operand: (call
               target: (identifier) @identifier (#any-of? @identifier "callback" "spec")
   (arguments [
@@ -36,12 +37,20 @@
   ) @start
 
 (unary_operator
+  operator: "@"
   operand: (call
     target: (identifier) @identifier (#eq? @identifier "module_attribute")
     (arguments) @name
     ) @type
   (#set! "kind" "Function")
   ) @start
+
+(unary_operator
+  operator: "@"
+  operand: (call target: (identifier) @name (#not-any-of? @name "module_attribute" "callback" "spec")) @type
+  (#set! "kind" "Constant")
+  ) @start
+
 
 (do_block
   (call
