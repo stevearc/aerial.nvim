@@ -16,3 +16,17 @@ const fn_3 = () => {};
 
 const const_var = 'value';
 let let_var = 'value';
+
+describe("UnitTest", () => {
+  afterAll(() => {});
+  afterEach(() => {});
+  beforeAll(() => {});
+  beforeEach(() => {});
+  test("should describe the test", () => {});
+  it("is an alias for test", () => {});
+  test.skip("skip this test", () => {});
+  test.todo("this is a todo");
+  describe.each([])("Test Suite", () => {
+    test.each([])("runs multiple times", () => {});
+  });
+});
