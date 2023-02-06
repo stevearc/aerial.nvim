@@ -57,3 +57,18 @@
     target: (identifier) @identifier (#eq? @identifier "defstruct")) @type
   (#set! "kind" "Function")
   ) @start
+
+; describe("Unit test")
+(call
+  target: (identifier) @identifier (#any-of? @identifier "describe" "test")
+  (arguments [(string (quoted_content) @name)])
+  (#set! "kind" "Function")
+  ) @type
+
+; describe("Unit test")
+(do_block
+  (call
+    target: (identifier) @identifier @name (#eq? @identifier "setup")) @type
+  (#set! "kind" "Function")
+  ) @type
+

@@ -175,6 +175,55 @@ describe("treesitter elixir", function()
           },
         },
       },
+      {
+        kind = "Module",
+        name = "StringTest",
+        level = 0,
+        lnum = 43,
+        col = 0,
+        end_lnum = 59,
+        end_col = 3,
+        children = {
+          {
+            kind = "Function",
+            name = "String.capitalize/1",
+            level = 1,
+            lnum = 46,
+            col = 2,
+            end_lnum = 58,
+            end_col = 5,
+            children = {
+              {
+                kind = "Function",
+                name = "setup",
+                level = 2,
+                lnum = 47,
+                col = 4,
+                end_lnum = 49,
+                end_col = 7,
+              },
+              {
+                kind = "Function",
+                name = "first grapheme is in uppercase",
+                level = 2,
+                lnum = 51,
+                col = 4,
+                end_lnum = 53,
+                end_col = 7,
+              },
+              {
+                kind = "Function",
+                name = "converts remaining graphemes to lowercase",
+                level = 2,
+                lnum = 55,
+                col = 4,
+                end_lnum = 57,
+                end_col = 7,
+              },
+            },
+          },
+        },
+      },
     })
   end)
 end)
