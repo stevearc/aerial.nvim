@@ -92,7 +92,7 @@ describe("treesitter ts", function()
         level = 0,
         lnum = 18,
         col = 0,
-        end_lnum = 30,
+        end_lnum = 32,
         end_col = 2,
         children = {
           {
@@ -188,6 +188,15 @@ describe("treesitter ts", function()
             },
           },
         },
+      },
+      {
+        kind = "Function",
+        name = "fn_4",
+        level = 0,
+        lnum = 34,
+        col = 0,
+        end_lnum = 37,
+        end_col = 1,
       },
     })
   end)

@@ -290,6 +290,15 @@ M.typescript = {
       local str = vim.treesitter.query.get_node_text(string, bufnr) or "<parse error>"
       item.name = fn .. " " .. str
     end
+
+    -- we don't want to display in-function items
+    local cur_parent = value_node and value_node:parent()
+    while cur_parent do
+      if cur_parent:type() == "arrow_function" or cur_parent:type() == "function_declaration" then
+        return false
+      end
+      cur_parent = cur_parent:parent()
+    end
   end,
 }
 

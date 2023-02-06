@@ -27,4 +27,11 @@ describe("UnitTest", () => {
   describe.each([])("Test Suite", () => {
     test.each([])("runs multiple times", () => {});
   });
+  const local_const_var = "value";
+  let local_let_var = "value";
 });
+
+function fn_4() {
+  const local_const_var = "value";
+  let local_let_var = "value";
+}
