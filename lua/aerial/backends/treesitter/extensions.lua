@@ -83,6 +83,8 @@ M.elixir = {
         local protocol_name = vim.treesitter.query.get_node_text(protocol, bufnr) or "<parse error>"
         item.name = string.format("%s > %s", item.name, protocol_name)
       end
+    elseif item.kind == "Constant" then
+      item.name = string.format("@%s", item.name)
     end
   end,
 }

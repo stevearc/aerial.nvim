@@ -108,7 +108,7 @@ describe("treesitter elixir", function()
         children = {
           {
             kind = "Constant",
-            name = "constant",
+            name = "@constant",
             level = 1,
             lnum = 26,
             col = 2,
