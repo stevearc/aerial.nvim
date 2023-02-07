@@ -35,6 +35,7 @@ M.create_highlight_groups = function()
   link("AerialArrayIcon", "Identifier")
   link("AerialBooleanIcon", "Identifier")
   link("AerialClassIcon", "Type")
+  link("AerialColorIcon", "Identifier")
   link("AerialConstantIcon", "Constant")
   link("AerialConstructorIcon", "Special")
   link("AerialEnumIcon", "Type")
@@ -42,9 +43,11 @@ M.create_highlight_groups = function()
   link("AerialEventIcon", "Identifier")
   link("AerialFieldIcon", "Identifier")
   link("AerialFileIcon", "Identifier")
+  link("AerialFolderIcon", "Identifier")
   link("AerialFunctionIcon", "Function")
   link("AerialInterfaceIcon", "Type")
   link("AerialKeyIcon", "Identifier")
+  link("AerialKeywordIcon", "Identifier")
   link("AerialMethodIcon", "Function")
   link("AerialModuleIcon", "Include")
   link("AerialNamespaceIcon", "Include")
@@ -54,9 +57,14 @@ M.create_highlight_groups = function()
   link("AerialOperatorIcon", "Identifier")
   link("AerialPackageIcon", "Include")
   link("AerialPropertyIcon", "Identifier")
+  link("AerialReferenceIcon", "Identifier")
+  link("AerialSnippetIcon", "Identifier")
   link("AerialStringIcon", "Identifier")
   link("AerialStructIcon", "Type")
+  link("AerialTextIcon", "Identifier")
   link("AerialTypeParameterIcon", "Identifier")
+  link("AerialUnitIcon", "Identifier")
+  link("AerialValueIcon", "Identifier")
   link("AerialVariableIcon", "Identifier")
 end
 
@@ -64,6 +72,7 @@ M.identifiers = {
   "Array",
   "Boolean",
   "Class",
+  "Color",
   "Constant",
   "Constructor",
   "Enum",
@@ -71,9 +80,11 @@ M.identifiers = {
   "Event",
   "Field",
   "File",
+  "Folder",
   "Function",
   "Interface",
   "Key",
+  "Keyword",
   "Method",
   "Module",
   "Namespace",
@@ -83,9 +94,14 @@ M.identifiers = {
   "Operator",
   "Package",
   "Property",
+  "Reference",
+  "Snippet",
   "String",
   "Struct",
+  "Text",
   "TypeParameter",
+  "Unit",
+  "Value",
   "Variable",
 }
 
