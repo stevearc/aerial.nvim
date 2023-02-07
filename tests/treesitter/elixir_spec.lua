@@ -186,7 +186,7 @@ describe("treesitter elixir", function()
         children = {
           {
             kind = "Function",
-            name = "String.capitalize/1",
+            name = "describe String.capitalize/1",
             level = 1,
             lnum = 46,
             col = 2,
@@ -204,7 +204,7 @@ describe("treesitter elixir", function()
               },
               {
                 kind = "Function",
-                name = "first grapheme is in uppercase",
+                name = "test first grapheme is in uppercase",
                 level = 2,
                 lnum = 51,
                 col = 4,
@@ -213,7 +213,7 @@ describe("treesitter elixir", function()
               },
               {
                 kind = "Function",
-                name = "converts remaining graphemes to lowercase",
+                name = "test converts remaining graphemes to lowercase",
                 level = 2,
                 lnum = 55,
                 col = 4,

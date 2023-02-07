@@ -58,14 +58,14 @@
   (#set! "kind" "Function")
   ) @start
 
-; describe("Unit test")
+; exunit unit test
 (call
   target: (identifier) @identifier (#any-of? @identifier "describe" "test")
   (arguments [(string (quoted_content) @name)])
   (#set! "kind" "Function")
   ) @type
 
-; describe("Unit test")
+; exunit test setup
 (do_block
   (call
     target: (identifier) @identifier @name (#eq? @identifier "setup")) @type
