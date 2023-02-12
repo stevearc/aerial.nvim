@@ -38,3 +38,22 @@ defimpl Example.Protocol, for: Map do
     true
   end
 end
+
+# https://hexdocs.pm/ex_unit/ExUnit.Case.html#describe/2-examples
+defmodule StringTest do
+  use ExUnit.Case, async: true
+
+  describe "String.capitalize/1" do
+    setup do
+      # setup code
+    end
+
+    test "first grapheme is in uppercase" do
+      assert String.capitalize("hello") == "Hello"
+    end
+
+    test "converts remaining graphemes to lowercase" do
+      assert String.capitalize("HELLO") == "Hello"
+    end
+  end
+end
