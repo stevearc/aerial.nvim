@@ -54,17 +54,6 @@ local commands = {
     },
   },
   {
-    cmd = "AerialCloseAllButCurrent",
-    func = "close_all_but_current",
-    deprecated = {
-      alternative = "aerial.close_all_but_current()",
-      help = "aerial.close_all_but_current",
-    },
-    defn = {
-      desc = "Close all visible aerial windows except for the one currently focused or for the currently focused window.",
-    },
-  },
-  {
     cmd = "AerialNext",
     func = "next",
     defn = {
@@ -81,30 +70,6 @@ local commands = {
     },
   },
   {
-    cmd = "AerialNextUp",
-    func = "next_up",
-    deprecated = {
-      alternative = "aerial.next_up()",
-      help = "aerial.next_up",
-    },
-    defn = {
-      desc = "Jump up the tree [count] levels, moving forwards in the file (default 1).",
-      count = 1,
-    },
-  },
-  {
-    cmd = "AerialPrevUp",
-    func = "next_up",
-    deprecated = {
-      alternative = "aerial.prev_up()",
-      help = "aerial.prev_up",
-    },
-    defn = {
-      desc = "Jump up the tree [count] levels, moving backwards in the file (default 1).",
-      count = 1,
-    },
-  },
-  {
     cmd = "AerialGo",
     func = "go",
     defn = {
@@ -114,88 +79,6 @@ local commands = {
       nargs = "?",
     },
     long_desc = 'If with [!] and inside aerial window, the cursor will stay in the aerial window. [split] can be "v" to open a new vertical split, or "h" to open a horizontal split. [split] can also be a raw vim command, such as "belowright split". This command respects |switchbuf|=uselast',
-  },
-  {
-    cmd = "AerialTreeOpen",
-    func = "tree_open",
-    deprecated = {
-      alternative = "aerial.tree_open()",
-      help = "aerial.tree_cmd",
-    },
-    defn = {
-      desc = "Expand the tree at the current location. If with [!] then will expand recursively.",
-      bang = true,
-    },
-  },
-  {
-    cmd = "AerialTreeClose",
-    func = "tree_close",
-    deprecated = {
-      alternative = "aerial.tree_close()",
-      help = "aerial.tree_close",
-    },
-    defn = {
-      desc = "Collapse the tree at the current location. If with [!] then will collapse recursively.",
-      bang = true,
-    },
-  },
-  {
-    cmd = "AerialTreeToggle",
-    func = "tree_toggle",
-    deprecated = {
-      alternative = "aerial.tree_toggle()",
-      help = "aerial.tree_toggle",
-    },
-    defn = {
-      desc = "Toggle the tree at the current location. If with [!] then will toggle recursively.",
-      bang = true,
-    },
-  },
-  {
-    cmd = "AerialTreeOpenAll",
-    func = "tree_open_all",
-    deprecated = {
-      alternative = "aerial.tree_open_all()",
-      help = "aerial.tree_open_all",
-    },
-    defn = {
-      desc = "Expand all the tree nodes.",
-    },
-  },
-  {
-    cmd = "AerialTreeCloseAll",
-    func = "tree_close_all",
-    deprecated = {
-      alternative = "aerial.tree_close_all()",
-      help = "aerial.tree_close_all",
-    },
-    defn = {
-      desc = "Collapse all the tree nodes.",
-    },
-  },
-  {
-    cmd = "AerialTreeSyncFolds",
-    func = "tree_sync_folds",
-    deprecated = {
-      alternative = "aerial.tree_sync_folds()",
-      help = "aerial.tree_sync_folds",
-    },
-    defn = {
-      desc = "Sync code folding with current tree state. This ignores the link_tree_to_folds setting.",
-    },
-  },
-  {
-    cmd = "AerialTreeSetCollapseLevel",
-    func = "tree_set_collapse_level",
-    args = "N",
-    deprecated = {
-      alternative = "aerial.tree_set_collapse_level()",
-      help = "aerial.tree_set_collapse_level",
-    },
-    defn = {
-      desc = "Collapse symbols at a depth greater than N (0 collapses all)",
-      nargs = 1,
-    },
   },
   {
     cmd = "AerialInfo",
@@ -220,22 +103,6 @@ end
 local function create_commands()
   for _, v in pairs(commands) do
     local callback = lazy("command", v.func)
-    if v.deprecated then
-      local msg = string.format(":%s is deprecated.", v.cmd)
-      if type(v.deprecated) == "table" then
-        if v.deprecated.alternative then
-          msg = string.format("%s Please use %s instead", msg, v.deprecated.alternative)
-        end
-        if v.deprecated.help then
-          msg = string.format("%s (see :help %s)", msg, v.deprecated.help)
-        end
-      end
-      msg = msg .. "\nThis command will be removed on 2023-02-01"
-      callback = function(...)
-        vim.notify_once(msg, vim.log.levels.WARN)
-        lazy("command", v.func)(...)
-      end
-    end
     vim.api.nvim_create_user_command(v.cmd, callback, v.defn)
   end
 end
