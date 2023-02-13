@@ -327,14 +327,6 @@ end
 ---@return boolean
 M.is_open = function(opts)
   do_setup()
-  if type(opts) == "number" then
-    -- For backwards compatibility
-    opts = { bufnr = opts }
-    vim.notify_once(
-      "Deprecated(aerial.is_open): The parameters to this function have changed (see :help aerial.is_open)\nThese parameters will be unsupported on 2023-02-01",
-      vim.log.levels.WARN
-    )
-  end
   return require("aerial.window").is_open(opts)
 end
 
@@ -351,40 +343,16 @@ M.close_all = lazy("window", "close_all")
 ---Close all visible aerial windows except for the one currently focused or for the currently focused window.
 M.close_all_but_current = lazy("window", "close_all_but_current")
 
-local function convert_open_args(fn_name, opts, old_direction)
-  if type(opts) ~= "table" then
-    vim.notify_once(
-      string.format(
-        "Deprecated(%s): The parameters to this function have changed (see :help %s)\nThese parameters will be unsupported on 2023-02-01",
-        fn_name,
-        fn_name
-      ),
-      vim.log.levels.WARN
-    )
-    local focus = opts
-    if focus == "" then
-      focus = true
-    elseif focus == "!" then
-      focus = false
-    end
-    return {
-      focus = focus,
-      direction = old_direction,
-    }
-  else
-    return vim.tbl_extend("keep", opts, {
-      focus = true,
-    })
-  end
-end
 ---Open the aerial window for the current buffer.
 ---@param opts nil|table
 ---    focus boolean If true, jump to aerial window if it is opened (default true)
 ---    direction "left"|"right"|"float" Direction to open aerial window
-M.open = function(opts, old_direction)
+M.open = function(opts)
   do_setup()
   was_closed = false
-  opts = convert_open_args("aerial.open", opts or {}, old_direction)
+  opts = vim.tbl_extend("keep", opts or {}, {
+    focus = true,
+  })
   require("aerial.window").open(opts.focus, opts.direction)
 end
 
@@ -398,9 +366,11 @@ M.focus = lazy("window", "focus")
 ---@param opts nil|table
 ---    focus boolean If true, jump to aerial window if it is opened (default true)
 ---    direction "left"|"right"|"float" Direction to open aerial window
-M.toggle = function(opts, old_direction)
+M.toggle = function(opts)
   do_setup()
-  opts = convert_open_args("aerial.toggle", opts or {}, old_direction)
+  opts = vim.tbl_extend("keep", opts or {}, {
+    focus = true,
+  })
   local opened = require("aerial.window").toggle(opts.focus, opts.direction)
   was_closed = not opened
   return opened
@@ -421,19 +391,6 @@ M.next = lazy("navigation", "next")
 ---@param step nil|integer Number of symbols to jump by (default 1)
 M.prev = lazy("navigation", "prev")
 
----Jump to a symbol higher in the tree
----@deprecated
----@param direction integer -1 for backwards or 1 for forwards
----@param count nil|integer How many levels to jump up (default 1)
-M.up = function(...)
-  do_setup()
-  vim.notify_once(
-    "Deprecated(aerial.up): use aerial.next_up and aerial.prev_up instead\nThis function will be removed on 2023-02-01",
-    vim.log.levels.WARN
-  )
-  require("aerial.navigation").up(...)
-end
-
 ---Jump to a symbol higher in the tree, moving forwards
 ---@param count nil|integer How many levels to jump up (default 1)
 M.next_up = function(count)
@@ -446,14 +403,6 @@ end
 M.prev_up = function(count)
   do_setup()
   require("aerial.navigation").up(-1, count)
-end
-
----@deprecated
-M.on_attach = function(...)
-  vim.notify_once(
-    "Deprecated(aerial.on_attach): you no longer need to call this function\nThis function will be removed on 2023-02-01",
-    vim.log.levels.WARN
-  )
 end
 
 ---Get a list representing the symbol path to the current location.
@@ -565,17 +514,6 @@ M.sync_folds = function(bufnr)
     fold.sync_tree_folds(winid)
   end
   util.go_win_no_au(mywin)
-end
-
----Register a callback to be called when aerial is attached to a buffer.
----@deprecated
-M.register_attach_cb = function(callback)
-  do_setup()
-  vim.notify_once(
-    "Deprecated(aerial.register_attach_cb): pass `on_attach` to aerial.setup() instead (see :help aerial)\nThis function will be removed on 2023-02-01",
-    vim.log.levels.WARN
-  )
-  require("aerial.config").on_attach = callback
 end
 
 ---Get debug info for aerial
