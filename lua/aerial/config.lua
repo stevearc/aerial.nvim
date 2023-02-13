@@ -362,23 +362,6 @@ local function create_filetype_opt_getter(option, default)
   end
 end
 
-local function compat_move_option(opts, key, nested_key)
-  if opts[key] ~= nil then
-    opts[nested_key] = opts[nested_key] or {}
-    opts[nested_key][key] = opts[key]
-    opts[key] = nil
-    vim.notify_once(
-      string.format(
-        "Deprecated(aerial.config.%s) has moved to config.%s.%s\nSupport will be removed on 2023-02-01",
-        key,
-        nested_key,
-        key
-      ),
-      vim.log.levels.WARN
-    )
-  end
-end
-
 ---@param value string
 ---@param values string[]
 ---@param opts? {allow_nil: boolean}
@@ -404,46 +387,6 @@ end
 M.setup = function(opts)
   opts = opts or {}
 
-  -- For backwards compatibility
-  opts.layout = opts.layout or {}
-  compat_move_option(opts, "max_width", "layout")
-  compat_move_option(opts, "width", "layout")
-  compat_move_option(opts, "min_width", "layout")
-  compat_move_option(opts, "default_direction", "layout")
-  if opts.placement_editor_edge ~= nil then
-    opts.layout.placement = opts.placement_editor_edge and "edge" or "window"
-    vim.notify_once(
-      "Deprecated(aerial.config.placement_editor_edge) has moved to config.layout.placement\nSupport will be removed on 2023-02-01",
-      vim.log.levels.WARN
-    )
-  end
-  compat_move_option(opts, "placement_editor_edge", "layout")
-
-  if opts.close_behavior then
-    if opts.close_behavior == "global" then
-      opts.attach_mode = "global"
-    elseif opts.close_behavior == "persist" then
-      -- pass
-    elseif opts.close_behavior == "close" then
-      opts.close_automatic_events = { "switch_buffer" }
-    elseif opts.close_behavior == "auto" then
-      opts.close_automatic_events = { "unsupported" }
-    end
-    opts.close_behavior = nil
-    vim.notify_once(
-      "Deprecated(aerial.config.close_behavior): See :help aerial-close-behavior.\nThis option will be removed on 2023-02-01",
-      vim.log.levels.WARN
-    )
-  end
-
-  if opts.default_bindings == false then
-    vim.notify_once(
-      "Deprecated(aerial.config.default_bindings): Use config.keymaps to adjust aerial window keymaps.\nThis option will be removed on 2023-02-01",
-      vim.log.levels.WARN
-    )
-    opts.keymaps = {}
-  end
-
   local newconf = vim.tbl_deep_extend("force", default_options, opts)
 
   -- Asserts for all enum values
@@ -451,13 +394,7 @@ M.setup = function(opts)
     newconf.layout.default_direction,
     { "prefer_right", "prefer_left", "right", "left", "float" }
   )
-  newconf.layout.placement = assert_enum(newconf.layout.placement, { "window", "edge", "group" })
-  if newconf.layout.placement == "group" then
-    vim.notify_once(
-      "Deprecated(aerial.config.layout.placement = 'group'). If 'global' or 'window' do not fit your workflow, please file an issue https://github.com/stevearc/aerial.nvim/issues/new\nOtherwise, this option will be removed on 2023-02-01",
-      vim.log.levels.WARN
-    )
-  end
+  newconf.layout.placement = assert_enum(newconf.layout.placement, { "window", "edge" })
   newconf.attach_mode = assert_enum(newconf.attach_mode, { "window", "global" })
   for i, v in ipairs(newconf.close_automatic_events) do
     newconf.close_automatic_events[i] =
@@ -492,45 +429,19 @@ M.setup = function(opts)
   end
   newconf.default_icons = newconf.nerd_font and nerd_icons or plain_icons
 
-  -- Much of this logic is for backwards compatibility and can be removed in the
-  -- future
-  local open_automatic_min_symbols = newconf.open_automatic_min_symbols or 0
-  local open_automatic_min_lines = newconf.open_automatic_min_lines or 0
-  if
-    newconf.open_automatic_min_lines
-    or newconf.open_automatic_min_symbols
-    or type(newconf.open_automatic) == "table"
-  then
-    vim.notify_once(
-      "Deprecated(aerial.config.open_automatic) should be a boolean or function. See :help aerial-open-automatic.\nThis will be required as of 2023-02-01",
-      vim.log.levels.WARN
-    )
-    newconf.open_automatic_min_symbols = nil
-    newconf.open_automatic_min_lines = nil
-  end
   if type(newconf.open_automatic) == "boolean" then
     local open_automatic = newconf.open_automatic
     newconf.open_automatic = function(bufnr)
       return open_automatic and not require("aerial.util").is_ignored_buf(bufnr)
     end
   elseif type(newconf.open_automatic) ~= "function" then
-    local open_automatic_fn = create_filetype_opt_getter(newconf.open_automatic, false)
-    newconf.open_automatic = function(bufnr)
-      if
-        vim.api.nvim_buf_line_count(bufnr) < open_automatic_min_lines
-        or require("aerial").num_symbols(bufnr) < open_automatic_min_symbols
-      then
-        return false
-      end
-      return open_automatic_fn(bufnr)
-    end
-  end
-
-  if newconf.float.row or newconf.float.col then
     vim.notify_once(
-      "Deprecated(aerial.config.float) float.row and float.col are no longer used. Use float.override to customize layout.\nThis message will be removed on 2023-02-01",
+      "aerial.config.open_automatic should be a boolean or function. See :help aerial-open-automatic.",
       vim.log.levels.WARN
     )
+    newconf.open_automatic = function(bufnr)
+      return false
+    end
   end
 
   for k, v in pairs(newconf) do

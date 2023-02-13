@@ -22,29 +22,29 @@ describe("config", function()
   end)
   it("reads the filetype default value for filetype map option", function()
     config.setup({
-      open_automatic = {
+      manage_folds = {
         ["_"] = true,
       },
     })
-    assert.equals(config.open_automatic(0), true)
+    assert.equals(config.manage_folds(0), true)
   end)
   it("reads the filetype value for filetype map option", function()
     config.setup({
-      open_automatic = {
+      manage_folds = {
         fake_ft = true,
       },
     })
     vim.api.nvim_buf_set_option(0, "filetype", "fake_ft")
-    assert.equals(config.open_automatic(0), true)
+    assert.equals(config.manage_folds(0), true)
   end)
   it("reads the filetype value when using a compound filetype", function()
     config.setup({
-      open_automatic = {
+      manage_folds = {
         fake_ft = true,
       },
     })
     vim.api.nvim_buf_set_option(0, "filetype", "fake_ft.extension")
-    assert.equals(config.open_automatic(0), true)
+    assert.equals(config.manage_folds(0), true)
   end)
 
   it("Calls the open_automatic function", function()

@@ -137,18 +137,6 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
       local modifier
       if config.layout.placement == "edge" then
         modifier = direction == "left" and "topleft" or "botright"
-      elseif config.layout.placement == "group" then
-        local split_target
-        local winids = util.get_fixed_wins(bufnr)
-        if direction == "left" then
-          split_target = winids[1]
-        else
-          split_target = winids[#winids]
-        end
-        if my_winid ~= split_target then
-          util.go_win_no_au(split_target)
-        end
-        modifier = direction == "left" and "leftabove" or "rightbelow"
       else
         modifier = direction == "left" and "leftabove" or "rightbelow"
       end

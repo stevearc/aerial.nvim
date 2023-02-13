@@ -304,19 +304,10 @@ M.detect_split_direction = function(bufnr)
   if config.layout.placement == "edge" then
     left_available = not M.is_aerial_buffer(vim.api.nvim_win_get_buf(wins[1]))
     right_available = not M.is_aerial_buffer(vim.api.nvim_win_get_buf(wins[#wins]))
-  else
-    if not bufnr or bufnr == 0 then
-      bufnr = vim.api.nvim_get_current_buf()
-    end
-    -- TODO make this smarter using winlayout()
-    if config.layout.placement == "group" then
-      left_available = vim.api.nvim_win_get_buf(wins[1]) == bufnr
-      right_available = vim.api.nvim_win_get_buf(wins[#wins]) == bufnr
-    elseif config.layout.placement == "window" then
-      local mywin = vim.api.nvim_get_current_win()
-      left_available = wins[1] == mywin
-      right_available = wins[#wins] == mywin
-    end
+  elseif config.layout.placement == "window" then
+    local mywin = vim.api.nvim_get_current_win()
+    left_available = wins[1] == mywin
+    right_available = wins[#wins] == mywin
   end
 
   if default == "prefer_left" then
