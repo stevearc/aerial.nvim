@@ -51,7 +51,7 @@ describe("treesitter ts", function()
         },
       },
       {
-        kind = "Type",
+        kind = "Variable",
         name = "Type1",
         level = 0,
         lnum = 11,

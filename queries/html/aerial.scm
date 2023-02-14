@@ -7,7 +7,7 @@
     (start_tag (tag_name) @name)
     (self_closing_tag (tag_name) @name)
   ]
-  (#set! "kind" "Snippet")
+  (#set! "kind" "Struct")
 ) @type
 
 (attribute (attribute_name) @name

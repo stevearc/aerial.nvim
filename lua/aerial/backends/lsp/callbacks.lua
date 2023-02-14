@@ -1,12 +1,11 @@
 local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
-local protocol = require("vim.lsp.protocol")
 
 local M = {}
 
 local function get_symbol_kind_name(kind_number)
-  return protocol.SymbolKind[kind_number] or "Unknown"
+  return vim.lsp.protocol.SymbolKind[kind_number] or "Unknown"
 end
 
 local function convert_range(range)

@@ -25,7 +25,7 @@
 
 (type_alias_declaration
   name: (type_identifier) @name
-  (#set! "kind" "Type")
+  (#set! "kind" "Variable")
   ) @type
 
 (lexical_declaration
