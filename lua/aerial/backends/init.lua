@@ -144,10 +144,10 @@ M.get = function(bufnr)
   return backend, name
 end
 
----@param backend_name string
 ---@param bufnr? integer
 ---@param items aerial.Symbol[]
-M.set_symbols = function(backend_name, bufnr, items)
+---@param context {backend_name: string, lang: string}
+M.set_symbols = function(bufnr, items, ctx)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
@@ -161,9 +161,13 @@ M.set_symbols = function(backend_name, bufnr, items)
   local util = require("aerial.util")
   local window = require("aerial.window")
 
+  if config.post_add_all_symbols then
+    items = config.post_add_all_symbols(bufnr, items, ctx)
+  end
+
   local had_symbols = data.has_symbols(bufnr)
   -- Ignore symbols from non-attached backend IFF we already have symbols
-  if had_symbols and not M.is_backend_attached(bufnr, backend_name) then
+  if had_symbols and not M.is_backend_attached(bufnr, ctx.backend_name) then
     return
   end
 

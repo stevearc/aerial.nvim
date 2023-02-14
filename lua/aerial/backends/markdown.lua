@@ -1,6 +1,7 @@
 local backends = require("aerial.backends")
 local backend_util = require("aerial.backends.util")
 local util = require("aerial.util")
+local config = require("aerial.config")
 
 local M = {}
 
@@ -37,7 +38,16 @@ M.fetch_symbols_sync = function(bufnr)
         end
         table.insert(parent.children, item)
       else
-        table.insert(items, item)
+        if
+          config.post_parse_symbol == nil
+          or config.post_parse_symbol(bufnr, item, {
+              backend_name = "markdown",
+              lang = "markdown",
+            })
+            ~= false
+        then
+          table.insert(items, item)
+        end
       end
       while #stack > level and #stack > 0 do
         table.remove(stack, #stack)
@@ -49,7 +59,7 @@ M.fetch_symbols_sync = function(bufnr)
   end
   -- This sets the proper end_lnum and end_col
   extensions.markdown.postprocess_symbols(bufnr, items)
-  backends.set_symbols("markdown", bufnr, items)
+  backends.set_symbols(bufnr, items, { backend_name = "markdown", lang = "markdown" })
 end
 
 M.fetch_symbols = M.fetch_symbols_sync

@@ -39,7 +39,8 @@ end
 ---@param symbols table
 ---@param bufnr integer
 ---@param fix_start_col boolean
-local function process_symbols(symbols, bufnr, fix_start_col)
+---@param client_name LSP client name
+local function process_symbols(symbols, bufnr, fix_start_col, client_name)
   local include_kind = config.get_filter_kind_map(bufnr)
   local max_line = vim.api.nvim_buf_line_count(bufnr)
   local function _process_symbols(symbols_, parent, list, level)
@@ -88,7 +89,18 @@ local function process_symbols(symbols, bufnr, fix_start_col)
           if symbol.children then
             item.children = _process_symbols(symbol.children, item, {}, level + 1)
           end
-          table.insert(list, item)
+          if
+            config.post_parse_symbol == nil
+            or config.post_parse_symbol(bufnr, item, {
+                backend_name = "lsp",
+                lang = client_name,
+                symbols = symbols,
+                symbol = symbol,
+              })
+              ~= false
+          then
+            table.insert(list, item)
+          end
         elseif symbol.children then
           -- If this duplicate symbol has children (unlikely), make sure those get
           -- merged into the previous symbol's children
@@ -120,8 +132,12 @@ end
 M.handle_symbols = function(result, bufnr, client_name)
   -- Volar produces some symbols that start off the end of a line. We have to correct that or it
   -- causes navigation problems.
-  local symbols = process_symbols(result, bufnr, client_name == "volar")
-  backends.set_symbols("lsp", bufnr, symbols)
+  local symbols = process_symbols(result, bufnr, client_name == "volar", client_name)
+  backends.set_symbols(
+    bufnr,
+    symbols,
+    { backend_name = "lsp", symbols = symbols, lang = client_name }
+  )
 end
 
 local function get_error_count(bufnr, client_id)

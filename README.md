@@ -372,6 +372,37 @@ require("aerial").setup({
   -- Run this command after jumping to a symbol (false will disable)
   post_jump_cmd = "normal! zz",
 
+  -- Invoked after each symbol is parsed, can be used to modify the parsed item,
+  -- or to filter it by returning false.
+  --
+  -- bufnr: a neovim buffer number
+  -- item: of type aerial.Symbol
+  -- ctx: a record containing the following fields:
+  --   * backend_name: treesitter, lsp, man...
+  --   * lang: info about the language
+  --   * symbols?: specific to the lsp backend
+  --   * symbol?: specific to the lsp backend
+  --   * syntax_tree?: specific to the treesitter backend
+  --   * match?: specific to the treesitter backend, TS query match
+  post_parse_symbol = function(bufnr, item, ctx)
+    return true
+  end,
+
+  -- Invoked after all symbols have been parsed and post-processed,
+  -- allows to modify the symbol structure before final display
+  --
+  -- bufnr: a neovim buffer number
+  -- items: a collection of aerial.Symbol items, organized in a tree,
+  --        with 'parent' and 'children' fields
+  -- ctx: a record containing the following fields:
+  --   * backend_name: treesitter, lsp, man...
+  --   * lang: info about the language
+  --   * symbols?: specific to the lsp backend
+  --   * syntax_tree?: specific to the treesitter backend
+  post_add_all_symbols = function(bufnr, items, ctx)
+    return items
+  end,
+
   -- When true, aerial will automatically close after jumping to a symbol
   close_on_select = false,
 
@@ -454,6 +485,21 @@ All possible SymbolKind values can be found [in the LSP
 spec](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#symbolKind).
 These are the values used for configuring icons, highlight groups, and
 filtering.
+
+The `aerial.Symbol` type used in some optional callbacks is:
+
+```typescript
+{
+  kind: SymbolKind,
+  name: string,
+  level: number,
+  parent: aerial.Symbol,
+  lnum: number,
+  end_lnum: number,
+  col: number,
+  end_col: number
+}
+```
 
 ## Third-party integrations
 
