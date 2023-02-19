@@ -39,7 +39,7 @@ M.fetch_symbols_sync = function(bufnr)
         table.insert(parent.children, item)
       else
         if
-          config.post_parse_symbol == nil
+          not config.post_parse_symbol
           or config.post_parse_symbol(bufnr, item, {
               backend_name = "markdown",
               lang = "markdown",

@@ -163,6 +163,12 @@ M.set_symbols = function(bufnr, items, ctx)
 
   if config.post_add_all_symbols then
     items = config.post_add_all_symbols(bufnr, items, ctx)
+    if items == nil then
+      vim.notify_once(
+        "aerial.config.post_add_all_symbols should return the symbols to display, but you returned nil or didn't return anything.",
+        vim.log.levels.WARN
+      )
+    end
   end
 
   local had_symbols = data.has_symbols(bufnr)

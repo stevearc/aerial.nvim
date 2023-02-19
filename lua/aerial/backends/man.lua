@@ -38,7 +38,7 @@ M.fetch_symbols_sync = function(bufnr)
         col = 0,
       }
       if
-        config.post_parse_symbol == nil
+        not config.post_parse_symbol
         or config.post_parse_symbol(bufnr, item, {
             backend_name = "man",
             lang = "man",
@@ -60,7 +60,7 @@ M.fetch_symbols_sync = function(bufnr)
         end_col = line:len(),
       }
       if
-        config.post_parse_symbol == nil
+        not config.post_parse_symbol
         or config.post_parse_symbol(bufnr, item, {
             backend_name = "man",
             lang = "man",

@@ -90,7 +90,7 @@ local function process_symbols(symbols, bufnr, fix_start_col, client_name)
             item.children = _process_symbols(symbol.children, item, {}, level + 1)
           end
           if
-            config.post_parse_symbol == nil
+            not config.post_parse_symbol
             or config.post_parse_symbol(bufnr, item, {
                 backend_name = "lsp",
                 lang = client_name,
