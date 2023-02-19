@@ -45,13 +45,17 @@ M.fetch_symbols_sync = function(bufnr)
   local parser = parsers.get_parser(bufnr)
   local items = {}
   if not parser then
-    backends.set_symbols("treesitter", bufnr, items)
+    backends.set_symbols(bufnr, items, { backend_name = "treesitter", lang = "unknown" })
     return
   end
   local lang = parser:lang()
   local syntax_tree = parser:parse()[1]
   if not query.has_query_files(lang, "aerial") or not syntax_tree then
-    backends.set_symbols("treesitter", bufnr, items)
+    backends.set_symbols(
+      bufnr,
+      items,
+      { backend_name = "treesitter", lang = lang, syntax_tree = syntax_tree }
+    )
     return
   end
   -- This will track a loose hierarchy of recent node+items.
@@ -105,6 +109,15 @@ M.fetch_symbols_sync = function(bufnr)
     if ext.postprocess(bufnr, item, match) == false or not include_kind[item.kind] then
       goto continue
     end
+    local ctx = {
+      backend_name = "treesitter",
+      lang = lang,
+      syntax_tree = syntax_tree,
+      match = match,
+    }
+    if config.post_parse_symbol and config.post_parse_symbol(bufnr, item, ctx) == false then
+      goto continue
+    end
     if item.parent then
       if not item.parent.children then
         item.parent.children = {}
@@ -118,7 +131,11 @@ M.fetch_symbols_sync = function(bufnr)
     ::continue::
   end
   ext.postprocess_symbols(bufnr, items)
-  backends.set_symbols("treesitter", bufnr, items)
+  backends.set_symbols(
+    bufnr,
+    items,
+    { backend_name = "treesitter", lang = lang, syntax_tree = syntax_tree }
+  )
 end
 
 M.fetch_symbols = M.fetch_symbols_sync

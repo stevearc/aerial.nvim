@@ -1,6 +1,7 @@
 local backends = require("aerial.backends")
 local backend_util = require("aerial.backends.util")
 local util = require("aerial.util")
+local config = require("aerial.config")
 
 local M = {}
 
@@ -36,8 +37,17 @@ M.fetch_symbols_sync = function(bufnr)
         lnum = lnum,
         col = 0,
       }
-      last_header = item
-      table.insert(items, item)
+      if
+        not config.post_parse_symbol
+        or config.post_parse_symbol(bufnr, item, {
+            backend_name = "man",
+            lang = "man",
+          })
+          ~= false
+      then
+        last_header = item
+        table.insert(items, item)
+      end
     elseif arg then
       local item = {
         kind = "Interface",
@@ -49,18 +59,27 @@ M.fetch_symbols_sync = function(bufnr)
         end_lnum = lnum,
         end_col = line:len(),
       }
-      if last_header then
-        last_header.children = last_header.children or {}
-        table.insert(last_header.children, item)
-      else
-        table.insert(items, item)
+      if
+        not config.post_parse_symbol
+        or config.post_parse_symbol(bufnr, item, {
+            backend_name = "man",
+            lang = "man",
+          })
+          ~= false
+      then
+        if last_header then
+          last_header.children = last_header.children or {}
+          table.insert(last_header.children, item)
+        else
+          table.insert(items, item)
+        end
       end
     end
     prev_lnum = lnum
     prev_line = line
   end
   finalize_header()
-  backends.set_symbols("man", bufnr, items)
+  backends.set_symbols(bufnr, items, { backend_name = "man", lang = "man" })
 end
 
 M.fetch_symbols = M.fetch_symbols_sync
