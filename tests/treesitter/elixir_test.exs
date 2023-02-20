@@ -1,4 +1,7 @@
 defmodule Example.Module do
+  @moduledoc """
+  Module documentation
+  """
   @module_attribute :value
 
   def public_function() do
@@ -28,6 +31,10 @@ defmodule Example.Struct do
 end
 
 defprotocol Example.Protocol do
+  @doc """
+  function documentation
+  """
+  @doc since: "1.3.0"
   @spec public_function_head(t, atom()) :: boolean
   def public_function_head(target, opt)
 end
