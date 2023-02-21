@@ -47,7 +47,7 @@
 
 (unary_operator
   operator: "@"
-  operand: (call target: (identifier) @name (#not-any-of? @name "module_attribute" "callback" "spec")) @type
+  operand: (call target: (identifier) @name (#not-any-of? @name "module_attribute" "callback" "spec" "doc" "moduledoc")) @type
   (#set! "kind" "Constant")
   ) @start
 
