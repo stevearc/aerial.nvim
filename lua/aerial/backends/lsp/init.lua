@@ -1,7 +1,9 @@
 local backends = require("aerial.backends")
 local callbacks = require("aerial.backends.lsp.callbacks")
 local config = require("aerial.config")
+local lsp_util = require("aerial.backends.lsp.util")
 local util = require("aerial.backends.util")
+
 local M = {}
 
 local function replace_handler(name, callback, preserve_callback)
@@ -30,25 +32,79 @@ local function hook_handlers(preserve_symbol_callback)
   replace_handler("textDocument/publishDiagnostics", callbacks.on_publish_diagnostics, true)
 end
 
+---@param bufnr integer
+---@return nil|table
+local function get_client(bufnr)
+  local ret
+  local last_priority = -1
+  for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
+    local priority = config.lsp.priority[client.name] or 10
+    if lsp_util.client_supports_symbols(client) and priority > last_priority then
+      ret = client
+      last_priority = priority
+    end
+  end
+  return ret
+end
+
 M.fetch_symbols = function(bufnr)
-  bufnr = bufnr or 0
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
   local params = { textDocument = vim.lsp.util.make_text_document_params(bufnr) }
-  vim.lsp.buf_request(bufnr, "textDocument/documentSymbol", params, callbacks.symbol_callback)
+  local client = get_client(bufnr)
+  if not client then
+    vim.notify("No LSP client found that supports symbols", vim.log.levels.WARN)
+    return
+  end
+  local request_success =
+    client.request("textDocument/documentSymbol", params, callbacks.symbol_callback, bufnr)
+  if not request_success then
+    vim.notify("Error requesting document symbols", vim.log.levels.WARN)
+  end
 end
 
 M.fetch_symbols_sync = function(bufnr, opts)
-  bufnr = bufnr or 0
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
   opts = vim.tbl_extend("keep", opts or {}, {
     timeout = 4000,
   })
   local params = { textDocument = vim.lsp.util.make_text_document_params(bufnr) }
-  local response_map, err =
-    vim.lsp.buf_request_sync(bufnr, "textDocument/documentSymbol", params, opts.timeout)
-  if err or vim.tbl_isempty(response_map) then
-    vim.notify(string.format("Error fetching document symbols: %s", err), vim.log.levels.ERROR)
+  local client = get_client(bufnr)
+  if not client then
+    vim.notify("No LSP client found that supports symbols", vim.log.levels.WARN)
+    return
+  end
+  local response
+  local request_success = client.request(
+    "textDocument/documentSymbol",
+    params,
+    function(err, result)
+      response = { err = err, result = result }
+    end,
+    bufnr
+  )
+  if not request_success then
+    vim.notify("Error requesting document symbols", vim.log.levels.WARN)
+  end
+
+  local wait_result = vim.wait(opts.timeout, function()
+    return response ~= nil
+  end, 10)
+
+  if wait_result then
+    if response.err then
+      vim.notify(
+        string.format("Error requesting document symbols: %s", response.err),
+        vim.log.levels.WARN
+      )
+    else
+      callbacks.handle_symbols(response.result, bufnr)
+    end
   else
-    local _, response = next(response_map)
-    callbacks.handle_symbols(response.result, bufnr)
+    vim.notify("Timeout when requesting document symbols", vim.log.levels.WARN)
   end
 end
 
@@ -57,7 +113,7 @@ end
 ---@return boolean
 local function is_lsp_attached(bufnr, exclude_id)
   for _, client in pairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
-    if client.id ~= exclude_id and client.server_capabilities.documentSymbolProvider then
+    if client.id ~= exclude_id and lsp_util.client_supports_symbols(client) then
       return true
     end
   end
@@ -82,7 +138,7 @@ M.on_attach = function(client, bufnr, opts)
     bufnr = 0
   end
   opts = opts or {}
-  if client.server_capabilities.documentSymbolProvider then
+  if lsp_util.client_supports_symbols(client) then
     hook_handlers(opts.preserve_callback)
     -- This is called from the LspAttach autocmd
     -- The client isn't fully attached until just after that autocmd completes, so we need to

@@ -461,6 +461,13 @@ require("aerial").setup({
     -- How long to wait (in ms) after a buffer change before updating
     -- Only used when diagnostics_trigger_update = false
     update_delay = 300,
+
+    -- Map of LSP client name to priority. Default value is 10.
+    -- Clients with higher (larger) priority will be used before those with lower priority.
+    -- Set to -1 to never use the client.
+    priority = {
+      -- pyright = 10,
+    },
   },
 
   treesitter = {

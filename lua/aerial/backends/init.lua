@@ -3,8 +3,8 @@ local M = {}
 
 ---@class aerial.Backend
 ---@field is_supported fun(bufnr: integer): boolean, string?
----@field fetch_symbols_sync fun(bufnr: integer, timeout?: integer)
----@field fetch_symbols fun(bufnr: integer)
+---@field fetch_symbols_sync fun(bufnr?: integer, opts?: {timeout?: integer})
+---@field fetch_symbols fun(bufnr?: integer)
 ---@field attach fun(bufnr: integer)
 ---@field detach fun(bufnr: integer)
 
@@ -146,7 +146,7 @@ end
 
 ---@param bufnr? integer
 ---@param items aerial.Symbol[]
----@param context {backend_name: string, lang: string}
+---@param ctx {backend_name: string, lang: string}
 M.set_symbols = function(bufnr, items, ctx)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
@@ -164,10 +164,11 @@ M.set_symbols = function(bufnr, items, ctx)
   if config.post_add_all_symbols then
     items = config.post_add_all_symbols(bufnr, items, ctx)
     if items == nil then
-      vim.notify_once(
+      vim.notify(
         "aerial.config.post_add_all_symbols should return the symbols to display, but you returned nil or didn't return anything.",
         vim.log.levels.WARN
       )
+      return
     end
   end
 

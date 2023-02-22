@@ -1,6 +1,7 @@
 local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
+local lsp_util = require("aerial.backends.lsp.util")
 
 local M = {}
 
@@ -191,7 +192,7 @@ M.on_publish_diagnostics = function(_err, result, ctx, _config)
     not bufnr
     or not backends.is_backend_attached(bufnr, "lsp")
     or not config.lsp.diagnostics_trigger_update
-    or not client.server_capabilities.documentSymbolProvider
+    or not lsp_util.client_supports_symbols(client)
   then
     return
   end
