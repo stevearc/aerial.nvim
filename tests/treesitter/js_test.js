@@ -1,5 +1,6 @@
 class Cl_1 {
   meth_1() {}
+  cl_fn_3 = () => {}
 }
 
 function fn_1() {}
