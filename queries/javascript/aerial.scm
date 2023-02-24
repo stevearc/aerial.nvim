@@ -13,6 +13,12 @@
   (#set! "kind" "Method")
   ) @type
 
+(field_definition
+  property: (property_identifier) @name
+  value: (arrow_function)
+  (#set! "kind" "Method")
+  ) @type
+
 ; const fn = () => {}
 (lexical_declaration
   (variable_declarator
