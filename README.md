@@ -591,8 +591,9 @@ require("lualine").setup({
 ## Highlight
 
 There are highlight groups created for each `SymbolKind`. There will be one for
-the name of the symbol (`Aerial<SymbolKind>`, and one for the icon
-(`Aerial<SymbolKind>Icon`). For example:
+the name of the symbol (`Aerial<SymbolKind>`), one for name and scope (`Aerial<SymbolKind>Private`),
+one for the icon (`Aerial<SymbolKind>Icon`), and one for the icon with scope (`Aerial<SymbolKind>PrivateIcon`).
+For example:
 
 ```vim
 hi link AerialClass Type

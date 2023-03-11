@@ -29,6 +29,7 @@ M.create_highlight_groups = function()
   -- The name of the symbol
   for _, symbol_kind in ipairs(M.identifiers) do
     link(string.format("Aerial%s", symbol_kind), "NONE")
+    vim.cmd(string.format("hi Aerial%sPrivate cterm=italic gui=italic", symbol_kind))
   end
 
   -- The icon displayed to the left of the symbol
@@ -43,6 +44,7 @@ M.create_highlight_groups = function()
   link("AerialFieldIcon", "Identifier")
   link("AerialFileIcon", "Identifier")
   link("AerialFunctionIcon", "Function")
+  link("AerialFunctionPrivateIcon", "NONE")
   link("AerialInterfaceIcon", "Type")
   link("AerialKeyIcon", "Identifier")
   link("AerialMethodIcon", "Function")

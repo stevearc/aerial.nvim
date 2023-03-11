@@ -52,8 +52,8 @@ local function aerial_picker(opts)
     local text = vim.api.nvim_buf_get_lines(bufnr, item.lnum - 1, item.lnum, false)[1] or ""
     text = vim.trim(text)
     local columns = {
-      { icon, "Aerial" .. item.kind .. "Icon" },
-      { entry.name, "Aerial" .. item.kind },
+      { icon, "Aerial" .. item.kind .. "Icon" .. (item.scope or "") },
+      { entry.name, "Aerial" .. item.kind .. (item.scope or "") },
       text,
     }
     return displayer(columns)

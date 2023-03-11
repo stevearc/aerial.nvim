@@ -151,13 +151,13 @@ M.update_aerial_buffer = function(buf)
     local text = util.remove_newlines(string.format("%s%s %s", spacing, kind, item.name))
     local text_cols = vim.api.nvim_strwidth(text)
     table.insert(highlights, {
-      group = "Aerial" .. item.kind .. "Icon",
+      group = "Aerial" .. item.kind .. (item.scope or "") .. "Icon",
       row = row,
       col_start = string_len[spacing],
       col_end = string_len[spacing] + string_len[kind],
     })
     table.insert(highlights, {
-      group = "Aerial" .. item.kind,
+      group = "Aerial" .. item.kind .. (item.scope or ""),
       row = row,
       col_start = string_len[spacing] + string_len[kind],
       col_end = -1,
