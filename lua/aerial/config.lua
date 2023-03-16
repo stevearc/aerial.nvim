@@ -248,6 +248,11 @@ local default_options = {
     whitespace = "  ",
   },
 
+  -- Set this function to override the highlight groups for certain symbols
+  get_highlight = function(symbol, is_icon)
+    -- return "MyHighlight" .. symbol.kind
+  end,
+
   -- Options for opening aerial in a floating win
   float = {
     -- Controls border appearance. Passed to nvim_open_win

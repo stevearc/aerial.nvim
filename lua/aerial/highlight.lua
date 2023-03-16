@@ -1,3 +1,4 @@
+local config = require("aerial.config")
 local M = {}
 
 ---@param group1 string
@@ -6,10 +7,60 @@ local function link(group1, group2)
   vim.api.nvim_set_hl(0, group1, { link = group2, default = true })
 end
 
+local symbol_kinds = {
+  "Array",
+  "Boolean",
+  "Class",
+  "Constant",
+  "Constructor",
+  "Enum",
+  "EnumMember",
+  "Event",
+  "Field",
+  "File",
+  "Function",
+  "Interface",
+  "Key",
+  "Method",
+  "Module",
+  "Namespace",
+  "Null",
+  "Number",
+  "Object",
+  "Operator",
+  "Package",
+  "Property",
+  "String",
+  "Struct",
+  "TypeParameter",
+  "Variable",
+}
+
+---@param symbol aerial.Symbol
+---@param is_icon boolean
+---@return nil|string
+M.get_highlight = function(symbol, is_icon)
+  local hl_group = config.get_highlight(symbol, is_icon)
+  if hl_group then
+    return hl_group
+  end
+
+  -- Default functionality will set the highlight for private and protected symbol names
+  if symbol.scope and not is_icon and symbol.scope ~= "public" then
+    return string.format("Aerial%s", symbol.scope:gsub("^%l", string.upper))
+  end
+
+  return string.format("Aerial%s%s", symbol.kind, is_icon and "Icon" or "")
+end
+
 M.create_highlight_groups = function()
   -- The line that shows where your cursor(s) are
   link("AerialLine", "QuickFixLine")
   link("AerialLineNC", "AerialLine")
+
+  -- Highlight groups for private and protected functions/fields/etc
+  link("AerialPrivate", "Comment")
+  link("AerialProtected", "Comment")
 
   -- Use Comment colors for AerialGuide, while stripping bold/italic/etc
   local comment_defn = vim.api.nvim_get_hl_by_name("Comment", true)
@@ -27,7 +78,7 @@ M.create_highlight_groups = function()
   end
 
   -- The name of the symbol
-  for _, symbol_kind in ipairs(M.identifiers) do
+  for _, symbol_kind in ipairs(symbol_kinds) do
     link(string.format("Aerial%s", symbol_kind), "NONE")
   end
 
@@ -59,34 +110,5 @@ M.create_highlight_groups = function()
   link("AerialTypeParameterIcon", "Identifier")
   link("AerialVariableIcon", "Identifier")
 end
-
-M.identifiers = {
-  "Array",
-  "Boolean",
-  "Class",
-  "Constant",
-  "Constructor",
-  "Enum",
-  "EnumMember",
-  "Event",
-  "Field",
-  "File",
-  "Function",
-  "Interface",
-  "Key",
-  "Method",
-  "Module",
-  "Namespace",
-  "Null",
-  "Number",
-  "Object",
-  "Operator",
-  "Package",
-  "Property",
-  "String",
-  "Struct",
-  "TypeParameter",
-  "Variable",
-}
 
 return M
