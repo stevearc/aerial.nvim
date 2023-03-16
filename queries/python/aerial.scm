@@ -7,3 +7,8 @@
   name: (identifier) @name
   (#set! "kind" "Class")
   ) @type
+
+(assignment
+  left: (_) @name
+  (#set! "kind" "Variable")
+  ) @type

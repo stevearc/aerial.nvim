@@ -32,6 +32,15 @@ describe("treesitter python", function()
           },
         },
       },
+      {
+        kind = "Variable",
+        name = "var",
+        level = 0,
+        lnum = 9,
+        col = 0,
+        end_lnum = 9,
+        end_col = 10,
+      },
     })
   end)
 end)
