@@ -72,6 +72,9 @@ M.elixir = {
     local identifier = (utils.get_at_path(match, "identifier") or {}).node
     if identifier then
       local name = vim.treesitter.query.get_node_text(identifier, bufnr) or "<parse error>"
+      if name == "defp" then
+        item.scope = "private"
+      end
       item.kind = M.elixir.kind_map[name] or item.kind
       if name == "callback" and item.parent then
         item.parent.kind = "Interface"
