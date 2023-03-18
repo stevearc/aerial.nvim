@@ -18,6 +18,7 @@ local function aerial_picker(opts)
   local backends = require("aerial.backends")
   local config = require("aerial.config")
   local data = require("aerial.data")
+  local highlight = require("aerial.highlight")
   local util = require("aerial.util")
 
   local bufnr = vim.api.nvim_get_current_buf()
@@ -51,9 +52,11 @@ local function aerial_picker(opts)
     local icon = config.get_icon(bufnr, item.kind)
     local text = vim.api.nvim_buf_get_lines(bufnr, item.lnum - 1, item.lnum, false)[1] or ""
     text = vim.trim(text)
+    local icon_hl = highlight.get_highlight(item, true) or "NONE"
+    local name_hl = highlight.get_highlight(item, false) or "NONE"
     local columns = {
-      { icon, "Aerial" .. item.kind .. "Icon" },
-      { entry.name, "Aerial" .. item.kind },
+      { icon, icon_hl },
+      { entry.name, name_hl },
       text,
     }
     return displayer(columns)

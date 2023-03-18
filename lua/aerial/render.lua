@@ -1,6 +1,7 @@
 local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
+local highlight = require("aerial.highlight")
 local layout = require("aerial.layout")
 local loading = require("aerial.loading")
 local util = require("aerial.util")
@@ -150,18 +151,24 @@ M.update_aerial_buffer = function(buf)
     end
     local text = util.remove_newlines(string.format("%s%s %s", spacing, kind, item.name))
     local text_cols = vim.api.nvim_strwidth(text)
-    table.insert(highlights, {
-      group = "Aerial" .. item.kind .. "Icon",
-      row = row,
-      col_start = string_len[spacing],
-      col_end = string_len[spacing] + string_len[kind],
-    })
-    table.insert(highlights, {
-      group = "Aerial" .. item.kind,
-      row = row,
-      col_start = string_len[spacing] + string_len[kind],
-      col_end = -1,
-    })
+    local icon_hl = highlight.get_highlight(item, true)
+    if icon_hl then
+      table.insert(highlights, {
+        group = icon_hl,
+        row = row,
+        col_start = string_len[spacing],
+        col_end = string_len[spacing] + string_len[kind],
+      })
+    end
+    local name_hl = highlight.get_highlight(item, false)
+    if name_hl then
+      table.insert(highlights, {
+        group = name_hl,
+        row = row,
+        col_start = string_len[spacing] + string_len[kind],
+        col_end = -1,
+      })
+    end
     max_len = math.max(max_len, text_cols)
     table.insert(lines, text)
     row = row + 1

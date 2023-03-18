@@ -1,6 +1,8 @@
 local util = require("aerial.util")
 local config = require("aerial.config")
 
+---@alias aerial.Scope "private"|"public"|"protected"
+
 ---@class aerial.Range
 ---@field lnum integer
 ---@field end_lnum integer
@@ -11,6 +13,7 @@ local config = require("aerial.config")
 ---@field kind string
 ---@field name string
 ---@field level integer
+---@field scope nil|aerial.Scope
 ---@field parent? aerial.Symbol
 ---@field selection_range? aerial.Range
 ---@field children? aerial.Symbol[]

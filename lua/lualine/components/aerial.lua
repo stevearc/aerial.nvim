@@ -43,7 +43,6 @@
 --  my_method_name
 
 local M = require("lualine.component"):extend()
-local aerial = require("aerial")
 local utils = require("lualine.utils.utils")
 
 local default_options = {
@@ -53,21 +52,6 @@ local default_options = {
   dense_sep = ".",
   exact = true,
 }
-
-function M:color_for_lualine()
-  local identifiers = require("aerial.highlight").identifiers
-  self.highlight_groups = {}
-  for _, symbol_kind in ipairs(identifiers) do
-    local hl = "Aerial" .. symbol_kind
-    local hl_icon = "Aerial" .. symbol_kind .. "Icon"
-    local color = { fg = utils.extract_highlight_colors(hl, "fg") }
-    local color_icon = { fg = utils.extract_highlight_colors(hl_icon, "fg") }
-    self.highlight_groups[symbol_kind] = {
-      icon = self:create_hl(color_icon, symbol_kind .. "Icon"),
-      text = self:create_hl(color, symbol_kind),
-    }
-  end
-end
 
 function M:format_status(symbols, depth, separator, icons_enabled, colored)
   local parts = {}
@@ -80,15 +64,9 @@ function M:format_status(symbols, depth, separator, icons_enabled, colored)
   end
 
   for _, symbol in ipairs(symbols) do
-    local name = utils.stl_escape(symbol.name)
-    if colored then
-      name = self:format_hl(self.highlight_groups[symbol.kind].text) .. name
-    end
+    local name = self:color_text(utils.stl_escape(symbol.name), symbol, false)
     if icons_enabled then
-      local icon = symbol.icon
-      if colored then
-        icon = self:format_hl(self.highlight_groups[symbol.kind].icon) .. icon
-      end
+      local icon = self:color_text(symbol.icon, symbol, true)
       table.insert(parts, string.format("%s %s", icon, name))
     else
       table.insert(parts, name)
@@ -104,15 +82,33 @@ function M:init(options)
   if self.options.colored == nil then
     self.options.colored = true
   end
-  if self.options.colored then
-    aerial.sync_load()
-    require("aerial.highlight").create_highlight_groups()
-    self:color_for_lualine()
-  end
+  self.highlight_groups = {}
   self.get_status = self.get_status_normal
 
   if self.options.dense then
     self.get_status = self.get_status_dense
+  end
+end
+
+---@param text string
+---@param symbol aerial.Symbol
+---@param is_icon boolean
+---@return string
+function M:color_text(text, symbol, is_icon)
+  if not self.options.colored then
+    return text
+  end
+  local hl_group = require("aerial.highlight").get_highlight(symbol, is_icon)
+  if hl_group then
+    local lualine_hl_group = self.highlight_groups[hl_group]
+    if not lualine_hl_group then
+      lualine_hl_group =
+        self:create_hl({ fg = utils.extract_highlight_colors(hl_group, "fg") }, "LL" .. hl_group)
+      self.highlight_groups[hl_group] = lualine_hl_group
+    end
+    return self:format_hl(lualine_hl_group) .. text
+  else
+    return text
   end
 end
 
@@ -121,7 +117,7 @@ function M:update_status()
 end
 
 function M:get_status_normal()
-  local symbols = aerial.get_location(self.options.exact)
+  local symbols = require("aerial").get_location(self.options.exact)
   local status = self:format_status(
     symbols,
     self.options.depth,
@@ -133,7 +129,7 @@ function M:get_status_normal()
 end
 
 function M:get_status_dense()
-  local symbols = aerial.get_location(self.options.exact)
+  local symbols = require("aerial").get_location(self.options.exact)
   local status = self:format_status(
     symbols,
     self.options.depth,
@@ -146,10 +142,7 @@ function M:get_status_dense()
 
   if self.options.icons_enabled and not vim.tbl_isempty(symbols) then
     local symbol = symbols[#symbols]
-    local icon = symbol.icon
-    if self.options.colored then
-      icon = self:format_hl(self.highlight_groups[symbol.kind].icon) .. icon
-    end
+    local icon = self:color_text(symbol.icon, symbol, true)
     status = string.format("%s %s", icon, status)
   end
   return status
