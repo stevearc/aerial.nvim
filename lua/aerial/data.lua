@@ -14,6 +14,7 @@ local config = require("aerial.config")
 ---@field parent? aerial.Symbol
 ---@field selection_range? aerial.Range
 ---@field children? aerial.Symbol[]
+---@field scope? string
 
 ---@class aerial.BufData
 ---@field bufnr integer

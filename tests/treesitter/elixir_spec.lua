@@ -34,6 +34,7 @@ describe("treesitter elixir", function()
             kind = "Function",
             name = "private_function",
             level = 1,
+            scope = "private",
             lnum = 10,
             col = 2,
             end_lnum = 11,
