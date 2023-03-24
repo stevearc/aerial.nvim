@@ -240,8 +240,9 @@ M.is_ignored_buf = function(bufnr)
   end
   if ignore.buftypes then
     local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
+    local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
     if ignore.buftypes == "special" then
-      if buftype ~= "" and buftype ~= "help" then
+      if buftype ~= "" and buftype ~= "help" and filetype ~= "man" then
         return true, string.format("Buftype '%s' is \"special\"", buftype)
       end
     elseif type(ignore.buftypes) == "table" then
