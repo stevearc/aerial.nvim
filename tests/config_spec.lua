@@ -87,7 +87,7 @@ describe("config", function()
   -- Icons
   it("reads icons from the default table", function()
     config.setup({ nerd_font = true, use_lspkind = false })
-    assert.equals(" ", config.get_icon(0, "Function", false))
+    assert.equals("󰊕 ", config.get_icon(0, "Function", false))
   end)
   it("reads icons from setup var", function()
     config.setup({
@@ -98,7 +98,7 @@ describe("config", function()
       use_lspkind = false,
     })
     assert.equals("*", config.get_icon(0, "Function", false))
-    assert.equals(" ", config.get_icon(0, "Method", false))
+    assert.equals("󰊕 ", config.get_icon(0, "Method", false))
   end)
   it("fetches the collapsed version of icon", function()
     config.setup({

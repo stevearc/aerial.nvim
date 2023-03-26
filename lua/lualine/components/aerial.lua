@@ -34,13 +34,13 @@
 -- ## Examples
 --
 -- { "aerial" }
--- ﴯ MyClassName ⟩  my_method_name
+-- 󰠱 MyClassName ⟩ 󰆧 my_method_name
 --
 -- { "aerial", dense = true }
---  MyClassName.my_method_name
+-- 󰆧 MyClassName.my_method_name
 --
 -- { "aerial", depth = -1 }
---  my_method_name
+-- 󰆧 my_method_name
 
 local M = require("lualine.component"):extend()
 local utils = require("lualine.utils.utils")
