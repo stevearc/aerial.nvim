@@ -192,8 +192,12 @@ M.update_aerial_buffer = function(buf)
   M.update_highlights(bufnr)
 end
 
--- Update the highlighted lines in the aerial buffer
+---Update the highlighted lines in the aerial buffer
+---@param buf integer
 M.update_highlights = function(buf)
+  if not vim.api.nvim_buf_is_valid(buf) then
+    return
+  end
   local hl_mode = config.highlight_mode
   if not hl_mode or hl_mode == "none" then
     return
@@ -251,9 +255,13 @@ M.update_highlights = function(buf)
   end
 end
 
-M.clear_highlights = function(buf)
+---@param bufnr integer
+M.clear_highlights = function(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return
+  end
   local ns = vim.api.nvim_create_namespace("aerial-line")
-  vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
+  vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
   return ns
 end
 
