@@ -6,7 +6,7 @@ M.show_help = {
   desc = "Show default keymaps",
   callback = function()
     local config = require("aerial.config")
-    require("aerial.keymap_util").show_help(config.keymaps)
+    require("aerial.keymap_util").show_help("aerial.actions", config.keymaps)
   end,
 }
 

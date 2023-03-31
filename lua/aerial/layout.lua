@@ -13,6 +13,27 @@ local function calc_float(value, max_value)
   end
 end
 
+---@return integer
+M.get_editor_width = function()
+  return vim.o.columns
+end
+
+---@return integer
+M.get_editor_height = function()
+  local editor_height = vim.o.lines - vim.o.cmdheight
+  -- Subtract 1 if tabline is visible
+  if vim.o.showtabline == 2 or (vim.o.showtabline == 1 and #vim.api.nvim_list_tabpages() > 1) then
+    editor_height = editor_height - 1
+  end
+  -- Subtract 1 if statusline is visible
+  if
+    vim.o.laststatus >= 2 or (vim.o.laststatus == 1 and #vim.api.nvim_tabpage_list_wins(0) > 1)
+  then
+    editor_height = editor_height - 1
+  end
+  return editor_height
+end
+
 local function calc_list(values, max_value, aggregator, limit)
   local ret = limit
   if type(values) == "table" then
@@ -44,7 +65,7 @@ end
 
 local function get_max_width(relative, winid)
   if relative == "editor" then
-    return vim.o.columns
+    return M.get_editor_width()
   else
     return vim.api.nvim_win_get_width(winid or 0)
   end
@@ -52,7 +73,7 @@ end
 
 local function get_max_height(relative, winid)
   if relative == "editor" then
-    return vim.o.lines - vim.o.cmdheight
+    return M.get_editor_height()
   else
     return vim.api.nvim_win_get_height(winid or 0)
   end

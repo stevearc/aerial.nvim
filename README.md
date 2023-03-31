@@ -168,6 +168,9 @@ it](https://github.com/stevearc/aerial.nvim/issues/new?assignees=stevearc&labels
 | `[count]AerialPrev`  |                    | Jump backwards [count] symbols (default 1).                              |
 | `[count]AerialGo[!]` |                    | Jump to the [count] symbol (default 1).                                  |
 | `AerialInfo`         |                    | Print out debug info related to aerial.                                  |
+| `AerialNavToggle`    |                    | Open or close the aerial nav window.                                     |
+| `AerialNavOpen`      |                    | Open the aerial nav window.                                              |
+| `AerialNavClose`     |                    | Close the aerial nav window.                                             |
 
 
 ## Options
@@ -455,6 +458,31 @@ require("aerial").setup({
     end,
   },
 
+  -- Options for the floating nav windows
+  nav = {
+    border = "rounded",
+    max_height = 0.9,
+    min_height = { 10, 0.1 },
+    max_width = 0.5,
+    min_width = { 0.2, 20 },
+    win_opts = {
+      cursorline = true,
+      winblend = 10,
+    },
+    -- Jump to symbol in source window when the cursor moves
+    autojump = false,
+    -- Keymaps in the nav window
+    keymaps = {
+      ["<CR>"] = "actions.jump",
+      ["<2-LeftMouse>"] = "actions.jump",
+      ["<C-v>"] = "actions.jump_vsplit",
+      ["<C-s>"] = "actions.jump_split",
+      ["h"] = "actions.left",
+      ["l"] = "actions.right",
+      ["<C-c>"] = "actions.close",
+    },
+  },
+
   lsp = {
     -- Fetch document symbols when LSP diagnostics update.
     -- If false, will update on buffer changes.
@@ -646,6 +674,10 @@ hi AerialGuide2 guifg=Blue
 - [tree_open(opts)](doc/api.md#tree_openopts)
 - [tree_close(opts)](doc/api.md#tree_closeopts)
 - [tree_toggle(opts)](doc/api.md#tree_toggleopts)
+- [nav_is_open()](doc/api.md#nav_is_open)
+- [nav_open()](doc/api.md#nav_open)
+- [nav_close()](doc/api.md#nav_close)
+- [nav_toggle()](doc/api.md#nav_toggle)
 - [sync_folds(bufnr)](doc/api.md#sync_foldsbufnr)
 - [info()](doc/api.md#info)
 - [num_symbols(bufnr)](doc/api.md#num_symbolsbufnr)

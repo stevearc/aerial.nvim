@@ -120,4 +120,16 @@ M.info = function(params)
   print(string.format("Show symbols: %s", data.filter_kind_map))
 end
 
+M.nav_toggle = function()
+  require("aerial.nav_view").toggle()
+end
+
+M.nav_open = function()
+  require("aerial.nav_view").open()
+end
+
+M.nav_close = function()
+  require("aerial.nav_view").close()
+end
+
 return M

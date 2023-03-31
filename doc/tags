@@ -2,6 +2,9 @@
 :AerialCloseAll	aerial.txt	/*:AerialCloseAll*
 :AerialGo	aerial.txt	/*:AerialGo*
 :AerialInfo	aerial.txt	/*:AerialInfo*
+:AerialNavClose	aerial.txt	/*:AerialNavClose*
+:AerialNavOpen	aerial.txt	/*:AerialNavOpen*
+:AerialNavToggle	aerial.txt	/*:AerialNavToggle*
 :AerialNext	aerial.txt	/*:AerialNext*
 :AerialOpen	aerial.txt	/*:AerialOpen*
 :AerialOpenAll	aerial.txt	/*:AerialOpenAll*
@@ -26,6 +29,10 @@ aerial.focus	aerial.txt	/*aerial.focus*
 aerial.get_location	aerial.txt	/*aerial.get_location*
 aerial.info	aerial.txt	/*aerial.info*
 aerial.is_open	aerial.txt	/*aerial.is_open*
+aerial.nav_close	aerial.txt	/*aerial.nav_close*
+aerial.nav_is_open	aerial.txt	/*aerial.nav_is_open*
+aerial.nav_open	aerial.txt	/*aerial.nav_open*
+aerial.nav_toggle	aerial.txt	/*aerial.nav_toggle*
 aerial.next	aerial.txt	/*aerial.next*
 aerial.next_up	aerial.txt	/*aerial.next_up*
 aerial.num_symbols	aerial.txt	/*aerial.num_symbols*

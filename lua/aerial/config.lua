@@ -279,6 +279,31 @@ local default_options = {
     end,
   },
 
+  -- Options for the floating nav windows
+  nav = {
+    border = "rounded",
+    max_height = 0.9,
+    min_height = { 10, 0.1 },
+    max_width = 0.5,
+    min_width = { 0.2, 20 },
+    win_opts = {
+      cursorline = true,
+      winblend = 10,
+    },
+    -- Jump to symbol in source window when the cursor moves
+    autojump = false,
+    -- Keymaps in the nav window
+    keymaps = {
+      ["<CR>"] = "actions.jump",
+      ["<2-LeftMouse>"] = "actions.jump",
+      ["<C-v>"] = "actions.jump_vsplit",
+      ["<C-s>"] = "actions.jump_split",
+      ["h"] = "actions.left",
+      ["l"] = "actions.right",
+      ["<C-c>"] = "actions.close",
+    },
+  },
+
   lsp = {
     -- Fetch document symbols when LSP diagnostics update.
     -- If false, will update on buffer changes.

@@ -1,10 +1,10 @@
-local actions = require("aerial.actions")
 local util = require("aerial.util")
 local M = {}
 
-local function resolve(rhs)
+local function resolve(action_module, rhs)
   if type(rhs) == "string" and vim.startswith(rhs, "actions.") then
-    return resolve(actions[vim.split(rhs, ".", true)[2]])
+    local mod = require(action_module)
+    return resolve(action_module, mod[vim.split(rhs, ".", true)[2]])
   elseif type(rhs) == "table" then
     local opts = vim.deepcopy(rhs)
     opts.callback = nil
@@ -13,16 +13,23 @@ local function resolve(rhs)
   return rhs, {}
 end
 
-M.set_keymaps = function(mode, keymaps, bufnr)
+M.set_keymaps = function(mode, action_module, keymaps, bufnr, ...)
+  local args = vim.F.pack_len(...)
   for k, v in pairs(keymaps) do
-    local rhs, opts = resolve(v)
+    local rhs, opts = resolve(action_module, v)
     if rhs then
+      if type(rhs) == "function" and args.n > 0 then
+        local _rhs = rhs
+        rhs = function()
+          _rhs(vim.F.unpack_len(args))
+        end
+      end
       vim.keymap.set(mode, k, rhs, vim.tbl_extend("keep", { buffer = bufnr }, opts))
     end
   end
 end
 
-M.show_help = function(keymaps)
+M.show_help = function(action_module, keymaps)
   local rhs_to_lhs = {}
   local lhs_to_all_lhs = {}
   for k, rhs in pairs(keymaps) do
@@ -43,7 +50,7 @@ M.show_help = function(keymaps)
   for k, rhs in pairs(keymaps) do
     local all_lhs = lhs_to_all_lhs[k]
     if all_lhs then
-      local _, opts = resolve(rhs)
+      local _, opts = resolve(action_module, rhs)
       local keystr = table.concat(all_lhs, "/")
       max_lhs = math.max(max_lhs, vim.api.nvim_strwidth(keystr))
       table.insert(col_left, { str = keystr, all_lhs = all_lhs })

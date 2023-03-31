@@ -26,6 +26,10 @@
 - [tree_open(opts)](#tree_openopts)
 - [tree_close(opts)](#tree_closeopts)
 - [tree_toggle(opts)](#tree_toggleopts)
+- [nav_is_open()](#nav_is_open)
+- [nav_open()](#nav_open)
+- [nav_close()](#nav_close)
+- [nav_toggle()](#nav_toggle)
 - [sync_folds(bufnr)](#sync_foldsbufnr)
 - [info()](#info)
 - [num_symbols(bufnr)](#num_symbolsbufnr)
@@ -265,6 +269,30 @@ Toggle the collapsed state at the selected location
 |       | fold         | `nil\|boolean` | If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)            |
 |       | recurse      | `nil\|boolean` | If true, perform the action recursively on all children (default false)                             |
 |       | bubble       | `nil\|boolean` | If true and current symbol has no children, perform the action on the nearest parent (default true) |
+
+## nav_is_open()
+
+`nav_is_open(): boolean` \
+Check if the nav windows are open
+
+
+## nav_open()
+
+`nav_open()` \
+Open the nav windows
+
+
+## nav_close()
+
+`nav_close()` \
+Close the nav windows
+
+
+## nav_toggle()
+
+`nav_toggle()` \
+Toggle the nav windows open/closed
+
 
 ## sync_folds(bufnr)
 

@@ -87,6 +87,27 @@ local commands = {
       desc = "Print out debug info related to aerial.",
     },
   },
+  {
+    cmd = "AerialNavToggle",
+    func = "nav_toggle",
+    defn = {
+      desc = "Open or close the aerial nav window.",
+    },
+  },
+  {
+    cmd = "AerialNavOpen",
+    func = "nav_open",
+    defn = {
+      desc = "Open the aerial nav window.",
+    },
+  },
+  {
+    cmd = "AerialNavClose",
+    func = "nav_close",
+    defn = {
+      desc = "Close the aerial nav window.",
+    },
+  },
 }
 
 local do_setup
@@ -366,6 +387,19 @@ M.tree_close = lazy("tree", "close")
 ---    recurse nil|boolean If true, perform the action recursively on all children (default false)
 ---    bubble nil|boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
 M.tree_toggle = lazy("tree", "toggle")
+
+---Check if the nav windows are open
+---@return boolean
+M.nav_is_open = lazy("nav_view", "is_open")
+
+---Open the nav windows
+M.nav_open = lazy("nav_view", "open")
+
+---Close the nav windows
+M.nav_close = lazy("nav_view", "close")
+
+---Toggle the nav windows open/closed
+M.nav_toggle = lazy("nav_view", "toggle")
 
 ---Sync code folding with the current tree state.
 ---@param bufnr nil|integer

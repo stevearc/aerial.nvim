@@ -208,6 +208,7 @@ function M.set_symbols(buf, items)
     local prev = prev_by_level[item.level]
     if prev then
       prev.next_sibling = item
+      item.prev_sibling = prev
     end
     for j = item.level + 1, max_level do
       prev_by_level[j] = nil

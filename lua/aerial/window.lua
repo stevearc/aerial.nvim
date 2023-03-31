@@ -15,7 +15,7 @@ local function create_aerial_buffer(bufnr)
   end
   local aer_bufnr = vim.api.nvim_create_buf(false, true)
 
-  keymap_util.set_keymaps("", config.keymaps, aer_bufnr)
+  keymap_util.set_keymaps("", "aerial.actions", config.keymaps, aer_bufnr)
   vim.api.nvim_buf_set_var(bufnr, "aerial_buffer", aer_bufnr)
   -- Set buffer options
   vim.api.nvim_buf_set_var(aer_bufnr, "source_buffer", bufnr)

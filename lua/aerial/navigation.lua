@@ -196,8 +196,15 @@ M.select = function(opts)
     error(string.format("Symbol %s is outside the bounds", opts.index))
     return
   end
-
   local bufnr, _ = util.get_buffers()
+  M.select_symbol(item, winid, bufnr, opts)
+end
+
+---@param item aerial.Symbol
+---@param winid integer
+---@param bufnr integer
+---@param opts table
+M.select_symbol = function(item, winid, bufnr, opts)
   if opts.jump and config.close_on_select then
     window.close()
   end
