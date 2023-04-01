@@ -33,13 +33,18 @@ local function hook_handlers(preserve_symbol_callback)
 end
 
 ---@param bufnr integer
+---@param exclude_id nil|integer Client ID to exclude from calculation
 ---@return nil|table
-local function get_client(bufnr)
+local function get_client(bufnr, exclude_id)
   local ret
   local last_priority = -1
   for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
     local priority = config.lsp.priority[client.name] or 10
-    if lsp_util.client_supports_symbols(client) and priority > last_priority then
+    if
+      client.id ~= exclude_id
+      and lsp_util.client_supports_symbols(client)
+      and priority > last_priority
+    then
       ret = client
       last_priority = priority
     end
@@ -108,24 +113,12 @@ M.fetch_symbols_sync = function(bufnr, opts)
   end
 end
 
----@param bufnr integer
----@param exclude_id nil|integer Client ID to exclude from calculation
----@return boolean
-local function is_lsp_attached(bufnr, exclude_id)
-  for _, client in pairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
-    if client.id ~= exclude_id and lsp_util.client_supports_symbols(client) then
-      return true
-    end
-  end
-  return false
-end
-
 M.is_supported = function(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  if not is_lsp_attached(bufnr) then
-    return false, "No LSP client found"
+  if not get_client(bufnr) then
+    return false, "No LSP client found that supports symbols"
   end
   return true, nil
 end
@@ -148,7 +141,7 @@ M.on_attach = function(client, bufnr, opts)
 end
 
 M.on_detach = function(client_id, bufnr)
-  if not is_lsp_attached(bufnr, client_id) then
+  if not get_client(bufnr, client_id) then
     -- This is called from the LspDetach autocmd
     -- The client isn't fully attached until just after that autocmd completes, so we need to
     -- schedule the attach
