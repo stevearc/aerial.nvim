@@ -199,6 +199,7 @@ M.help = {
     end
   end,
 }
+M.vimdoc = M.help
 
 M.rust = {
   postprocess = function(bufnr, item, match)

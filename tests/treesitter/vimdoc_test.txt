@@ -1,4 +1,4 @@
-*help_test.txt* *help_test*
+*vimdoc_test.txt* *vimdoc_test*
 --------------------------------------------------------------------------------
 TEST INTRO                                                            *test-intro*
 

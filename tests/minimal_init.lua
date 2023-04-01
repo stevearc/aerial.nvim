@@ -12,7 +12,10 @@ vim.filetype.add({
 
 local langs = {}
 for lang, _ in vim.fs.dir("queries") do
-  table.insert(langs, lang)
+  -- "help" has been renamed to "vimdoc"
+  if lang ~= "help" then
+    table.insert(langs, lang)
+  end
 end
 require("nvim-treesitter.configs").setup({
   ensure_installed = langs,

@@ -1,16 +1,16 @@
 local util = require("tests.test_util")
 
-describe("treesitter help", function()
+describe("treesitter vimdoc", function()
   it("parses all symbols correctly", function()
-    util.test_file_symbols("treesitter", "./tests/treesitter/help_test.txt", {
+    util.test_file_symbols("treesitter", "./tests/treesitter/vimdoc_test.txt", {
       {
         kind = "Interface",
-        name = "help_test.txt",
+        name = "vimdoc_test.txt",
         level = 0,
         lnum = 1,
         col = 0,
         end_lnum = 1,
-        end_col = 15,
+        end_col = 17,
       },
       {
         kind = "Interface",
