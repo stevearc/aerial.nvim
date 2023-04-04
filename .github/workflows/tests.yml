@@ -36,7 +36,7 @@ jobs:
       matrix:
         include:
           - nvim_tag: v0.8.0
-          - nvim_tag: v0.8.1
+          - nvim_tag: v0.8.3
 
     name: Run tests
     runs-on: ubuntu-22.04
