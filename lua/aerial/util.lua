@@ -175,7 +175,7 @@ M.flash_highlight = function(bufnr, lnum, durationMs, hl_group)
   end
   local ns = vim.api.nvim_buf_add_highlight(bufnr, 0, hl_group, lnum - 1, 0, -1)
   local remove_highlight = function()
-    vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+    pcall(vim.api.nvim_buf_clear_namespace, bufnr, ns, 0, -1)
   end
   vim.defer_fn(remove_highlight, durationMs)
 end

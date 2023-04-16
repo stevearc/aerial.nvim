@@ -48,6 +48,9 @@ local function create_aerial_buffer(bufnr)
     callback = function(params)
       -- Defer it so we have time to set window options and variables on the float first
       vim.defer_fn(function()
+        if not vim.api.nvim_buf_is_valid(bufnr) then
+          return
+        end
         render.update_aerial_buffer(aer_bufnr)
         M.update_all_positions(bufnr, 0)
         M.center_symbol_in_view(bufnr)
