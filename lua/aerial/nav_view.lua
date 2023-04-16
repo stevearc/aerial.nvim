@@ -29,7 +29,7 @@ local _active_nav = nil
 local function create_buf()
   local bufnr = vim.api.nvim_create_buf(false, true)
   vim.bo[bufnr].buftype = "nofile"
-  vim.bo[bufnr].bufhidden = "wipe"
+  vim.bo[bufnr].bufhidden = "hide"
   vim.bo[bufnr].swapfile = false
   vim.bo[bufnr].modifiable = false
   vim.bo[bufnr].filetype = "aerial-nav"
@@ -211,6 +211,15 @@ local function render_symbols(panel)
   panel.height = #lines
 end
 
+---@param panel aerial.NavPanel
+function AerialNav:preview_symbol(panel)
+  local symbol = self:get_current_symbol()
+  if symbol then
+    vim.api.nvim_win_set_buf(panel.winid, self.bufnr)
+    navigation.select_symbol(symbol, panel.winid, self.bufnr, { jump = false })
+  end
+end
+
 ---@param symbol aerial.Symbol
 function AerialNav:focus_symbol(symbol)
   local siblings, lnum = get_all_siblings(symbol)
@@ -220,7 +229,12 @@ function AerialNav:focus_symbol(symbol)
 
   render_symbols(self.left)
   render_symbols(self.main)
-  render_symbols(self.right)
+  if config.nav.preview and vim.tbl_isempty(self.right.symbols) then
+    self:preview_symbol(self.right)
+  else
+    vim.api.nvim_win_set_buf(self.right.winid, self.right.bufnr)
+    render_symbols(self.right)
+  end
 
   if vim.api.nvim_win_is_valid(self.main.winid) then
     vim.api.nvim_win_set_cursor(self.main.winid, { lnum, 0 })
@@ -290,6 +304,9 @@ function AerialNav:close()
   end
   for _, id in ipairs(self.autocmds) do
     vim.api.nvim_del_autocmd(id)
+  end
+  for _, bufnr in ipairs({ self.left.bufnr, self.main.bufnr, self.right.bufnr }) do
+    vim.api.nvim_buf_delete(bufnr, { force = true })
   end
   self.autocmds = {}
 end
