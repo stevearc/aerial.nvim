@@ -213,7 +213,11 @@ end
 
 M.close = function()
   if util.is_aerial_buffer() then
+    local source_win = util.get_source_win(0)
     vim.api.nvim_win_close(0, false)
+    if source_win then
+      vim.api.nvim_set_current_win(source_win)
+    end
   else
     local aer_win = util.get_aerial_win()
     if aer_win then
@@ -327,12 +331,7 @@ M.focus = function()
 end
 
 M.toggle = function(focus, direction)
-  if util.is_aerial_buffer() then
-    vim.api.nvim_win_close(0, false)
-    return false
-  end
-
-  if M.is_open() then
+  if util.is_aerial_buffer() or M.is_open() then
     M.close()
     return false
   else
