@@ -177,6 +177,9 @@ M.symbol_callback = function(_err, result, context, _config)
     vim.defer_fn(function()
       local r = results[bufnr]
       results[bufnr] = nil
+      if not vim.api.nvim_buf_is_valid(bufnr) then
+        return
+      end
       M.handle_symbols(r, bufnr, client.name)
     end, 100)
   end

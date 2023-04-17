@@ -190,6 +190,9 @@ M.set_symbols = function(bufnr, items, ctx)
       -- We need that autocmd to complete first so that it reallocates the existing aerial windows,
       -- thus the defer. It's a bit of a hack :/
       vim.defer_fn(function()
+        if not vim.api.nvim_buf_is_valid(bufnr) then
+          return
+        end
         window.maybe_open_automatic(bufnr)
       end, 15)
     end
