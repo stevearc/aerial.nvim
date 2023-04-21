@@ -306,7 +306,7 @@ function AerialNav:close()
     vim.api.nvim_del_autocmd(id)
   end
   for _, bufnr in ipairs({ self.left.bufnr, self.main.bufnr, self.right.bufnr }) do
-    vim.api.nvim_buf_delete(bufnr, { force = true })
+    pcall(vim.api.nvim_buf_delete, bufnr, { force = true })
   end
   self.autocmds = {}
 end
