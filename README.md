@@ -33,6 +33,23 @@ https://user-images.githubusercontent.com/506791/122652728-18688500-d0f5-11eb-80
 aerial supports all the usual plugin managers
 
 <details>
+  <summary>lazy.nvim</summary>
+
+```lua
+{
+  'stevearc/aerial.nvim',
+  opts = {},
+  -- Optional dependencies
+  dependencies = {
+     "nvim-treesitter/nvim-treesitter",
+     "nvim-tree/nvim-web-devicons"
+  },
+}
+```
+
+</details>
+
+<details>
   <summary>Packer</summary>
 
 ```lua
