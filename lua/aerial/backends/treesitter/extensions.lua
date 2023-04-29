@@ -316,6 +316,13 @@ M.typescript = {
   end,
 }
 
+M.usd = {
+  postprocess = function(bufnr, item, match)
+    item.name = item.name:gsub("^\"", "")
+    item.name = item.name:gsub("\"$", "")
+  end
+}
+
 M.latex = {
   postprocess = function(bufnr, item, match)
     local type_node = (utils.get_at_path(match, "type") or {}).node
