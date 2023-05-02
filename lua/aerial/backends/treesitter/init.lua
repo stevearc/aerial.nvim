@@ -65,7 +65,7 @@ M.fetch_symbols_sync = function(bufnr)
   local stack = {}
   local ext = extensions[lang]
   for match in query.iter_group_results(bufnr, "aerial", syntax_tree:root(), lang) do
-    local name_node = (match.name or {}).node
+    local name_match = match.name or {}
     local type_node = (match.type or {}).node
     -- The location capture groups are optional. We default to the
     -- location of the @type capture
@@ -92,8 +92,8 @@ M.fetch_symbols_sync = function(bufnr)
     local row, col = start_node:start()
     local end_row, end_col = end_node:end_()
     local name
-    if name_node then
-      name = get_node_text(name_node, bufnr) or "<parse error>"
+    if name_match.node then
+      name = get_node_text(name_match.node, bufnr, name_match) or "<parse error>"
     else
       name = "<Anonymous>"
     end

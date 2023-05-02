@@ -33,6 +33,23 @@ https://user-images.githubusercontent.com/506791/122652728-18688500-d0f5-11eb-80
 aerial supports all the usual plugin managers
 
 <details>
+  <summary>lazy.nvim</summary>
+
+```lua
+{
+  'stevearc/aerial.nvim',
+  opts = {},
+  -- Optional dependencies
+  dependencies = {
+     "nvim-treesitter/nvim-treesitter",
+     "nvim-tree/nvim-web-devicons"
+  },
+}
+```
+
+</details>
+
+<details>
   <summary>Packer</summary>
 
 ```lua
@@ -305,6 +322,9 @@ require("aerial").setup({
   -- When jumping to a symbol, highlight the line for this many ms.
   -- Set to false to disable
   highlight_on_jump = 300,
+
+  -- Jump to symbol in source window when the cursor moves
+  autojump = false,
 
   -- Define symbol icons. You can also specify "<Symbol>Collapsed" to change the
   -- icon when the tree is collapsed at that symbol, or "Collapsed" to specify a

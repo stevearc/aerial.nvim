@@ -25,14 +25,21 @@ local function create_aerial_buffer(bufnr)
   vim.api.nvim_buf_set_option(aer_bufnr, "swapfile", false)
   vim.api.nvim_buf_set_option(aer_bufnr, "modifiable", false)
 
-  if config.highlight_on_hover then
+  if config.highlight_on_hover or config.autojump then
     vim.api.nvim_create_autocmd("CursorMoved", {
       desc = "Aerial update highlights in the source buffer",
       buffer = aer_bufnr,
       callback = function()
-        render.update_highlights(bufnr)
+        if config.highlight_on_hover then
+          render.update_highlights(bufnr)
+        end
+        if config.autojump then
+          require("aerial.navigation").select({ jump = false })
+        end
       end,
     })
+  end
+  if config.highlight_on_hover then
     vim.api.nvim_create_autocmd("BufLeave", {
       desc = "Aerial clear highlights in the source buffer",
       buffer = aer_bufnr,
