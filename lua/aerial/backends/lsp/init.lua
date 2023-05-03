@@ -32,32 +32,12 @@ local function hook_handlers(preserve_symbol_callback)
   replace_handler("textDocument/publishDiagnostics", callbacks.on_publish_diagnostics, true)
 end
 
----@param bufnr integer
----@param exclude_id nil|integer Client ID to exclude from calculation
----@return nil|table
-local function get_client(bufnr, exclude_id)
-  local ret
-  local last_priority = -1
-  for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
-    local priority = config.lsp.priority[client.name] or 10
-    if
-      client.id ~= exclude_id
-      and lsp_util.client_supports_symbols(client)
-      and priority > last_priority
-    then
-      ret = client
-      last_priority = priority
-    end
-  end
-  return ret
-end
-
 M.fetch_symbols = function(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
   local params = { textDocument = vim.lsp.util.make_text_document_params(bufnr) }
-  local client = get_client(bufnr)
+  local client = lsp_util.get_client(bufnr)
   if not client then
     vim.notify(
       string.format("No LSP client found that supports symbols in buffer %d", bufnr),
@@ -80,7 +60,7 @@ M.fetch_symbols_sync = function(bufnr, opts)
     timeout = 4000,
   })
   local params = { textDocument = vim.lsp.util.make_text_document_params(bufnr) }
-  local client = get_client(bufnr)
+  local client = lsp_util.get_client(bufnr)
   if not client then
     vim.notify(
       string.format("No LSP client found that supports symbols in buffer %d", bufnr),
@@ -123,7 +103,7 @@ M.is_supported = function(bufnr)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
-  if not get_client(bufnr) then
+  if not lsp_util.get_client(bufnr) then
     return false, "No LSP client found that supports symbols"
   end
   return true, nil
@@ -147,7 +127,7 @@ M.on_attach = function(client, bufnr, opts)
 end
 
 M.on_detach = function(client_id, bufnr)
-  if not get_client(bufnr, client_id) then
+  if not lsp_util.get_client(bufnr, client_id) then
     -- This is called from the LspDetach autocmd
     -- The client isn't fully attached until just after that autocmd completes, so we need to
     -- schedule the attach
