@@ -244,6 +244,18 @@ M.open = function(opts)
   require("aerial.window").open(opts.focus, opts.direction)
 end
 
+---Open aerial in an existing window
+---@param target_win integer The winid to open the aerial buffer
+---@param source_win integer The winid that contains the source buffer
+---@note
+--- This can be used to create custom layouts, since you can create and position the window yourself
+M.open_in_win = function(target_win, source_win)
+  do_setup()
+  was_closed = false
+  local source_bufnr = vim.api.nvim_win_get_buf(source_win)
+  require("aerial.window").open_aerial_in_win(source_bufnr, source_win, target_win)
+end
+
 ---Open an aerial window for each visible window.
 M.open_all = lazy("window", "open_all")
 

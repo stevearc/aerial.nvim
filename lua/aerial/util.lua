@@ -305,7 +305,8 @@ M.is_managing_folds = function(winid)
   return vim.api.nvim_win_get_option(winid or 0, "foldexpr") == "v:lua.aerial_foldexpr()"
 end
 
-M.detect_split_direction = function(bufnr)
+---@return "left"|"right"|"float"
+M.detect_split_direction = function()
   local default = config.layout.default_direction
   if default ~= "prefer_left" and default ~= "prefer_right" then
     return default

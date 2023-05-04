@@ -107,6 +107,11 @@ local function setup_aerial_win(src_winid, aer_winid, aer_bufnr)
   end
 end
 
+---@param bufnr nil|integer
+---@param aer_bufnr nil|integer
+---@param direction "left"|"right"|"float"
+---@param existing_win nil|integer
+---@return integer
 local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   if direction ~= "left" and direction ~= "right" and direction ~= "float" then
     error("Expected direction to be 'left', 'right', or 'float'")
@@ -286,10 +291,9 @@ M.maybe_open_automatic = function(bufnr)
   end
 end
 
-M.open = function(focus, direction, opts)
-  opts = vim.tbl_extend("keep", opts or {}, {
-    winid = nil,
-  })
+---@param focus? boolean
+---@param direction? "left"|"right"|"float"
+M.open = function(focus, direction)
   if util.is_aerial_buffer(0) or util.is_ignored_win() then
     return
   end
@@ -303,7 +307,7 @@ M.open = function(focus, direction, opts)
   end
 
   direction = direction or util.detect_split_direction()
-  local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction, opts.winid or aerial_win)
+  local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction, aerial_win)
   local backend = backends.get(0)
   if backend and not data.has_symbols(bufnr) then
     backend.fetch_symbols(bufnr)
