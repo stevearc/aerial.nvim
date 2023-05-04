@@ -141,6 +141,9 @@ M.get_source_win = function(winid)
   return M.get_winid_from_var(winid or 0, "source_win")
 end
 
+---@param bufnr nil|integer
+---@return nil|integer Source buffer
+---@return nil|integer Aerial buffer
 M.get_buffers = function(bufnr)
   if bufnr == nil or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
@@ -152,18 +155,25 @@ M.get_buffers = function(bufnr)
   end
 end
 
+---@param bufnr nil|integer
+---@return nil|integer
 M.get_aerial_buffer = function(bufnr)
   return M.get_buffer_from_var(bufnr or 0, "aerial_buffer")
 end
 
+---@param bufnr nil|integer
+---@return nil|integer
 M.get_source_buffer = function(bufnr)
   return M.get_buffer_from_var(bufnr or 0, "source_buffer")
 end
 
+---@param bufnr integer
+---@param varname string
+---@return nil|integer
 M.get_buffer_from_var = function(bufnr, varname)
   local status, result_bufnr = pcall(vim.api.nvim_buf_get_var, bufnr, varname)
   if not status or result_bufnr == nil or not vim.api.nvim_buf_is_valid(result_bufnr) then
-    return -1
+    return nil
   end
   return result_bufnr
 end

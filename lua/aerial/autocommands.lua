@@ -22,7 +22,7 @@ local function should_close_aerial(aer_win)
 
   -- Close the aerial window if its attached buffer is unsupported
   if config.close_automatic_events.unsupported then
-    if not vim.api.nvim_buf_is_valid(src_buf) or not backends.get(src_buf) then
+    if not src_buf or not vim.api.nvim_buf_is_valid(src_buf) or not backends.get(src_buf) then
       return true
     end
   end

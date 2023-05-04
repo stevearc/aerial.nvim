@@ -6,8 +6,9 @@ local window = require("aerial.window")
 local M = {}
 
 local function _get_current_lnum(winid)
+  ---@type nil|integer
   local bufnr = vim.api.nvim_get_current_buf()
-  if data.has_symbols(bufnr) then
+  if bufnr and data.has_symbols(bufnr) then
     local bufdata = data.get_or_create(bufnr)
     local cached_lnum = bufdata.positions[winid]
     if cached_lnum then
@@ -18,7 +19,7 @@ local function _get_current_lnum(winid)
   if util.is_aerial_buffer(bufnr) then
     bufnr = util.get_source_buffer()
   end
-  if data.has_symbols(bufnr) then
+  if bufnr and data.has_symbols(bufnr) then
     return window.get_position_in_win(bufnr, winid)
   else
     return nil
@@ -197,6 +198,9 @@ M.select = function(opts)
     return
   end
   local bufnr, _ = util.get_buffers()
+  if not bufnr then
+    error("Could not find source buffer")
+  end
   M.select_symbol(item, winid, bufnr, opts)
 end
 
