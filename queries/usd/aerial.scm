@@ -27,5 +27,11 @@
 (variant_set_definition
   (string) @name
   (#offset! @name 0 1 0 -1)
-  (#set! "kind" "Property")
+  (#set! "kind" "Enum")
+) @type
+
+(variant
+  (string) @name
+  (#offset! @name 0 1 0 -1)
+  (#set! "kind" "EnumMember")
 ) @type
