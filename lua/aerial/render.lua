@@ -78,7 +78,7 @@ M.update_aerial_buffer = function(buf)
     return
   end
   local bufnr, aer_bufnr = util.get_buffers(buf)
-  if aer_bufnr == -1 or loading.is_loading(aer_bufnr) then
+  if not bufnr or not aer_bufnr or loading.is_loading(aer_bufnr) then
     resize_all_wins(aer_bufnr)
     return
   end
@@ -203,7 +203,7 @@ M.update_highlights = function(buf)
     return
   end
   local bufnr, aer_bufnr = util.get_buffers(buf)
-  if not data.has_symbols(bufnr) or aer_bufnr == -1 then
+  if not bufnr or not data.has_symbols(bufnr) or not aer_bufnr then
     return
   end
   local bufdata = data.get_or_create(bufnr)
@@ -251,17 +251,19 @@ M.update_highlights = function(buf)
     M.clear_highlights(bufnr)
     local cursor = vim.api.nvim_win_get_cursor(0)
     local item = data.get_or_create(0):item(cursor[1])
-    vim.api.nvim_buf_add_highlight(bufnr, ns, "AerialLine", item.lnum - 1, 0, -1)
+    if item then
+      vim.api.nvim_buf_add_highlight(bufnr, ns, "AerialLine", item.lnum - 1, 0, -1)
+    end
   end
 end
 
 ---@param bufnr integer
+---@return integer
 M.clear_highlights = function(bufnr)
-  if not vim.api.nvim_buf_is_valid(bufnr) then
-    return
-  end
   local ns = vim.api.nvim_create_namespace("aerial-line")
-  vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+  if vim.api.nvim_buf_is_valid(bufnr) then
+    vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+  end
   return ns
 end
 

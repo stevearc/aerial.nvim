@@ -447,6 +447,16 @@ open({opts})                                                         *aerial.ope
                       (default true)
           {direction} `"left"|"right"|"float"` Direction to open aerial window
 
+open_in_win({target_win}, {source_win})                       *aerial.open_in_win*
+    Open aerial in an existing window
+
+    Parameters:
+      {target_win} `integer` The winid to open the aerial buffer
+      {source_win} `integer` The winid that contains the source buffer
+
+    Note:
+      This can be used to create custom layouts, since you can create and position the window yourself
+
 open_all()                                                       *aerial.open_all*
     Open an aerial window for each visible window.
 

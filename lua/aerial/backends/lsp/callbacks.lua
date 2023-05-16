@@ -199,6 +199,11 @@ M.on_publish_diagnostics = function(_err, result, ctx, _config)
   then
     return
   end
+  -- Ignore diagnostics from other clients
+  local attached_client = lsp_util.get_client(bufnr)
+  if not attached_client or attached_client.id ~= client_id then
+    return
+  end
 
   -- Don't update if there are diagnostics errors, unless config option is set
   -- or we have no symbols for this buffer

@@ -680,6 +680,7 @@ hi AerialGuide2 guifg=Blue
 - [close_all()](doc/api.md#close_all)
 - [close_all_but_current()](doc/api.md#close_all_but_current)
 - [open(opts)](doc/api.md#openopts)
+- [open_in_win(target_win, source_win)](doc/api.md#open_in_wintarget_win-source_win)
 - [open_all()](doc/api.md#open_all)
 - [focus()](doc/api.md#focus)
 - [toggle(opts)](doc/api.md#toggleopts)

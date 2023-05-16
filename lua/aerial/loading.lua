@@ -3,10 +3,14 @@ local M = {}
 
 local timers = {}
 
+---@param aer_bufnr integer
+---@return boolean
 M.is_loading = function(aer_bufnr)
   return timers[aer_bufnr] ~= nil
 end
 
+---@param aer_bufnr integer
+---@param is_loading boolean
 M.set_loading = function(aer_bufnr, is_loading)
   if is_loading then
     if timers[aer_bufnr] == nil then

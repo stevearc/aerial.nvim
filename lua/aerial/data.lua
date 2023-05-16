@@ -17,14 +17,13 @@ local config = require("aerial.config")
 ---@field parent? aerial.Symbol
 ---@field selection_range? aerial.Range
 ---@field children? aerial.Symbol[]
----@field scope? string
 
 ---@class aerial.BufData
 ---@field bufnr integer
 ---@field items aerial.Symbol[]
 ---@field flat_items aerial.Symbol[]
 ---@field positions any
----@field last_win integer
+---@field last_win nil|integer
 ---@field collapsed table<string, boolean>
 ---@field collapse_level integer
 ---@field max_level integer
@@ -37,7 +36,7 @@ function BufData.new(bufnr)
     items = {},
     flat_items = {},
     positions = {},
-    last_win = -1,
+    last_win = nil,
     collapsed = {},
     collapse_level = 99,
   }
@@ -148,7 +147,7 @@ function BufData:visit(callback)
   end
 end
 
----@param include_hidden boolean
+---@param opts nil|{skip_hidden: nil|boolean}
 ---@return integer
 function BufData:count(opts)
   opts = vim.tbl_extend("keep", opts or {}, {
@@ -181,6 +180,9 @@ end
 function M.get_or_create(buf)
   buf = buf or 0
   local bufnr, _ = util.get_buffers(buf)
+  if not bufnr then
+    error("Could not find source buffer")
+  end
   local bufdata = buf_to_symbols[bufnr]
   if not bufdata then
     bufdata = BufData.new(bufnr)
@@ -237,7 +239,7 @@ function M.has_received_data(bufnr)
 end
 
 ---Return true if the buffer has any symbols
----@param bufnr integer
+---@param bufnr nil|integer
 ---@return boolean
 function M.has_symbols(bufnr)
   local bufdata = M.get(bufnr)

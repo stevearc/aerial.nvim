@@ -108,7 +108,9 @@ local function attach(bufnr, backend, name)
     local loading = require("aerial.loading")
     local util = require("aerial.util")
     local aer_bufnr = util.get_aerial_buffer(bufnr)
-    loading.set_loading(aer_bufnr, not data.has_received_data(bufnr))
+    if aer_bufnr then
+      loading.set_loading(aer_bufnr, not data.has_received_data(bufnr))
+    end
 
     -- On first attach, fetch symbols from ALL possible backends so that they will race and the
     -- fastest provider will display symbols (instead of just waiting for the prioritized backend
@@ -179,7 +181,10 @@ M.set_symbols = function(bufnr, items, ctx)
   end
 
   data.set_symbols(bufnr, items)
-  loading.set_loading(util.get_aerial_buffer(bufnr), false)
+  local aer_bufnr = util.get_aerial_buffer(bufnr)
+  if aer_bufnr then
+    loading.set_loading(aer_bufnr, false)
+  end
 
   render.update_aerial_buffer(bufnr)
   window.update_all_positions(bufnr, 0)

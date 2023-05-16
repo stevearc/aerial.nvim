@@ -131,11 +131,11 @@ M.toggle = function(opts)
 end
 
 ---Set the collapse level of the symbol tree
----@param bufnr integer
+---@param bufnr nil|integer
 ---@param level integer 0 is all closed, use 99 to open all
 M.set_collapse_level = function(bufnr, level)
   bufnr = util.get_buffers(bufnr or 0)
-  if not data.has_symbols(bufnr) then
+  if not bufnr or not data.has_symbols(bufnr) then
     return
   end
   local bufdata = data.get_or_create(bufnr)
@@ -148,7 +148,7 @@ M.set_collapse_level = function(bufnr, level)
       end, vim.api.nvim_list_wins())
     else
       local source_win = util.get_winids(0)
-      if vim.api.nvim_win_get_buf(source_win) == bufnr then
+      if source_win and vim.api.nvim_win_get_buf(source_win) == bufnr then
         wins = { source_win }
       else
         wins = util.get_fixed_wins(bufnr)

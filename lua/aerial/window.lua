@@ -107,12 +107,17 @@ local function setup_aerial_win(src_winid, aer_winid, aer_bufnr)
   end
 end
 
+---@param bufnr nil|integer
+---@param aer_bufnr nil|integer
+---@param direction "left"|"right"|"float"
+---@param existing_win nil|integer
+---@return integer
 local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
   if direction ~= "left" and direction ~= "right" and direction ~= "float" then
     error("Expected direction to be 'left', 'right', or 'float'")
   end
 
-  if aer_bufnr == -1 then
+  if not aer_bufnr then
     aer_bufnr = create_aerial_buffer(bufnr)
   end
 
@@ -183,7 +188,7 @@ M.open_aerial_in_win = function(src_bufnr, src_winid, aer_winid)
     vim.api.nvim_win_set_var(src_winid, "aerial_win", aer_winid)
     return
   end
-  if aer_bufnr == -1 then
+  if not aer_bufnr then
     aer_bufnr = create_aerial_buffer(src_bufnr)
   end
   local my_winid = vim.api.nvim_get_current_win()
@@ -200,7 +205,7 @@ end
 ---@return integer|nil
 local function get_aerial_win_for_buf(bufnr)
   local aer_bufnr = util.get_aerial_buffer(bufnr)
-  if aer_bufnr ~= -1 then
+  if aer_bufnr then
     return util.buf_first_win_in_tabpage(aer_bufnr)
   end
 end
@@ -286,10 +291,9 @@ M.maybe_open_automatic = function(bufnr)
   end
 end
 
-M.open = function(focus, direction, opts)
-  opts = vim.tbl_extend("keep", opts or {}, {
-    winid = nil,
-  })
+---@param focus? boolean
+---@param direction? "left"|"right"|"float"
+M.open = function(focus, direction)
   if util.is_aerial_buffer(0) or util.is_ignored_win() then
     return
   end
@@ -303,7 +307,7 @@ M.open = function(focus, direction, opts)
   end
 
   direction = direction or util.detect_split_direction()
-  local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction, opts.winid or aerial_win)
+  local aer_winid = create_aerial_window(bufnr, aer_bufnr, direction, aerial_win)
   local backend = backends.get(0)
   if backend and not data.has_symbols(bufnr) then
     backend.fetch_symbols(bufnr)
@@ -462,7 +466,7 @@ M.update_position = function(winids, last_focused_win)
   end
   local win_bufnr = vim.api.nvim_win_get_buf(winids[1])
   local bufnr = util.get_buffers(win_bufnr)
-  if not data.has_symbols(bufnr) then
+  if not bufnr or not data.has_symbols(bufnr) then
     return
   end
   if util.is_aerial_buffer(win_bufnr) then
@@ -498,9 +502,10 @@ M.update_position = function(winids, last_focused_win)
   end
 end
 
+---@param buffer nil|integer
 M.center_symbol_in_view = function(buffer)
   local bufnr, aer_bufnr = util.get_buffers(buffer)
-  if not data.has_symbols(bufnr) then
+  if not bufnr or not data.has_symbols(bufnr) or not aer_bufnr then
     return
   end
   local bufdata = data.get_or_create(bufnr)
@@ -512,9 +517,11 @@ M.center_symbol_in_view = function(buffer)
       local max_topline = vim.api.nvim_buf_line_count(aer_bufnr) - height
       local topline = math.max(1, math.min(max_topline, lnum - math.floor(height / 2)))
       local aerial_win = util.buf_first_win_in_tabpage(aer_bufnr)
-      vim.api.nvim_win_call(aerial_win, function()
-        vim.fn.winrestview({ lnum = lnum, topline = topline })
-      end)
+      if aerial_win then
+        vim.api.nvim_win_call(aerial_win, function()
+          vim.fn.winrestview({ lnum = lnum, topline = topline })
+        end)
+      end
     end
   end
 end

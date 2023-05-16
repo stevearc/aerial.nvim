@@ -9,6 +9,7 @@
 - [close_all()](#close_all)
 - [close_all_but_current()](#close_all_but_current)
 - [open(opts)](#openopts)
+- [open_in_win(target_win, source_win)](#open_in_wintarget_win-source_win)
 - [open_all()](#open_all)
 - [focus()](#focus)
 - [toggle(opts)](#toggleopts)
@@ -93,6 +94,21 @@ Open the aerial window for the current buffer.
 | opts  | `nil\|table` |                            |                                                               |
 |       | focus        | `boolean`                  | If true, jump to aerial window if it is opened (default true) |
 |       | direction    | `"left"\|"right"\|"float"` | Direction to open aerial window                               |
+
+## open_in_win(target_win, source_win)
+
+`open_in_win(target_win, source_win)` \
+Open aerial in an existing window
+
+| Param      | Type      | Desc                                      |
+| ---------- | --------- | ----------------------------------------- |
+| target_win | `integer` | The winid to open the aerial buffer       |
+| source_win | `integer` | The winid that contains the source buffer |
+
+**Note:**
+<pre>
+This can be used to create custom layouts, since you can create and position the window yourself
+</pre>
 
 ## open_all()
 
