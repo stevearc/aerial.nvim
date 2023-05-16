@@ -163,6 +163,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - teal
 - tsx
 - typescript
+- usd
 - vim
 - vimdoc
 - yaml
