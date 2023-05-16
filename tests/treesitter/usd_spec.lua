@@ -41,12 +41,12 @@ describe("treesitter USD", function()
               },
               {
                 kind = "Property",
-                name = "xformOpOrder",
+                name = "thing",
                 level = 2,
                 lnum = 11,
                 col = 9,
                 end_lnum = 11,
-                end_col = 81,
+                end_col = 32,
               },
               {
                 kind = "Enum",

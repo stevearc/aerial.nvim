@@ -8,7 +8,7 @@ def Xform "something" (
     {
         float3 foo:xformOp:rotateXYZ = (-15.7, -55.8, 0.3)
         double3 translate = (153.2, 119.3, 24.7)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+        rel thing = </something>
 
         variantSet "variants" = {
             "default" {
