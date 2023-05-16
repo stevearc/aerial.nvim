@@ -4,29 +4,23 @@
   (#set! "kind" "Class")
 ) @type
 
-(prim_definition
-  (string) @name
-  (#offset! @name 0 1 0 -1)
-  (#set! "kind" "Class")
-) @type
-
 (attribute_assignment
-  (identifier) @name
+  [(identifier) (qualified_identifier)] @name
   (#set! "kind" "Property")
 ) @type
 
 (attribute_declaration
-  (identifier) @name
+  [(identifier) (qualified_identifier)] @name
   (#set! "kind" "Property")
 ) @type
 
 (relationship_assignment
-  (identifier) @name
+  [(identifier) (qualified_identifier)] @name
   (#set! "kind" "Property")
 ) @type
 
 (relationship_declaration
-  (identifier) @name
+  [(identifier) (qualified_identifier)] @name
   (#set! "kind" "Property")
 ) @type
 
