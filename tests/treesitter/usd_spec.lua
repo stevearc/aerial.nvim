@@ -1,5 +1,10 @@
 local util = require("tests.test_util")
 
+-- These queries rely on #offset! which only works in neovim 0.9.0+
+if vim.fn.has("nvim-0.9.0") == 0 then
+  return
+end
+
 describe("treesitter USD", function()
   it("parses all symbols correctly", function()
     util.test_file_symbols("treesitter", "./tests/treesitter/usd_test.usd", {
