@@ -7,6 +7,8 @@ vim.bo.swapfile = false
 vim.filetype.add({
   extension = {
     norg = "norg", -- Neovim doesn't have built-in norg filetype detection
+    usd = "usd", -- Neovim doesn't have built-in USD filetype detection
+    usda = "usd", -- Neovim doesn't have built-in USD filetype detection
   },
 })
 

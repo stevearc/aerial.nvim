@@ -1,0 +1,21 @@
+#usda 1.0
+
+def Xform "something" (
+    kind = "component"
+)
+{
+    def Xform "child"
+    {
+        float3 foo:xformOp:rotateXYZ = (-15.7, -55.8, 0.3)
+        double3 translate = (153.2, 119.3, 24.7)
+        rel thing = </something>
+
+        variantSet "variants" = {
+            "default" {
+            }
+            "one" {
+                double3 xformOp:translate = (10, 10, 10)
+            }
+        }
+    }
+}
