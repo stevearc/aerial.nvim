@@ -84,16 +84,16 @@ end
 ---@param aer_winid integer
 local function setup_aerial_win(src_winid, aer_winid, aer_bufnr)
   vim.api.nvim_win_set_buf(aer_winid, aer_bufnr)
-  vim.api.nvim_win_set_option(aer_winid, "list", false)
-  vim.api.nvim_win_set_option(aer_winid, "winfixwidth", true)
-  vim.api.nvim_win_set_option(aer_winid, "number", false)
-  vim.api.nvim_win_set_option(aer_winid, "signcolumn", "no")
-  vim.api.nvim_win_set_option(aer_winid, "foldcolumn", "0")
-  vim.api.nvim_win_set_option(aer_winid, "relativenumber", false)
-  vim.api.nvim_win_set_option(aer_winid, "wrap", false)
-  vim.api.nvim_win_set_option(aer_winid, "spell", false)
+  vim.wo[aer_winid].list = false
+  vim.wo[aer_winid].winfixwidth = true
+  vim.wo[aer_winid].number = false
+  vim.wo[aer_winid].signcolumn = "no"
+  vim.wo[aer_winid].foldcolumn = "0"
+  vim.wo[aer_winid].relativenumber = false
+  vim.wo[aer_winid].wrap = false
+  vim.wo[aer_winid].spell = false
   for k, v in pairs(config.layout.win_opts) do
-    vim.api.nvim_win_set_option(aer_winid, k, v)
+    vim.wo[aer_winid][k] = v
   end
   vim.api.nvim_win_set_var(aer_winid, "is_aerial_win", true)
 

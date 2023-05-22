@@ -164,21 +164,21 @@ M.maybe_set_foldmethod = function(bufnr)
     winids = { vim.api.nvim_get_current_win() }
   end
   for _, winid in ipairs(winids) do
-    local fdm = vim.api.nvim_win_get_option(winid, "foldmethod")
-    local fde = vim.api.nvim_win_get_option(winid, "foldexpr")
+    local fdm = vim.wo[winid].foldmethod
+    local fde = vim.wo[winid].foldexpr
     if
       not util.is_managing_folds(winid)
       and (manage_folds == true or (manage_folds == "auto" and fdm == "manual"))
     then
       vim.api.nvim_win_set_var(winid, prev_fdm, fdm)
       vim.api.nvim_win_set_var(winid, prev_fde, fde)
-      vim.api.nvim_win_set_option(winid, "foldmethod", "expr")
-      vim.api.nvim_win_set_option(winid, "foldexpr", "v:lua.aerial_foldexpr()")
+      vim.wo[winid].foldmethod = "expr"
+      vim.wo[winid].foldexpr = "v:lua.aerial_foldexpr()"
       if config.link_folds_to_tree then
-        local fdl = vim.api.nvim_win_get_option(winid, "foldlevel")
+        local fdl = vim.wo[winid].foldlevel
         require("aerial").tree_set_collapse_level(bufnr, fdl)
       elseif config.link_tree_to_folds then
-        vim.api.nvim_win_set_option(winid, "foldlevel", 99)
+        vim.wo[winid].foldlevel = 99
       end
     end
   end

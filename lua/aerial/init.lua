@@ -435,7 +435,7 @@ M.info = function()
   do_setup()
   local util = require("aerial.util")
   local bufnr = util.get_buffers(0)
-  local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
+  local filetype = vim.bo[bufnr].filetype
   local ignored, message = util.is_ignored_win()
   return {
     ignore = {

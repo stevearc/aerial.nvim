@@ -410,7 +410,7 @@ local nerd_icons = {
 local M = {}
 
 M.get_filetypes = function(bufnr)
-  local ft = vim.api.nvim_buf_get_option(bufnr or 0, "filetype")
+  local ft = vim.bo[bufnr or 0].filetype
   return vim.split(ft, "%.")
 end
 

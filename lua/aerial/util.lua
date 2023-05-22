@@ -50,11 +50,8 @@ end
 ---@return integer
 M.win_get_gutter_width = function(winid)
   winid = winid or 0
-  if
-    vim.api.nvim_win_get_option(winid, "number")
-    or vim.api.nvim_win_get_option(winid, "relativenumber")
-  then
-    return vim.api.nvim_win_get_option(winid, "numberwidth")
+  if vim.wo[winid].number or vim.wo[winid].relativenumber then
+    return vim.wo[winid].numberwidth
   else
     return 0
   end
@@ -66,7 +63,7 @@ M.is_aerial_buffer = function(bufnr)
   if not vim.api.nvim_buf_is_valid(bufnr or 0) then
     return false
   end
-  local ft = vim.api.nvim_buf_get_option(bufnr or 0, "filetype")
+  local ft = vim.bo[bufnr or 0].filetype
   return ft == "aerial"
 end
 
@@ -245,12 +242,12 @@ M.is_ignored_buf = function(bufnr)
     return false
   end
   local ignore = config.ignore
-  if ignore.unlisted_buffers and not vim.api.nvim_buf_get_option(bufnr, "buflisted") then
+  if ignore.unlisted_buffers and not vim.bo[bufnr].buflisted then
     return true, "Buffer is not listed"
   end
   if ignore.buftypes then
-    local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
-    local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
+    local buftype = vim.bo[bufnr].buftype
+    local filetype = vim.bo[bufnr].filetype
     if ignore.buftypes == "special" then
       if buftype ~= "" and buftype ~= "help" and filetype ~= "man" then
         return true, string.format("Buftype '%s' is \"special\"", buftype)
@@ -302,7 +299,7 @@ end
 ---@param winid nil|integer
 ---@return boolean
 M.is_managing_folds = function(winid)
-  return vim.api.nvim_win_get_option(winid or 0, "foldexpr") == "v:lua.aerial_foldexpr()"
+  return vim.wo[winid or 0].foldexpr == "v:lua.aerial_foldexpr()"
 end
 
 ---@return "left"|"right"|"float"

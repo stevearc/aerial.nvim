@@ -18,7 +18,7 @@ a.describe("layout", function()
     aerial.toggle()
     local winid = vim.api.nvim_tabpage_list_wins(0)[1]
     local aer_bufnr = vim.api.nvim_win_get_buf(winid)
-    assert.equals("aerial", vim.api.nvim_buf_get_option(aer_bufnr, "filetype"))
+    assert.equals("aerial", vim.bo[aer_bufnr].filetype)
   end)
 
   a.it("can open relative to the window, to the right", function()
@@ -32,7 +32,7 @@ a.describe("layout", function()
     aerial.toggle()
     local winid = vim.api.nvim_tabpage_list_wins(0)[2]
     local aer_bufnr = vim.api.nvim_win_get_buf(winid)
-    assert.equals("aerial", vim.api.nvim_buf_get_option(aer_bufnr, "filetype"))
+    assert.equals("aerial", vim.bo[aer_bufnr].filetype)
   end)
 
   a.it("can open aerial in float", function()
@@ -40,7 +40,7 @@ a.describe("layout", function()
     aerial.toggle({ direction = "float" })
     local winid = vim.api.nvim_tabpage_list_wins(0)[2]
     local aer_bufnr = vim.api.nvim_win_get_buf(winid)
-    assert.equals("aerial", vim.api.nvim_buf_get_option(aer_bufnr, "filetype"))
+    assert.equals("aerial", vim.bo[aer_bufnr].filetype)
     assert(require("aerial.util").is_floating_win(winid))
   end)
 
