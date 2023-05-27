@@ -335,7 +335,9 @@ M.open = function()
   local bufdata = data.get(bufnr)
   if bufdata then
     local pos = window.get_symbol_position(bufdata, cursor[1], cursor[2], true)
-    _active_nav:focus_symbol(pos.closest_symbol)
+    if pos.closest_symbol then
+      _active_nav:focus_symbol(pos.closest_symbol)
+    end
   end
 end
 
