@@ -3,15 +3,15 @@
 --------------------------------------------------------------------------------
 CONTENTS                                                         *aerial-contents*
 
-  1. Options..................................................|aerial-options|
-  2. Commands................................................|aerial-commands|
-  3. Api..........................................................|aerial-api|
-  4. Notes......................................................|aerial-notes|
+  1. Options                                                  |aerial-options|
+  2. Commands                                                |aerial-commands|
+  3. Api                                                          |aerial-api|
+  4. Notes                                                      |aerial-notes|
 
 --------------------------------------------------------------------------------
 OPTIONS                                                           *aerial-options*
 
->
+>lua
     require("aerial").setup({
       -- Priority list of preferred backends for aerial.
       -- This can be a filetype map (see :help aerial-filetype-map)

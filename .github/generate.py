@@ -116,7 +116,7 @@ def get_options_vimdoc() -> "VimdocSection":
     section = VimdocSection("options", "aerial-options")
     config_file = os.path.join(ROOT, "lua", "aerial", "config.lua")
     opt_lines = read_section(config_file, r"^local default_options =", r"^}$")
-    lines = ["\n", ">\n", '    require("aerial").setup({\n']
+    lines = ["\n", ">lua\n", '    require("aerial").setup({\n']
     lines.extend(indent(opt_lines, 4))
     lines.extend(["    })\n", "<\n"])
     section.body = lines
