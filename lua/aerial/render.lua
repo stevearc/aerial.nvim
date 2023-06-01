@@ -151,7 +151,7 @@ M.update_aerial_buffer = function(buf)
     end
     local text = util.remove_newlines(string.format("%s%s %s", spacing, kind, item.name))
     local text_cols = vim.api.nvim_strwidth(text)
-    local icon_hl = highlight.get_highlight(item, true)
+    local icon_hl = highlight.get_highlight(item, true, collapsed)
     if icon_hl then
       table.insert(highlights, {
         group = icon_hl,
@@ -160,7 +160,7 @@ M.update_aerial_buffer = function(buf)
         col_end = string_len[spacing] + string_len[kind],
       })
     end
-    local name_hl = highlight.get_highlight(item, false)
+    local name_hl = highlight.get_highlight(item, false, collapsed)
     if name_hl then
       table.insert(highlights, {
         group = name_hl,

@@ -38,14 +38,15 @@ local symbol_kinds = {
 
 ---@param symbol aerial.Symbol
 ---@param is_icon boolean
+---@param is_collapsed boolean
 ---@return nil|string
-M.get_highlight = function(symbol, is_icon)
-  local hl_group = config.get_highlight(symbol, is_icon)
+M.get_highlight = function(symbol, is_icon, is_collapsed)
+  local hl_group = config.get_highlight(symbol, is_icon, is_collapsed)
   if hl_group then
     return hl_group
   end
 
-  -- Default functionality will set the highlight for private and protected symbol names
+  -- If the symbol has a non-public scope, use that as the highlight group (e.g. AerialPrivate)
   if symbol.scope and not is_icon and symbol.scope ~= "public" then
     return string.format("Aerial%s", symbol.scope:gsub("^%l", string.upper))
   end
