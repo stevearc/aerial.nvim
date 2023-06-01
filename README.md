@@ -450,7 +450,7 @@ require("aerial").setup({
   },
 
   -- Set this function to override the highlight groups for certain symbols
-  get_highlight = function(symbol, is_icon)
+  get_highlight = function(symbol, is_icon, is_collapsed)
     -- return "MyHighlight" .. symbol.kind
   end,
 
