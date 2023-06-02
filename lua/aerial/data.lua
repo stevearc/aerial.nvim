@@ -41,7 +41,7 @@ function BufData.new(bufnr)
     collapse_level = 99,
   }
   -- cache the evaluation of managing folds
-  new.manage_folds = config.manage_folds(bufnr)
+  new.manage_folds = config.manage_folds(bufnr) and config.link_tree_to_folds
   setmetatable(new, { __index = BufData })
   return new
 end
