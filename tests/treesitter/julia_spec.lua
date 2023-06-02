@@ -9,7 +9,7 @@ describe("treesitter julia", function()
         level = 0,
         lnum = 1,
         col = 0,
-        end_lnum = 20,
+        end_lnum = 24,
         end_col = 3,
         children = {
           {
@@ -85,6 +85,26 @@ describe("treesitter julia", function()
             col = 0,
             end_lnum = 18,
             end_col = 3,
+          },
+          {
+            kind = "Module",
+            name = "submod",
+            level = 1,
+            lnum = 20,
+            col = 2,
+            end_lnum = 22,
+            end_col = 5,
+            children = {
+              {
+                kind = "Function",
+                name = "myfunc",
+                level = 2,
+                lnum = 21,
+                col = 4,
+                end_lnum = 21,
+                end_col = 26,
+              },
+            },
           },
         },
       },

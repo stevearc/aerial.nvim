@@ -17,4 +17,8 @@ end
 macro mac(expr)
 end
 
+  module submod
+    mod.myfunc() = nothing
+  end
+
 end
