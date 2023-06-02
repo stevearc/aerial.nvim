@@ -5,6 +5,7 @@ local pickers = require("telescope.pickers")
 local telescope = require("telescope")
 
 local ext_config = {
+  show_lines = true,
   show_nesting = {
     ["_"] = false,
     json = true,
@@ -37,14 +38,23 @@ local function aerial_picker(opts)
     backend.fetch_symbols_sync(0, opts)
   end
 
+  local layout
+  if ext_config.show_lines then
+    layout = {
+      { width = 4 },
+      { width = 30 },
+      { remaining = true },
+    }
+  else
+    layout = {
+      { width = 4 },
+      { remaining = true },
+    }
+  end
   local displayer = opts.displayer
     or entry_display.create({
       separator = " ",
-      items = {
-        { width = 4 },
-        { width = 30 },
-        { remaining = true },
-      },
+      items = layout,
     })
 
   local function make_display(entry)
