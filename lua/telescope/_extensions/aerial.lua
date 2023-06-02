@@ -60,15 +60,17 @@ local function aerial_picker(opts)
   local function make_display(entry)
     local item = entry.value
     local icon = config.get_icon(bufnr, item.kind)
-    local text = vim.api.nvim_buf_get_lines(bufnr, item.lnum - 1, item.lnum, false)[1] or ""
-    text = vim.trim(text)
     local icon_hl = highlight.get_highlight(item, true) or "NONE"
     local name_hl = highlight.get_highlight(item, false) or "NONE"
     local columns = {
       { icon, icon_hl },
       { entry.name, name_hl },
-      text,
     }
+    if ext_config.show_lines then
+      local text = vim.api.nvim_buf_get_lines(bufnr, item.lnum - 1, item.lnum, false)[1] or ""
+      text = vim.trim(text)
+      table.insert(columns, text)
+    end
     return displayer(columns)
   end
 
