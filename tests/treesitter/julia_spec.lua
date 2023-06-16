@@ -9,7 +9,7 @@ describe("treesitter julia", function()
         level = 0,
         lnum = 1,
         col = 0,
-        end_lnum = 24,
+        end_lnum = 26,
         end_col = 3,
         children = {
           {
@@ -92,7 +92,7 @@ describe("treesitter julia", function()
             level = 1,
             lnum = 20,
             col = 2,
-            end_lnum = 22,
+            end_lnum = 24,
             end_col = 5,
             children = {
               {
@@ -103,6 +103,15 @@ describe("treesitter julia", function()
                 col = 4,
                 end_lnum = 21,
                 end_col = 26,
+              },
+              {
+                kind = "Function",
+                name = "myfuncb",
+                level = 2,
+                lnum = 22,
+                col = 4,
+                end_lnum = 23,
+                end_col = 7,
               },
             },
           },

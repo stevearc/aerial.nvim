@@ -8,6 +8,13 @@
   (#set! "kind" "Function")
   ) @type
 
+(function_definition
+  name: (field_expression
+          value: (_)
+          (identifier) @name)
+  (#set! "kind" "Function")
+  ) @type
+
 (short_function_definition
   name: (identifier) @name
   (#set! "kind" "Function")

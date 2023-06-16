@@ -19,6 +19,8 @@ end
 
   module submod
     mod.myfunc() = nothing
+    function mod.myfuncb()
+    end
   end
 
 end
