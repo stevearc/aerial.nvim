@@ -140,12 +140,12 @@ M.restore_foldmethod = function()
   local ok, prev_foldmethod = pcall(vim.api.nvim_win_get_var, 0, prev_fdm)
   if ok and prev_foldmethod then
     vim.api.nvim_win_del_var(0, prev_fdm)
-    vim.wo.foldmethod = prev_foldmethod
+    vim.api.nvim_set_option_value("foldmethod", prev_foldmethod, { scope = "local", win = 0 })
   end
   local ok2, prev_foldexpr = pcall(vim.api.nvim_win_get_var, 0, prev_fde)
   if ok2 and prev_foldexpr then
     vim.api.nvim_win_del_var(0, prev_fde)
-    vim.wo.foldexpr = prev_foldexpr
+    vim.api.nvim_set_option_value("foldexpr", prev_foldexpr, { scope = "local", win = 0 })
   end
 end
 
@@ -172,13 +172,17 @@ M.maybe_set_foldmethod = function(bufnr)
     then
       vim.api.nvim_win_set_var(winid, prev_fdm, fdm)
       vim.api.nvim_win_set_var(winid, prev_fde, fde)
-      vim.wo[winid].foldmethod = "expr"
-      vim.wo[winid].foldexpr = "v:lua.aerial_foldexpr()"
+      vim.api.nvim_set_option_value("foldmethod", "expr", { scope = "local", win = winid })
+      vim.api.nvim_set_option_value(
+        "foldexpr",
+        "v:lua.aerial_foldexpr()",
+        { scope = "local", win = winid }
+      )
       if config.link_folds_to_tree then
         local fdl = vim.wo[winid].foldlevel
         require("aerial").tree_set_collapse_level(bufnr, fdl)
       elseif config.link_tree_to_folds then
-        vim.wo[winid].foldlevel = 99
+        vim.api.nvim_set_option_value("foldlevel", 99, { scope = "local", win = winid })
       end
     end
   end

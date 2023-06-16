@@ -80,20 +80,26 @@ local function create_aerial_buffer(bufnr)
   return aer_bufnr
 end
 
+local default_win_opts = {
+  list = false,
+  winfixwidth = true,
+  number = false,
+  signcolumn = "no",
+  foldcolumn = "0",
+  relativenumber = false,
+  wrap = false,
+  spell = false,
+}
+
 ---@param src_winid integer
 ---@param aer_winid integer
 local function setup_aerial_win(src_winid, aer_winid, aer_bufnr)
   vim.api.nvim_win_set_buf(aer_winid, aer_bufnr)
-  vim.wo[aer_winid].list = false
-  vim.wo[aer_winid].winfixwidth = true
-  vim.wo[aer_winid].number = false
-  vim.wo[aer_winid].signcolumn = "no"
-  vim.wo[aer_winid].foldcolumn = "0"
-  vim.wo[aer_winid].relativenumber = false
-  vim.wo[aer_winid].wrap = false
-  vim.wo[aer_winid].spell = false
+  for k, v in pairs(default_win_opts) do
+    vim.api.nvim_set_option_value(k, v, { scope = "local", win = aer_winid })
+  end
   for k, v in pairs(config.layout.win_opts) do
-    vim.wo[aer_winid][k] = v
+    vim.api.nvim_set_option_value(k, v, { scope = "local", win = aer_winid })
   end
   vim.api.nvim_win_set_var(aer_winid, "is_aerial_win", true)
 

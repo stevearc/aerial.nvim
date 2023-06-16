@@ -158,7 +158,7 @@ M.set_collapse_level = function(bufnr, level)
     end
 
     for _, winid in ipairs(wins) do
-      vim.wo[winid].foldlevel = level
+      vim.api.nvim_set_option_value("foldlevel", level, { scope = "local", win = winid })
     end
   end
   _post_tree_mutate(bufnr)

@@ -287,11 +287,11 @@ function AerialNav:relayout()
     col = main_col + main_width + border_width,
   })
   for k, v in pairs(config.nav.win_opts) do
-    vim.wo[self.main.winid][k] = v
+    vim.api.nvim_set_option_value(k, v, { scope = "local", win = self.main.winid })
     -- Hack: we generally don't want the left/right to have cursorline enabled
     if k ~= "cursorline" then
-      vim.wo[self.left.winid][k] = v
-      vim.wo[self.right.winid][k] = v
+      vim.api.nvim_set_option_value(k, v, { scope = "local", win = self.left.winid })
+      vim.api.nvim_set_option_value(k, v, { scope = "local", win = self.right.winid })
     end
   end
 end
