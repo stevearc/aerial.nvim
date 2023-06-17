@@ -96,7 +96,9 @@ function BufData:set_fold_level(level)
   level = math.min(99, math.max(0, level))
   self.collapse_level = level
   for _, item in ipairs(self.flat_items) do
-    self:set_collapsed(item, level <= item.level)
+    if self:is_collapsable(item) then
+      self:set_collapsed(item, level <= item.level)
+    end
   end
   return level
 end

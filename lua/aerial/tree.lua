@@ -182,8 +182,12 @@ M.decrease_fold_level = function(bufnr, count)
   end
   local bufdata = data.get_or_create(bufnr)
   -- If the current level is 99, start the decrement from the max level instead
-  -- (+1 because the leaves can actually be folded/collapsed)
-  local start = math.min(bufdata.collapse_level, bufdata.max_level + 1)
+  local max_level = bufdata.max_level
+  -- When folding is enabled, leaves can be folded so add 1
+  if config.manage_folds(bufnr) and config.link_tree_to_folds then
+    max_level = max_level + 1
+  end
+  local start = math.min(bufdata.collapse_level, max_level)
   M.set_collapse_level(bufnr, start - count)
 end
 
