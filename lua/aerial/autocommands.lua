@@ -96,9 +96,6 @@ M.on_enter_buffer = util.throttle(function()
       or vim.tbl_count(vim.api.nvim_tabpage_list_wins(0)) == 1
     then
       vim.cmd("quit")
-    else
-      -- Hack to ignore winwidth
-      util.restore_width(0, 0)
     end
     return
   end
