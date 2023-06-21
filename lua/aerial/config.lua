@@ -26,6 +26,9 @@ local default_options = {
     --   window - open aerial to the right/left of the current window
     placement = "window",
 
+    -- When the symbols change, resize the aerial window (within min/max constraints) to fit
+    resize_to_content = true,
+
     -- Preserve window size equality with (:help CTRL-W_=)
     preserve_equality = false,
   },

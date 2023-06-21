@@ -28,22 +28,8 @@ end
 ---@param str string
 ---@return string
 M.remove_newlines = function(str)
-  return string.gsub(str, "\n", " ")
-end
-
----@param winid integer Window to restore
----@param bufnr integer Aerial buffer
-M.restore_width = function(winid, bufnr)
-  local ok, width = pcall(vim.api.nvim_buf_get_var, bufnr, "aerial_width")
-  if ok then
-    vim.api.nvim_win_set_width(winid, width)
-  end
-end
-
----@param bufnr integer
----@param width integer
-M.save_width = function(bufnr, width)
-  vim.api.nvim_buf_set_var(bufnr, "aerial_width", width)
+  local ret = string.gsub(str, "\n", " ")
+  return ret
 end
 
 ---@param winid nil|integer
