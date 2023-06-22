@@ -42,8 +42,11 @@ local function resize_all_wins(aer_bufnr, preferred_width, preferred_height)
       -- padding out whitespace. The gutter needs to adjust the total window
       -- size, but it doesn't take space away from the content.
       max_width = math.max(max_width, width - gutter)
-      if config.layout.resize_to_content or vim.b[aer_bufnr].aerial_width == nil then
+      if not vim.w[winid].aerial_set_width or config.layout.resize_to_content then
         vim.api.nvim_win_set_width(winid, width)
+        vim.w[winid].aerial_set_width = true
+      else
+        max_width = math.max(max_width, vim.api.nvim_win_get_width(winid))
       end
       vim.b[aer_bufnr].aerial_width = width
 

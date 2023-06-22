@@ -108,8 +108,9 @@ local function setup_aerial_win(src_winid, aer_winid, aer_bufnr)
   -- Set the filetype only after we enter the buffer so that ftplugins behave properly
   vim.api.nvim_buf_set_option(aer_bufnr, "filetype", "aerial")
   local width = vim.b[aer_bufnr].aerial_width
-  if width then
+  if width and (not vim.w[aer_winid].aerial_set_width or config.layout.resize_to_content) then
     vim.api.nvim_win_set_width(aer_winid, width)
+    vim.w[aer_winid].aerial_set_width = true
   end
   if config.layout.preserve_equality then
     vim.cmd.wincmd({ args = { "=" } })
