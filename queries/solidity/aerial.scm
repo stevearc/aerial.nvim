@@ -5,6 +5,12 @@
     (#set! "kind" "Method")
     ) @type))
 
+(library_declaration (_
+  (function_definition
+    name: (identifier) @name
+    (#set! "kind" "Method")
+    ) @type))
+
 (source_file
   (function_definition
     name: (identifier) @name
