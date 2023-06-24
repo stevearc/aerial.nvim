@@ -97,7 +97,7 @@ describe("treesitter julia", function()
             children = {
               {
                 kind = "Function",
-                name = "myfunc",
+                name = "mod.myfunc",
                 level = 2,
                 lnum = 21,
                 col = 4,
@@ -106,7 +106,7 @@ describe("treesitter julia", function()
               },
               {
                 kind = "Function",
-                name = "myfuncb",
+                name = "mod.myfuncb",
                 level = 2,
                 lnum = 22,
                 col = 4,

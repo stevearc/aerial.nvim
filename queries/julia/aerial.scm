@@ -11,7 +11,7 @@
 (function_definition
   name: (field_expression
           value: (_)
-          (identifier) @name)
+          (identifier)) @name
   (#set! "kind" "Function")
   ) @type
 
@@ -23,7 +23,7 @@
 (short_function_definition
   name: (field_expression
           value: (_)
-          (identifier) @name)
+          (identifier)) @name
   (#set! "kind" "Function")
   ) @type
 
