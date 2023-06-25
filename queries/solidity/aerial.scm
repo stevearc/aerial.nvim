@@ -1,21 +1,21 @@
-;; Method and Function declarations
 (contract_declaration (_
-                        (function_definition
-                          name: (identifier) @name
-                          (#set! "kind" "Function")
-                          ) @type))
+  (function_definition
+    name: (identifier) @name
+    (#set! "kind" "Method")
+    ) @type))
 
 (library_declaration (_
-                       (function_definition
-                         name: (identifier) @name
-                         (#set! "kind" "Function")
-                         ) @type))
+  (function_definition
+    name: (identifier) @name
+    (#set! "kind" "Function")
+    ) @type))
 
 (interface_declaration (_
-                         (function_definition
-                           name: (identifier) @name
-                           (#set! "kind" "Function")
-                           ) @type))
+  (function_definition
+    name: (identifier) @name
+    (#set! "kind" "Function")
+    ) @type))
+
 (source_file
   (function_definition
     name: (identifier) @name
@@ -41,9 +41,3 @@
   name: (identifier) @name
   (#set! "kind" "Function")
   ) @type
-
-; (constructor_declaration
-;   name: (identifier) @name
-;   (#set! "kind" "Constructor")
-;   ) @type
-
