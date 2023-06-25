@@ -56,3 +56,27 @@ jobs:
       - name: Run tests
         run: |
           bash ./run_tests.sh
+
+  release:
+    name: release
+
+    if: ${{ github.ref == 'refs/heads/master' }}
+    needs:
+      - luacheck
+      - stylua
+      - run_tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          release-type: simple
+          package-name: aerial.nvim
+      - uses: actions/checkout@v3
+      - uses: rickstaa/action-create-tag@v1
+        if: ${{ steps.release.outputs.release_created }}
+        with:
+          tag: stable
+          message: "Current stable release: ${{ steps.release.outputs.tag_name }}"
+          tag_exists_error: false
+          force_push_tag: true
