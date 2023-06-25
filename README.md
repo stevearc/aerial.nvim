@@ -160,6 +160,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - ruby
 - rust
 - scala
+- solidity
 - teal
 - tsx
 - typescript
