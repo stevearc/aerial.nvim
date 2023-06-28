@@ -36,7 +36,7 @@ jobs:
       matrix:
         include:
           - nvim_tag: v0.8.3
-          - nvim_tag: v0.9.0
+          - nvim_tag: v0.9.1
 
     name: Run tests
     runs-on: ubuntu-22.04
@@ -65,7 +65,7 @@ jobs:
       - luacheck
       - stylua
       - run_tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: google-github-actions/release-please-action@v3
         id: release
