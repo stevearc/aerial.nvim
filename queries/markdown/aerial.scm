@@ -3,3 +3,9 @@
   heading_content: (_) @name
   (#set! "kind" "Interface")
   ) @type
+
+(setext_heading
+  heading_content: (_) @name
+  (#set! "kind" "Interface")
+  [(setext_h1_underline) (setext_h2_underline)] @level
+  ) @type
