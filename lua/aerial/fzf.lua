@@ -15,7 +15,7 @@ M.get_labels = function(opts)
   local results = {}
   if data.has_symbols(0) then
     for _, item in data.get_or_create(0):iter({ skip_hidden = false }) do
-      local label = string.format("%d:%s", item.idx, item.name)
+      local label = string.format("%d: %s", item.idx, item.name)
       table.insert(results, label)
     end
   end
