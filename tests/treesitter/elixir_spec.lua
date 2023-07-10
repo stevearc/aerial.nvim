@@ -225,6 +225,15 @@ describe("treesitter elixir", function()
           },
         },
       },
+      {
+        kind = "Function",
+        name = "parameterless_function",
+        level = 0,
+        lnum = 68,
+        col = 0,
+        end_lnum = 69,
+        end_col = 3,
+      },
     })
   end)
 end)

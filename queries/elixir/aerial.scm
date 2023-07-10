@@ -20,6 +20,7 @@
   (arguments [
               (call target: (identifier) @name)
               (binary_operator left: (call target: (identifier) @name))
+              ((identifier) @name)
    ])
   (#set! "kind" "Function")
   ) @type
