@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.1.0](https://github.com/stevearc/aerial.nvim/compare/v1.0.0...v1.1.0) (2023-07-11)
+
+
+### Features
+
+* add new `AerialNormal` highlight as a fallback for all text ([#278](https://github.com/stevearc/aerial.nvim/issues/278)) ([b4eb257](https://github.com/stevearc/aerial.nvim/commit/b4eb257e5422eafbdd577f5b1c9f83ca0359ab7b))
+* add solidity treesitter support ([#273](https://github.com/stevearc/aerial.nvim/issues/273)) ([7c2a432](https://github.com/stevearc/aerial.nvim/commit/7c2a432238b9c8e8c526619fa003e658691ea127))
+* **elixir:** support parameterless functions ([#277](https://github.com/stevearc/aerial.nvim/issues/277)) ([603ffde](https://github.com/stevearc/aerial.nvim/commit/603ffde23a3834ff6fdafd0db448347337792c10))
+* **fzf:** various improvements ([#275](https://github.com/stevearc/aerial.nvim/issues/275)) ([66078ea](https://github.com/stevearc/aerial.nvim/commit/66078ea0fa3589fea8f267672422773ca73ca68d))
+
+
+### Bug Fixes
+
+* update julia queries for upstream parser changes ([e22facd](https://github.com/stevearc/aerial.nvim/commit/e22facd3a696f4690f888e16ddaba585c8173e4e))
+
 ## 1.0.0 (2023-06-24)
 
 
