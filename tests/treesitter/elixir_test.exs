@@ -13,7 +13,7 @@ defmodule Example.Module do
   defguard public_guard(x) when is_atom(x)
 
   defguard private_guard(x) when is_atom(x)
- 
+
   defmacro public_macro() do
   end
 
@@ -63,4 +63,7 @@ defmodule StringTest do
       assert String.capitalize("HELLO") == "Hello"
     end
   end
+end
+
+def parameterless_function do
 end
