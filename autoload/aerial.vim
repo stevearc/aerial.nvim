@@ -3,12 +3,11 @@ function! aerial#fzf() abort
 	if type(l:labels) == type(v:null) && l:labels == v:null
 		return
 	endif
-	call fzf#run({
+	call fzf#run(fzf#wrap({
 				\ 'source': l:labels,
 				\ 'sink': funcref('aerial#goto_symbol'),
-				\ 'options': '--prompt="Document symbols: "',
-				\ 'window': {'width': 0.5, 'height': 0.4},
-				\ })
+				\ 'options': ['--prompt="Document symbols: "', '--layout=reverse-list'],
+				\ }))
 endfunction
 
 function! aerial#goto_symbol(symbol) abort
