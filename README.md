@@ -176,6 +176,7 @@ it](https://github.com/stevearc/aerial.nvim/issues/new?assignees=stevearc&labels
 
 ## Commands
 
+
 | Command              | Args               | Description                                                              |
 | -------------------- | ------------------ | ------------------------------------------------------------------------ |
 | `AerialToggle[!]`    | `left/right/float` | Open or close the aerial window. With `!` cursor stays in current window |
@@ -190,6 +191,7 @@ it](https://github.com/stevearc/aerial.nvim/issues/new?assignees=stevearc&labels
 | `AerialNavToggle`    |                    | Open or close the aerial nav window.                                     |
 | `AerialNavOpen`      |                    | Open the aerial nav window.                                              |
 | `AerialNavClose`     |                    | Close the aerial nav window.                                             |
+
 
 ## Options
 
