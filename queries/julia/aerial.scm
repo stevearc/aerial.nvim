@@ -37,7 +37,7 @@
   (#set! "kind" "Class")
   ) @type
 
-(const_declaration
+(const_statement
   (assignment
     . (identifier) @name)
   (#set! "kind" "Constant")
