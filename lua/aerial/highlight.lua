@@ -55,6 +55,18 @@ M.get_highlight = function(symbol, is_icon, is_collapsed)
 end
 
 M.create_highlight_groups = function()
+  -- Use Normal colors for AerialNormal, while stripping bold/italic/etc
+  local normal_defn = vim.api.nvim_get_hl_by_name("Normal", true)
+  -- The default text highlight
+  vim.api.nvim_set_hl(0, "AerialNormal", {
+    fg = normal_defn.foreground,
+    bg = normal_defn.background,
+    ctermfg = normal_defn.ctermfg,
+    ctermbg = normal_defn.ctermbg,
+    blend = normal_defn.blend,
+    default = true,
+  })
+
   -- The line that shows where your cursor(s) are
   link("AerialLine", "QuickFixLine")
   link("AerialLineNC", "AerialLine")
@@ -80,7 +92,7 @@ M.create_highlight_groups = function()
 
   -- The name of the symbol
   for _, symbol_kind in ipairs(symbol_kinds) do
-    link(string.format("Aerial%s", symbol_kind), "NONE")
+    link(string.format("Aerial%s", symbol_kind), "AerialNormal")
   end
 
   -- The icon displayed to the left of the symbol

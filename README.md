@@ -176,7 +176,6 @@ it](https://github.com/stevearc/aerial.nvim/issues/new?assignees=stevearc&labels
 
 ## Commands
 
-
 | Command              | Args               | Description                                                              |
 | -------------------- | ------------------ | ------------------------------------------------------------------------ |
 | `AerialToggle[!]`    | `left/right/float` | Open or close the aerial window. With `!` cursor stays in current window |
@@ -191,7 +190,6 @@ it](https://github.com/stevearc/aerial.nvim/issues/new?assignees=stevearc&labels
 | `AerialNavToggle`    |                    | Open or close the aerial nav window.                                     |
 | `AerialNavOpen`      |                    | Open the aerial nav window.                                              |
 | `AerialNavClose`     |                    | Close the aerial nav window.                                             |
-
 
 ## Options
 
@@ -661,6 +659,9 @@ hi link AerialClassIcon Special
 hi link AerialFunction Special
 hi AerialFunctionIcon guifg=#cb4b16 guibg=NONE guisp=NONE gui=NONE cterm=NONE
 
+" There's also this group for the fallback of the text if a specific
+" class highlight isn't defined
+hi link AerialNormal Normal
 " There's also this group for the cursor position
 hi link AerialLine QuickFixLine
 " If highlight_mode="split_width", you can set a separate color for the
