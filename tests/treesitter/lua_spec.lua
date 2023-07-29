@@ -38,17 +38,6 @@ describe("treesitter lua", function()
         col = 0,
         end_lnum = 18,
         end_col = 3,
-        children = {
-          {
-            kind = "Function",
-            name = "<Anonymous>",
-            level = 1,
-            lnum = 14,
-            col = 7,
-            end_lnum = 16,
-            end_col = 5,
-          },
-        },
       },
       {
         kind = "Function",

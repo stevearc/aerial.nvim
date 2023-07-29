@@ -44,7 +44,3 @@
     (function_definition) @type)
   (#set! "kind" "Function")
 ) @start
-
-(function_definition
-  (#set! "kind" "Function")
-  ) @type
