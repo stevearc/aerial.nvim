@@ -86,13 +86,14 @@ end
 ---@param bufnr? integer
 ---@param backend? aerial.Backend
 ---@param name? string
+---@return boolean
 local function attach(bufnr, backend, name)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
   local existing_backend_name = M.get_attached_backend(bufnr)
   if not backend or not name or name == existing_backend_name then
-    return
+    return false
   end
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
@@ -129,6 +130,7 @@ local function attach(bufnr, backend, name)
   if not existing_backend_name and config.on_attach then
     config.on_attach(bufnr)
   end
+  return true
 end
 
 ---@param bufnr? integer
@@ -231,18 +233,20 @@ end
 
 ---@param bufnr? integer
 ---@param refresh? boolean
+---@return boolean True if symbols were fetched
 M.attach = function(bufnr, refresh)
   if not bufnr or bufnr == 0 then
     bufnr = vim.api.nvim_get_current_buf()
   end
   if not vim.api.nvim_buf_is_valid(bufnr) then
-    return
+    return false
   end
   if refresh then
     local backend, name = get_best_backend()
-    attach(bufnr, backend, name)
+    return attach(bufnr, backend, name)
   else
     M.get(bufnr)
+    return false
   end
 end
 

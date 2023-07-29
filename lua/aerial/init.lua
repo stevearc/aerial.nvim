@@ -276,6 +276,22 @@ M.toggle = function(opts)
   return opened
 end
 
+---Refresh the symbols for a buffer
+---@param bufnr? integer
+---@note
+--- Symbols will usually get refreshed automatically when needed. You should only need to
+--- call this if you change something in the config (e.g. by setting vim.b.aerial_backends)
+M.refetch_symbols = function(bufnr)
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  do_setup()
+  local backends = require("aerial.backends")
+  if not backends.attach(bufnr, true) then
+    backends.get(bufnr).fetch_symbols(bufnr)
+  end
+end
+
 ---Jump to a specific symbol.
 ---@param opts nil|table
 ---    index nil|integer The symbol to jump to. If nil, will jump to the symbol under the cursor (in the aerial buffer)
