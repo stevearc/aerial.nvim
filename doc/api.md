@@ -13,6 +13,7 @@
 - [open_all()](#open_all)
 - [focus()](#focus)
 - [toggle(opts)](#toggleopts)
+- [refetch_symbols(bufnr)](#refetch_symbolsbufnr)
 - [select(opts)](#selectopts)
 - [next(step)](#nextstep)
 - [prev(step)](#prevstep)
@@ -132,6 +133,21 @@ Open or close the aerial window for the current buffer.
 | opts  | `nil\|table` |                            |                                                               |
 |       | focus        | `boolean`                  | If true, jump to aerial window if it is opened (default true) |
 |       | direction    | `"left"\|"right"\|"float"` | Direction to open aerial window                               |
+
+## refetch_symbols(bufnr)
+
+`refetch_symbols(bufnr)` \
+Refresh the symbols for a buffer
+
+| Param | Type           | Desc |
+| ----- | -------------- | ---- |
+| bufnr | `nil\|integer` |      |
+
+**Note:**
+<pre>
+Symbols will usually get refreshed automatically when needed. You should only need to
+call this if you change something in the config (e.g. by setting vim.b.aerial_backends)
+</pre>
 
 ## select(opts)
 

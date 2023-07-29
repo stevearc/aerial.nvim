@@ -175,7 +175,7 @@ do_setup = function()
 end
 
 ---Initialize aerial
----@param opts nil|table
+---@param opts? table
 M.setup = function(opts)
   if vim.fn.has("nvim-0.8") == 0 then
     vim.notify_once(
@@ -209,9 +209,9 @@ M.sync_load = function()
 end
 
 ---Returns true if aerial is open for the current window or buffer (returns false inside an aerial buffer)
----@param opts nil|table
----    bufnr nil|integer
----    winid nil|integer
+---@param opts? table
+---    bufnr? integer
+---    winid? integer
 ---@return boolean
 M.is_open = function(opts)
   do_setup()
@@ -232,7 +232,7 @@ M.close_all = lazy("window", "close_all")
 M.close_all_but_current = lazy("window", "close_all_but_current")
 
 ---Open the aerial window for the current buffer.
----@param opts nil|table
+---@param opts? table
 ---    focus boolean If true, jump to aerial window if it is opened (default true)
 ---    direction "left"|"right"|"float" Direction to open aerial window
 M.open = function(opts)
@@ -263,7 +263,7 @@ M.open_all = lazy("window", "open_all")
 M.focus = lazy("window", "focus")
 
 ---Open or close the aerial window for the current buffer.
----@param opts nil|table
+---@param opts? table
 ---    focus boolean If true, jump to aerial window if it is opened (default true)
 ---    direction "left"|"right"|"float" Direction to open aerial window
 M.toggle = function(opts)
@@ -293,36 +293,36 @@ M.refetch_symbols = function(bufnr)
 end
 
 ---Jump to a specific symbol.
----@param opts nil|table
----    index nil|integer The symbol to jump to. If nil, will jump to the symbol under the cursor (in the aerial buffer)
----    split nil|string Jump to the symbol in a new split. Can be "v" for vertical or "h" for horizontal. Can also be a raw command to execute (e.g. "belowright split")
----    jump nil|boolean If false and in the aerial window, do not leave the aerial window. (Default true)
+---@param opts? table
+---    index? integer The symbol to jump to. If nil, will jump to the symbol under the cursor (in the aerial buffer)
+---    split? string Jump to the symbol in a new split. Can be "v" for vertical or "h" for horizontal. Can also be a raw command to execute (e.g. "belowright split")
+---    jump? boolean If false and in the aerial window, do not leave the aerial window. (Default true)
 M.select = lazy("navigation", "select")
 
 ---Jump forwards in the symbol list.
----@param step nil|integer Number of symbols to jump by (default 1)
+---@param step? integer Number of symbols to jump by (default 1)
 M.next = lazy("navigation", "next")
 
 ---Jump backwards in the symbol list.
----@param step nil|integer Number of symbols to jump by (default 1)
+---@param step? integer Number of symbols to jump by (default 1)
 M.prev = lazy("navigation", "prev")
 
 ---Jump to a symbol higher in the tree, moving forwards
----@param count nil|integer How many levels to jump up (default 1)
+---@param count? integer How many levels to jump up (default 1)
 M.next_up = function(count)
   do_setup()
   require("aerial.navigation").up(1, count)
 end
 
 ---Jump to a symbol higher in the tree, moving backwards
----@param count nil|integer How many levels to jump up (default 1)
+---@param count? integer How many levels to jump up (default 1)
 M.prev_up = function(count)
   do_setup()
   require("aerial.navigation").up(-1, count)
 end
 
 ---Get a list representing the symbol path to the current location.
----@param exact nil|boolean If true, only return symbols if we are exactly inside the hierarchy. When false, will return the closest symbol.
+---@param exact? boolean If true, only return symbols if we are exactly inside the hierarchy. When false, will return the closest symbol.
 ---@return table[]
 ---@note
 --- Returns empty list if none found or in an invalid buffer.
@@ -370,11 +370,11 @@ M.get_location = function(exact)
 end
 
 ---Collapse all nodes in the symbol tree
----@param bufnr nil|integer
+---@param bufnr? integer
 M.tree_close_all = lazy("tree", "close_all")
 
 ---Expand all nodes in the symbol tree
----@param bufnr nil|integer
+---@param bufnr? integer
 M.tree_open_all = lazy("tree", "open_all")
 
 ---Set the collapse level of the symbol tree
@@ -384,36 +384,36 @@ M.tree_set_collapse_level = lazy("tree", "set_collapse_level")
 
 ---Increase the fold level of the symbol tree
 ---@param bufnr integer
----@param count nil|integer
+---@param count? integer
 M.tree_increase_fold_level = lazy("tree", "increase_fold_level")
 
 ---Decrease the fold level of the symbol tree
 ---@param bufnr integer
----@param count nil|integer
+---@param count? integer
 M.tree_decrease_fold_level = lazy("tree", "decrease_fold_level")
 
 ---Open the tree at the selected location
----@param opts nil|table
----    index nil|integer The index of the symbol to perform the action on. Defaults to cursor location.
----    fold nil|boolean If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)
----    recurse nil|boolean If true, perform the action recursively on all children (default false)
----    bubble nil|boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
+---@param opts? table
+---    index? integer The index of the symbol to perform the action on. Defaults to cursor location.
+---    fold? boolean If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)
+---    recurse? boolean If true, perform the action recursively on all children (default false)
+---    bubble? boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
 M.tree_open = lazy("tree", "open")
 
 ---Collapse the tree at the selected location
----@param opts nil|table
----    index nil|integer The index of the symbol to perform the action on. Defaults to cursor location.
----    fold nil|boolean If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)
----    recurse nil|boolean If true, perform the action recursively on all children (default false)
----    bubble nil|boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
+---@param opts? table
+---    index? integer The index of the symbol to perform the action on. Defaults to cursor location.
+---    fold? boolean If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)
+---    recurse? boolean If true, perform the action recursively on all children (default false)
+---    bubble? boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
 M.tree_close = lazy("tree", "close")
 
 ---Toggle the collapsed state at the selected location
----@param opts nil|table
----    index nil|integer The index of the symbol to perform the action on. Defaults to cursor location.
----    fold nil|boolean If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)
----    recurse nil|boolean If true, perform the action recursively on all children (default false)
----    bubble nil|boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
+---@param opts? table
+---    index? integer The index of the symbol to perform the action on. Defaults to cursor location.
+---    fold? boolean If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)
+---    recurse? boolean If true, perform the action recursively on all children (default false)
+---    bubble? boolean If true and current symbol has no children, perform the action on the nearest parent (default true)
 M.tree_toggle = lazy("tree", "toggle")
 
 ---Check if the nav windows are open
@@ -430,7 +430,7 @@ M.nav_close = lazy("nav_view", "close")
 M.nav_toggle = lazy("nav_view", "toggle")
 
 ---Sync code folding with the current tree state.
----@param bufnr nil|integer
+---@param bufnr? integer
 ---@note
 --- Ignores the 'link_tree_to_folds' config option.
 M.sync_folds = function(bufnr)
@@ -479,7 +479,7 @@ M.num_symbols = function(bufnr)
 end
 
 ---Returns true if the user has manually closed aerial. Will become false if the user opens aerial again.
----@param default nil|boolean
+---@param default? boolean
 ---@return nil|boolean
 M.was_closed = function(default)
   if was_closed == nil then

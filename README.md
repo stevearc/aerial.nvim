@@ -692,6 +692,7 @@ hi AerialGuide2 guifg=Blue
 - [open_all()](doc/api.md#open_all)
 - [focus()](doc/api.md#focus)
 - [toggle(opts)](doc/api.md#toggleopts)
+- [refetch_symbols(bufnr)](doc/api.md#refetch_symbolsbufnr)
 - [select(opts)](doc/api.md#selectopts)
 - [next(step)](doc/api.md#nextstep)
 - [prev(step)](doc/api.md#prevstep)
