@@ -425,7 +425,6 @@ local function create_filetype_opt_getter(name, option, default)
   if type(option) ~= "table" or vim.tbl_islist(option) then
     return function(bufnr)
       local has_buf_option, buf_option = pcall(vim.api.nvim_buf_get_var, bufnr, buffer_option_name)
-      print(buffer_option_name, has_buf_option, vim.inspect(buf_option))
       if has_buf_option then
         return buf_option
       else
