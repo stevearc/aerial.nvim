@@ -434,7 +434,7 @@ end
 M.info = function()
   do_setup()
   local util = require("aerial.util")
-  local bufnr = util.get_buffers(0)
+  local bufnr = util.get_buffers(0) or 0
   local filetype = vim.bo[bufnr].filetype
   local ignored, message = util.is_ignored_win()
   return {
@@ -443,7 +443,7 @@ M.info = function()
       message = message,
     },
     filetype = filetype,
-    filter_kind_map = require("aerial.config").get_filter_kind_map(),
+    filter_kind_map = require("aerial.config").get_filter_kind_map(bufnr),
     backends = require("aerial.backends").get_status(bufnr),
   }
 end

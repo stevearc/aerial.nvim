@@ -417,13 +417,27 @@ M.get_filetypes = function(bufnr)
   return vim.split(ft, "%.")
 end
 
-local function create_filetype_opt_getter(option, default)
+---@param name string
+---@param option any
+---@param default any
+local function create_filetype_opt_getter(name, option, default)
+  local buffer_option_name = string.format("aerial_%s", name)
   if type(option) ~= "table" or vim.tbl_islist(option) then
-    return function()
-      return option
+    return function(bufnr)
+      local has_buf_option, buf_option = pcall(vim.api.nvim_buf_get_var, bufnr, buffer_option_name)
+      print(buffer_option_name, has_buf_option, vim.inspect(buf_option))
+      if has_buf_option then
+        return buf_option
+      else
+        return option
+      end
     end
   else
     return function(bufnr)
+      local has_buf_option, buf_option = pcall(vim.api.nvim_buf_get_var, bufnr, buffer_option_name)
+      if has_buf_option then
+        return buf_option
+      end
       for _, ft in ipairs(M.get_filetypes(bufnr)) do
         if option[ft] ~= nil then
           return option[ft]
@@ -523,10 +537,12 @@ M.setup = function(opts)
   for k, v in pairs(newconf) do
     M[k] = v
   end
-  M.manage_folds = create_filetype_opt_getter(M.manage_folds, default_options.manage_folds)
-  M.backends = create_filetype_opt_getter(M.backends, default_options.backends)
+  M.manage_folds =
+    create_filetype_opt_getter("manage_folds", M.manage_folds, default_options.manage_folds)
+  M.backends = create_filetype_opt_getter("backends", M.backends, default_options.backends)
   local get_filter_kind_list =
-    create_filetype_opt_getter(M.filter_kind, default_options.filter_kind)
+    create_filetype_opt_getter("filter_kind", M.filter_kind, default_options.filter_kind)
+  ---@param bufnr integer
   M.get_filter_kind_map = function(bufnr)
     local fk = get_filter_kind_list(bufnr)
     if fk == false or fk == 0 then

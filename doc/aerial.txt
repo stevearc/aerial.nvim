@@ -651,12 +651,18 @@ NOTES                                                               *aerial-note
                                                             *aerial-filetype-map*
 Certain options can be configured per-filetype by passing in a table. "_" will
 be used as the default if the filetype is not present.
->
+>lua
         backends = {
             ['_']  = {"lsp", "treesitter"},
             python = {"treesitter"},
             rust   = {"lsp"},
         }
+<
+
+You can also specify a value on a per-buffer basis by setting a buffer-local
+variable. For example: >lua
+
+        vim.b.aerial_backends = { "lsp" }
 <
 
                                                                   *aerial-filter*
@@ -670,7 +676,7 @@ filtering.
 Aerial can be configured to open automatically in certain conditions. To
 replicate the old behavior you could get with `open_automatic_min_lines` and
 `open_automatic_min_symbols`, use the following:
->
+>lua
         local aerial = require("aerial")
         aerial.setup({
           open_automatic = function(bufnr)
