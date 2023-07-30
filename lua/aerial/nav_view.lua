@@ -71,6 +71,13 @@ function AerialNav.new(bufnr, winid)
     border = config.nav.border,
     style = "minimal",
   })
+  for _, floatwin in ipairs({ left_win, main_win, right_win }) do
+    vim.api.nvim_set_option_value(
+      "winhighlight",
+      "AerialNormal:AerialNormalFloat",
+      { scope = "local", win = floatwin }
+    )
+  end
   local nav = setmetatable({
     winid = winid,
     bufnr = bufnr,

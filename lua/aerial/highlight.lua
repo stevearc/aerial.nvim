@@ -67,6 +67,16 @@ M.create_highlight_groups = function()
     default = true,
   })
 
+  -- Set another group for NormalFloat, for use in the nav view
+  local normal_float_defn = vim.api.nvim_get_hl_by_name("NormalFloat", true)
+  -- Don't set the background for the float so that it blends nicely with the cursorline
+  vim.api.nvim_set_hl(0, "AerialNormalFloat", {
+    fg = normal_float_defn.foreground,
+    ctermfg = normal_float_defn.ctermfg,
+    blend = normal_float_defn.blend,
+    default = true,
+  })
+
   -- The line that shows where your cursor(s) are
   link("AerialLine", "QuickFixLine")
   link("AerialLineNC", "AerialLine")
