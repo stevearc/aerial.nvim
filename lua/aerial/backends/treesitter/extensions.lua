@@ -113,7 +113,7 @@ M.markdown = {
   get_parent = function(stack, match, node)
     local level_node = (utils.get_at_path(match, "level") or {}).node
     -- Parse the level out of e.g. atx_h1_marker
-    local level = tonumber(string.sub(level_node:type(), 6, 6)) - 1
+    local level = tonumber(string.match(level_node:type(), "%d")) - 1
     for i = #stack, 1, -1 do
       if stack[i].item.level < level or stack[i].node == node then
         return stack[i].item, stack[i].node, level
