@@ -1,6 +1,8 @@
+local config = require("aerial.config")
 -- This file is used by the markdown backend as well.
 -- We pcall(require) so it doesn't error when nvim-treesitter isn't installed.
 local _, utils = pcall(require, "nvim-treesitter.utils")
+local helpers = require("aerial.backends.treesitter.helpers")
 local M = {}
 
 local get_node_text
@@ -178,6 +180,10 @@ M.help = {
         node = node:prev_sibling()
         item.lnum = row + 1
         item.col = col
+        if item.selection_range then
+          item.selection_range.lnum = row + 1
+          item.selection_range.col = col
+        end
       end
       item.name = table.concat(pieces, " ")
     end
@@ -278,6 +284,9 @@ local function c_postprocess(bufnr, item, match)
       end
     end
     item.name = get_node_text(root, bufnr) or "<parse error>"
+    if config.treesitter.experimental_selection_range and not item.selection_range then
+      item.selection_range = helpers.range_from_nodes(root, root)
+    end
   end
 end
 

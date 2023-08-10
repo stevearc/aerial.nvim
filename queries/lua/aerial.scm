@@ -32,7 +32,7 @@
     (string)? @name
     (function_definition) @type)
   (#set! "kind" "Function")
-) @start
+) @start @selection
 
 (function_call
   name: (dot_index_expression
@@ -43,4 +43,4 @@
     (string)? @name
     (function_definition) @type)
   (#set! "kind" "Function")
-) @start
+) @start @selection

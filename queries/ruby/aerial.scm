@@ -40,4 +40,4 @@
      (call) @name
     ])?
   (#set! "kind" "Method")
-) @type
+) @type @selection

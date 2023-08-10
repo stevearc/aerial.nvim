@@ -335,6 +335,10 @@ local default_options = {
   treesitter = {
     -- How long to wait (in ms) after a buffer change before updating
     update_delay = 300,
+    -- Experimental feature to navigate to symbol names instead of the declaration
+    -- See https://github.com/stevearc/aerial.nvim/issues/279
+    -- If no bugs are reported for a time this will become the default
+    experimental_selection_range = false,
   },
 
   markdown = {

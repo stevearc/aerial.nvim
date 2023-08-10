@@ -1,5 +1,6 @@
 local backends = require("aerial.backends")
 local config = require("aerial.config")
+local helpers = require("aerial.backends.treesitter.helpers")
 local util = require("aerial.backends.util")
 
 ---@type aerial.Backend
@@ -60,12 +61,14 @@ M.fetch_symbols_sync = function(bufnr)
     )
     return
   end
+  local use_selection_range = config.treesitter.experimental_selection_range
   -- This will track a loose hierarchy of recent node+items.
   -- It is used to determine node parents for the tree structure.
   local stack = {}
   local ext = extensions[lang]
   for match in query.iter_group_results(bufnr, "aerial", syntax_tree:root(), lang) do
     local name_match = match.name or {}
+    local selection_match = match.selection or {}
     local type_node = (match.type or {}).node
     -- The location capture groups are optional. We default to the
     -- location of the @type capture
@@ -89,11 +92,17 @@ M.fetch_symbols_sync = function(bufnr)
       )
       break
     end
-    local row, col = start_node:start()
-    local end_row, end_col = end_node:end_()
+    local range = helpers.range_from_nodes(start_node, end_node)
+    local selection_range
+    if selection_match.node then
+      selection_range = helpers.range_from_nodes(selection_match.node, selection_match.node)
+    end
     local name
     if name_match.node then
       name = get_node_text(name_match.node, bufnr, name_match) or "<parse error>"
+      if not selection_range then
+        selection_range = helpers.range_from_nodes(name_match.node, name_match.node)
+      end
     else
       name = "<Anonymous>"
     end
@@ -103,11 +112,13 @@ M.fetch_symbols_sync = function(bufnr)
       name = name,
       level = level,
       parent = parent_item,
-      lnum = row + 1,
-      end_lnum = end_row + 1,
-      col = col,
-      end_col = end_col,
     }
+    if use_selection_range then
+      item.selection_range = selection_range
+    end
+    for k, v in pairs(range) do
+      item[k] = v
+    end
     if ext.postprocess(bufnr, item, match) == false or not include_kind[item.kind] then
       goto continue
     end

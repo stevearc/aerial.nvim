@@ -48,7 +48,7 @@
     (string
       (string_fragment) @name @string))?
   (#set! "kind" "Function")
-  ) @type
+  ) @type @selection
 
 ; test.skip("this test")
 (call_expression
@@ -60,7 +60,7 @@
     (string
       (string_fragment) @name @string))?
   (#set! "kind" "Function")
-  ) @type
+  ) @type @selection
 
 ; describe.each([])("Test suite")
 (call_expression
@@ -74,4 +74,4 @@
     (string
       (string_fragment) @name @string))?
   (#set! "kind" "Function")
-  ) @type
+  ) @type @selection
