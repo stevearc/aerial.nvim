@@ -87,13 +87,15 @@ local function aerial_picker(opts)
         end
       end
     end
+    local lnum = item.selection_range and item.selection_range.lnum or item.lnum
+    local col = item.selection_range and item.selection_range.col or item.col
     return {
       value = item,
       display = make_display,
       name = name,
       ordinal = name .. " " .. string.lower(item.kind),
-      lnum = item.lnum,
-      col = item.col + 1,
+      lnum = lnum,
+      col = col + 1,
       filename = filename,
     }
   end
