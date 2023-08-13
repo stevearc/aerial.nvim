@@ -98,7 +98,7 @@ function M:color_text(text, symbol, is_icon)
   if not self.options.colored then
     return text
   end
-  local hl_group = require("aerial.highlight").get_highlight(symbol, is_icon)
+  local hl_group = require("aerial.highlight").get_highlight(symbol, is_icon, false)
   if hl_group then
     local lualine_hl_group = self.highlight_groups[hl_group]
     if not lualine_hl_group then

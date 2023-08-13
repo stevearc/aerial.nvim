@@ -3,6 +3,8 @@ local config = require("aerial.config")
 local helpers = require("aerial.backends.treesitter.helpers")
 local util = require("aerial.backends.util")
 
+---@diagnostic disable deprecated
+
 ---@type aerial.Backend
 local M = {}
 

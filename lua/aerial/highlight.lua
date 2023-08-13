@@ -54,9 +54,21 @@ M.get_highlight = function(symbol, is_icon, is_collapsed)
   return string.format("Aerial%s%s", symbol.kind, is_icon and "Icon" or "")
 end
 
+local get_hl_by_name
+if vim.fn.has("nvim-0.9") == 1 then
+  get_hl_by_name = function(name)
+    return vim.api.nvim_get_hl(0, { name = name, link = false })
+  end
+else
+  get_hl_by_name = function(name)
+    ---@diagnostic disable-next-line undefined-field
+    return vim.api.nvim_get_hl_by_name(name, true)
+  end
+end
+
 M.create_highlight_groups = function()
   -- Use Normal colors for AerialNormal, while stripping bold/italic/etc
-  local normal_defn = vim.api.nvim_get_hl_by_name("Normal", true)
+  local normal_defn = get_hl_by_name("Normal")
   -- The default text highlight
   vim.api.nvim_set_hl(0, "AerialNormal", {
     fg = normal_defn.foreground,
@@ -68,7 +80,7 @@ M.create_highlight_groups = function()
   })
 
   -- Set another group for NormalFloat, for use in the nav view
-  local normal_float_defn = vim.api.nvim_get_hl_by_name("NormalFloat", true)
+  local normal_float_defn = get_hl_by_name("NormalFloat")
   -- Don't set the background for the float so that it blends nicely with the cursorline
   vim.api.nvim_set_hl(0, "AerialNormalFloat", {
     fg = normal_float_defn.foreground,
@@ -86,7 +98,7 @@ M.create_highlight_groups = function()
   link("AerialProtected", "Comment")
 
   -- Use Comment colors for AerialGuide, while stripping bold/italic/etc
-  local comment_defn = vim.api.nvim_get_hl_by_name("Comment", true)
+  local comment_defn = get_hl_by_name("Comment")
   -- The guides when show_guide = true
   vim.api.nvim_set_hl(0, "AerialGuide", {
     fg = comment_defn.foreground,

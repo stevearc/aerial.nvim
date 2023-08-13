@@ -169,13 +169,13 @@ local function get_all_siblings(symbol)
   table.insert(ret, symbol)
   local i = 1
   local iter = symbol
-  while iter.prev_sibling do
+  while assert(iter).prev_sibling do
     iter = iter.prev_sibling
     i = i + 1
     table.insert(ret, 1, iter)
   end
   iter = symbol
-  while iter.next_sibling do
+  while assert(iter).next_sibling do
     iter = iter.next_sibling
     table.insert(ret, iter)
   end

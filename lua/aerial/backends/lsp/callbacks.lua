@@ -40,7 +40,7 @@ end
 ---@param symbols table
 ---@param bufnr integer
 ---@param fix_start_col boolean
----@param client_name LSP client name
+---@param client_name string LSP client name
 local function process_symbols(symbols, bufnr, fix_start_col, client_name)
   local include_kind = config.get_filter_kind_map(bufnr)
   local max_line = vim.api.nvim_buf_line_count(bufnr)

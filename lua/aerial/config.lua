@@ -516,6 +516,15 @@ M.setup = function(opts)
   -- for backwards compatibility
   for k, _ in pairs(default_options.lsp) do
     if newconf[k] ~= nil then
+      vim.notify_once(
+        string.format(
+          "aerial.config.%s should be moved to aerial.config.lsp.%s (see :help aerial-options)\nThis shim will be removed on 2024-02-11",
+          k,
+          k
+        ),
+        vim.log.levels.WARN
+      )
+      ---@diagnostic disable-next-line assign-type-mismatch
       newconf.lsp[k] = newconf[k]
       newconf[k] = nil
     end

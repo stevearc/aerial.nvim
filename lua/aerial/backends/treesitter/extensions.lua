@@ -5,6 +5,8 @@ local _, utils = pcall(require, "nvim-treesitter.utils")
 local helpers = require("aerial.backends.treesitter.helpers")
 local M = {}
 
+---@diagnostic disable deprecated
+
 local get_node_text
 if vim.treesitter.get_node_text then
   -- Neovim 0.9

@@ -1,5 +1,7 @@
 local M = {}
 
+---@diagnostic disable undefined-doc-param
+
 local was_closed = nil
 
 local function list_complete(choices)

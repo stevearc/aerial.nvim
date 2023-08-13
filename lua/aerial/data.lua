@@ -17,6 +17,9 @@ local config = require("aerial.config")
 ---@field parent? aerial.Symbol
 ---@field selection_range? aerial.Range
 ---@field children? aerial.Symbol[]
+---@field prev_sibling? aerial.Symbol
+---@field next_sibling? aerial.Symbol
+---@field id? string
 
 ---@class aerial.BufData
 ---@field bufnr integer
@@ -27,6 +30,7 @@ local config = require("aerial.config")
 ---@field collapsed table<string, boolean>
 ---@field collapse_level integer
 ---@field max_level integer
+---@field manage_folds boolean
 local BufData = {}
 
 ---@param bufnr integer
@@ -86,7 +90,7 @@ function BufData:set_collapsed(item, collapsed)
 end
 
 ---@param item aerial.Symbol
----@return boolean
+---@return boolean?
 function BufData:is_collapsable(item)
   return self.manage_folds or (item.children and not vim.tbl_isempty(item.children))
 end

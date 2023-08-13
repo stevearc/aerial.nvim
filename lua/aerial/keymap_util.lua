@@ -4,7 +4,7 @@ local M = {}
 local function resolve(action_module, rhs)
   if type(rhs) == "string" and vim.startswith(rhs, "actions.") then
     local mod = require(action_module)
-    return resolve(action_module, mod[vim.split(rhs, ".", true)[2]])
+    return resolve(action_module, mod[vim.split(rhs, ".", { plain = true })[2]])
   elseif type(rhs) == "table" then
     local opts = vim.deepcopy(rhs)
     opts.callback = nil
