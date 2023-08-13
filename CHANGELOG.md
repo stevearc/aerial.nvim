@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.2.0](https://github.com/stevearc/aerial.nvim/compare/v1.1.0...v1.2.0) (2023-08-13)
+
+
+### Features
+
+* add refetch_symbols API method ([#280](https://github.com/stevearc/aerial.nvim/issues/280)) ([1f15722](https://github.com/stevearc/aerial.nvim/commit/1f1572285725663deb4ec3afece2decabfdca16b))
+* experimental support for navigating to symbol names ([#279](https://github.com/stevearc/aerial.nvim/issues/279)) ([e54cae0](https://github.com/stevearc/aerial.nvim/commit/e54cae0df0dc4a368beb705de2f5d2139ce5c062))
+* some options can be set on a per-buffer basis ([#280](https://github.com/stevearc/aerial.nvim/issues/280)) ([cd44627](https://github.com/stevearc/aerial.nvim/commit/cd446279f1606c3f44e0e0a8aedbc417f4a9a4d8))
+* treesitter supports markdown setext_heading ([#276](https://github.com/stevearc/aerial.nvim/issues/276)) ([de460a4](https://github.com/stevearc/aerial.nvim/commit/de460a4a29491af46eaf2108e6f7534c7b66c4a0))
+
+
+### Bug Fixes
+
+* default highlight group in nav view is NormalFloat ([#281](https://github.com/stevearc/aerial.nvim/issues/281)) ([2a6498f](https://github.com/stevearc/aerial.nvim/commit/2a6498f4b5f8e52557eadbcd2b3f91da8fe438ca))
+* remove debug print statement ([9703f76](https://github.com/stevearc/aerial.nvim/commit/9703f76f3429e1e77a98f2b11b5ee0eb71d65900))
+* telescope extension uses selection_range ([#279](https://github.com/stevearc/aerial.nvim/issues/279)) ([bb2cc2f](https://github.com/stevearc/aerial.nvim/commit/bb2cc2fbf0f5be6ff6cd7e467c7c6b02860f3c7b))
+* type annotations and type errors ([ffb5fd0](https://github.com/stevearc/aerial.nvim/commit/ffb5fd0aa7fcd5c3f68df38f89af3aa007f76604))
+
 ## [1.1.0](https://github.com/stevearc/aerial.nvim/compare/v1.0.0...v1.1.0) (2023-07-11)
 
 
