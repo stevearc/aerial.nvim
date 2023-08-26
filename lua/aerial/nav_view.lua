@@ -23,6 +23,7 @@ local M = {}
 ---@field autocmds integer[]
 local AerialNav = {}
 
+---@type nil|aerial.Nav
 local _active_nav = nil
 
 ---@return integer
@@ -362,7 +363,9 @@ M.close = function()
   end
   local nav = _active_nav
   _active_nav = nil
-  nav:close()
+  if nav then
+    nav:close()
+  end
 end
 
 return M

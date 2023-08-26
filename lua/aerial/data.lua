@@ -20,6 +20,7 @@ local config = require("aerial.config")
 ---@field prev_sibling? aerial.Symbol
 ---@field next_sibling? aerial.Symbol
 ---@field id? string
+---@field idx? integer
 
 ---@class aerial.BufData
 ---@field bufnr integer
