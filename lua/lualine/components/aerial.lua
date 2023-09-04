@@ -14,6 +14,13 @@
 -- *sep* (default: " ⟩ ")
 --   The separator to be used to separate symbols in status line.
 --
+-- *sep_prefix* (default: false)
+--   Prefix the separator before the first symbol. Useful if you have another
+--   component before aerial that shows the file path.
+--
+-- *sep_highlight* (default: "NonText")
+--   The separator highlight group.
+--
 -- *depth* (default: nil)
 --   The number of symbols to render top-down. In order to render only 'N' last
 --   symbols, negative numbers may be supplied. For instance, 'depth = -1' can
@@ -47,6 +54,8 @@ local utils = require("lualine.utils.utils")
 
 local default_options = {
   sep = " ⟩ ",
+  sep_prefix = false,
+  sep_highlight = "NonText",
   depth = nil,
   dense = false,
   dense_sep = ".",
@@ -64,15 +73,23 @@ function M:format_status(symbols, depth, separator, icons_enabled, colored)
   end
 
   for _, symbol in ipairs(symbols) do
-    local name = self:color_text(utils.stl_escape(symbol.name), symbol, false)
+    local hl_group = self:get_hl_group(symbol, false)
+    local name = self:color_text(utils.stl_escape(symbol.name), hl_group)
     if icons_enabled then
-      local icon = self:color_text(symbol.icon, symbol, true)
+      hl_group = self:get_hl_group(symbol, true)
+      local icon = self:color_text(symbol.icon, hl_group)
       table.insert(parts, string.format("%s %s", icon, name))
     else
       table.insert(parts, name)
     end
   end
-  return table.concat(parts, self:get_default_hl() .. separator)
+
+  local prefix = ""
+  if #parts > 0 and self.options.sep_prefix then
+    -- Trim leading whitespace
+    prefix = self:color_text(separator:match("^%s*(.*)"), self.options.sep_highlight)
+  end
+  return prefix .. table.concat(parts, self:color_text(separator, self.options.sep_highlight))
 end
 
 function M:init(options)
@@ -90,26 +107,27 @@ function M:init(options)
   end
 end
 
----@param text string
 ---@param symbol aerial.Symbol
 ---@param is_icon boolean
+---@return string|nil
+function M:get_hl_group(symbol, is_icon)
+  return require("aerial.highlight").get_highlight(symbol, is_icon, false)
+end
+
+---@param text string
+---@param hl_group string|nil
 ---@return string
-function M:color_text(text, symbol, is_icon)
-  if not self.options.colored then
+function M:color_text(text, hl_group)
+  if not self.options.colored or hl_group == nil or hl_group == "" then
     return text
   end
-  local hl_group = require("aerial.highlight").get_highlight(symbol, is_icon, false)
-  if hl_group then
-    local lualine_hl_group = self.highlight_groups[hl_group]
-    if not lualine_hl_group then
-      lualine_hl_group =
-        self:create_hl({ fg = utils.extract_highlight_colors(hl_group, "fg") }, "LL" .. hl_group)
-      self.highlight_groups[hl_group] = lualine_hl_group
-    end
-    return self:format_hl(lualine_hl_group) .. text
-  else
-    return text
+  local lualine_hl_group = self.highlight_groups[hl_group]
+  if not lualine_hl_group then
+    lualine_hl_group =
+      self:create_hl({ fg = utils.extract_highlight_colors(hl_group, "fg") }, "LL" .. hl_group)
+    self.highlight_groups[hl_group] = lualine_hl_group
   end
+  return self:format_hl(lualine_hl_group) .. text .. self:get_default_hl()
 end
 
 function M:update_status()
@@ -134,7 +152,7 @@ function M:get_status_dense()
     symbols,
     self.options.depth,
     self.options.dense_sep,
-    -- In dense mode icons aren't rendered togeter with symbols. A single icon
+    -- In dense mode icons aren't rendered together with symbols. A single icon
     -- at the beginning of status line is rendered instead. See below.
     false,
     self.options.colored
@@ -142,7 +160,8 @@ function M:get_status_dense()
 
   if self.options.icons_enabled and not vim.tbl_isempty(symbols) then
     local symbol = symbols[#symbols]
-    local icon = self:color_text(symbol.icon, symbol, true)
+    local hl_group = self:get_hl_group(symbol, true)
+    local icon = self:color_text(symbol.icon, hl_group)
     status = string.format("%s %s", icon, status)
   end
   return status
