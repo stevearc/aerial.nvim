@@ -162,6 +162,24 @@ describe("treesitter js", function()
         end_lnum = 23,
         end_col = 28,
       },
+      {
+        kind = "Function",
+        name = "g",
+        level = 0,
+        lnum = 25,
+        col = 0,
+        end_lnum = 25,
+        end_col = 16,
+      },
+      {
+        kind = "Function",
+        name = "g_1",
+        level = 0,
+        lnum = 26,
+        col = 0,
+        end_lnum = 26,
+        end_col = 28,
+      },
     })
   end)
 end)
