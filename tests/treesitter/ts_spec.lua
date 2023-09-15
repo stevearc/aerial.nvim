@@ -198,6 +198,24 @@ describe("treesitter ts", function()
           },
         },
       },
+      {
+        kind = "Function",
+        name = "g",
+        level = 0,
+        lnum = 33,
+        col = 0,
+        end_lnum = 33,
+        end_col = 16,
+      },
+      {
+        kind = "Function",
+        name = "g_1",
+        level = 0,
+        lnum = 34,
+        col = 0,
+        end_lnum = 34,
+        end_col = 28,
+      },
     })
   end)
 end)

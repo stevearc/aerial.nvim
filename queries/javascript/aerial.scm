@@ -8,6 +8,11 @@
   (#set! "kind" "Function")
   ) @type
 
+(generator_function_declaration
+  name: (identifier) @name
+  (#set! "kind" "Function")
+  ) @type
+
 (method_definition
   name: (property_identifier) @name
   (#set! "kind" "Method")
@@ -23,7 +28,7 @@
 (lexical_declaration
   (variable_declarator
     name: (identifier) @name
-    value: [(arrow_function) (function)] @type
+    value: [(arrow_function) (function) (generator_function)] @type
   )
   (#set! "kind" "Function")
   ) @start

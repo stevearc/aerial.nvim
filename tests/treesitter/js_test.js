@@ -21,3 +21,6 @@ describe("UnitTest", () => {
 
 const fn_2 = () => {};
 const fn_3 = function () {};
+
+function* g() {}
+const g_1 = function* () {};

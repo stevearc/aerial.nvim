@@ -309,6 +309,9 @@ M.typescript = {
   postprocess = function(bufnr, item, match)
     local value_node = (utils.get_at_path(match, "var_type") or {}).node
     if value_node then
+      if value_node:type() == "generator_function" then
+        item.kind = "Function"
+      end
       if value_node:type() == "arrow_function" then
         item.kind = "Function"
       end
