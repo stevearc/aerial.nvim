@@ -8,6 +8,11 @@
   (#set! "kind" "Function")
   ) @type
 
+(generator_function_declaration
+  name: (identifier) @name
+  (#set! "kind" "Function")
+  ) @type
+
 (interface_declaration
   name: (type_identifier) @name
   (#set! "kind" "Interface")
