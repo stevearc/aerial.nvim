@@ -9,12 +9,32 @@ library a {
 }
 
 contract A {
+    bool flag;
     event Log(address indexed sender, string message);
+
+    constructor() public {}
+
     function m() {
         uint x = 3 < 0 ? 2 > 1 ? 2 : 1 : 7 > 2 ? 7 : 6;
+    }
+
+    modifier never() {
+        require(false);
+        _;
     }
 }
 
 interface I {
     function f();
+}
+
+struct S {
+    uint x;
+    uint y;
+}
+
+enum E {
+    A,
+    B,
+    C
 }
