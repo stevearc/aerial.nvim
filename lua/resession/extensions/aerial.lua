@@ -1,8 +1,5 @@
 local M = {}
 
-M.on_save = function() end
-M.on_load = function() end
-
 M.is_win_supported = function(winid, bufnr)
   local util = require("aerial.util")
   if not util.is_aerial_buffer(bufnr) then
