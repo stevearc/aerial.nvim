@@ -6,6 +6,10 @@ module Mod
   def meth_2() end
 
   def name=(value) end
+
+  def ==(other) end
+
+  def oneline = "woo"
 end
 
 describe 'UnitTest' do
