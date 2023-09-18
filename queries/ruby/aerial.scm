@@ -9,6 +9,11 @@
   ) @type
 
 (method
+  name: (operator) @name
+  (#set! "kind" "Method")
+  ) @type
+
+(method
   name: (setter
     name: (identifier)) @name
   (#set! "kind" "Method")
