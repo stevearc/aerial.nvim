@@ -20,8 +20,15 @@
   ) @type
 
 (singleton_method
-  name: (identifier) @name
+  object: [(constant) (self) (identifier)] @receiver
+  (["." "::"] @separator)?
+  name: [(operator) (identifier)] @name
   (#set! "kind" "Method")
+  ) @type
+
+(singleton_class
+  value: (_) @name
+  (#set! "kind" "Class")
   ) @type
 
 (module

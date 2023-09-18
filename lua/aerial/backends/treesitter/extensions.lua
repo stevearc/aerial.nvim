@@ -226,6 +226,19 @@ M.rust = {
 
 M.ruby = {
   postprocess = function(bufnr, item, match)
+    -- Reciever modification comes first, as we intend for it to generate a ruby-like `reciever.name`
+    local receiver = (utils.get_at_path(match, "receiver") or {}).node
+    local separator = (utils.get_at_path(match, "separator") or {}).node
+    if receiver then
+      local reciever_name = get_node_text(receiver, bufnr) or "<parse error>"
+      local separator_string = get_node_text(separator, bufnr) or "."
+      if reciever_name ~= item.name then
+        item.name = reciever_name .. separator_string .. item.name
+      end
+    end
+
+    -- Method modification comes last, as it's supposed to generate a global prefix
+    -- akin to RSpec's "describe ClassName"
     local method = (utils.get_at_path(match, "method") or {}).node
     if method then
       local fn = get_node_text(method, bufnr) or "<parse error>"
