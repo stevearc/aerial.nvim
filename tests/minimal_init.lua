@@ -1,6 +1,4 @@
 vim.cmd([[set runtimepath+=.]])
--- Force load the nvim-treesitter query predicates
-require("nvim-treesitter.query_predicates")
 
 vim.o.swapfile = false
 vim.bo.swapfile = false
@@ -23,3 +21,5 @@ require("nvim-treesitter.configs").setup({
   ensure_installed = langs,
   sync_install = true,
 })
+-- this needs to be run a second time to make tests behave
+require("nvim-treesitter").setup()

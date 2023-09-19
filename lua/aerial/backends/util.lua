@@ -55,4 +55,29 @@ M.remove_change_watcher = function(bufnr, backend_name)
   })
 end
 
+-- Gets a property at path
+-- Thanks to nvim-treesitter authors for the code
+---@param tbl table the table to access
+---@param path string the '.' separated path
+---@return table result the value at path or empty table
+function M.get_at_path(tbl, path)
+  if path == "" then
+    return tbl
+  end
+
+  local segments = vim.split(path, ".", { plain = true })
+  ---@type table[]|table
+  local result = tbl
+
+  for _, segment in ipairs(segments) do
+    if type(result) == "table" then
+      ---@type table
+      -- TODO: figure out the actual type of tbl
+      result = result[segment]
+    end
+  end
+
+  return result or {}
+end
+
 return M
