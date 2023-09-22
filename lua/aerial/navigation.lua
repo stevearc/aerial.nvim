@@ -194,7 +194,7 @@ M.select = function(opts)
 
   local item = data.get_or_create(0):item(opts.index)
   if not item then
-    error(string.format("Symbol %s is outside the bounds", opts.index))
+    -- No symbol found at location. Can happen if the source buf has no symbols.
     return
   end
   local bufnr, _ = util.get_buffers()
