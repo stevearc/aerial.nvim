@@ -155,7 +155,12 @@ end
 ---@return nil|integer
 M.get_buffer_from_var = function(bufnr, varname)
   local status, result_bufnr = pcall(vim.api.nvim_buf_get_var, bufnr, varname)
-  if not status or result_bufnr == nil or not vim.api.nvim_buf_is_valid(result_bufnr) then
+  if
+    not status
+    or result_bufnr == nil
+    or not vim.api.nvim_buf_is_valid(result_bufnr)
+    or not vim.api.nvim_buf_is_loaded(result_bufnr)
+  then
     return nil
   end
   return result_bufnr

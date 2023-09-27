@@ -79,7 +79,7 @@ end
 -- Update the aerial buffer from cached symbols
 M.update_aerial_buffer = function(buf)
   buf = buf or 0
-  if not vim.api.nvim_buf_is_valid(buf) then
+  if not vim.api.nvim_buf_is_valid(buf) or not vim.api.nvim_buf_is_loaded(buf) then
     return
   end
   local bufnr, aer_bufnr = util.get_buffers(buf)
@@ -200,7 +200,7 @@ end
 ---Update the highlighted lines in the aerial buffer
 ---@param buf integer
 M.update_highlights = function(buf)
-  if not vim.api.nvim_buf_is_valid(buf) then
+  if not vim.api.nvim_buf_is_valid(buf) or not vim.api.nvim_buf_is_loaded(buf) then
     return
   end
   local hl_mode = config.highlight_mode
