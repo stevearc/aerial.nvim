@@ -5,6 +5,8 @@ local window = require("aerial.window")
 
 local M = {}
 
+---@param winid integer
+---@return nil|aerial.CursorPosition
 local function _get_current_lnum(winid)
   ---@type nil|integer
   local bufnr = vim.api.nvim_get_current_buf()
@@ -26,6 +28,7 @@ local function _get_current_lnum(winid)
   end
 end
 
+---@return integer?
 local function get_target_win()
   local bufnr, _ = util.get_buffers()
   local winid
@@ -52,6 +55,8 @@ local function get_target_win()
   return winid
 end
 
+---@param direction? integer -1 for backwards or 1 for forwards
+---@param count? integer
 M.up = function(direction, count)
   direction = direction or -1
   count = count or 1
@@ -131,11 +136,13 @@ M.up = function(direction, count)
   end
 end
 
+---@param step? integer
 M.prev = function(step)
   step = step or 1
   M.next(-1 * step)
 end
 
+---@param step? integer
 M.next = function(step)
   step = step or 1
   local winid = get_target_win()
@@ -168,18 +175,20 @@ M.next = function(step)
   end
 end
 
+---@param opts? {index?: integer, jump?: boolean, split?: string, quiet?: boolean, winid?: integer}
 M.select = function(opts)
   opts = vim.tbl_extend("keep", opts or {}, {
-    index = nil,
-    split = nil,
     jump = true,
+    quiet = false,
   })
   local winid = opts.winid
   if not winid then
     winid = get_target_win()
   end
   if not winid then
-    error("Could not find destination window")
+    if not opts.quiet then
+      error("Could not find destination window")
+    end
     return
   end
   if opts.index == nil then
@@ -199,7 +208,10 @@ M.select = function(opts)
   end
   local bufnr, _ = util.get_buffers()
   if not bufnr then
-    error("Could not find source buffer")
+    if not opts.quiet then
+      error("Could not find source buffer")
+    end
+    return
   end
   M.select_symbol(item, winid, bufnr, opts)
 end
@@ -207,13 +219,13 @@ end
 ---@param item aerial.Symbol
 ---@param winid integer
 ---@param bufnr integer
----@param opts table
+---@param opts {jump: boolean, split: nil|string}
 M.select_symbol = function(item, winid, bufnr, opts)
   if opts.jump and config.close_on_select then
     window.close()
   end
-  if opts.split then
-    local split = opts.split
+  local split = opts.split
+  if split then
     if split == "vertical" or split == "v" then
       split = "belowright vsplit"
     elseif split == "horizontal" or split == "h" or split == "s" then

@@ -34,7 +34,7 @@ local function create_aerial_buffer(bufnr)
           render.update_highlights(bufnr)
         end
         if config.autojump then
-          require("aerial.navigation").select({ jump = false })
+          require("aerial.navigation").select({ jump = false, quiet = true })
         end
       end,
     })
