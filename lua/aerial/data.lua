@@ -1,5 +1,5 @@
-local util = require("aerial.util")
 local config = require("aerial.config")
+local util = require("aerial.util")
 
 ---@alias aerial.Scope "private"|"public"|"protected"
 

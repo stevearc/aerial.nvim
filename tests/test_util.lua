@@ -1,6 +1,6 @@
-local data = require("aerial.data")
 local backends = require("aerial.backends")
 local config = require("aerial.config")
+local data = require("aerial.data")
 local M = {}
 
 local function summarize(received, expected)

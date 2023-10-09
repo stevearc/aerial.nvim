@@ -1,7 +1,7 @@
-local backends = require("aerial.backends")
 local backend_util = require("aerial.backends.util")
-local util = require("aerial.util")
+local backends = require("aerial.backends")
 local config = require("aerial.config")
+local util = require("aerial.util")
 
 local M = {}
 

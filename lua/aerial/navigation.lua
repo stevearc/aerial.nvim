@@ -1,6 +1,6 @@
+local config = require("aerial.config")
 local data = require("aerial.data")
 local util = require("aerial.util")
-local config = require("aerial.config")
 local window = require("aerial.window")
 
 local M = {}
