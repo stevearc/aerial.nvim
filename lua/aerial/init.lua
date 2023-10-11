@@ -58,7 +58,7 @@ local commands = {
   {
     cmd = "AerialNext",
     func = "next",
-    retry_on_setup = true,
+    meta = { retry_on_setup = true },
     defn = {
       desc = "Jump forwards {count} symbols (default 1).",
       count = 1,
@@ -67,7 +67,7 @@ local commands = {
   {
     cmd = "AerialPrev",
     func = "prev",
-    retry_on_setup = true,
+    meta = { retry_on_setup = true },
     defn = {
       desc = "Jump backwards [count] symbols (default 1).",
       count = 1,
@@ -76,7 +76,7 @@ local commands = {
   {
     cmd = "AerialGo",
     func = "go",
-    retry_on_setup = true,
+    meta = { retry_on_setup = true },
     defn = {
       desc = "Jump to the [count] symbol (default 1).",
       count = 1,
@@ -152,7 +152,7 @@ end
 
 local function create_commands()
   for _, v in pairs(commands) do
-    local callback = lazy("command", v.func, v.retry_on_setup)
+    local callback = lazy("command", v.func, vim.tbl_get(v, "meta", "retry_on_setup"))
     vim.api.nvim_create_user_command(v.cmd, callback, v.defn)
   end
 end
