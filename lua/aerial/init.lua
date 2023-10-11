@@ -58,6 +58,7 @@ local commands = {
   {
     cmd = "AerialNext",
     func = "next",
+    retry_on_setup = true,
     defn = {
       desc = "Jump forwards {count} symbols (default 1).",
       count = 1,
@@ -66,6 +67,7 @@ local commands = {
   {
     cmd = "AerialPrev",
     func = "prev",
+    retry_on_setup = true,
     defn = {
       desc = "Jump backwards [count] symbols (default 1).",
       count = 1,
@@ -74,6 +76,7 @@ local commands = {
   {
     cmd = "AerialGo",
     func = "go",
+    retry_on_setup = true,
     defn = {
       desc = "Jump to the [count] symbol (default 1).",
       count = 1,
@@ -114,18 +117,42 @@ local commands = {
 
 local do_setup
 
+local pending_funcs = {}
+---@private
+M.process_pending_fn_calls = function()
+  for _, func_bundle in ipairs(pending_funcs) do
+    local bufnr, mod, fn, args = unpack(func_bundle)
+    if vim.api.nvim_get_current_buf() == bufnr then
+      require(string.format("aerial.%s", mod))[fn](vim.F.unpack_len(args))
+    end
+  end
+  pending_funcs = {}
+end
+
 ---@param mod string Name of aerial module
 ---@param fn string Name of function to wrap
-local function lazy(mod, fn)
+---@param retry_on_setup? boolean If true, will retry the function on attach if aerial is not setup yet
+local function lazy(mod, fn, retry_on_setup)
   return function(...)
-    do_setup()
+    if do_setup() and retry_on_setup then
+      ---When aerial first starts up it may take a bit of time before we get symbols for a buffer.
+      ---Since lazy-loading puts off initialization, we can lose the first command (e.g. AerialNext
+      ---will trigger initialization and load symbols, but there are no symbols yet so it will be a
+      ---no-op). To fix this, we stick these commands in a pending queue and retry them after aerial
+      ---attaches to a buffer.
+      table.insert(pending_funcs, { vim.api.nvim_get_current_buf(), mod, fn, vim.F.pack_len(...) })
+      vim.defer_fn(function()
+        -- Timeout: if we don't consume these soon, we should clear them
+        pending_funcs = {}
+      end, 1000)
+    end
     return require(string.format("aerial.%s", mod))[fn](...)
   end
 end
 
 local function create_commands()
   for _, v in pairs(commands) do
-    local callback = lazy("command", v.func)
+    local callback = lazy("command", v.func, v.retry_on_setup)
     vim.api.nvim_create_user_command(v.cmd, callback, v.defn)
   end
 end
@@ -166,7 +193,7 @@ local pending_opts
 local initialized = false
 do_setup = function()
   if not pending_opts then
-    return
+    return false
   end
   require("aerial.config").setup(pending_opts)
   create_autocmds()
@@ -174,6 +201,7 @@ do_setup = function()
   require("aerial.autocommands").on_enter_buffer()
   pending_opts = nil
   initialized = true
+  return true
 end
 
 ---Initialize aerial
@@ -299,28 +327,28 @@ end
 ---    index? integer The symbol to jump to. If nil, will jump to the symbol under the cursor (in the aerial buffer)
 ---    split? string Jump to the symbol in a new split. Can be "v" for vertical or "h" for horizontal. Can also be a raw command to execute (e.g. "belowright split")
 ---    jump? boolean If false and in the aerial window, do not leave the aerial window. (Default true)
-M.select = lazy("navigation", "select")
+M.select = lazy("navigation", "select", true)
 
 ---Jump forwards in the symbol list.
 ---@param step? integer Number of symbols to jump by (default 1)
-M.next = lazy("navigation", "next")
+M.next = lazy("navigation", "next", true)
 
 ---Jump backwards in the symbol list.
 ---@param step? integer Number of symbols to jump by (default 1)
-M.prev = lazy("navigation", "prev")
+M.prev = lazy("navigation", "prev", true)
+
+local nav_up = lazy("navigation", "up", true)
 
 ---Jump to a symbol higher in the tree, moving forwards
 ---@param count? integer How many levels to jump up (default 1)
 M.next_up = function(count)
-  do_setup()
-  require("aerial.navigation").up(1, count)
+  nav_up(1, count)
 end
 
 ---Jump to a symbol higher in the tree, moving backwards
 ---@param count? integer How many levels to jump up (default 1)
 M.prev_up = function(count)
-  do_setup()
-  require("aerial.navigation").up(-1, count)
+  nav_up(-1, count)
 end
 
 ---Get a list representing the symbol path to the current location.

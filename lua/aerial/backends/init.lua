@@ -127,8 +127,11 @@ local function attach(bufnr, backend, name)
     end
   end
   backend.fetch_symbols(bufnr)
-  if not existing_backend_name and config.on_attach then
-    config.on_attach(bufnr)
+  if not existing_backend_name then
+    if config.on_attach then
+      config.on_attach(bufnr)
+    end
+    require("aerial").process_pending_fn_calls()
   end
   return true
 end
