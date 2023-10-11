@@ -82,10 +82,10 @@ M.on_enter_buffer = util.throttle(function()
   local config = require("aerial.config")
   local fold = require("aerial.fold")
   local window = require("aerial.window")
-  backends.attach()
   if util.is_ignored_win() then
     return
   end
+  backends.attach()
 
   local mybuf = vim.api.nvim_get_current_buf()
 

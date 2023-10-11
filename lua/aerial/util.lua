@@ -267,11 +267,16 @@ end
 ---@return boolean
 ---@return nil|string
 M.is_ignored_win = function(winid)
-  winid = winid or 0
+  if not winid or winid == 0 then
+    winid = vim.api.nvim_get_current_win()
+  end
   local bufnr = vim.api.nvim_win_get_buf(winid)
   local ignore_buf, message = M.is_ignored_buf(bufnr)
   if ignore_buf then
     return ignore_buf, message
+  end
+  if vim.wo[winid].diff then
+    return true, "Viewing a diff"
   end
   local ignore = config.ignore
   if ignore.wintypes then
