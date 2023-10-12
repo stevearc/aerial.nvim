@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.3.0](https://github.com/stevearc/aerial.nvim/compare/v1.2.0...v1.3.0) (2023-10-12)
+
+
+### Features
+
+* add lualine separator highlight and optional prefix ([#287](https://github.com/stevearc/aerial.nvim/issues/287)) ([f34defe](https://github.com/stevearc/aerial.nvim/commit/f34defe8f5c2d27f49d53fe0269b87a16f1fb1b9))
+* **ts:** add ruby support for ruby operator methods ([#292](https://github.com/stevearc/aerial.nvim/issues/292)) ([fa8c408](https://github.com/stevearc/aerial.nvim/commit/fa8c408b76269a1ce5f17078d4f6cceb8e7e0114))
+* **ts:** support for more solidity symbols ([#290](https://github.com/stevearc/aerial.nvim/issues/290)) ([bed048d](https://github.com/stevearc/aerial.nvim/commit/bed048ddef3e7b7fd992bc3a28c413aaa25d63de))
+
+
+### Bug Fixes
+
+* add guards for unloaded buffers ([#296](https://github.com/stevearc/aerial.nvim/issues/296)) ([d7577c6](https://github.com/stevearc/aerial.nvim/commit/d7577c6bd4714a61f255d685964f6bc0f5ae2474))
+* add treesitter support for JS / TS / TSX generator functions ([#289](https://github.com/stevearc/aerial.nvim/issues/289)) ([9bcfbaf](https://github.com/stevearc/aerial.nvim/commit/9bcfbaf7a7d4ad31f234b4a6a1af6bb959838c26))
+* aerial ignores diff windows ([#299](https://github.com/stevearc/aerial.nvim/issues/299)) ([c383f45](https://github.com/stevearc/aerial.nvim/commit/c383f45ec061031635488079f52f765c6986b7de))
+* missing symbol on navigation shouldn't error ([#295](https://github.com/stevearc/aerial.nvim/issues/295)) ([1175f79](https://github.com/stevearc/aerial.nvim/commit/1175f79bdd1e7800b1b65a7f99a7fe47758652ff))
+* queue commands before aerial attaches to avoid dropped inputs ([#301](https://github.com/stevearc/aerial.nvim/issues/301)) ([847a2a3](https://github.com/stevearc/aerial.nvim/commit/847a2a31fb7d2088e41a13ab58a6f7ff97cdc2dd))
+* **render:** use EOL extmarks to render AerialLine ([#302](https://github.com/stevearc/aerial.nvim/issues/302)) ([568780e](https://github.com/stevearc/aerial.nvim/commit/568780e7c1d3bedace4d54777871e70be41eb3a7))
+* silence errors from moving cursor ([#297](https://github.com/stevearc/aerial.nvim/issues/297)) ([551a2b6](https://github.com/stevearc/aerial.nvim/commit/551a2b679f265917990207e6d8de28018d55f437))
+* **ts:** improve ruby handling of singletons and methods ([#293](https://github.com/stevearc/aerial.nvim/issues/293)) ([a2368d1](https://github.com/stevearc/aerial.nvim/commit/a2368d1c4bdb149679fbcbd16a288e5e0bee8156))
+
 ## [1.2.0](https://github.com/stevearc/aerial.nvim/compare/v1.1.0...v1.2.0) (2023-08-13)
 
 
