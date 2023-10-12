@@ -21,6 +21,9 @@
 -- *sep_highlight* (default: "NonText")
 --   The separator highlight group.
 --
+-- *sep_icon* (default: " ")
+--   The separator between the icon and the symbol name (when icons are enabled).
+--
 -- *depth* (default: nil)
 --   The number of symbols to render top-down. In order to render only 'N' last
 --   symbols, negative numbers may be supplied. For instance, 'depth = -1' can
@@ -56,6 +59,7 @@ local default_options = {
   sep = " ⟩ ",
   sep_prefix = false,
   sep_highlight = "NonText",
+  sep_icon = " ",
   depth = nil,
   dense = false,
   dense_sep = ".",
@@ -78,7 +82,7 @@ function M:format_status(symbols, depth, separator, icons_enabled, colored)
     if icons_enabled then
       hl_group = self:get_hl_group(symbol, true)
       local icon = self:color_text(symbol.icon, hl_group)
-      table.insert(parts, string.format("%s %s", icon, name))
+      table.insert(parts, string.format("%s%s%s", icon, self.options.sep_icon, name))
     else
       table.insert(parts, name)
     end
