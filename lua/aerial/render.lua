@@ -195,6 +195,7 @@ M.highlight_line = function(buf, ns, hl_group, row, col, end_col)
     end_row = end_col == -1 and (row + 1) or nil,
     hl_eol = true,
     hl_group = hl_group or "AerialLine",
+    strict = false,
   })
 end
 
