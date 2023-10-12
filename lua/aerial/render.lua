@@ -182,9 +182,6 @@ M.update_aerial_buffer = function(buf)
   local width = resize_all_wins(aer_bufnr, max_len, #lines)
 
   -- Insert lines into buffer
-  for i, line in ipairs(lines) do
-    lines[i] = util.rpad(line, width)
-  end
   vim.api.nvim_buf_set_option(aer_bufnr, "modifiable", true)
   vim.api.nvim_buf_set_lines(aer_bufnr, 0, -1, false, lines)
   vim.api.nvim_buf_set_option(aer_bufnr, "modifiable", false)
@@ -195,6 +192,15 @@ M.update_aerial_buffer = function(buf)
     vim.api.nvim_buf_add_highlight(aer_bufnr, ns, hl.group, hl.row - 1, hl.col_start, hl.col_end)
   end
   M.update_highlights(bufnr)
+end
+
+M.highlight_line = function(buf, ns, hl_group, row, col, end_col)
+  vim.api.nvim_buf_set_extmark(buf, ns, row, col, {
+    end_col = end_col ~= -1 and end_col or nil,
+    end_row = end_col == -1 and (row + 1) or nil,
+    hl_eol = true,
+    hl_group = hl_group or "AerialLine",
+  })
 end
 
 ---Update the highlighted lines in the aerial buffer
@@ -227,7 +233,7 @@ M.update_highlights = function(buf)
   if hl_mode == "last" then
     local pos = bufdata.positions[bufdata.last_win]
     if pos and (config.highlight_closest or pos.exact_symbol) then
-      vim.api.nvim_buf_add_highlight(aer_bufnr, ns, "AerialLine", pos.lnum - 1, 0, -1)
+      M.highlight_line(aer_bufnr, ns, "AerialLine", pos.lnum - 1, 0, -1)
     end
     return
   end
@@ -243,7 +249,7 @@ M.update_highlights = function(buf)
     local pos = bufdata.positions[winid]
     if config.highlight_closest or pos.exact_symbol then
       local hl_group = winid == bufdata.last_win and "AerialLine" or "AerialLineNC"
-      vim.api.nvim_buf_add_highlight(aer_bufnr, ns, hl_group, pos.lnum - 1, start_hl, end_hl)
+      M.highlight_line(aer_bufnr, ns, hl_group, pos.lnum - 1, start_hl, end_hl)
     end
     if hl_mode ~= "full_width" then
       start_hl = end_hl
@@ -257,7 +263,7 @@ M.update_highlights = function(buf)
     local cursor = vim.api.nvim_win_get_cursor(0)
     local item = data.get_or_create(0):item(cursor[1])
     if item then
-      vim.api.nvim_buf_add_highlight(bufnr, ns, "AerialLine", item.lnum - 1, 0, -1)
+      M.highlight_line(bufnr, ns, "AerialLine", item.lnum - 1, 0, -1)
     end
   end
 end
