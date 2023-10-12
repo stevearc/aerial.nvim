@@ -15,7 +15,6 @@ end
 
 -- Resize all windows displaying this aerial buffer
 local function resize_all_wins(aer_bufnr, preferred_width, preferred_height)
-  local max_width = 0
   for _, winid in ipairs(vim.api.nvim_list_wins()) do
     if vim.api.nvim_win_get_buf(winid) == aer_bufnr then
       local relative = "editor"
@@ -41,12 +40,9 @@ local function resize_all_wins(aer_bufnr, preferred_width, preferred_height)
       -- Subtract the gutter here because it is passed back to be used for
       -- padding out whitespace. The gutter needs to adjust the total window
       -- size, but it doesn't take space away from the content.
-      max_width = math.max(max_width, width - gutter)
       if not vim.w[winid].aerial_set_width or config.layout.resize_to_content then
         vim.api.nvim_win_set_width(winid, width)
         vim.w[winid].aerial_set_width = true
-      else
-        max_width = math.max(max_width, vim.api.nvim_win_get_width(winid))
       end
       vim.b[aer_bufnr].aerial_width = width
 
@@ -73,7 +69,6 @@ local function resize_all_wins(aer_bufnr, preferred_width, preferred_height)
   if config.layout.preserve_equality then
     vim.cmd.wincmd({ args = { "=" } })
   end
-  return max_width
 end
 
 -- Update the aerial buffer from cached symbols
@@ -179,7 +174,7 @@ M.update_aerial_buffer = function(buf)
     row = row + 1
   end
 
-  local width = resize_all_wins(aer_bufnr, max_len, #lines)
+  resize_all_wins(aer_bufnr, max_len, #lines)
 
   -- Insert lines into buffer
   vim.api.nvim_buf_set_option(aer_bufnr, "modifiable", true)
