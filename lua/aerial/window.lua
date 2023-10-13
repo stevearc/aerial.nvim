@@ -158,6 +158,25 @@ local function create_aerial_window(bufnr, aer_bufnr, direction, existing_win)
       -- We store this as a window variable because relative=cursor gets
       -- turned into relative=win when checking nvim_win_get_config()
       vim.api.nvim_win_set_var(aer_winid, "relative", new_config.relative)
+      local win_enter_au
+      win_enter_au = vim.api.nvim_create_autocmd("WinEnter", {
+        desc = "After entering aerial win, add hook to close it when leaving",
+        callback = function()
+          if vim.api.nvim_get_current_win() == aer_winid then
+            vim.api.nvim_create_autocmd("WinLeave", {
+              desc = "Close aerial floating win when leaving",
+              callback = function()
+                pcall(vim.api.nvim_win_close, aer_winid, true)
+              end,
+              once = true,
+              nested = true,
+            })
+            vim.api.nvim_del_autocmd(win_enter_au)
+          elseif not vim.api.nvim_win_is_valid(aer_winid) then
+            vim.api.nvim_del_autocmd(win_enter_au)
+          end
+        end,
+      })
     else
       local modifier
       if config.layout.placement == "edge" then
