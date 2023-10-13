@@ -240,7 +240,7 @@ M.select_symbol = function(item, winid, bufnr, opts)
 
   if opts.jump then
     local old_cursor = vim.api.nvim_win_get_cursor(winid)
-    vim.api.nvim_buf_set_mark(vim.api.nvim_get_current_buf(), [[']], old_cursor[1], old_cursor[2])
+    vim.api.nvim_buf_set_mark(vim.api.nvim_get_current_buf(), [[']], unpack(old_cursor))
   end
 
   vim.api.nvim_win_set_buf(winid, bufnr)
