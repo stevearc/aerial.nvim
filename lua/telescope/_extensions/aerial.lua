@@ -114,8 +114,10 @@ local function aerial_picker(opts)
   end
 
   -- Reverse the symbols so they have the same top-to-bottom order as in the file
-  util.tbl_reverse(results)
-  default_selection_index = #results - (default_selection_index - 1)
+  if conf.sorting_strategy == "descending" then
+    util.tbl_reverse(results)
+    default_selection_index = #results - (default_selection_index - 1)
+  end
   pickers
     .new(opts, {
       prompt_title = "Document Symbols",
