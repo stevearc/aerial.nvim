@@ -237,6 +237,12 @@ M.select_symbol = function(item, winid, bufnr, opts)
     winid = vim.api.nvim_get_current_win()
     util.go_win_no_au(my_winid)
   end
+
+  if opts.jump then
+    local old_cursor = vim.api.nvim_win_get_cursor(winid)
+    vim.api.nvim_buf_set_mark(vim.api.nvim_get_current_buf(), [[']], old_cursor[1], old_cursor[2])
+  end
+
   vim.api.nvim_win_set_buf(winid, bufnr)
   local lnum = item.selection_range and item.selection_range.lnum or item.lnum
   local col = item.selection_range and item.selection_range.col or item.col
