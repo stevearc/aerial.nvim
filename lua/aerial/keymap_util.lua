@@ -24,7 +24,7 @@ M.set_keymaps = function(mode, action_module, keymaps, bufnr, ...)
           _rhs(vim.F.unpack_len(args))
         end
       end
-      vim.keymap.set(mode, k, rhs, vim.tbl_extend("keep", { buffer = bufnr }, opts))
+      vim.keymap.set(mode, k, rhs, vim.tbl_extend("keep", { buffer = bufnr, nowait = true }, opts))
     end
   end
 end
@@ -85,7 +85,7 @@ M.show_help = function(action_module, keymaps)
       hl_group = hl_group,
     })
   end
-  vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = bufnr })
+  vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = bufnr, nowait = true })
   vim.keymap.set("n", "<c-c>", "<cmd>close<CR>", { buffer = bufnr })
   vim.api.nvim_buf_set_option(bufnr, "modifiable", false)
   vim.api.nvim_buf_set_option(bufnr, "bufhidden", "wipe")
