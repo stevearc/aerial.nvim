@@ -24,7 +24,7 @@ M.set_keymaps = function(mode, action_module, keymaps, bufnr, ...)
           _rhs(vim.F.unpack_len(args))
         end
       end
-      vim.keymap.set(mode, k, rhs, vim.tbl_extend("keep", { buffer = bufnr }, opts))
+      vim.keymap.set(mode, k, rhs, vim.tbl_extend("keep", { buffer = bufnr, nowait = true }, opts))
     end
   end
 end
