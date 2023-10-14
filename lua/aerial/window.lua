@@ -33,7 +33,7 @@ local function create_aerial_buffer(bufnr)
         if config.highlight_on_hover then
           render.update_highlights(bufnr)
         end
-        if config.autojump then
+        if config.autojump and vim.b[aer_bufnr].rendered then
           require("aerial.navigation").select({ jump = false, quiet = true })
         end
       end,

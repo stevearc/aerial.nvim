@@ -187,6 +187,7 @@ M.update_aerial_buffer = function(buf)
     vim.api.nvim_buf_add_highlight(aer_bufnr, ns, hl.group, hl.row - 1, hl.col_start, hl.col_end)
   end
   M.update_highlights(bufnr)
+  vim.b[aer_bufnr].rendered = true
 end
 
 M.highlight_line = function(buf, ns, hl_group, row, col, end_col)
