@@ -53,11 +53,13 @@ aerial supports all the usual plugin managers
   <summary>Packer</summary>
 
 ```lua
-require('packer').startup(function()
-    use {
-      'stevearc/aerial.nvim',
-      config = function() require('aerial').setup() end
-    }
+require("packer").startup(function()
+  use({
+    "stevearc/aerial.nvim",
+    config = function()
+      require("aerial").setup()
+    end,
+  })
 end)
 ```
 
@@ -67,9 +69,9 @@ end)
   <summary>Paq</summary>
 
 ```lua
-require "paq" {
-    {'stevearc/aerial.nvim'};
-}
+require("paq")({
+  { "stevearc/aerial.nvim" },
+})
 ```
 
 </details>
@@ -117,16 +119,16 @@ Somewhere in your init.lua you will need to call `aerial.setup()`. See below for
 [a full list of options](#options).
 
 ```lua
-require('aerial').setup({
+require("aerial").setup({
   -- optionally use on_attach to set keymaps when aerial has attached to a buffer
   on_attach = function(bufnr)
     -- Jump forwards/backwards with '{' and '}'
-    vim.keymap.set('n', '{', '<cmd>AerialPrev<CR>', {buffer = bufnr})
-    vim.keymap.set('n', '}', '<cmd>AerialNext<CR>', {buffer = bufnr})
-  end
+    vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
+    vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
+  end,
 })
 -- You probably also want to set a keymap to toggle aerial
-vim.keymap.set('n', '<leader>a', '<cmd>AerialToggle!<CR>')
+vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
 ```
 
 In addition, you will need to have either Treesitter or a working LSP client. You can configure your preferred source(s) with the `backends` option (see [Options](#options)). The default is to prefer Treesitter when it's available and fall back to LSP.
@@ -550,7 +552,6 @@ require("aerial").setup({
     update_delay = 300,
   },
 })
-
 ```
 
 All possible SymbolKind values can be found [in the LSP
@@ -562,14 +563,14 @@ The `aerial.Symbol` type used in some optional callbacks is:
 
 ```typescript
 {
-  kind: SymbolKind,
-  name: string,
-  level: number,
-  parent: aerial.Symbol,
-  lnum: number,
-  end_lnum: number,
-  col: number,
-  end_col: number
+kind: SymbolKind,
+name: string,
+level: number,
+parent: aerial.Symbol,
+lnum: number,
+end_lnum: number,
+col: number,
+end_col: number
 }
 ```
 
@@ -589,23 +590,23 @@ You can activate the picker with `:Telescope aerial` or `:lua require("telescope
 If you want the command to autocomplete, you can load the extension first:
 
 ```lua
-require('telescope').load_extension('aerial')
+require("telescope").load_extension("aerial")
 ```
 
 The extension can be customized with the following options:
 
 ```lua
-require('telescope').setup({
+require("telescope").setup({
   extensions = {
     aerial = {
       -- Display symbols as <root>.<parent>.<symbol>
       show_nesting = {
-        ['_'] = false, -- This key will be the default
-        json = true,   -- You can set the option for specific filetypes
+        ["_"] = false, -- This key will be the default
+        json = true, -- You can set the option for specific filetypes
         yaml = true,
-      }
-    }
-  }
+      },
+    },
+  },
 })
 ```
 
@@ -629,26 +630,29 @@ require("lualine").setup({
     lualine_x = { "aerial" },
 
     -- Or you can customize it
-    lualine_y = {{ "aerial",
-      -- The separator to be used to separate symbols in status line.
-      sep = ' ) ',
+    lualine_y = {
+      {
+        "aerial",
+        -- The separator to be used to separate symbols in status line.
+        sep = " ) ",
 
-      -- The number of symbols to render top-down. In order to render only 'N' last
-      -- symbols, negative numbers may be supplied. For instance, 'depth = -1' can
-      -- be used in order to render only current symbol.
-      depth = nil,
+        -- The number of symbols to render top-down. In order to render only 'N' last
+        -- symbols, negative numbers may be supplied. For instance, 'depth = -1' can
+        -- be used in order to render only current symbol.
+        depth = nil,
 
-      -- When 'dense' mode is on, icons are not rendered near their symbols. Only
-      -- a single icon that represents the kind of current symbol is rendered at
-      -- the beginning of status line.
-      dense = false,
+        -- When 'dense' mode is on, icons are not rendered near their symbols. Only
+        -- a single icon that represents the kind of current symbol is rendered at
+        -- the beginning of status line.
+        dense = false,
 
-      -- The separator to be used to separate symbols in dense mode.
-      dense_sep = '.',
+        -- The separator to be used to separate symbols in dense mode.
+        dense_sep = ".",
 
-      -- Color the symbol icons.
-      colored = true,
-    }},
+        -- Color the symbol icons.
+        colored = true,
+      },
+    },
   },
 })
 ```

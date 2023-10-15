@@ -700,7 +700,7 @@ replicate the old behavior you could get with `open_automatic_min_lines` and
               and aerial.num_symbols(bufnr) > 4
               -- A useful way to keep aerial closed when closed manually
               and not aerial.was_closed()
-        }
+        })
 <
 
                                                             *aerial-close-behavior*
