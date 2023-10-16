@@ -1,0 +1,49 @@
+[
+  {
+    "col": 0,
+    "end_col": 17,
+    "end_lnum": 1,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 1,
+    "name": "vimdoc_test.txt",
+    "selection_range": {
+      "col": 1,
+      "end_col": 16,
+      "end_lnum": 1,
+      "lnum": 1
+    }
+  },
+  {
+    "children": [
+      {
+        "col": 68,
+        "end_col": 82,
+        "end_lnum": 5,
+        "kind": "Interface",
+        "level": 1,
+        "lnum": 5,
+        "name": ":SomeCommand",
+        "selection_range": {
+          "col": 69,
+          "end_col": 81,
+          "end_lnum": 5,
+          "lnum": 5
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 10,
+    "end_lnum": 3,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 3,
+    "name": "TEST INTRO",
+    "selection_range": {
+      "col": 0,
+      "end_col": 10,
+      "end_lnum": 3,
+      "lnum": 3
+    }
+  }
+]

@@ -1,0 +1,64 @@
+[
+  {
+    "col": 0,
+    "end_col": 8,
+    "end_lnum": 2,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 1,
+    "name": "fn_1",
+    "selection_range": {
+      "col": 4,
+      "end_col": 8,
+      "end_lnum": 1,
+      "lnum": 1
+    }
+  },
+  {
+    "children": [
+      {
+        "col": 4,
+        "end_col": 12,
+        "end_lnum": 7,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 6,
+        "name": "meth_1",
+        "selection_range": {
+          "col": 8,
+          "end_col": 14,
+          "end_lnum": 6,
+          "lnum": 6
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 12,
+    "end_lnum": 7,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 5,
+    "name": "cl_1",
+    "selection_range": {
+      "col": 6,
+      "end_col": 10,
+      "end_lnum": 5,
+      "lnum": 5
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 10,
+    "end_lnum": 9,
+    "kind": "Variable",
+    "level": 0,
+    "lnum": 9,
+    "name": "var",
+    "selection_range": {
+      "col": 0,
+      "end_col": 3,
+      "end_lnum": 9,
+      "lnum": 9
+    }
+  }
+]

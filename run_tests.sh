@@ -1,6 +1,15 @@
 #!/bin/bash
 set -e
 
+if [ "$1" = "--update" ]; then
+  shift
+  export UPDATE_SYMBOLS=1
+  if ! command -v jq >/dev/null; then
+    echo "jq is required for --update. Please install jq"
+    exit 1
+  fi
+fi
+
 mkdir -p ".testenv/config/nvim"
 mkdir -p ".testenv/data/nvim"
 mkdir -p ".testenv/state/nvim"

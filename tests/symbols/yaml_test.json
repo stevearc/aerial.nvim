@@ -1,0 +1,113 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "col": 4,
+            "end_col": 15,
+            "end_lnum": 7,
+            "kind": "Enum",
+            "level": 2,
+            "lnum": 6,
+            "name": "ports",
+            "selection_range": {
+              "col": 4,
+              "end_col": 9,
+              "end_lnum": 6,
+              "lnum": 6
+            }
+          }
+        ],
+        "col": 2,
+        "end_col": 15,
+        "end_lnum": 7,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 4,
+        "name": "proxy",
+        "selection_range": {
+          "col": 2,
+          "end_col": 7,
+          "end_lnum": 4,
+          "lnum": 4
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 24,
+        "end_lnum": 10,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 9,
+        "name": "db",
+        "selection_range": {
+          "col": 2,
+          "end_col": 4,
+          "end_lnum": 9,
+          "lnum": 9
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 24,
+    "end_lnum": 10,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 3,
+    "name": "services",
+    "selection_range": {
+      "col": 0,
+      "end_col": 8,
+      "end_lnum": 3,
+      "lnum": 3
+    }
+  },
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 18,
+        "end_lnum": 14,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 13,
+        "name": "media-volume",
+        "selection_range": {
+          "col": 2,
+          "end_col": 14,
+          "end_lnum": 13,
+          "lnum": 13
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 18,
+    "end_lnum": 14,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 12,
+    "name": "volumes",
+    "selection_range": {
+      "col": 0,
+      "end_col": 7,
+      "end_lnum": 12,
+      "lnum": 12
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 18,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 16,
+    "name": "networks",
+    "selection_range": {
+      "col": 0,
+      "end_col": 8,
+      "end_lnum": 16,
+      "lnum": 16
+    }
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 4,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 1,
+    "name": "all",
+    "selection_range": {
+      "col": 0,
+      "end_col": 3,
+      "end_lnum": 1,
+      "lnum": 1
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 6,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 4,
+    "name": "out.so",
+    "selection_range": {
+      "col": 0,
+      "end_col": 6,
+      "end_lnum": 4,
+      "lnum": 4
+    }
+  }
+]

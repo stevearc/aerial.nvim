@@ -1,0 +1,353 @@
+[
+  {
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 3,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 1,
+    "name": "fn_1",
+    "selection_range": {
+      "col": 9,
+      "end_col": 13,
+      "end_lnum": 1,
+      "lnum": 1
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 22,
+    "end_lnum": 5,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 5,
+    "name": "fn_2",
+    "selection_range": {
+      "col": 9,
+      "end_col": 13,
+      "end_lnum": 5,
+      "lnum": 5
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 20,
+    "end_lnum": 7,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 7,
+    "name": "Iface_1",
+    "selection_range": {
+      "col": 10,
+      "end_col": 17,
+      "end_lnum": 7,
+      "lnum": 7
+    }
+  },
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 13,
+        "end_lnum": 10,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 10,
+        "name": "meth_1",
+        "selection_range": {
+          "col": 2,
+          "end_col": 8,
+          "end_lnum": 10,
+          "lnum": 10
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 20,
+        "end_lnum": 11,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 11,
+        "name": "cl_fn_3",
+        "selection_range": {
+          "col": 2,
+          "end_col": 9,
+          "end_lnum": 11,
+          "lnum": 11
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 12,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 9,
+    "name": "Cl_1",
+    "selection_range": {
+      "col": 6,
+      "end_col": 10,
+      "end_lnum": 9,
+      "lnum": 9
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 16,
+    "end_lnum": 14,
+    "kind": "Variable",
+    "level": 0,
+    "lnum": 14,
+    "name": "Type1",
+    "selection_range": {
+      "col": 5,
+      "end_col": 10,
+      "end_lnum": 14,
+      "lnum": 14
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 22,
+    "end_lnum": 16,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 16,
+    "name": "fn_3",
+    "selection_range": {
+      "col": 6,
+      "end_col": 10,
+      "end_lnum": 16,
+      "lnum": 16
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 26,
+    "end_lnum": 18,
+    "kind": "Variable",
+    "level": 0,
+    "lnum": 18,
+    "name": "const_var",
+    "selection_range": {
+      "col": 6,
+      "end_col": 15,
+      "end_lnum": 18,
+      "lnum": 18
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 22,
+    "end_lnum": 19,
+    "kind": "Variable",
+    "level": 0,
+    "lnum": 19,
+    "name": "let_var",
+    "selection_range": {
+      "col": 4,
+      "end_col": 11,
+      "end_lnum": 19,
+      "lnum": 19
+    }
+  },
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 20,
+        "end_lnum": 22,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 22,
+        "name": "afterAll",
+        "selection_range": {
+          "col": 2,
+          "end_col": 20,
+          "end_lnum": 22,
+          "lnum": 22
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 21,
+        "end_lnum": 23,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 23,
+        "name": "afterEach",
+        "selection_range": {
+          "col": 2,
+          "end_col": 21,
+          "end_lnum": 23,
+          "lnum": 23
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 21,
+        "end_lnum": 24,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 24,
+        "name": "beforeAll",
+        "selection_range": {
+          "col": 2,
+          "end_col": 21,
+          "end_lnum": 24,
+          "lnum": 24
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 22,
+        "end_lnum": 25,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 25,
+        "name": "beforeEach",
+        "selection_range": {
+          "col": 2,
+          "end_col": 22,
+          "end_lnum": 25,
+          "lnum": 25
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 44,
+        "end_lnum": 26,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 26,
+        "name": "test should describe the test",
+        "selection_range": {
+          "col": 2,
+          "end_col": 44,
+          "end_lnum": 26,
+          "lnum": 26
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 38,
+        "end_lnum": 27,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 27,
+        "name": "it is an alias for test",
+        "selection_range": {
+          "col": 2,
+          "end_col": 38,
+          "end_lnum": 27,
+          "lnum": 27
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 39,
+        "end_lnum": 28,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 28,
+        "name": "test.skip skip this test",
+        "selection_range": {
+          "col": 2,
+          "end_col": 39,
+          "end_lnum": 28,
+          "lnum": 28
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 29,
+        "end_lnum": 29,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 29,
+        "name": "test.todo this is a todo",
+        "selection_range": {
+          "col": 2,
+          "end_col": 29,
+          "end_lnum": 29,
+          "lnum": 29
+        }
+      },
+      {
+        "children": [
+          {
+            "col": 4,
+            "end_col": 50,
+            "end_lnum": 31,
+            "kind": "Function",
+            "level": 2,
+            "lnum": 31,
+            "name": "test.each runs multiple times",
+            "selection_range": {
+              "col": 4,
+              "end_col": 50,
+              "end_lnum": 31,
+              "lnum": 31
+            }
+          }
+        ],
+        "col": 2,
+        "end_col": 4,
+        "end_lnum": 32,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 30,
+        "name": "describe.each Test Suite",
+        "selection_range": {
+          "col": 2,
+          "end_col": 4,
+          "end_lnum": 32,
+          "lnum": 30
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 2,
+    "end_lnum": 33,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 21,
+    "name": "describe UnitTest",
+    "selection_range": {
+      "col": 0,
+      "end_col": 2,
+      "end_lnum": 33,
+      "lnum": 21
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 16,
+    "end_lnum": 35,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 35,
+    "name": "g",
+    "selection_range": {
+      "col": 10,
+      "end_col": 11,
+      "end_lnum": 35,
+      "lnum": 35
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 28,
+    "end_lnum": 36,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 36,
+    "name": "g_1",
+    "selection_range": {
+      "col": 6,
+      "end_col": 9,
+      "end_lnum": 36,
+      "lnum": 36
+    }
+  }
+]

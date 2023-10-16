@@ -1,0 +1,62 @@
+[
+  {
+    "col": 0,
+    "end_col": 14,
+    "end_lnum": 3,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 3,
+    "name": "fn_1",
+    "selection_range": {
+      "col": 5,
+      "end_col": 9,
+      "end_lnum": 3,
+      "lnum": 3
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 18,
+    "end_lnum": 5,
+    "kind": "Struct",
+    "level": 0,
+    "lnum": 5,
+    "name": "st_1",
+    "selection_range": {
+      "col": 5,
+      "end_col": 9,
+      "end_lnum": 5,
+      "lnum": 5
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 23,
+    "end_lnum": 7,
+    "kind": "Method",
+    "level": 0,
+    "lnum": 7,
+    "name": "(st_1) Meth_1",
+    "selection_range": {
+      "col": 12,
+      "end_col": 18,
+      "end_lnum": 7,
+      "lnum": 7
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 28,
+    "end_lnum": 9,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 9,
+    "name": "MyInterface",
+    "selection_range": {
+      "col": 5,
+      "end_col": 16,
+      "end_lnum": 9,
+      "lnum": 9
+    }
+  }
+]

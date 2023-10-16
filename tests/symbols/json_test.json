@@ -1,0 +1,49 @@
+[
+  {
+    "col": 2,
+    "end_col": 12,
+    "end_lnum": 3,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 3,
+    "name": "obj1",
+    "selection_range": {
+      "col": 3,
+      "end_col": 7,
+      "end_lnum": 3,
+      "lnum": 3
+    }
+  },
+  {
+    "children": [
+      {
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 7,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 5,
+        "name": "obj3",
+        "selection_range": {
+          "col": 5,
+          "end_col": 9,
+          "end_lnum": 5,
+          "lnum": 5
+        }
+      }
+    ],
+    "col": 2,
+    "end_col": 3,
+    "end_lnum": 8,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 4,
+    "name": "obj2",
+    "selection_range": {
+      "col": 3,
+      "end_col": 7,
+      "end_lnum": 4,
+      "lnum": 4
+    }
+  }
+]

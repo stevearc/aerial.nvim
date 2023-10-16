@@ -1,0 +1,109 @@
+[
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 18,
+        "end_lnum": 2,
+        "kind": "Constructor",
+        "level": 1,
+        "lnum": 2,
+        "name": "Cl_1",
+        "selection_range": {
+          "col": 9,
+          "end_col": 13,
+          "end_lnum": 2,
+          "lnum": 2
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 25,
+        "end_lnum": 3,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 3,
+        "name": "meth_1",
+        "selection_range": {
+          "col": 14,
+          "end_col": 20,
+          "end_lnum": 3,
+          "lnum": 3
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 24,
+        "end_lnum": 4,
+        "kind": "Property",
+        "level": 1,
+        "lnum": 4,
+        "name": "Pr_1",
+        "selection_range": {
+          "col": 13,
+          "end_col": 17,
+          "end_lnum": 4,
+          "lnum": 4
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 18,
+        "end_lnum": 5,
+        "kind": "Field",
+        "level": 1,
+        "lnum": 5,
+        "name": "Fl_1",
+        "selection_range": {
+          "col": 13,
+          "end_col": 17,
+          "end_lnum": 5,
+          "lnum": 5
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 6,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 1,
+    "name": "Cl_1",
+    "selection_range": {
+      "col": 13,
+      "end_col": 17,
+      "end_lnum": 1,
+      "lnum": 1
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 20,
+    "end_lnum": 7,
+    "kind": "Enum",
+    "level": 0,
+    "lnum": 7,
+    "name": "En_1",
+    "selection_range": {
+      "col": 12,
+      "end_col": 16,
+      "end_lnum": 7,
+      "lnum": 7
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 22,
+    "end_lnum": 8,
+    "kind": "Struct",
+    "level": 0,
+    "lnum": 8,
+    "name": "St_1",
+    "selection_range": {
+      "col": 14,
+      "end_col": 18,
+      "end_lnum": 8,
+      "lnum": 8
+    }
+  }
+]

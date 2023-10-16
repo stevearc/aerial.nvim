@@ -1,0 +1,128 @@
+[
+  {
+    "col": 0,
+    "end_col": 38,
+    "end_lnum": 3,
+    "kind": "Operator",
+    "level": 0,
+    "lnum": 3,
+    "name": "\\abs",
+    "selection_range": {
+      "col": 13,
+      "end_col": 17,
+      "end_lnum": 3,
+      "lnum": 3
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 19,
+    "end_lnum": 5,
+    "kind": "Field",
+    "level": 0,
+    "lnum": 5,
+    "name": "Title: Lorem Ipsum",
+    "selection_range": {
+      "col": 7,
+      "end_col": 18,
+      "end_lnum": 5,
+      "lnum": 5
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 17,
+    "end_lnum": 6,
+    "kind": "Field",
+    "level": 0,
+    "lnum": 6,
+    "name": "Authors: John Doe",
+    "selection_range": {
+      "col": 8,
+      "end_col": 16,
+      "end_lnum": 6,
+      "lnum": 6
+    }
+  },
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "col": 0,
+                "end_col": 24,
+                "end_lnum": 20,
+                "kind": "Method",
+                "level": 3,
+                "lnum": 18,
+                "name": "A subsubsection",
+                "selection_range": {
+                  "col": 15,
+                  "end_col": 30,
+                  "end_lnum": 18,
+                  "lnum": 18
+                }
+              }
+            ],
+            "col": 0,
+            "end_col": 24,
+            "end_lnum": 20,
+            "kind": "Method",
+            "level": 2,
+            "lnum": 14,
+            "name": "A subsection",
+            "selection_range": {
+              "col": 12,
+              "end_col": 24,
+              "end_lnum": 14,
+              "lnum": 14
+            }
+          }
+        ],
+        "col": 0,
+        "end_col": 24,
+        "end_lnum": 20,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 10,
+        "name": "First section",
+        "selection_range": {
+          "col": 9,
+          "end_col": 22,
+          "end_lnum": 10,
+          "lnum": 10
+        }
+      },
+      {
+        "col": 0,
+        "end_col": 36,
+        "end_lnum": 22,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 22,
+        "name": "This is another subsection",
+        "selection_range": {
+          "col": 9,
+          "end_col": 35,
+          "end_lnum": 22,
+          "lnum": 22
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 14,
+    "end_lnum": 24,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 8,
+    "name": "document",
+    "selection_range": {
+      "col": 7,
+      "end_col": 15,
+      "end_lnum": 8,
+      "lnum": 8
+    }
+  }
+]

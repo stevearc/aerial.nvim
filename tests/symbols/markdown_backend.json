@@ -1,0 +1,53 @@
+[
+  {
+    "children": [
+      {
+        "col": 0,
+        "end_col": 0,
+        "end_lnum": 4,
+        "kind": "Interface",
+        "level": 1,
+        "lnum": 3,
+        "name": "Title 2"
+      }
+    ],
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 4,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 1,
+    "name": "Title 1"
+  },
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "col": 0,
+            "end_col": 3,
+            "end_lnum": 27,
+            "kind": "Interface",
+            "level": 3,
+            "lnum": 13,
+            "name": "Title 5"
+          }
+        ],
+        "col": 0,
+        "end_col": 3,
+        "end_lnum": 27,
+        "kind": "Interface",
+        "level": 2,
+        "lnum": 7,
+        "name": "Title 4"
+      }
+    ],
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 27,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 5,
+    "name": "Title 3"
+  }
+]

@@ -1,0 +1,107 @@
+[
+  {
+    "col": 0,
+    "end_col": 22,
+    "end_lnum": 3,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 3,
+    "name": "fn_1",
+    "selection_range": {
+      "col": 5,
+      "end_col": 9,
+      "end_lnum": 3,
+      "lnum": 3
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 34,
+    "end_lnum": 5,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 5,
+    "name": "fn_2",
+    "selection_range": {
+      "col": 6,
+      "end_col": 10,
+      "end_lnum": 5,
+      "lnum": 5
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 14,
+    "end_lnum": 7,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 7,
+    "name": "fn_3",
+    "selection_range": {
+      "col": 5,
+      "end_col": 9,
+      "end_lnum": 7,
+      "lnum": 7
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 26,
+    "end_lnum": 9,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 9,
+    "name": "fn_4",
+    "selection_range": {
+      "col": 6,
+      "end_col": 10,
+      "end_lnum": 9,
+      "lnum": 9
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 27,
+    "end_lnum": 11,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 11,
+    "name": "fn_5",
+    "selection_range": {
+      "col": 7,
+      "end_col": 11,
+      "end_lnum": 11,
+      "lnum": 11
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 8,
+    "end_lnum": 15,
+    "kind": "Enum",
+    "level": 0,
+    "lnum": 13,
+    "name": "kEnum",
+    "selection_range": {
+      "col": 2,
+      "end_col": 7,
+      "end_lnum": 15,
+      "lnum": 15
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 7,
+    "end_lnum": 19,
+    "kind": "Struct",
+    "level": 0,
+    "lnum": 17,
+    "name": "St_1",
+    "selection_range": {
+      "col": 2,
+      "end_col": 6,
+      "end_lnum": 19,
+      "lnum": 19
+    }
+  }
+]

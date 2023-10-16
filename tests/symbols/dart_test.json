@@ -1,0 +1,109 @@
+[
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 11,
+        "end_lnum": 2,
+        "kind": "Constructor",
+        "level": 1,
+        "lnum": 2,
+        "name": "Class_1",
+        "selection_range": {
+          "col": 2,
+          "end_col": 9,
+          "end_lnum": 2,
+          "lnum": 2
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 19,
+        "end_lnum": 4,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 4,
+        "name": "meth_1",
+        "selection_range": {
+          "col": 7,
+          "end_col": 13,
+          "end_lnum": 4,
+          "lnum": 4
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 3,
+        "end_lnum": 8,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 6,
+        "name": "prop",
+        "selection_range": {
+          "col": 10,
+          "end_col": 14,
+          "end_lnum": 6,
+          "lnum": 6
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 31,
+        "end_lnum": 10,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 10,
+        "name": "prop",
+        "selection_range": {
+          "col": 11,
+          "end_col": 15,
+          "end_lnum": 10,
+          "lnum": 10
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 11,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 1,
+    "name": "Class_1",
+    "selection_range": {
+      "col": 6,
+      "end_col": 13,
+      "end_lnum": 1,
+      "lnum": 1
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 21,
+    "end_lnum": 13,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 13,
+    "name": "function_1",
+    "selection_range": {
+      "col": 5,
+      "end_col": 15,
+      "end_lnum": 13,
+      "lnum": 13
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 17,
+    "kind": "Enum",
+    "level": 0,
+    "lnum": 15,
+    "name": "Enum_1",
+    "selection_range": {
+      "col": 5,
+      "end_col": 11,
+      "end_lnum": 15,
+      "lnum": 15
+    }
+  }
+]

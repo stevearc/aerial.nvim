@@ -1,0 +1,32 @@
+[
+  {
+    "col": 0,
+    "end_col": 11,
+    "end_lnum": 2,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 1,
+    "name": "Fn_1",
+    "selection_range": {
+      "col": 10,
+      "end_col": 14,
+      "end_lnum": 1,
+      "lnum": 1
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 11,
+    "end_lnum": 5,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 4,
+    "name": "s:fn_2",
+    "selection_range": {
+      "col": 10,
+      "end_col": 16,
+      "end_lnum": 4,
+      "lnum": 4
+    }
+  }
+]

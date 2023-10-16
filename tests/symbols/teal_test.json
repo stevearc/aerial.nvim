@@ -1,0 +1,107 @@
+[
+  {
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 3,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 1,
+    "name": "fn_1",
+    "selection_range": {
+      "col": 15,
+      "end_col": 19,
+      "end_lnum": 1,
+      "lnum": 1
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 7,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 5,
+    "name": "fn_2",
+    "selection_range": {
+      "col": 6,
+      "end_col": 10,
+      "end_lnum": 5,
+      "lnum": 5
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 23,
+    "end_lnum": 11,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 11,
+    "name": "fn_3",
+    "selection_range": {
+      "col": 2,
+      "end_col": 6,
+      "end_lnum": 11,
+      "lnum": 11
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 15,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 13,
+    "name": "M.launch",
+    "selection_range": {
+      "col": 9,
+      "end_col": 17,
+      "end_lnum": 13,
+      "lnum": 13
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 21,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 17,
+    "name": "M.wrap",
+    "selection_range": {
+      "col": 9,
+      "end_col": 15,
+      "end_lnum": 17,
+      "lnum": 17
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 33,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 28,
+    "name": "Point.new",
+    "selection_range": {
+      "col": 9,
+      "end_col": 18,
+      "end_lnum": 28,
+      "lnum": 28
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 38,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 35,
+    "name": "Point:move",
+    "selection_range": {
+      "col": 9,
+      "end_col": 19,
+      "end_lnum": 35,
+      "lnum": 35
+    }
+  }
+]
