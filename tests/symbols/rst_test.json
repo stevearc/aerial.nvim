@@ -6,7 +6,13 @@
     "kind": "Interface",
     "level": 0,
     "lnum": 1,
-    "name": "Title 1"
+    "name": "Title 1",
+    "selection_range": {
+      "col": 0,
+      "end_col": 7,
+      "end_lnum": 1,
+      "lnum": 1
+    }
   },
   {
     "col": 0,
@@ -15,6 +21,12 @@
     "kind": "Interface",
     "level": 0,
     "lnum": 4,
-    "name": "Title 2"
+    "name": "Title 2",
+    "selection_range": {
+      "col": 0,
+      "end_col": 7,
+      "end_lnum": 4,
+      "lnum": 4
+    }
   }
 ]

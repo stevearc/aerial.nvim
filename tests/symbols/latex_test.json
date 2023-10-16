@@ -6,7 +6,13 @@
     "kind": "Operator",
     "level": 0,
     "lnum": 3,
-    "name": "\\abs"
+    "name": "\\abs",
+    "selection_range": {
+      "col": 13,
+      "end_col": 17,
+      "end_lnum": 3,
+      "lnum": 3
+    }
   },
   {
     "col": 0,
@@ -15,7 +21,13 @@
     "kind": "Field",
     "level": 0,
     "lnum": 5,
-    "name": "Title: Lorem Ipsum"
+    "name": "Title: Lorem Ipsum",
+    "selection_range": {
+      "col": 7,
+      "end_col": 18,
+      "end_lnum": 5,
+      "lnum": 5
+    }
   },
   {
     "col": 0,
@@ -24,7 +36,13 @@
     "kind": "Field",
     "level": 0,
     "lnum": 6,
-    "name": "Authors: John Doe"
+    "name": "Authors: John Doe",
+    "selection_range": {
+      "col": 8,
+      "end_col": 16,
+      "end_lnum": 6,
+      "lnum": 6
+    }
   },
   {
     "children": [
@@ -39,7 +57,13 @@
                 "kind": "Method",
                 "level": 3,
                 "lnum": 18,
-                "name": "A subsubsection"
+                "name": "A subsubsection",
+                "selection_range": {
+                  "col": 15,
+                  "end_col": 30,
+                  "end_lnum": 18,
+                  "lnum": 18
+                }
               }
             ],
             "col": 0,
@@ -48,7 +72,13 @@
             "kind": "Method",
             "level": 2,
             "lnum": 14,
-            "name": "A subsection"
+            "name": "A subsection",
+            "selection_range": {
+              "col": 12,
+              "end_col": 24,
+              "end_lnum": 14,
+              "lnum": 14
+            }
           }
         ],
         "col": 0,
@@ -57,7 +87,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 10,
-        "name": "First section"
+        "name": "First section",
+        "selection_range": {
+          "col": 9,
+          "end_col": 22,
+          "end_lnum": 10,
+          "lnum": 10
+        }
       },
       {
         "col": 0,
@@ -66,7 +102,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 22,
-        "name": "This is another subsection"
+        "name": "This is another subsection",
+        "selection_range": {
+          "col": 9,
+          "end_col": 35,
+          "end_lnum": 22,
+          "lnum": 22
+        }
       }
     ],
     "col": 0,
@@ -75,6 +117,12 @@
     "kind": "Class",
     "level": 0,
     "lnum": 8,
-    "name": "document"
+    "name": "document",
+    "selection_range": {
+      "col": 7,
+      "end_col": 15,
+      "end_lnum": 8,
+      "lnum": 8
+    }
   }
 ]

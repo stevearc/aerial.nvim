@@ -8,7 +8,13 @@
         "kind": "Field",
         "level": 1,
         "lnum": 5,
-        "name": ":value"
+        "name": ":value",
+        "selection_range": {
+          "col": 20,
+          "end_col": 26,
+          "end_lnum": 5,
+          "lnum": 5
+        }
       },
       {
         "col": 2,
@@ -17,7 +23,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 7,
-        "name": "public_function"
+        "name": "public_function",
+        "selection_range": {
+          "col": 6,
+          "end_col": 21,
+          "end_lnum": 7,
+          "lnum": 7
+        }
       },
       {
         "col": 2,
@@ -26,7 +38,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 10,
-        "name": "private_function"
+        "name": "private_function",
+        "selection_range": {
+          "col": 7,
+          "end_col": 23,
+          "end_lnum": 10,
+          "lnum": 10
+        }
       },
       {
         "col": 2,
@@ -35,7 +53,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 13,
-        "name": "public_guard"
+        "name": "public_guard",
+        "selection_range": {
+          "col": 11,
+          "end_col": 23,
+          "end_lnum": 13,
+          "lnum": 13
+        }
       },
       {
         "col": 2,
@@ -44,7 +68,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 15,
-        "name": "private_guard"
+        "name": "private_guard",
+        "selection_range": {
+          "col": 11,
+          "end_col": 24,
+          "end_lnum": 15,
+          "lnum": 15
+        }
       },
       {
         "col": 2,
@@ -53,7 +83,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 17,
-        "name": "public_macro"
+        "name": "public_macro",
+        "selection_range": {
+          "col": 11,
+          "end_col": 23,
+          "end_lnum": 17,
+          "lnum": 17
+        }
       },
       {
         "col": 2,
@@ -62,7 +98,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 20,
-        "name": "private_macro"
+        "name": "private_macro",
+        "selection_range": {
+          "col": 12,
+          "end_col": 25,
+          "end_lnum": 20,
+          "lnum": 20
+        }
       }
     ],
     "col": 0,
@@ -71,7 +113,13 @@
     "kind": "Module",
     "level": 0,
     "lnum": 1,
-    "name": "Example.Module"
+    "name": "Example.Module",
+    "selection_range": {
+      "col": 10,
+      "end_col": 24,
+      "end_lnum": 1,
+      "lnum": 1
+    }
   },
   {
     "children": [
@@ -82,7 +130,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 25,
-        "name": "example_function"
+        "name": "example_function",
+        "selection_range": {
+          "col": 12,
+          "end_col": 28,
+          "end_lnum": 25,
+          "lnum": 25
+        }
       }
     ],
     "col": 0,
@@ -91,7 +145,13 @@
     "kind": "Interface",
     "level": 0,
     "lnum": 24,
-    "name": "Example.Behaviour"
+    "name": "Example.Behaviour",
+    "selection_range": {
+      "col": 10,
+      "end_col": 27,
+      "end_lnum": 24,
+      "lnum": 24
+    }
   },
   {
     "children": [
@@ -102,7 +162,13 @@
         "kind": "Constant",
         "level": 1,
         "lnum": 29,
-        "name": "@constant"
+        "name": "@constant",
+        "selection_range": {
+          "col": 3,
+          "end_col": 11,
+          "end_lnum": 29,
+          "lnum": 29
+        }
       }
     ],
     "col": 0,
@@ -111,7 +177,13 @@
     "kind": "Struct",
     "level": 0,
     "lnum": 28,
-    "name": "Example.Struct"
+    "name": "Example.Struct",
+    "selection_range": {
+      "col": 10,
+      "end_col": 24,
+      "end_lnum": 28,
+      "lnum": 28
+    }
   },
   {
     "children": [
@@ -122,7 +194,13 @@
         "kind": "TypeParameter",
         "level": 1,
         "lnum": 38,
-        "name": "public_function_head"
+        "name": "public_function_head",
+        "selection_range": {
+          "col": 8,
+          "end_col": 28,
+          "end_lnum": 38,
+          "lnum": 38
+        }
       },
       {
         "col": 2,
@@ -131,7 +209,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 39,
-        "name": "public_function_head"
+        "name": "public_function_head",
+        "selection_range": {
+          "col": 6,
+          "end_col": 26,
+          "end_lnum": 39,
+          "lnum": 39
+        }
       }
     ],
     "col": 0,
@@ -140,7 +224,13 @@
     "kind": "Interface",
     "level": 0,
     "lnum": 33,
-    "name": "Example.Protocol"
+    "name": "Example.Protocol",
+    "selection_range": {
+      "col": 12,
+      "end_col": 28,
+      "end_lnum": 33,
+      "lnum": 33
+    }
   },
   {
     "children": [
@@ -151,7 +241,13 @@
         "kind": "TypeParameter",
         "level": 1,
         "lnum": 43,
-        "name": "public_function_head"
+        "name": "public_function_head",
+        "selection_range": {
+          "col": 8,
+          "end_col": 28,
+          "end_lnum": 43,
+          "lnum": 43
+        }
       },
       {
         "col": 2,
@@ -160,7 +256,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 44,
-        "name": "public_function_head"
+        "name": "public_function_head",
+        "selection_range": {
+          "col": 6,
+          "end_col": 26,
+          "end_lnum": 44,
+          "lnum": 44
+        }
       }
     ],
     "col": 0,
@@ -169,7 +271,13 @@
     "kind": "Class",
     "level": 0,
     "lnum": 42,
-    "name": "Map > Example.Protocol"
+    "name": "Map > Example.Protocol",
+    "selection_range": {
+      "col": 31,
+      "end_col": 34,
+      "end_lnum": 42,
+      "lnum": 42
+    }
   },
   {
     "children": [
@@ -182,7 +290,13 @@
             "kind": "Function",
             "level": 2,
             "lnum": 54,
-            "name": "setup"
+            "name": "setup",
+            "selection_range": {
+              "col": 4,
+              "end_col": 9,
+              "end_lnum": 54,
+              "lnum": 54
+            }
           },
           {
             "col": 4,
@@ -191,7 +305,13 @@
             "kind": "Function",
             "level": 2,
             "lnum": 58,
-            "name": "test first grapheme is in uppercase"
+            "name": "test first grapheme is in uppercase",
+            "selection_range": {
+              "col": 10,
+              "end_col": 40,
+              "end_lnum": 58,
+              "lnum": 58
+            }
           },
           {
             "col": 4,
@@ -200,7 +320,13 @@
             "kind": "Function",
             "level": 2,
             "lnum": 62,
-            "name": "test converts remaining graphemes to lowercase"
+            "name": "test converts remaining graphemes to lowercase",
+            "selection_range": {
+              "col": 10,
+              "end_col": 51,
+              "end_lnum": 62,
+              "lnum": 62
+            }
           }
         ],
         "col": 2,
@@ -209,7 +335,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 53,
-        "name": "describe String.capitalize/1"
+        "name": "describe String.capitalize/1",
+        "selection_range": {
+          "col": 12,
+          "end_col": 31,
+          "end_lnum": 53,
+          "lnum": 53
+        }
       }
     ],
     "col": 0,
@@ -218,7 +350,13 @@
     "kind": "Module",
     "level": 0,
     "lnum": 50,
-    "name": "StringTest"
+    "name": "StringTest",
+    "selection_range": {
+      "col": 10,
+      "end_col": 20,
+      "end_lnum": 50,
+      "lnum": 50
+    }
   },
   {
     "col": 0,
@@ -227,6 +365,12 @@
     "kind": "Function",
     "level": 0,
     "lnum": 68,
-    "name": "parameterless_function"
+    "name": "parameterless_function",
+    "selection_range": {
+      "col": 4,
+      "end_col": 26,
+      "end_lnum": 68,
+      "lnum": 68
+    }
   }
 ]

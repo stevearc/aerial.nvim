@@ -59,6 +59,9 @@ M.test_file_symbols = function(backend_name, filename, symbols_file)
   config.setup({
     backends = { backend_name },
     filter_kind = false,
+    treesitter = {
+      experimental_selection_range = true,
+    },
   })
   vim.cmd(string.format("edit %s", filename))
   local backend = backends.get(0)

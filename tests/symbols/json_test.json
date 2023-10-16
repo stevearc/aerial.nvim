@@ -6,7 +6,13 @@
     "kind": "Class",
     "level": 0,
     "lnum": 3,
-    "name": "obj1"
+    "name": "obj1",
+    "selection_range": {
+      "col": 3,
+      "end_col": 7,
+      "end_lnum": 3,
+      "lnum": 3
+    }
   },
   {
     "children": [
@@ -17,7 +23,13 @@
         "kind": "Class",
         "level": 1,
         "lnum": 5,
-        "name": "obj3"
+        "name": "obj3",
+        "selection_range": {
+          "col": 5,
+          "end_col": 9,
+          "end_lnum": 5,
+          "lnum": 5
+        }
       }
     ],
     "col": 2,
@@ -26,6 +38,12 @@
     "kind": "Class",
     "level": 0,
     "lnum": 4,
-    "name": "obj2"
+    "name": "obj2",
+    "selection_range": {
+      "col": 3,
+      "end_col": 7,
+      "end_lnum": 4,
+      "lnum": 4
+    }
   }
 ]

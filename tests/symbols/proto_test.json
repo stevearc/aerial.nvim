@@ -8,7 +8,13 @@
         "kind": "Enum",
         "level": 1,
         "lnum": 7,
-        "name": "Number"
+        "name": "Number",
+        "selection_range": {
+          "col": 7,
+          "end_col": 13,
+          "end_lnum": 7,
+          "lnum": 7
+        }
       }
     ],
     "col": 0,
@@ -17,7 +23,13 @@
     "kind": "Class",
     "level": 0,
     "lnum": 3,
-    "name": "MessageA"
+    "name": "MessageA",
+    "selection_range": {
+      "col": 8,
+      "end_col": 16,
+      "end_lnum": 3,
+      "lnum": 3
+    }
   },
   {
     "col": 0,
@@ -26,6 +38,12 @@
     "kind": "Class",
     "level": 0,
     "lnum": 13,
-    "name": "MessageB"
+    "name": "MessageB",
+    "selection_range": {
+      "col": 8,
+      "end_col": 16,
+      "end_lnum": 13,
+      "lnum": 13
+    }
   }
 ]

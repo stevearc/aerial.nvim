@@ -8,7 +8,13 @@
         "kind": "Enum",
         "level": 1,
         "lnum": 2,
-        "name": "Enum_1"
+        "name": "Enum_1",
+        "selection_range": {
+          "col": 9,
+          "end_col": 15,
+          "end_lnum": 2,
+          "lnum": 2
+        }
       },
       {
         "col": 4,
@@ -17,7 +23,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 4,
-        "name": "Fn_1"
+        "name": "Fn_1",
+        "selection_range": {
+          "col": 7,
+          "end_col": 11,
+          "end_lnum": 4,
+          "lnum": 4
+        }
       },
       {
         "col": 4,
@@ -26,7 +38,13 @@
         "kind": "Struct",
         "level": 1,
         "lnum": 6,
-        "name": "MyStruct"
+        "name": "MyStruct",
+        "selection_range": {
+          "col": 11,
+          "end_col": 19,
+          "end_lnum": 6,
+          "lnum": 6
+        }
       },
       {
         "children": [
@@ -37,7 +55,13 @@
             "kind": "Function",
             "level": 2,
             "lnum": 9,
-            "name": "TraitFn"
+            "name": "TraitFn",
+            "selection_range": {
+              "col": 11,
+              "end_col": 18,
+              "end_lnum": 9,
+              "lnum": 9
+            }
           }
         ],
         "col": 4,
@@ -46,7 +70,13 @@
         "kind": "Interface",
         "level": 1,
         "lnum": 8,
-        "name": "MyTrait"
+        "name": "MyTrait",
+        "selection_range": {
+          "col": 10,
+          "end_col": 17,
+          "end_lnum": 8,
+          "lnum": 8
+        }
       },
       {
         "children": [
@@ -57,7 +87,13 @@
             "kind": "Function",
             "level": 2,
             "lnum": 13,
-            "name": "StructFn"
+            "name": "StructFn",
+            "selection_range": {
+              "col": 11,
+              "end_col": 19,
+              "end_lnum": 13,
+              "lnum": 13
+            }
           }
         ],
         "col": 4,
@@ -77,7 +113,13 @@
             "kind": "Function",
             "level": 2,
             "lnum": 17,
-            "name": "fmt"
+            "name": "fmt",
+            "selection_range": {
+              "col": 11,
+              "end_col": 14,
+              "end_lnum": 17,
+              "lnum": 17
+            }
           }
         ],
         "col": 4,
@@ -104,6 +146,12 @@
     "kind": "Module",
     "level": 0,
     "lnum": 1,
-    "name": "mod_1"
+    "name": "mod_1",
+    "selection_range": {
+      "col": 4,
+      "end_col": 9,
+      "end_lnum": 1,
+      "lnum": 1
+    }
   }
 ]

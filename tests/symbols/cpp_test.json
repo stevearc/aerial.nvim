@@ -6,7 +6,13 @@
     "kind": "Function",
     "level": 0,
     "lnum": 1,
-    "name": "fn_1"
+    "name": "fn_1",
+    "selection_range": {
+      "col": 5,
+      "end_col": 9,
+      "end_lnum": 1,
+      "lnum": 1
+    }
   },
   {
     "col": 0,
@@ -15,7 +21,13 @@
     "kind": "Struct",
     "level": 0,
     "lnum": 3,
-    "name": "st_1"
+    "name": "st_1",
+    "selection_range": {
+      "col": 7,
+      "end_col": 11,
+      "end_lnum": 3,
+      "lnum": 3
+    }
   },
   {
     "col": 0,
@@ -24,7 +36,13 @@
     "kind": "Struct",
     "level": 0,
     "lnum": 5,
-    "name": "st_2"
+    "name": "st_2",
+    "selection_range": {
+      "col": 2,
+      "end_col": 6,
+      "end_lnum": 6,
+      "lnum": 6
+    }
   },
   {
     "col": 0,
@@ -33,7 +51,13 @@
     "kind": "Enum",
     "level": 0,
     "lnum": 8,
-    "name": "en_1"
+    "name": "en_1",
+    "selection_range": {
+      "col": 5,
+      "end_col": 9,
+      "end_lnum": 8,
+      "lnum": 8
+    }
   },
   {
     "children": [
@@ -44,7 +68,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 11,
-        "name": "~cl_1"
+        "name": "~cl_1",
+        "selection_range": {
+          "col": 2,
+          "end_col": 7,
+          "end_lnum": 11,
+          "lnum": 11
+        }
       },
       {
         "col": 2,
@@ -53,7 +83,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 14,
-        "name": "meth_1"
+        "name": "meth_1",
+        "selection_range": {
+          "col": 7,
+          "end_col": 13,
+          "end_lnum": 14,
+          "lnum": 14
+        }
       }
     ],
     "col": 0,
@@ -62,7 +98,13 @@
     "kind": "Class",
     "level": 0,
     "lnum": 10,
-    "name": "cl_1"
+    "name": "cl_1",
+    "selection_range": {
+      "col": 6,
+      "end_col": 10,
+      "end_lnum": 10,
+      "lnum": 10
+    }
   },
   {
     "col": 0,
@@ -71,7 +113,13 @@
     "kind": "Function",
     "level": 0,
     "lnum": 17,
-    "name": "A::bar"
+    "name": "A::bar",
+    "selection_range": {
+      "col": 5,
+      "end_col": 11,
+      "end_lnum": 17,
+      "lnum": 17
+    }
   },
   {
     "col": 0,
@@ -80,7 +128,13 @@
     "kind": "Function",
     "level": 0,
     "lnum": 19,
-    "name": "fn_2"
+    "name": "fn_2",
+    "selection_range": {
+      "col": 5,
+      "end_col": 9,
+      "end_lnum": 19,
+      "lnum": 19
+    }
   },
   {
     "col": 0,
@@ -89,7 +143,13 @@
     "kind": "Function",
     "level": 0,
     "lnum": 21,
-    "name": "fn_3"
+    "name": "fn_3",
+    "selection_range": {
+      "col": 6,
+      "end_col": 10,
+      "end_lnum": 21,
+      "lnum": 21
+    }
   },
   {
     "col": 0,
@@ -98,7 +158,13 @@
     "kind": "Function",
     "level": 0,
     "lnum": 23,
-    "name": "operator<"
+    "name": "operator<",
+    "selection_range": {
+      "col": 5,
+      "end_col": 14,
+      "end_lnum": 23,
+      "lnum": 23
+    }
   },
   {
     "col": 0,
@@ -107,7 +173,13 @@
     "kind": "Function",
     "level": 0,
     "lnum": 25,
-    "name": "fn_4"
+    "name": "fn_4",
+    "selection_range": {
+      "col": 5,
+      "end_col": 9,
+      "end_lnum": 25,
+      "lnum": 25
+    }
   },
   {
     "col": 0,
@@ -116,7 +188,13 @@
     "kind": "Function",
     "level": 0,
     "lnum": 30,
-    "name": "declaredFunction"
+    "name": "declaredFunction",
+    "selection_range": {
+      "col": 4,
+      "end_col": 20,
+      "end_lnum": 30,
+      "lnum": 30
+    }
   },
   {
     "children": [
@@ -127,7 +205,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 33,
-        "name": "clsDeclaredFunction"
+        "name": "clsDeclaredFunction",
+        "selection_range": {
+          "col": 6,
+          "end_col": 25,
+          "end_lnum": 33,
+          "lnum": 33
+        }
       }
     ],
     "col": 0,
@@ -136,6 +220,12 @@
     "kind": "Class",
     "level": 0,
     "lnum": 32,
-    "name": "A"
+    "name": "A",
+    "selection_range": {
+      "col": 6,
+      "end_col": 7,
+      "end_lnum": 32,
+      "lnum": 32
+    }
   }
 ]

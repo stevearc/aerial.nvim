@@ -10,7 +10,13 @@
             "kind": "Method",
             "level": 2,
             "lnum": 3,
-            "name": "=="
+            "name": "==",
+            "selection_range": {
+              "col": 8,
+              "end_col": 10,
+              "end_lnum": 3,
+              "lnum": 3
+            }
           },
           {
             "col": 4,
@@ -19,7 +25,13 @@
             "kind": "Method",
             "level": 2,
             "lnum": 4,
-            "name": "regular"
+            "name": "regular",
+            "selection_range": {
+              "col": 8,
+              "end_col": 15,
+              "end_lnum": 4,
+              "lnum": 4
+            }
           },
           {
             "col": 4,
@@ -28,7 +40,13 @@
             "kind": "Method",
             "level": 2,
             "lnum": 5,
-            "name": "endless"
+            "name": "endless",
+            "selection_range": {
+              "col": 8,
+              "end_col": 15,
+              "end_lnum": 5,
+              "lnum": 5
+            }
           }
         ],
         "col": 2,
@@ -37,7 +55,13 @@
         "kind": "Class",
         "level": 1,
         "lnum": 2,
-        "name": "self"
+        "name": "self",
+        "selection_range": {
+          "col": 11,
+          "end_col": 15,
+          "end_lnum": 2,
+          "lnum": 2
+        }
       },
       {
         "col": 2,
@@ -46,7 +70,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 8,
-        "name": "self.<=>"
+        "name": "self.<=>",
+        "selection_range": {
+          "col": 11,
+          "end_col": 14,
+          "end_lnum": 8,
+          "lnum": 8
+        }
       },
       {
         "col": 2,
@@ -55,7 +85,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 9,
-        "name": "self.regularish"
+        "name": "self.regularish",
+        "selection_range": {
+          "col": 11,
+          "end_col": 21,
+          "end_lnum": 9,
+          "lnum": 9
+        }
       },
       {
         "col": 2,
@@ -64,7 +100,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 10,
-        "name": "self.endlessish"
+        "name": "self.endlessish",
+        "selection_range": {
+          "col": 11,
+          "end_col": 21,
+          "end_lnum": 10,
+          "lnum": 10
+        }
       }
     ],
     "col": 0,
@@ -73,7 +115,13 @@
     "kind": "Class",
     "level": 0,
     "lnum": 1,
-    "name": "Klassy"
+    "name": "Klassy",
+    "selection_range": {
+      "col": 6,
+      "end_col": 12,
+      "end_lnum": 1,
+      "lnum": 1
+    }
   },
   {
     "col": 0,
@@ -82,7 +130,13 @@
     "kind": "Method",
     "level": 0,
     "lnum": 13,
-    "name": "Explody.>"
+    "name": "Explody.>",
+    "selection_range": {
+      "col": 12,
+      "end_col": 13,
+      "end_lnum": 13,
+      "lnum": 13
+    }
   },
   {
     "col": 0,
@@ -91,7 +145,13 @@
     "kind": "Method",
     "level": 0,
     "lnum": 14,
-    "name": "Explody.regularnot"
+    "name": "Explody.regularnot",
+    "selection_range": {
+      "col": 12,
+      "end_col": 22,
+      "end_lnum": 14,
+      "lnum": 14
+    }
   },
   {
     "col": 0,
@@ -100,7 +160,13 @@
     "kind": "Method",
     "level": 0,
     "lnum": 15,
-    "name": "Explody.endlessness"
+    "name": "Explody.endlessness",
+    "selection_range": {
+      "col": 12,
+      "end_col": 23,
+      "end_lnum": 15,
+      "lnum": 15
+    }
   },
   {
     "col": 0,
@@ -109,7 +175,13 @@
     "kind": "Method",
     "level": 0,
     "lnum": 17,
-    "name": "instance.=="
+    "name": "instance.==",
+    "selection_range": {
+      "col": 13,
+      "end_col": 15,
+      "end_lnum": 17,
+      "lnum": 17
+    }
   },
   {
     "col": 0,
@@ -118,7 +190,13 @@
     "kind": "Method",
     "level": 0,
     "lnum": 18,
-    "name": "instance.regular"
+    "name": "instance.regular",
+    "selection_range": {
+      "col": 13,
+      "end_col": 20,
+      "end_lnum": 18,
+      "lnum": 18
+    }
   },
   {
     "col": 0,
@@ -127,7 +205,13 @@
     "kind": "Method",
     "level": 0,
     "lnum": 19,
-    "name": "instance.endless"
+    "name": "instance.endless",
+    "selection_range": {
+      "col": 13,
+      "end_col": 20,
+      "end_lnum": 19,
+      "lnum": 19
+    }
   },
   {
     "col": 0,
@@ -136,7 +220,13 @@
     "kind": "Method",
     "level": 0,
     "lnum": 21,
-    "name": "youcandothistoo::=="
+    "name": "youcandothistoo::==",
+    "selection_range": {
+      "col": 21,
+      "end_col": 23,
+      "end_lnum": 21,
+      "lnum": 21
+    }
   },
   {
     "col": 0,
@@ -145,7 +235,13 @@
     "kind": "Method",
     "level": 0,
     "lnum": 22,
-    "name": "youcandothistoo::regular"
+    "name": "youcandothistoo::regular",
+    "selection_range": {
+      "col": 21,
+      "end_col": 28,
+      "end_lnum": 22,
+      "lnum": 22
+    }
   },
   {
     "col": 0,
@@ -154,7 +250,13 @@
     "kind": "Method",
     "level": 0,
     "lnum": 23,
-    "name": "youcandothistoo::endless"
+    "name": "youcandothistoo::endless",
+    "selection_range": {
+      "col": 21,
+      "end_col": 28,
+      "end_lnum": 23,
+      "lnum": 23
+    }
   },
   {
     "children": [
@@ -165,7 +267,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 27,
-        "name": "=="
+        "name": "==",
+        "selection_range": {
+          "col": 6,
+          "end_col": 8,
+          "end_lnum": 27,
+          "lnum": 27
+        }
       },
       {
         "col": 2,
@@ -174,7 +282,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 28,
-        "name": "regular"
+        "name": "regular",
+        "selection_range": {
+          "col": 6,
+          "end_col": 13,
+          "end_lnum": 28,
+          "lnum": 28
+        }
       },
       {
         "col": 2,
@@ -183,7 +297,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 29,
-        "name": "endless"
+        "name": "endless",
+        "selection_range": {
+          "col": 6,
+          "end_col": 13,
+          "end_lnum": 29,
+          "lnum": 29
+        }
       }
     ],
     "col": 0,
@@ -192,7 +312,13 @@
     "kind": "Class",
     "level": 0,
     "lnum": 26,
-    "name": "42"
+    "name": "42",
+    "selection_range": {
+      "col": 9,
+      "end_col": 11,
+      "end_lnum": 26,
+      "lnum": 26
+    }
   },
   {
     "children": [
@@ -203,7 +329,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 33,
-        "name": "=="
+        "name": "==",
+        "selection_range": {
+          "col": 6,
+          "end_col": 8,
+          "end_lnum": 33,
+          "lnum": 33
+        }
       },
       {
         "col": 2,
@@ -212,7 +344,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 34,
-        "name": "regular"
+        "name": "regular",
+        "selection_range": {
+          "col": 6,
+          "end_col": 13,
+          "end_lnum": 34,
+          "lnum": 34
+        }
       },
       {
         "col": 2,
@@ -221,7 +359,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 35,
-        "name": "endless"
+        "name": "endless",
+        "selection_range": {
+          "col": 6,
+          "end_col": 13,
+          "end_lnum": 35,
+          "lnum": 35
+        }
       }
     ],
     "col": 0,
@@ -230,7 +374,13 @@
     "kind": "Class",
     "level": 0,
     "lnum": 32,
-    "name": "\"42\""
+    "name": "\"42\"",
+    "selection_range": {
+      "col": 9,
+      "end_col": 13,
+      "end_lnum": 32,
+      "lnum": 32
+    }
   },
   {
     "children": [
@@ -241,7 +391,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 39,
-        "name": "=="
+        "name": "==",
+        "selection_range": {
+          "col": 6,
+          "end_col": 8,
+          "end_lnum": 39,
+          "lnum": 39
+        }
       },
       {
         "col": 2,
@@ -250,7 +406,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 40,
-        "name": "regular"
+        "name": "regular",
+        "selection_range": {
+          "col": 6,
+          "end_col": 13,
+          "end_lnum": 40,
+          "lnum": 40
+        }
       },
       {
         "col": 2,
@@ -259,7 +421,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 41,
-        "name": "endless"
+        "name": "endless",
+        "selection_range": {
+          "col": 6,
+          "end_col": 13,
+          "end_lnum": 41,
+          "lnum": 41
+        }
       }
     ],
     "col": 0,
@@ -268,7 +436,13 @@
     "kind": "Class",
     "level": 0,
     "lnum": 38,
-    "name": "variable"
+    "name": "variable",
+    "selection_range": {
+      "col": 9,
+      "end_col": 17,
+      "end_lnum": 38,
+      "lnum": 38
+    }
   },
   {
     "children": [
@@ -279,7 +453,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 45,
-        "name": "=="
+        "name": "==",
+        "selection_range": {
+          "col": 6,
+          "end_col": 8,
+          "end_lnum": 45,
+          "lnum": 45
+        }
       },
       {
         "col": 2,
@@ -288,7 +468,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 46,
-        "name": "regular"
+        "name": "regular",
+        "selection_range": {
+          "col": 6,
+          "end_col": 13,
+          "end_lnum": 46,
+          "lnum": 46
+        }
       },
       {
         "col": 2,
@@ -297,7 +483,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 47,
-        "name": "endless"
+        "name": "endless",
+        "selection_range": {
+          "col": 6,
+          "end_col": 13,
+          "end_lnum": 47,
+          "lnum": 47
+        }
       }
     ],
     "col": 0,
@@ -306,6 +498,12 @@
     "kind": "Class",
     "level": 0,
     "lnum": 44,
-    "name": "Constant"
+    "name": "Constant",
+    "selection_range": {
+      "col": 9,
+      "end_col": 17,
+      "end_lnum": 44,
+      "lnum": 44
+    }
   }
 ]

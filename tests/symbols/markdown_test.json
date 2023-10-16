@@ -8,7 +8,13 @@
         "kind": "Interface",
         "level": 1,
         "lnum": 3,
-        "name": "Title 2"
+        "name": "Title 2",
+        "selection_range": {
+          "col": 2,
+          "end_col": 10,
+          "end_lnum": 3,
+          "lnum": 3
+        }
       }
     ],
     "col": 0,
@@ -17,7 +23,13 @@
     "kind": "Interface",
     "level": 0,
     "lnum": 1,
-    "name": "Title 1"
+    "name": "Title 1",
+    "selection_range": {
+      "col": 1,
+      "end_col": 9,
+      "end_lnum": 1,
+      "lnum": 1
+    }
   },
   {
     "children": [
@@ -30,7 +42,13 @@
             "kind": "Interface",
             "level": 3,
             "lnum": 13,
-            "name": "Title 5"
+            "name": "Title 5",
+            "selection_range": {
+              "col": 4,
+              "end_col": 12,
+              "end_lnum": 13,
+              "lnum": 13
+            }
           }
         ],
         "col": 0,
@@ -39,7 +57,13 @@
         "kind": "Interface",
         "level": 2,
         "lnum": 7,
-        "name": "Title 4"
+        "name": "Title 4",
+        "selection_range": {
+          "col": 3,
+          "end_col": 11,
+          "end_lnum": 7,
+          "lnum": 7
+        }
       }
     ],
     "col": 0,
@@ -48,7 +72,13 @@
     "kind": "Interface",
     "level": 0,
     "lnum": 5,
-    "name": "Title 3"
+    "name": "Title 3",
+    "selection_range": {
+      "col": 1,
+      "end_col": 9,
+      "end_lnum": 5,
+      "lnum": 5
+    }
   },
   {
     "children": [
@@ -59,7 +89,13 @@
         "kind": "Interface",
         "level": 1,
         "lnum": 21,
-        "name": "Title 7"
+        "name": "Title 7",
+        "selection_range": {
+          "col": 0,
+          "end_col": 0,
+          "end_lnum": 22,
+          "lnum": 21
+        }
       }
     ],
     "col": 0,
@@ -68,6 +104,12 @@
     "kind": "Interface",
     "level": 0,
     "lnum": 18,
-    "name": "Title 6"
+    "name": "Title 6",
+    "selection_range": {
+      "col": 0,
+      "end_col": 0,
+      "end_lnum": 19,
+      "lnum": 18
+    }
   }
 ]

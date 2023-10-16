@@ -6,7 +6,13 @@
     "kind": "Function",
     "level": 0,
     "lnum": 2,
-    "name": "my_function"
+    "name": "my_function",
+    "selection_range": {
+      "col": 9,
+      "end_col": 20,
+      "end_lnum": 2,
+      "lnum": 2
+    }
   },
   {
     "col": 0,
@@ -15,7 +21,13 @@
     "kind": "Function",
     "level": 0,
     "lnum": 4,
-    "name": "$var_function"
+    "name": "$var_function",
+    "selection_range": {
+      "col": 0,
+      "end_col": 13,
+      "end_lnum": 4,
+      "lnum": 4
+    }
   },
   {
     "children": [
@@ -26,7 +38,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 7,
-        "name": "myMethod"
+        "name": "myMethod",
+        "selection_range": {
+          "col": 20,
+          "end_col": 28,
+          "end_lnum": 7,
+          "lnum": 7
+        }
       }
     ],
     "col": 0,
@@ -35,7 +53,13 @@
     "kind": "Class",
     "level": 0,
     "lnum": 6,
-    "name": "MyClass"
+    "name": "MyClass",
+    "selection_range": {
+      "col": 6,
+      "end_col": 13,
+      "end_lnum": 6,
+      "lnum": 6
+    }
   },
   {
     "children": [
@@ -46,7 +70,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 10,
-        "name": "doSomething"
+        "name": "doSomething",
+        "selection_range": {
+          "col": 20,
+          "end_col": 31,
+          "end_lnum": 10,
+          "lnum": 10
+        }
       }
     ],
     "col": 0,
@@ -55,7 +85,13 @@
     "kind": "Interface",
     "level": 0,
     "lnum": 9,
-    "name": "InterfaceOne"
+    "name": "InterfaceOne",
+    "selection_range": {
+      "col": 10,
+      "end_col": 22,
+      "end_lnum": 9,
+      "lnum": 9
+    }
   },
   {
     "children": [
@@ -66,7 +102,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 14,
-        "name": "myTraitMethod"
+        "name": "myTraitMethod",
+        "selection_range": {
+          "col": 20,
+          "end_col": 33,
+          "end_lnum": 14,
+          "lnum": 14
+        }
       }
     ],
     "col": 0,
@@ -75,6 +117,12 @@
     "kind": "Class",
     "level": 0,
     "lnum": 13,
-    "name": "MyTrait"
+    "name": "MyTrait",
+    "selection_range": {
+      "col": 6,
+      "end_col": 13,
+      "end_lnum": 13,
+      "lnum": 13
+    }
   }
 ]

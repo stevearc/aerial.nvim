@@ -10,7 +10,13 @@
             "kind": "Method",
             "level": 2,
             "lnum": 3,
-            "name": "meth_1"
+            "name": "meth_1",
+            "selection_range": {
+              "col": 8,
+              "end_col": 14,
+              "end_lnum": 3,
+              "lnum": 3
+            }
           }
         ],
         "col": 2,
@@ -19,7 +25,13 @@
         "kind": "Class",
         "level": 1,
         "lnum": 2,
-        "name": "Cl_1"
+        "name": "Cl_1",
+        "selection_range": {
+          "col": 8,
+          "end_col": 12,
+          "end_lnum": 2,
+          "lnum": 2
+        }
       },
       {
         "col": 2,
@@ -28,7 +40,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 6,
-        "name": "meth_2"
+        "name": "meth_2",
+        "selection_range": {
+          "col": 6,
+          "end_col": 12,
+          "end_lnum": 6,
+          "lnum": 6
+        }
       },
       {
         "col": 2,
@@ -37,7 +55,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 8,
-        "name": "name="
+        "name": "name=",
+        "selection_range": {
+          "col": 6,
+          "end_col": 11,
+          "end_lnum": 8,
+          "lnum": 8
+        }
       },
       {
         "col": 2,
@@ -46,7 +70,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 10,
-        "name": "=="
+        "name": "==",
+        "selection_range": {
+          "col": 6,
+          "end_col": 8,
+          "end_lnum": 10,
+          "lnum": 10
+        }
       },
       {
         "col": 2,
@@ -55,7 +85,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 12,
-        "name": "oneline"
+        "name": "oneline",
+        "selection_range": {
+          "col": 6,
+          "end_col": 13,
+          "end_lnum": 12,
+          "lnum": 12
+        }
       }
     ],
     "col": 0,
@@ -64,7 +100,13 @@
     "kind": "Module",
     "level": 0,
     "lnum": 1,
-    "name": "Mod"
+    "name": "Mod",
+    "selection_range": {
+      "col": 7,
+      "end_col": 10,
+      "end_lnum": 1,
+      "lnum": 1
+    }
   },
   {
     "children": [
@@ -75,7 +117,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 16,
-        "name": "before :all"
+        "name": "before :all",
+        "selection_range": {
+          "col": 2,
+          "end_col": 5,
+          "end_lnum": 17,
+          "lnum": 16
+        }
       },
       {
         "col": 2,
@@ -84,7 +132,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 18,
-        "name": "after"
+        "name": "after",
+        "selection_range": {
+          "col": 2,
+          "end_col": 5,
+          "end_lnum": 19,
+          "lnum": 18
+        }
       },
       {
         "col": 2,
@@ -93,7 +147,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 20,
-        "name": "it should describe the test"
+        "name": "it should describe the test",
+        "selection_range": {
+          "col": 2,
+          "end_col": 5,
+          "end_lnum": 21,
+          "lnum": 20
+        }
       }
     ],
     "col": 0,
@@ -102,7 +162,13 @@
     "kind": "Method",
     "level": 0,
     "lnum": 15,
-    "name": "describe UnitTest"
+    "name": "describe UnitTest",
+    "selection_range": {
+      "col": 0,
+      "end_col": 3,
+      "end_lnum": 22,
+      "lnum": 15
+    }
   },
   {
     "children": [
@@ -113,7 +179,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 25,
-        "name": "task :simple_task"
+        "name": "task :simple_task",
+        "selection_range": {
+          "col": 2,
+          "end_col": 29,
+          "end_lnum": 25,
+          "lnum": 25
+        }
       },
       {
         "col": 2,
@@ -122,7 +194,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 26,
-        "name": "task inline_task"
+        "name": "task inline_task",
+        "selection_range": {
+          "col": 2,
+          "end_col": 43,
+          "end_lnum": 26,
+          "lnum": 26
+        }
       },
       {
         "col": 2,
@@ -131,7 +209,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 27,
-        "name": "task rake_task"
+        "name": "task rake_task",
+        "selection_range": {
+          "col": 2,
+          "end_col": 37,
+          "end_lnum": 27,
+          "lnum": 27
+        }
       },
       {
         "col": 2,
@@ -140,7 +224,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 28,
-        "name": "multitask parallel_prereqs"
+        "name": "multitask parallel_prereqs",
+        "selection_range": {
+          "col": 2,
+          "end_col": 58,
+          "end_lnum": 28,
+          "lnum": 28
+        }
       },
       {
         "col": 2,
@@ -149,7 +239,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 29,
-        "name": "file create_file"
+        "name": "file create_file",
+        "selection_range": {
+          "col": 2,
+          "end_col": 30,
+          "end_lnum": 29,
+          "lnum": 29
+        }
       }
     ],
     "col": 0,
@@ -158,7 +254,13 @@
     "kind": "Method",
     "level": 0,
     "lnum": 24,
-    "name": "namespace rake_namespace"
+    "name": "namespace rake_namespace",
+    "selection_range": {
+      "col": 0,
+      "end_col": 3,
+      "end_lnum": 30,
+      "lnum": 24
+    }
   },
   {
     "children": [
@@ -169,7 +271,13 @@
         "kind": "Class",
         "level": 1,
         "lnum": 34,
-        "name": "Long::Class::Name"
+        "name": "Long::Class::Name",
+        "selection_range": {
+          "col": 8,
+          "end_col": 25,
+          "end_lnum": 34,
+          "lnum": 34
+        }
       }
     ],
     "col": 0,
@@ -178,7 +286,13 @@
     "kind": "Module",
     "level": 0,
     "lnum": 33,
-    "name": "Long::Mod::Name"
+    "name": "Long::Mod::Name",
+    "selection_range": {
+      "col": 7,
+      "end_col": 22,
+      "end_lnum": 33,
+      "lnum": 33
+    }
   },
   {
     "children": [
@@ -189,7 +303,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 39,
-        "name": "setup"
+        "name": "setup",
+        "selection_range": {
+          "col": 2,
+          "end_col": 5,
+          "end_lnum": 40,
+          "lnum": 39
+        }
       },
       {
         "col": 2,
@@ -198,7 +318,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 41,
-        "name": "teardown"
+        "name": "teardown",
+        "selection_range": {
+          "col": 2,
+          "end_col": 5,
+          "end_lnum": 42,
+          "lnum": 41
+        }
       },
       {
         "col": 2,
@@ -207,7 +333,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 43,
-        "name": "should test something"
+        "name": "should test something",
+        "selection_range": {
+          "col": 2,
+          "end_col": 5,
+          "end_lnum": 44,
+          "lnum": 43
+        }
       },
       {
         "col": 2,
@@ -216,7 +348,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 45,
-        "name": "should_eventually actually work"
+        "name": "should_eventually actually work",
+        "selection_range": {
+          "col": 2,
+          "end_col": 5,
+          "end_lnum": 46,
+          "lnum": 45
+        }
       },
       {
         "col": 2,
@@ -225,7 +363,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 47,
-        "name": "should_not validate_presence_of(:title)"
+        "name": "should_not validate_presence_of(:title)",
+        "selection_range": {
+          "col": 2,
+          "end_col": 41,
+          "end_lnum": 47,
+          "lnum": 47
+        }
       }
     ],
     "col": 0,
@@ -234,6 +378,12 @@
     "kind": "Method",
     "level": 0,
     "lnum": 38,
-    "name": "context Shoulda Context"
+    "name": "context Shoulda Context",
+    "selection_range": {
+      "col": 0,
+      "end_col": 3,
+      "end_lnum": 48,
+      "lnum": 38
+    }
   }
 ]

@@ -10,7 +10,13 @@
             "kind": "Property",
             "level": 2,
             "lnum": 9,
-            "name": "foo:xformOp:rotateXYZ"
+            "name": "foo:xformOp:rotateXYZ",
+            "selection_range": {
+              "col": 15,
+              "end_col": 36,
+              "end_lnum": 9,
+              "lnum": 9
+            }
           },
           {
             "col": 8,
@@ -19,7 +25,13 @@
             "kind": "Property",
             "level": 2,
             "lnum": 10,
-            "name": "translate"
+            "name": "translate",
+            "selection_range": {
+              "col": 16,
+              "end_col": 25,
+              "end_lnum": 10,
+              "lnum": 10
+            }
           },
           {
             "col": 8,
@@ -28,7 +40,13 @@
             "kind": "Property",
             "level": 2,
             "lnum": 11,
-            "name": "thing"
+            "name": "thing",
+            "selection_range": {
+              "col": 12,
+              "end_col": 17,
+              "end_lnum": 11,
+              "lnum": 11
+            }
           },
           {
             "children": [
@@ -39,7 +57,13 @@
                 "kind": "EnumMember",
                 "level": 3,
                 "lnum": 14,
-                "name": "default"
+                "name": "default",
+                "selection_range": {
+                  "col": 12,
+                  "end_col": 21,
+                  "end_lnum": 14,
+                  "lnum": 14
+                }
               },
               {
                 "children": [
@@ -50,7 +74,13 @@
                     "kind": "Property",
                     "level": 4,
                     "lnum": 17,
-                    "name": "xformOp:translate"
+                    "name": "xformOp:translate",
+                    "selection_range": {
+                      "col": 24,
+                      "end_col": 41,
+                      "end_lnum": 17,
+                      "lnum": 17
+                    }
                   }
                 ],
                 "col": 12,
@@ -59,7 +89,13 @@
                 "kind": "EnumMember",
                 "level": 3,
                 "lnum": 16,
-                "name": "one"
+                "name": "one",
+                "selection_range": {
+                  "col": 12,
+                  "end_col": 17,
+                  "end_lnum": 16,
+                  "lnum": 16
+                }
               }
             ],
             "col": 8,
@@ -68,7 +104,13 @@
             "kind": "Enum",
             "level": 2,
             "lnum": 13,
-            "name": "variants"
+            "name": "variants",
+            "selection_range": {
+              "col": 19,
+              "end_col": 29,
+              "end_lnum": 13,
+              "lnum": 13
+            }
           }
         ],
         "col": 4,
@@ -77,7 +119,13 @@
         "kind": "Class",
         "level": 1,
         "lnum": 7,
-        "name": "child"
+        "name": "child",
+        "selection_range": {
+          "col": 14,
+          "end_col": 21,
+          "end_lnum": 7,
+          "lnum": 7
+        }
       }
     ],
     "col": 0,
@@ -86,6 +134,12 @@
     "kind": "Class",
     "level": 0,
     "lnum": 3,
-    "name": "something"
+    "name": "something",
+    "selection_range": {
+      "col": 10,
+      "end_col": 21,
+      "end_lnum": 3,
+      "lnum": 3
+    }
   }
 ]

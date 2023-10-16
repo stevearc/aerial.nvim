@@ -8,7 +8,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 6,
-        "name": "f"
+        "name": "f",
+        "selection_range": {
+          "col": 13,
+          "end_col": 14,
+          "end_lnum": 6,
+          "lnum": 6
+        }
       }
     ],
     "col": 0,
@@ -17,7 +23,13 @@
     "kind": "Module",
     "level": 0,
     "lnum": 5,
-    "name": "a"
+    "name": "a",
+    "selection_range": {
+      "col": 8,
+      "end_col": 9,
+      "end_lnum": 5,
+      "lnum": 5
+    }
   },
   {
     "children": [
@@ -28,7 +40,13 @@
         "kind": "Field",
         "level": 1,
         "lnum": 12,
-        "name": "flag"
+        "name": "flag",
+        "selection_range": {
+          "col": 9,
+          "end_col": 13,
+          "end_lnum": 12,
+          "lnum": 12
+        }
       },
       {
         "col": 4,
@@ -37,7 +55,13 @@
         "kind": "Event",
         "level": 1,
         "lnum": 13,
-        "name": "Log"
+        "name": "Log",
+        "selection_range": {
+          "col": 10,
+          "end_col": 13,
+          "end_lnum": 13,
+          "lnum": 13
+        }
       },
       {
         "col": 4,
@@ -46,7 +70,13 @@
         "kind": "Constructor",
         "level": 1,
         "lnum": 15,
-        "name": "constructor"
+        "name": "constructor",
+        "selection_range": {
+          "col": 4,
+          "end_col": 15,
+          "end_lnum": 15,
+          "lnum": 15
+        }
       },
       {
         "col": 4,
@@ -55,7 +85,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 17,
-        "name": "m"
+        "name": "m",
+        "selection_range": {
+          "col": 13,
+          "end_col": 14,
+          "end_lnum": 17,
+          "lnum": 17
+        }
       },
       {
         "col": 4,
@@ -64,7 +100,13 @@
         "kind": "Method",
         "level": 1,
         "lnum": 21,
-        "name": "never"
+        "name": "never",
+        "selection_range": {
+          "col": 13,
+          "end_col": 18,
+          "end_lnum": 21,
+          "lnum": 21
+        }
       }
     ],
     "col": 0,
@@ -73,7 +115,13 @@
     "kind": "Class",
     "level": 0,
     "lnum": 11,
-    "name": "A"
+    "name": "A",
+    "selection_range": {
+      "col": 9,
+      "end_col": 10,
+      "end_lnum": 11,
+      "lnum": 11
+    }
   },
   {
     "children": [
@@ -84,7 +132,13 @@
         "kind": "Function",
         "level": 1,
         "lnum": 28,
-        "name": "f"
+        "name": "f",
+        "selection_range": {
+          "col": 13,
+          "end_col": 14,
+          "end_lnum": 28,
+          "lnum": 28
+        }
       }
     ],
     "col": 0,
@@ -93,7 +147,13 @@
     "kind": "Interface",
     "level": 0,
     "lnum": 27,
-    "name": "I"
+    "name": "I",
+    "selection_range": {
+      "col": 10,
+      "end_col": 11,
+      "end_lnum": 27,
+      "lnum": 27
+    }
   },
   {
     "col": 0,
@@ -102,7 +162,13 @@
     "kind": "Struct",
     "level": 0,
     "lnum": 31,
-    "name": "S"
+    "name": "S",
+    "selection_range": {
+      "col": 7,
+      "end_col": 8,
+      "end_lnum": 31,
+      "lnum": 31
+    }
   },
   {
     "col": 0,
@@ -111,6 +177,12 @@
     "kind": "Enum",
     "level": 0,
     "lnum": 36,
-    "name": "E"
+    "name": "E",
+    "selection_range": {
+      "col": 5,
+      "end_col": 6,
+      "end_lnum": 36,
+      "lnum": 36
+    }
   }
 ]

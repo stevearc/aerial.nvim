@@ -6,7 +6,13 @@
     "kind": "Module",
     "level": 0,
     "lnum": 1,
-    "name": "<!DOCTYPE html>"
+    "name": "<!DOCTYPE html>",
+    "selection_range": {
+      "col": 0,
+      "end_col": 15,
+      "end_lnum": 1,
+      "lnum": 1
+    }
   },
   {
     "children": [
@@ -17,7 +23,13 @@
         "kind": "Field",
         "level": 1,
         "lnum": 3,
-        "name": "lang"
+        "name": "lang",
+        "selection_range": {
+          "col": 6,
+          "end_col": 10,
+          "end_lnum": 3,
+          "lnum": 3
+        }
       },
       {
         "children": [
@@ -30,7 +42,13 @@
                 "kind": "Field",
                 "level": 3,
                 "lnum": 5,
-                "name": "charset"
+                "name": "charset",
+                "selection_range": {
+                  "col": 10,
+                  "end_col": 17,
+                  "end_lnum": 5,
+                  "lnum": 5
+                }
               }
             ],
             "col": 4,
@@ -39,7 +57,13 @@
             "kind": "Struct",
             "level": 2,
             "lnum": 5,
-            "name": "meta"
+            "name": "meta",
+            "selection_range": {
+              "col": 5,
+              "end_col": 9,
+              "end_lnum": 5,
+              "lnum": 5
+            }
           },
           {
             "children": [
@@ -50,7 +74,13 @@
                 "kind": "Field",
                 "level": 3,
                 "lnum": 6,
-                "name": "name"
+                "name": "name",
+                "selection_range": {
+                  "col": 10,
+                  "end_col": 14,
+                  "end_lnum": 6,
+                  "lnum": 6
+                }
               },
               {
                 "col": 29,
@@ -59,7 +89,13 @@
                 "kind": "Field",
                 "level": 3,
                 "lnum": 6,
-                "name": "content"
+                "name": "content",
+                "selection_range": {
+                  "col": 29,
+                  "end_col": 36,
+                  "end_lnum": 6,
+                  "lnum": 6
+                }
               }
             ],
             "col": 4,
@@ -68,7 +104,13 @@
             "kind": "Struct",
             "level": 2,
             "lnum": 6,
-            "name": "meta"
+            "name": "meta",
+            "selection_range": {
+              "col": 5,
+              "end_col": 9,
+              "end_lnum": 6,
+              "lnum": 6
+            }
           },
           {
             "col": 4,
@@ -77,7 +119,13 @@
             "kind": "Struct",
             "level": 2,
             "lnum": 7,
-            "name": "title"
+            "name": "title",
+            "selection_range": {
+              "col": 5,
+              "end_col": 10,
+              "end_lnum": 7,
+              "lnum": 7
+            }
           },
           {
             "children": [
@@ -88,7 +136,13 @@
                 "kind": "Field",
                 "level": 3,
                 "lnum": 8,
-                "name": "rel"
+                "name": "rel",
+                "selection_range": {
+                  "col": 10,
+                  "end_col": 13,
+                  "end_lnum": 8,
+                  "lnum": 8
+                }
               },
               {
                 "col": 27,
@@ -97,7 +151,13 @@
                 "kind": "Field",
                 "level": 3,
                 "lnum": 8,
-                "name": "href"
+                "name": "href",
+                "selection_range": {
+                  "col": 27,
+                  "end_col": 31,
+                  "end_lnum": 8,
+                  "lnum": 8
+                }
               }
             ],
             "col": 4,
@@ -106,7 +166,13 @@
             "kind": "Struct",
             "level": 2,
             "lnum": 8,
-            "name": "link"
+            "name": "link",
+            "selection_range": {
+              "col": 5,
+              "end_col": 9,
+              "end_lnum": 8,
+              "lnum": 8
+            }
           },
           {
             "col": 4,
@@ -115,7 +181,13 @@
             "kind": "Struct",
             "level": 2,
             "lnum": 9,
-            "name": "style"
+            "name": "style",
+            "selection_range": {
+              "col": 5,
+              "end_col": 10,
+              "end_lnum": 9,
+              "lnum": 9
+            }
           }
         ],
         "col": 2,
@@ -124,7 +196,13 @@
         "kind": "Struct",
         "level": 1,
         "lnum": 4,
-        "name": "head"
+        "name": "head",
+        "selection_range": {
+          "col": 3,
+          "end_col": 7,
+          "end_lnum": 4,
+          "lnum": 4
+        }
       },
       {
         "children": [
@@ -135,7 +213,13 @@
             "kind": "Field",
             "level": 2,
             "lnum": 15,
-            "name": "class"
+            "name": "class",
+            "selection_range": {
+              "col": 8,
+              "end_col": 13,
+              "end_lnum": 15,
+              "lnum": 15
+            }
           },
           {
             "children": [
@@ -148,7 +232,13 @@
                     "kind": "Field",
                     "level": 4,
                     "lnum": 17,
-                    "name": "id"
+                    "name": "id",
+                    "selection_range": {
+                      "col": 10,
+                      "end_col": 12,
+                      "end_lnum": 17,
+                      "lnum": 17
+                    }
                   }
                 ],
                 "col": 6,
@@ -157,7 +247,13 @@
                 "kind": "Struct",
                 "level": 3,
                 "lnum": 17,
-                "name": "h1"
+                "name": "h1",
+                "selection_range": {
+                  "col": 7,
+                  "end_col": 9,
+                  "end_lnum": 17,
+                  "lnum": 17
+                }
               },
               {
                 "col": 6,
@@ -166,7 +262,13 @@
                 "kind": "Struct",
                 "level": 3,
                 "lnum": 18,
-                "name": "p"
+                "name": "p",
+                "selection_range": {
+                  "col": 7,
+                  "end_col": 8,
+                  "end_lnum": 18,
+                  "lnum": 18
+                }
               },
               {
                 "col": 6,
@@ -175,7 +277,13 @@
                 "kind": "Struct",
                 "level": 3,
                 "lnum": 20,
-                "name": "hr"
+                "name": "hr",
+                "selection_range": {
+                  "col": 7,
+                  "end_col": 9,
+                  "end_lnum": 20,
+                  "lnum": 20
+                }
               },
               {
                 "children": [
@@ -190,7 +298,13 @@
                             "kind": "Struct",
                             "level": 6,
                             "lnum": 24,
-                            "name": "th"
+                            "name": "th",
+                            "selection_range": {
+                              "col": 15,
+                              "end_col": 17,
+                              "end_lnum": 24,
+                              "lnum": 24
+                            }
                           },
                           {
                             "col": 27,
@@ -199,7 +313,13 @@
                             "kind": "Struct",
                             "level": 6,
                             "lnum": 24,
-                            "name": "th"
+                            "name": "th",
+                            "selection_range": {
+                              "col": 28,
+                              "end_col": 30,
+                              "end_lnum": 24,
+                              "lnum": 24
+                            }
                           }
                         ],
                         "col": 10,
@@ -208,7 +328,13 @@
                         "kind": "Struct",
                         "level": 5,
                         "lnum": 24,
-                        "name": "tr"
+                        "name": "tr",
+                        "selection_range": {
+                          "col": 11,
+                          "end_col": 13,
+                          "end_lnum": 24,
+                          "lnum": 24
+                        }
                       }
                     ],
                     "col": 8,
@@ -217,7 +343,13 @@
                     "kind": "Struct",
                     "level": 4,
                     "lnum": 23,
-                    "name": "thead"
+                    "name": "thead",
+                    "selection_range": {
+                      "col": 9,
+                      "end_col": 14,
+                      "end_lnum": 23,
+                      "lnum": 23
+                    }
                   },
                   {
                     "children": [
@@ -230,7 +362,13 @@
                             "kind": "Struct",
                             "level": 6,
                             "lnum": 27,
-                            "name": "td"
+                            "name": "td",
+                            "selection_range": {
+                              "col": 15,
+                              "end_col": 17,
+                              "end_lnum": 27,
+                              "lnum": 27
+                            }
                           },
                           {
                             "col": 29,
@@ -239,7 +377,13 @@
                             "kind": "Struct",
                             "level": 6,
                             "lnum": 27,
-                            "name": "td"
+                            "name": "td",
+                            "selection_range": {
+                              "col": 30,
+                              "end_col": 32,
+                              "end_lnum": 27,
+                              "lnum": 27
+                            }
                           }
                         ],
                         "col": 10,
@@ -248,7 +392,13 @@
                         "kind": "Struct",
                         "level": 5,
                         "lnum": 27,
-                        "name": "tr"
+                        "name": "tr",
+                        "selection_range": {
+                          "col": 11,
+                          "end_col": 13,
+                          "end_lnum": 27,
+                          "lnum": 27
+                        }
                       },
                       {
                         "children": [
@@ -259,7 +409,13 @@
                             "kind": "Struct",
                             "level": 6,
                             "lnum": 28,
-                            "name": "td"
+                            "name": "td",
+                            "selection_range": {
+                              "col": 15,
+                              "end_col": 17,
+                              "end_lnum": 28,
+                              "lnum": 28
+                            }
                           },
                           {
                             "col": 30,
@@ -268,7 +424,13 @@
                             "kind": "Struct",
                             "level": 6,
                             "lnum": 28,
-                            "name": "td"
+                            "name": "td",
+                            "selection_range": {
+                              "col": 31,
+                              "end_col": 33,
+                              "end_lnum": 28,
+                              "lnum": 28
+                            }
                           }
                         ],
                         "col": 10,
@@ -277,7 +439,13 @@
                         "kind": "Struct",
                         "level": 5,
                         "lnum": 28,
-                        "name": "tr"
+                        "name": "tr",
+                        "selection_range": {
+                          "col": 11,
+                          "end_col": 13,
+                          "end_lnum": 28,
+                          "lnum": 28
+                        }
                       }
                     ],
                     "col": 8,
@@ -286,7 +454,13 @@
                     "kind": "Struct",
                     "level": 4,
                     "lnum": 26,
-                    "name": "tbody"
+                    "name": "tbody",
+                    "selection_range": {
+                      "col": 9,
+                      "end_col": 14,
+                      "end_lnum": 26,
+                      "lnum": 26
+                    }
                   }
                 ],
                 "col": 6,
@@ -295,7 +469,13 @@
                 "kind": "Struct",
                 "level": 3,
                 "lnum": 22,
-                "name": "table"
+                "name": "table",
+                "selection_range": {
+                  "col": 7,
+                  "end_col": 12,
+                  "end_lnum": 22,
+                  "lnum": 22
+                }
               }
             ],
             "col": 4,
@@ -304,7 +484,13 @@
             "kind": "Struct",
             "level": 2,
             "lnum": 16,
-            "name": "div"
+            "name": "div",
+            "selection_range": {
+              "col": 5,
+              "end_col": 8,
+              "end_lnum": 16,
+              "lnum": 16
+            }
           },
           {
             "col": 4,
@@ -313,7 +499,13 @@
             "kind": "Struct",
             "level": 2,
             "lnum": 33,
-            "name": "script"
+            "name": "script",
+            "selection_range": {
+              "col": 5,
+              "end_col": 11,
+              "end_lnum": 33,
+              "lnum": 33
+            }
           }
         ],
         "col": 2,
@@ -322,7 +514,13 @@
         "kind": "Struct",
         "level": 1,
         "lnum": 15,
-        "name": "body"
+        "name": "body",
+        "selection_range": {
+          "col": 3,
+          "end_col": 7,
+          "end_lnum": 15,
+          "lnum": 15
+        }
       }
     ],
     "col": 0,
@@ -331,6 +529,12 @@
     "kind": "Struct",
     "level": 0,
     "lnum": 3,
-    "name": "html"
+    "name": "html",
+    "selection_range": {
+      "col": 1,
+      "end_col": 5,
+      "end_lnum": 3,
+      "lnum": 3
+    }
   }
 ]

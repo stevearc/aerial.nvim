@@ -10,7 +10,13 @@
             "kind": "Enum",
             "level": 2,
             "lnum": 6,
-            "name": "ports"
+            "name": "ports",
+            "selection_range": {
+              "col": 4,
+              "end_col": 9,
+              "end_lnum": 6,
+              "lnum": 6
+            }
           }
         ],
         "col": 2,
@@ -19,7 +25,13 @@
         "kind": "Class",
         "level": 1,
         "lnum": 4,
-        "name": "proxy"
+        "name": "proxy",
+        "selection_range": {
+          "col": 2,
+          "end_col": 7,
+          "end_lnum": 4,
+          "lnum": 4
+        }
       },
       {
         "col": 2,
@@ -28,7 +40,13 @@
         "kind": "Class",
         "level": 1,
         "lnum": 9,
-        "name": "db"
+        "name": "db",
+        "selection_range": {
+          "col": 2,
+          "end_col": 4,
+          "end_lnum": 9,
+          "lnum": 9
+        }
       }
     ],
     "col": 0,
@@ -37,7 +55,13 @@
     "kind": "Class",
     "level": 0,
     "lnum": 3,
-    "name": "services"
+    "name": "services",
+    "selection_range": {
+      "col": 0,
+      "end_col": 8,
+      "end_lnum": 3,
+      "lnum": 3
+    }
   },
   {
     "children": [
@@ -48,7 +72,13 @@
         "kind": "Class",
         "level": 1,
         "lnum": 13,
-        "name": "media-volume"
+        "name": "media-volume",
+        "selection_range": {
+          "col": 2,
+          "end_col": 14,
+          "end_lnum": 13,
+          "lnum": 13
+        }
       }
     ],
     "col": 0,
@@ -57,7 +87,13 @@
     "kind": "Class",
     "level": 0,
     "lnum": 12,
-    "name": "volumes"
+    "name": "volumes",
+    "selection_range": {
+      "col": 0,
+      "end_col": 7,
+      "end_lnum": 12,
+      "lnum": 12
+    }
   },
   {
     "col": 0,
@@ -66,6 +102,12 @@
     "kind": "Class",
     "level": 0,
     "lnum": 16,
-    "name": "networks"
+    "name": "networks",
+    "selection_range": {
+      "col": 0,
+      "end_col": 8,
+      "end_lnum": 16,
+      "lnum": 16
+    }
   }
 ]
