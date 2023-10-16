@@ -1,0 +1,53 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "col": 0,
+            "end_col": 0,
+            "end_lnum": 7,
+            "kind": "Interface",
+            "level": 2,
+            "lnum": 5,
+            "name": "Level3"
+          }
+        ],
+        "col": 0,
+        "end_col": 0,
+        "end_lnum": 7,
+        "kind": "Interface",
+        "level": 1,
+        "lnum": 3,
+        "name": "Level2"
+      }
+    ],
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 7,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 1,
+    "name": "Level1"
+  },
+  {
+    "children": [
+      {
+        "col": 0,
+        "end_col": 0,
+        "end_lnum": 14,
+        "kind": "Interface",
+        "level": 1,
+        "lnum": 11,
+        "name": "Level2_2"
+      }
+    ],
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 14,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 7,
+    "name": "Level1_2"
+  }
+]

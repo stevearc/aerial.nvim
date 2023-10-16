@@ -1,0 +1,109 @@
+[
+  {
+    "children": [
+      {
+        "col": 4,
+        "end_col": 18,
+        "end_lnum": 2,
+        "kind": "Enum",
+        "level": 1,
+        "lnum": 2,
+        "name": "Enum_1"
+      },
+      {
+        "col": 4,
+        "end_col": 16,
+        "end_lnum": 4,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 4,
+        "name": "Fn_1"
+      },
+      {
+        "col": 4,
+        "end_col": 22,
+        "end_lnum": 6,
+        "kind": "Struct",
+        "level": 1,
+        "lnum": 6,
+        "name": "MyStruct"
+      },
+      {
+        "children": [
+          {
+            "col": 8,
+            "end_col": 21,
+            "end_lnum": 9,
+            "kind": "Function",
+            "level": 2,
+            "lnum": 9,
+            "name": "TraitFn"
+          }
+        ],
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 10,
+        "kind": "Interface",
+        "level": 1,
+        "lnum": 8,
+        "name": "MyTrait"
+      },
+      {
+        "children": [
+          {
+            "col": 8,
+            "end_col": 24,
+            "end_lnum": 13,
+            "kind": "Function",
+            "level": 2,
+            "lnum": 13,
+            "name": "StructFn"
+          }
+        ],
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 14,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 12,
+        "name": "MyStruct"
+      },
+      {
+        "children": [
+          {
+            "col": 8,
+            "end_col": 9,
+            "end_lnum": 19,
+            "kind": "Function",
+            "level": 2,
+            "lnum": 17,
+            "name": "fmt"
+          }
+        ],
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 20,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 16,
+        "name": "MyStruct > Display"
+      },
+      {
+        "col": 4,
+        "end_col": 43,
+        "end_lnum": 21,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 21,
+        "name": "MyStruct > GenericTrait"
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 22,
+    "kind": "Module",
+    "level": 0,
+    "lnum": 1,
+    "name": "mod_1"
+  }
+]

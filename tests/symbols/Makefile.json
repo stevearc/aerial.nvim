@@ -1,0 +1,20 @@
+[
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 4,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 1,
+    "name": "all"
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 6,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 4,
+    "name": "out.so"
+  }
+]

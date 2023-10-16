@@ -1,0 +1,71 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "col": 4,
+            "end_col": 15,
+            "end_lnum": 7,
+            "kind": "Enum",
+            "level": 2,
+            "lnum": 6,
+            "name": "ports"
+          }
+        ],
+        "col": 2,
+        "end_col": 15,
+        "end_lnum": 7,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 4,
+        "name": "proxy"
+      },
+      {
+        "col": 2,
+        "end_col": 24,
+        "end_lnum": 10,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 9,
+        "name": "db"
+      }
+    ],
+    "col": 0,
+    "end_col": 24,
+    "end_lnum": 10,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 3,
+    "name": "services"
+  },
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 18,
+        "end_lnum": 14,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 13,
+        "name": "media-volume"
+      }
+    ],
+    "col": 0,
+    "end_col": 18,
+    "end_lnum": 14,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 12,
+    "name": "volumes"
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 18,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 16,
+    "name": "networks"
+  }
+]

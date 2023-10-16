@@ -1,0 +1,71 @@
+[
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 3,
+        "end_lnum": 4,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 2,
+        "name": "foo"
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 5,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 1,
+    "name": "Object"
+  },
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 23,
+        "end_lnum": 8,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 8,
+        "name": "foo"
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 9,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 7,
+    "name": "Trait"
+  },
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 3,
+        "end_lnum": 14,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 12,
+        "name": "foo"
+      },
+      {
+        "col": 2,
+        "end_col": 3,
+        "end_lnum": 17,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 15,
+        "name": "bar"
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 18,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 11,
+    "name": "Class"
+  }
+]

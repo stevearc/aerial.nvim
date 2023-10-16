@@ -1,0 +1,80 @@
+[
+  {
+    "col": 0,
+    "end_col": 27,
+    "end_lnum": 2,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 2,
+    "name": "my_function"
+  },
+  {
+    "col": 0,
+    "end_col": 32,
+    "end_lnum": 4,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 4,
+    "name": "$var_function"
+  },
+  {
+    "children": [
+      {
+        "col": 4,
+        "end_col": 34,
+        "end_lnum": 7,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 7,
+        "name": "myMethod"
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 8,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 6,
+    "name": "MyClass"
+  },
+  {
+    "children": [
+      {
+        "col": 4,
+        "end_col": 34,
+        "end_lnum": 10,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 10,
+        "name": "doSomething"
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 11,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 9,
+    "name": "InterfaceOne"
+  },
+  {
+    "children": [
+      {
+        "col": 4,
+        "end_col": 39,
+        "end_lnum": 14,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 14,
+        "name": "myTraitMethod"
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 15,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 13,
+    "name": "MyTrait"
+  }
+]

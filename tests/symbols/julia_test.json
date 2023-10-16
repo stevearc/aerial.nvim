@@ -1,0 +1,116 @@
+[
+  {
+    "children": [
+      {
+        "col": 0,
+        "end_col": 24,
+        "end_lnum": 3,
+        "kind": "Constant",
+        "level": 1,
+        "lnum": 3,
+        "name": "constant"
+      },
+      {
+        "col": 0,
+        "end_col": 3,
+        "end_lnum": 6,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 5,
+        "name": "func"
+      },
+      {
+        "col": 0,
+        "end_col": 18,
+        "end_lnum": 8,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 8,
+        "name": "myfunc"
+      },
+      {
+        "col": 0,
+        "end_col": 24,
+        "end_lnum": 10,
+        "kind": "Interface",
+        "level": 1,
+        "lnum": 10,
+        "name": "MyType"
+      },
+      {
+        "children": [
+          {
+            "col": 4,
+            "end_col": 22,
+            "end_lnum": 13,
+            "kind": "Function",
+            "level": 2,
+            "lnum": 13,
+            "name": "MyStruct"
+          },
+          {
+            "col": 4,
+            "end_col": 22,
+            "end_lnum": 14,
+            "kind": "Function",
+            "level": 2,
+            "lnum": 14,
+            "name": "method"
+          }
+        ],
+        "col": 0,
+        "end_col": 3,
+        "end_lnum": 15,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 12,
+        "name": "MyStruct"
+      },
+      {
+        "col": 0,
+        "end_col": 3,
+        "end_lnum": 18,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 17,
+        "name": "mac"
+      },
+      {
+        "children": [
+          {
+            "col": 4,
+            "end_col": 26,
+            "end_lnum": 21,
+            "kind": "Function",
+            "level": 2,
+            "lnum": 21,
+            "name": "mod.myfunc"
+          },
+          {
+            "col": 4,
+            "end_col": 7,
+            "end_lnum": 23,
+            "kind": "Function",
+            "level": 2,
+            "lnum": 22,
+            "name": "mod.myfuncb"
+          }
+        ],
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 24,
+        "kind": "Module",
+        "level": 1,
+        "lnum": 20,
+        "name": "submod"
+      }
+    ],
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 26,
+    "kind": "Module",
+    "level": 0,
+    "lnum": 1,
+    "name": "mod"
+  }
+]

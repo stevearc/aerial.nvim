@@ -1,0 +1,20 @@
+[
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 3,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 1,
+    "name": "Title 1"
+  },
+  {
+    "col": 0,
+    "end_col": 8,
+    "end_lnum": 6,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 4,
+    "name": "Title 2"
+  }
+]

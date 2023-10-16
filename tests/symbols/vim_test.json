@@ -1,0 +1,20 @@
+[
+  {
+    "col": 0,
+    "end_col": 11,
+    "end_lnum": 2,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 1,
+    "name": "Fn_1"
+  },
+  {
+    "col": 0,
+    "end_col": 11,
+    "end_lnum": 5,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 4,
+    "name": "s:fn_2"
+  }
+]

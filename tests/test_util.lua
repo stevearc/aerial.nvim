@@ -27,7 +27,35 @@ local function summarize(received, expected)
   return table.concat(lines, "\n")
 end
 
-M.test_file_symbols = function(backend_name, filename, expected)
+local allowed_fields = {
+  "kind",
+  "name",
+  "level",
+  "lnum",
+  "col",
+  "end_lnum",
+  "end_col",
+  "selection_range",
+  "children",
+}
+local function sanitize_symbols(symbols)
+  for _, item in ipairs(symbols) do
+    for k, _ in pairs(item) do
+      if not vim.tbl_contains(allowed_fields, k) then
+        item[k] = nil
+      end
+    end
+    if item.children then
+      sanitize_symbols(item.children)
+    end
+  end
+  return symbols
+end
+
+---@param backend_name string
+---@param filename string
+---@param symbols_file string
+M.test_file_symbols = function(backend_name, filename, symbols_file)
   config.setup({
     backends = { backend_name },
     filter_kind = false,
@@ -37,7 +65,21 @@ M.test_file_symbols = function(backend_name, filename, expected)
   backend.fetch_symbols_sync()
   local items = data.get_or_create(0).items
   vim.api.nvim_buf_delete(0, { force = true })
-  M.assert_tree_equals(items, expected)
+  if vim.fn.filereadable(symbols_file) == 0 or vim.env.UPDATE_SYMBOLS then
+    local content = sanitize_symbols(vim.deepcopy(items))
+    local formatted_json = vim.fn.system("jq --sort-keys", vim.json.encode(content))
+    local fd = assert(vim.loop.fs_open(symbols_file, "w", 420)) -- 0644
+    vim.loop.fs_write(fd, formatted_json)
+    vim.loop.fs_close(fd)
+    print("Updated " .. symbols_file)
+  else
+    local fd = assert(vim.loop.fs_open(symbols_file, "r", 420)) -- 0644
+    local stat = assert(vim.loop.fs_fstat(fd))
+    local content = assert(vim.loop.fs_read(fd, stat.size))
+    vim.loop.fs_close(fd)
+    local expected = vim.json.decode(content)
+    M.assert_tree_equals(items, expected)
+  end
 end
 
 M.assert_tree_equals = function(received, expected, path)

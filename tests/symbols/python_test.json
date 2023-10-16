@@ -1,0 +1,40 @@
+[
+  {
+    "col": 0,
+    "end_col": 8,
+    "end_lnum": 2,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 1,
+    "name": "fn_1"
+  },
+  {
+    "children": [
+      {
+        "col": 4,
+        "end_col": 12,
+        "end_lnum": 7,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 6,
+        "name": "meth_1"
+      }
+    ],
+    "col": 0,
+    "end_col": 12,
+    "end_lnum": 7,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 5,
+    "name": "cl_1"
+  },
+  {
+    "col": 0,
+    "end_col": 10,
+    "end_lnum": 9,
+    "kind": "Variable",
+    "level": 0,
+    "lnum": 9,
+    "name": "var"
+  }
+]

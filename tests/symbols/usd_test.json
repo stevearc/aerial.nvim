@@ -1,0 +1,91 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "col": 8,
+            "end_col": 58,
+            "end_lnum": 9,
+            "kind": "Property",
+            "level": 2,
+            "lnum": 9,
+            "name": "foo:xformOp:rotateXYZ"
+          },
+          {
+            "col": 8,
+            "end_col": 48,
+            "end_lnum": 10,
+            "kind": "Property",
+            "level": 2,
+            "lnum": 10,
+            "name": "translate"
+          },
+          {
+            "col": 8,
+            "end_col": 32,
+            "end_lnum": 11,
+            "kind": "Property",
+            "level": 2,
+            "lnum": 11,
+            "name": "thing"
+          },
+          {
+            "children": [
+              {
+                "col": 12,
+                "end_col": 13,
+                "end_lnum": 15,
+                "kind": "EnumMember",
+                "level": 3,
+                "lnum": 14,
+                "name": "default"
+              },
+              {
+                "children": [
+                  {
+                    "col": 16,
+                    "end_col": 56,
+                    "end_lnum": 17,
+                    "kind": "Property",
+                    "level": 4,
+                    "lnum": 17,
+                    "name": "xformOp:translate"
+                  }
+                ],
+                "col": 12,
+                "end_col": 13,
+                "end_lnum": 18,
+                "kind": "EnumMember",
+                "level": 3,
+                "lnum": 16,
+                "name": "one"
+              }
+            ],
+            "col": 8,
+            "end_col": 9,
+            "end_lnum": 19,
+            "kind": "Enum",
+            "level": 2,
+            "lnum": 13,
+            "name": "variants"
+          }
+        ],
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 20,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 7,
+        "name": "child"
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 21,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 3,
+    "name": "something"
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "col": 0,
+    "end_col": 17,
+    "end_lnum": 1,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 1,
+    "name": "vimdoc_test.txt"
+  },
+  {
+    "children": [
+      {
+        "col": 68,
+        "end_col": 82,
+        "end_lnum": 5,
+        "kind": "Interface",
+        "level": 1,
+        "lnum": 5,
+        "name": ":SomeCommand"
+      }
+    ],
+    "col": 0,
+    "end_col": 10,
+    "end_lnum": 3,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 3,
+    "name": "TEST INTRO"
+  }
+]

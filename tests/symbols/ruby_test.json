@@ -1,0 +1,239 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "col": 4,
+            "end_col": 20,
+            "end_lnum": 3,
+            "kind": "Method",
+            "level": 2,
+            "lnum": 3,
+            "name": "meth_1"
+          }
+        ],
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 4,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 2,
+        "name": "Cl_1"
+      },
+      {
+        "col": 2,
+        "end_col": 18,
+        "end_lnum": 6,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 6,
+        "name": "meth_2"
+      },
+      {
+        "col": 2,
+        "end_col": 22,
+        "end_lnum": 8,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 8,
+        "name": "name="
+      },
+      {
+        "col": 2,
+        "end_col": 19,
+        "end_lnum": 10,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 10,
+        "name": "=="
+      },
+      {
+        "col": 2,
+        "end_col": 21,
+        "end_lnum": 12,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 12,
+        "name": "oneline"
+      }
+    ],
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 13,
+    "kind": "Module",
+    "level": 0,
+    "lnum": 1,
+    "name": "Mod"
+  },
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 17,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 16,
+        "name": "before :all"
+      },
+      {
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 19,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 18,
+        "name": "after"
+      },
+      {
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 21,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 20,
+        "name": "it should describe the test"
+      }
+    ],
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 22,
+    "kind": "Method",
+    "level": 0,
+    "lnum": 15,
+    "name": "describe UnitTest"
+  },
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 29,
+        "end_lnum": 25,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 25,
+        "name": "task :simple_task"
+      },
+      {
+        "col": 2,
+        "end_col": 43,
+        "end_lnum": 26,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 26,
+        "name": "task inline_task"
+      },
+      {
+        "col": 2,
+        "end_col": 37,
+        "end_lnum": 27,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 27,
+        "name": "task rake_task"
+      },
+      {
+        "col": 2,
+        "end_col": 58,
+        "end_lnum": 28,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 28,
+        "name": "multitask parallel_prereqs"
+      },
+      {
+        "col": 2,
+        "end_col": 30,
+        "end_lnum": 29,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 29,
+        "name": "file create_file"
+      }
+    ],
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 30,
+    "kind": "Method",
+    "level": 0,
+    "lnum": 24,
+    "name": "namespace rake_namespace"
+  },
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 35,
+        "kind": "Class",
+        "level": 1,
+        "lnum": 34,
+        "name": "Long::Class::Name"
+      }
+    ],
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 36,
+    "kind": "Module",
+    "level": 0,
+    "lnum": 33,
+    "name": "Long::Mod::Name"
+  },
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 40,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 39,
+        "name": "setup"
+      },
+      {
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 42,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 41,
+        "name": "teardown"
+      },
+      {
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 44,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 43,
+        "name": "should test something"
+      },
+      {
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 46,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 45,
+        "name": "should_eventually actually work"
+      },
+      {
+        "col": 2,
+        "end_col": 41,
+        "end_lnum": 47,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 47,
+        "name": "should_not validate_presence_of(:title)"
+      }
+    ],
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 48,
+    "kind": "Method",
+    "level": 0,
+    "lnum": 38,
+    "name": "context Shoulda Context"
+  }
+]

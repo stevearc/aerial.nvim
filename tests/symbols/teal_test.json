@@ -1,0 +1,65 @@
+[
+  {
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 3,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 1,
+    "name": "fn_1"
+  },
+  {
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 7,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 5,
+    "name": "fn_2"
+  },
+  {
+    "col": 0,
+    "end_col": 23,
+    "end_lnum": 11,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 11,
+    "name": "fn_3"
+  },
+  {
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 15,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 13,
+    "name": "M.launch"
+  },
+  {
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 21,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 17,
+    "name": "M.wrap"
+  },
+  {
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 33,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 28,
+    "name": "Point.new"
+  },
+  {
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 38,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 35,
+    "name": "Point:move"
+  }
+]
