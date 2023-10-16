@@ -39,6 +39,7 @@
         "level": 1,
         "lnum": 10,
         "name": "private_function",
+        "scope": "private",
         "selection_range": {
           "col": 7,
           "end_col": 23,

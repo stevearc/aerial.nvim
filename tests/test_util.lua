@@ -35,18 +35,17 @@ local allowed_fields = {
   "col",
   "end_lnum",
   "end_col",
+  "scope",
   "selection_range",
-  "children",
 }
 local function sanitize_symbols(symbols)
   for _, item in ipairs(symbols) do
     for k, _ in pairs(item) do
-      if not vim.tbl_contains(allowed_fields, k) then
+      if k == "children" then
+        sanitize_symbols(item[k])
+      elseif not vim.tbl_contains(allowed_fields, k) then
         item[k] = nil
       end
-    end
-    if item.children then
-      sanitize_symbols(item.children)
     end
   end
   return symbols
@@ -114,9 +113,7 @@ M.assert_tree_equals = function(received, expected, path)
   for i, child in ipairs(received) do
     local exp_child = expected[i]
     local lines = { "Symbol mismatch: {" }
-    local fields =
-      { "kind", "name", "level", "lnum", "col", "end_lnum", "end_col", "selection_range" }
-    for _, field in ipairs(fields) do
+    for _, field in ipairs(allowed_fields) do
       local s_field = string.rep(" ", 17 - string.len(field)) .. field
       local line = string.format("%s = %s", s_field, vim.inspect(exp_child[field]))
       if not vim.deep_equal(child[field], exp_child[field]) then
@@ -126,7 +123,7 @@ M.assert_tree_equals = function(received, expected, path)
     end
     table.insert(lines, "}")
     local err_msg = table.concat(lines, "\n")
-    for _, field in ipairs(fields) do
+    for _, field in ipairs(allowed_fields) do
       assert.same(exp_child[field], child[field], err_msg)
     end
     table.insert(path, exp_child.name)
