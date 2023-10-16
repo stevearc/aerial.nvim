@@ -113,6 +113,35 @@ describe("treesitter cpp", function()
         end_lnum = 28,
         end_col = 1,
       },
+      {
+        kind = "Function",
+        name = "declaredFunction",
+        level = 0,
+        lnum = 30,
+        col = 0,
+        end_lnum = 30,
+        end_col = 23,
+      },
+      {
+        kind = "Class",
+        name = "A",
+        level = 0,
+        lnum = 32,
+        col = 0,
+        end_lnum = 34,
+        end_col = 1,
+        children = {
+          {
+            kind = "Function",
+            name = "clsDeclaredFunction",
+            level = 1,
+            lnum = 33,
+            col = 2,
+            end_lnum = 33,
+            end_col = 28,
+          },
+        },
+      },
     })
   end)
 end)

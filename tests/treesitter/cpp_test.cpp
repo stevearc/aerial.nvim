@@ -26,3 +26,9 @@ void fn_4() {
   struct Point p1;                     // This should not show up as a symbol
   struct Point *p2 = new struct Point; // This should not show up as a symbol
 }
+
+int declaredFunction();
+
+class A {
+  int clsDeclaredFunction();
+};

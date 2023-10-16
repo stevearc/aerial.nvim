@@ -309,7 +309,21 @@ M.c = {
   postprocess = c_postprocess,
 }
 M.cpp = {
-  postprocess = c_postprocess,
+  postprocess = function(bufnr, item, match)
+    if item.kind ~= "Function" then
+      return
+    end
+    local parent = (utils.get_at_path(match, "type") or {}).node
+    local stop_types = { "function_definition", "declaration", "field_declaration" }
+    while parent and not vim.tbl_contains(stop_types, parent:type()) do
+      parent = parent:parent()
+    end
+    if parent then
+      for k, v in pairs(helpers.range_from_nodes(parent, parent)) do
+        item[k] = v
+      end
+    end
+  end,
 }
 
 M.rst = {

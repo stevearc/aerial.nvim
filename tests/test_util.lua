@@ -69,19 +69,20 @@ M.assert_tree_equals = function(received, expected, path)
   for i, child in ipairs(received) do
     local exp_child = expected[i]
     local lines = { "Symbol mismatch: {" }
-    local fields = { "kind", "name", "level", "lnum", "col", "end_lnum", "end_col" }
+    local fields =
+      { "kind", "name", "level", "lnum", "col", "end_lnum", "end_col", "selection_range" }
     for _, field in ipairs(fields) do
-      local s_field = string.rep(" ", 8 - string.len(field)) .. field
-      local line = string.format("%s = %s", s_field, exp_child[field])
-      if child[field] ~= exp_child[field] then
-        line = line .. string.format("  [%s]", child[field])
+      local s_field = string.rep(" ", 17 - string.len(field)) .. field
+      local line = string.format("%s = %s", s_field, vim.inspect(exp_child[field]))
+      if not vim.deep_equal(child[field], exp_child[field]) then
+        line = line .. string.format("  [%s]", vim.inspect(child[field]))
       end
       table.insert(lines, line)
     end
     table.insert(lines, "}")
     local err_msg = table.concat(lines, "\n")
     for _, field in ipairs(fields) do
-      assert.equals(exp_child[field], child[field], err_msg)
+      assert.same(exp_child[field], child[field], err_msg)
     end
     table.insert(path, exp_child.name)
     M.assert_tree_equals(child.children, exp_child.children, path)
@@ -91,6 +92,7 @@ end
 
 M.reset_editor = function()
   require("aerial").setup({})
+  require("aerial").sync_load()
   vim.cmd.tabonly({ mods = { silent = true } })
   for i, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
     if i > 1 then

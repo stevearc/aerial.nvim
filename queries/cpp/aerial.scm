@@ -1,7 +1,3 @@
-(function_definition
-  (#set! "kind" "Function")
-  ) @root @type
-
 (struct_specifier
   name: (type_identifier) @name
   body: (field_declaration_list)
@@ -15,6 +11,11 @@
   declarator: (identifier) @name
   (#set! "kind" "Struct")
   )
+
+(function_declarator
+  declarator: (_) @name
+  (#set! "kind" "Function")
+  ) @type
 
 (enum_specifier
   name: (type_identifier) @name
