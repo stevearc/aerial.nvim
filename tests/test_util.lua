@@ -64,6 +64,14 @@ M.test_file_symbols = function(backend_name, filename, symbols_file)
   })
   vim.cmd(string.format("edit %s", filename))
   local backend = backends.get(0)
+  if not backend then
+    local msg = string.format(
+      "Could not find aerial backend for %s with filetype '%s'. If this is not correct, you may need a special filetype rule in tests/minimal_init.lua.",
+      filename,
+      vim.bo.filetype
+    )
+    assert(backend, msg)
+  end
   backend.fetch_symbols_sync()
   local items = data.get_or_create(0).items
   vim.api.nvim_buf_delete(0, { force = true })
