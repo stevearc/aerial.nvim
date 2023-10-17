@@ -1,0 +1,47 @@
+[
+  {
+    "col": 0,
+    "end_col": 27,
+    "end_lnum": 7,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 1,
+    "name": "all",
+    "selection_range": {
+      "col": 5,
+      "end_col": 8,
+      "end_lnum": 1,
+      "lnum": 1
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 8,
+    "end_lnum": 10,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 9,
+    "name": "f",
+    "selection_range": {
+      "col": 4,
+      "end_col": 5,
+      "end_lnum": 9,
+      "lnum": 9
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 10,
+    "end_lnum": 12,
+    "kind": "Variable",
+    "level": 0,
+    "lnum": 12,
+    "name": "var",
+    "selection_range": {
+      "col": 0,
+      "end_col": 3,
+      "end_lnum": 12,
+      "lnum": 12
+    }
+  }
+]

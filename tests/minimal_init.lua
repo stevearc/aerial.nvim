@@ -9,6 +9,7 @@ vim.filetype.add({
     norg = "norg", -- Neovim doesn't have built-in norg filetype detection
     usd = "usd", -- Neovim doesn't have built-in USD filetype detection
     usda = "usd", -- Neovim doesn't have built-in USD filetype detection
+    smk = "snakemake", -- Neovim doesn't have built-in Snakemake filetype detection
   },
 })
 
