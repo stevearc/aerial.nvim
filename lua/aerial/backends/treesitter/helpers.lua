@@ -59,21 +59,6 @@ M.has_parser = function(lang)
   return installed
 end
 
-if vim.treesitter.query.get == nil then -- nvim < 0.9
-  ---@param lang string
-  ---@return boolean
-  M.has_query = function(lang)
-    ---@diagnostic disable-next-line: deprecated
-    return vim.treesitter.query.get_query(lang, "aerial") ~= nil
-  end
-else
-  ---@param lang string
-  ---@return boolean
-  M.has_query = function(lang)
-    return vim.treesitter.query.get(lang, "aerial") ~= nil
-  end
-end
-
 ---@param bufnr integer
 ---@return LanguageTree|nil
 M.get_parser = function(bufnr)
