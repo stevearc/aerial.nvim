@@ -1,7 +1,13 @@
 local config = require("aerial.config")
 local helpers = require("aerial.backends.treesitter.helpers")
-local util = require("aerial.backends.util")
 local M = {}
+
+---@param match? table
+---@param path string
+---@return nil|TSNode
+local function node_from_match(match, path)
+  return ((match or {})[path] or {}).node
+end
 
 local get_node_text = vim.treesitter.get_node_text
 local default_methods = {
@@ -69,7 +75,7 @@ M.elixir = {
     spec = "TypeParameter",
   },
   postprocess = function(bufnr, item, match)
-    local identifier = util.get_at_path(match, "identifier").node
+    local identifier = node_from_match(match, "identifier")
     if identifier then
       local name = get_node_text(identifier, bufnr) or "<parse error>"
       if name == "defp" then
@@ -82,7 +88,7 @@ M.elixir = {
         item.parent.kind = "Struct"
         return false
       elseif name == "defimpl" then
-        local protocol = util.get_at_path(match, "protocol").node
+        local protocol = assert(node_from_match(match, "protocol"))
         local protocol_name = get_node_text(protocol, bufnr) or "<parse error>"
         item.name = string.format("%s > %s", item.name, protocol_name)
       elseif name == "test" then
@@ -98,7 +104,7 @@ M.elixir = {
 
 M.markdown = {
   get_parent = function(stack, match, node)
-    local level_node = util.get_at_path(match, "level").node
+    local level_node = assert(node_from_match(match, "level"))
     -- Parse the level out of e.g. atx_h1_marker
     local level = tonumber(string.match(level_node:type(), "%d")) - 1
     for i = #stack, 1, -1 do
@@ -122,7 +128,7 @@ M.markdown = {
 
 M.go = {
   postprocess = function(bufnr, item, match)
-    local receiver = util.get_at_path(match, "receiver").node
+    local receiver = node_from_match(match, "receiver")
     if receiver then
       local receiver_text = get_node_text(receiver, bufnr) or "<parse error>"
       item.name = string.format("%s %s", receiver_text, item.name)
@@ -195,8 +201,8 @@ M.vimdoc = M.help
 M.rust = {
   postprocess = function(bufnr, item, match)
     if item.kind == "Class" then
-      local trait_node = util.get_at_path(match, "trait").node
-      local type = util.get_at_path(match, "rust_type").node
+      local trait_node = node_from_match(match, "trait")
+      local type = assert(node_from_match(match, "rust_type"))
       local name = get_node_text(type, bufnr) or "<parse error>"
       if trait_node then
         local trait = get_node_text(trait_node, bufnr) or "<parse error>"
@@ -210,11 +216,11 @@ M.rust = {
 M.ruby = {
   postprocess = function(bufnr, item, match)
     -- Reciever modification comes first, as we intend for it to generate a ruby-like `reciever.name`
-    local receiver = util.get_at_path(match, "receiver").node
-    local separator = util.get_at_path(match, "separator").node
+    local receiver = node_from_match(match, "receiver")
+    local separator = node_from_match(match, "separator")
     if receiver then
       local reciever_name = get_node_text(receiver, bufnr) or "<parse error>"
-      local separator_string = get_node_text(separator, bufnr) or "."
+      local separator_string = separator and get_node_text(separator, bufnr) or "."
       if reciever_name ~= item.name then
         item.name = reciever_name .. separator_string .. item.name
       end
@@ -222,7 +228,7 @@ M.ruby = {
 
     -- Method modification comes last, as it's supposed to generate a global prefix
     -- akin to RSpec's "describe ClassName"
-    local method = util.get_at_path(match, "method").node
+    local method = node_from_match(match, "method")
     if method then
       local fn = get_node_text(method, bufnr) or "<parse error>"
       if fn ~= item.name then
@@ -234,7 +240,7 @@ M.ruby = {
 
 M.lua = {
   postprocess = function(bufnr, item, match)
-    local method = util.get_at_path(match, "method").node
+    local method = node_from_match(match, "method")
     if method then
       local fn = get_node_text(method, bufnr) or "<parse error>"
       if fn == "it" or fn == "describe" then
@@ -246,9 +252,9 @@ M.lua = {
 
 M.javascript = {
   postprocess = function(bufnr, item, match)
-    local method = util.get_at_path(match, "method").node
-    local modifier = util.get_at_path(match, "modifier").node
-    local string = util.get_at_path(match, "string").node
+    local method = node_from_match(match, "method")
+    local modifier = node_from_match(match, "modifier")
+    local string = node_from_match(match, "string")
     if method and string then
       local fn = get_node_text(method, bufnr) or "<parse error>"
       if modifier then
@@ -261,7 +267,7 @@ M.javascript = {
 }
 
 local function c_postprocess(bufnr, item, match)
-  local root = util.get_at_path(match, "root").node
+  local root = node_from_match(match, "root")
   if root then
     while
       root
@@ -274,6 +280,7 @@ local function c_postprocess(bufnr, item, match)
       }, root:type())
     do
       -- Search the declarator downwards until you hit the identifier
+      ---@diagnostic disable-next-line: undefined-field
       local next = root:field("declarator")[1]
       if next ~= nil then
         root = next
@@ -296,7 +303,7 @@ M.cpp = {
     if item.kind ~= "Function" then
       return
     end
-    local parent = (util.get_at_path(match, "type") or {}).node
+    local parent = node_from_match(match, "type")
     local stop_types = { "function_definition", "declaration", "field_declaration" }
     while parent and not vim.tbl_contains(stop_types, parent:type()) do
       parent = parent:parent()
@@ -317,7 +324,7 @@ M.rst = {
 
 M.typescript = {
   postprocess = function(bufnr, item, match)
-    local value_node = util.get_at_path(match, "var_type").node
+    local value_node = node_from_match(match, "var_type")
     if value_node then
       if value_node:type() == "generator_function" then
         item.kind = "Function"
@@ -326,9 +333,9 @@ M.typescript = {
         item.kind = "Function"
       end
     end
-    local method = util.get_at_path(match, "method").node
-    local modifier = util.get_at_path(match, "modifier").node
-    local string = util.get_at_path(match, "string").node
+    local method = node_from_match(match, "method")
+    local modifier = node_from_match(match, "modifier")
+    local string = node_from_match(match, "string")
     if method and string then
       local fn = get_node_text(method, bufnr) or "<parse error>"
       if modifier then
@@ -342,7 +349,7 @@ M.typescript = {
 
 M.latex = {
   postprocess = function(bufnr, item, match)
-    local type_node = util.get_at_path(match, "type").node
+    local type_node = assert(node_from_match(match, "type"))
     local base_type = type_node:type()
     if base_type == "title_declaration" then
       item.name = "Title: " .. item.name
