@@ -3,9 +3,6 @@ local config = require("aerial.config")
 local helpers = require("aerial.backends.treesitter.helpers")
 local util = require("aerial.backends.util")
 
----@diagnostic disable deprecated
-
----@type aerial.Backend
 local M = {}
 
 -- Custom capture groups:
@@ -15,17 +12,15 @@ local M = {}
 -- end (optional): The location of the end of this symbol (default @start)
 
 M.is_supported = function(bufnr)
-  local ok, parsers = pcall(require, "nvim-treesitter.parsers")
-  if not ok then
-    return false, "nvim-treesitter not found"
+  if vim.fn.has("nvim-0.9") == 0 and not pcall(require, "nvim-treesitter") then
+    return false, "Neovim <0.9 requires nvim-treesitter"
   end
-  local lang = parsers.get_buf_lang(bufnr)
-  if not parsers.has_parser(lang) then
+  local lang = helpers.get_buf_lang(bufnr)
+  if not helpers.has_parser(lang) then
     return false, string.format("No treesitter parser for %s", lang)
   end
-  local query = require("nvim-treesitter.query")
-  if not query.has_query_files(lang, "aerial") then
-    return false, string.format("No query file for '%s'", lang)
+  if helpers.get_query(lang) == nil then
+    return false, string.format("No queries defined for '%s'", lang)
   end
   return true, nil
 end
@@ -33,21 +28,9 @@ end
 M.fetch_symbols_sync = function(bufnr)
   bufnr = bufnr or 0
   local extensions = require("aerial.backends.treesitter.extensions")
-  local parsers = require("nvim-treesitter.parsers")
-  local query = require("nvim-treesitter.query")
-  local get_node_text
-  if vim.treesitter.get_node_text then
-    get_node_text = vim.treesitter.get_node_text
-  elseif vim.treesitter.query and vim.treesitter.query.get_node_text then
-    get_node_text = vim.treesitter.query.get_node_text
-  else
-    local ts_utils = require("nvim-treesitter.ts_utils")
-    get_node_text = function(node, buf)
-      return ts_utils.get_node_text(node, buf)[1]
-    end
-  end
+  local get_node_text = vim.treesitter.get_node_text
   local include_kind = config.get_filter_kind_map(bufnr)
-  local parser = parsers.get_parser(bufnr)
+  local parser = helpers.get_parser(bufnr)
   local items = {}
   if not parser then
     backends.set_symbols(bufnr, items, { backend_name = "treesitter", lang = "unknown" })
@@ -55,7 +38,8 @@ M.fetch_symbols_sync = function(bufnr)
   end
   local lang = parser:lang()
   local syntax_tree = parser:parse()[1]
-  if not query.has_query_files(lang, "aerial") or not syntax_tree then
+  local query = helpers.get_query(lang)
+  if not query or not syntax_tree then
     backends.set_symbols(
       bufnr,
       items,
@@ -68,7 +52,33 @@ M.fetch_symbols_sync = function(bufnr)
   -- It is used to determine node parents for the tree structure.
   local stack = {}
   local ext = extensions[lang]
-  for match in query.iter_group_results(bufnr, "aerial", syntax_tree:root(), lang) do
+  ---@diagnostic disable-next-line: missing-parameter
+  for _, matches, metadata in query:iter_matches(syntax_tree:root(), bufnr) do
+    ---@note mimic nvim-treesitter's query.iter_group_results return values:
+    --       {
+    --         kind = "Method",
+    --         name = {
+    --           metadata = {
+    --             range = { 2, 11, 2, 20 }
+    --           },
+    --           node = <userdata 1>
+    --         },
+    --         type = {
+    --           node = <userdata 2>
+    --         }
+    --       }
+    --- Matches can overlap. The last match wins.
+    local match = vim.tbl_extend("force", {}, metadata)
+    for id, node in pairs(matches) do
+      -- iter_group_results prefers `#set!` metadata, keeping the behaviour
+      match = vim.tbl_extend("keep", match, {
+        [query.captures[id]] = {
+          metadata = metadata[id],
+          node = node,
+        },
+      })
+    end
+
     local name_match = match.name or {}
     local selection_match = match.selection or {}
     local type_node = (match.type or {}).node
