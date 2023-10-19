@@ -46,3 +46,47 @@ context "Shoulda Context" do
   end
   should_not validate_presence_of(:title)
 end
+
+class Privateers
+  private def inline_private
+  end
+
+  def public_1
+  end
+
+  private
+  def private_1
+  end
+
+  acts_as_state_machine
+
+  protected
+  def protected_1
+  end
+
+  attr_reader :test
+
+  class DoNotBreakScope
+  end
+
+  # Some comment
+  def protected_2
+  end
+
+  public def inline_public
+  end
+
+  def protected_3
+  end
+
+  public
+  def public_2
+  end
+
+  def public_setter=(val)
+  end
+
+  private
+  def private_setter=(val)
+  end
+end

@@ -124,6 +124,7 @@ M.fetch_symbols_sync = function(bufnr)
       name = name,
       level = level,
       parent = parent_item,
+      scope = match.scope,
     }
     if use_selection_range then
       item.selection_range = selection_range
