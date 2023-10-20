@@ -4,20 +4,38 @@
   ) @type
 
 (method
-  name: (identifier) @name
+  name: (_) @name
   (#set! "kind" "Method")
   ) @type
 
-(method
-  name: (operator) @name
-  (#set! "kind" "Method")
-  ) @type
+(call
+  (identifier) @scope_switch
+  (#any-of? @scope_switch "private" "protected")
 
-(method
-  name: (setter
-    name: (identifier)) @name
-  (#set! "kind" "Method")
-  ) @type
+  (argument_list
+    (method
+      name: (_) @name
+      (#set! "kind" "Method")
+      (#set! "scope" "private")
+      ) @type
+    )
+  )
+
+(body_statement
+  (identifier) @scope @later_scope
+  (#any-of? @scope "private" "protected")
+  .
+  [
+   (_)
+   ((identifier) @later_scope (#not-eq? @later_scope "public"))
+   ]*
+  .
+  (method
+    name: (_) @name
+    (#set! "kind" "Method")
+    (#set! "scope" "private")
+    ) @type
+  )
 
 (singleton_method
   object: [(constant) (self) (identifier)] @receiver
