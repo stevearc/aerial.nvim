@@ -443,7 +443,7 @@
         "level": 1,
         "lnum": 64,
         "name": "protected_1",
-        "scope": "private",
+        "scope": "protected",
         "selection_range": {
           "col": 6,
           "end_col": 17,
@@ -474,7 +474,7 @@
         "level": 1,
         "lnum": 73,
         "name": "protected_2",
-        "scope": "private",
+        "scope": "protected",
         "selection_range": {
           "col": 6,
           "end_col": 17,
@@ -490,6 +490,7 @@
         "level": 1,
         "lnum": 76,
         "name": "inline_public",
+        "scope": "public",
         "selection_range": {
           "col": 13,
           "end_col": 26,
@@ -505,7 +506,7 @@
         "level": 1,
         "lnum": 79,
         "name": "protected_3",
-        "scope": "private",
+        "scope": "protected",
         "selection_range": {
           "col": 6,
           "end_col": 17,
@@ -521,6 +522,7 @@
         "level": 1,
         "lnum": 83,
         "name": "public_2",
+        "scope": "public",
         "selection_range": {
           "col": 6,
           "end_col": 14,
@@ -536,6 +538,7 @@
         "level": 1,
         "lnum": 86,
         "name": "public_setter=",
+        "scope": "public",
         "selection_range": {
           "col": 6,
           "end_col": 20,

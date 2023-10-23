@@ -117,14 +117,20 @@ M.fetch_symbols_sync = function(bufnr)
     else
       name = "<Anonymous>"
     end
+    local scope
+    if match.scope and match.scope.node then -- we've got a node capture on our hands
+      scope = get_node_text(match.scope.node, bufnr, match.scope)
+    else
+      scope = match.scope
+    end
     ---@type aerial.Symbol
     local item = {
       kind = kind,
       name = name,
       level = level,
       parent = parent_item,
-      scope = match.scope,
       selection_range = selection_range,
+      scope = scope,
     }
     for k, v in pairs(range) do
       item[k] = v
