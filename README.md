@@ -16,6 +16,7 @@ A code outline window for skimming and quick navigation
 - [Highlight](#highlight)
 - [API](#api)
 - [TreeSitter queries](#treesitter-queries)
+  - [Language extensions](#language-extensions)
 - [FAQ](#faq)
 
 <!-- /TOC -->
