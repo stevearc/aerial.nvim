@@ -5,6 +5,7 @@ vim.bo.swapfile = false
 vim.filetype.add({
   extension = {
     norg = "norg", -- Neovim doesn't have built-in norg filetype detection
+    objdump = "objdump", -- Neovim doesn't have built-in USD filetype detection
     usd = "usd", -- Neovim doesn't have built-in USD filetype detection
     usda = "usd", -- Neovim doesn't have built-in USD filetype detection
     smk = "snakemake", -- Neovim doesn't have built-in Snakemake filetype detection
