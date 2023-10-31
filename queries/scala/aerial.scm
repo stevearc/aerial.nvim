@@ -1,24 +1,24 @@
 (trait_definition
   name: (identifier) @name
   (#set! "kind" "Interface")
-  ) @type
+  ) @symbol
 
 (object_definition
   name: (identifier) @name
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol
 
 (class_definition
   name: (identifier) @name
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol
 
 (function_declaration
   name: (identifier) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (function_definition
   name: (identifier) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol

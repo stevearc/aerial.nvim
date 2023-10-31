@@ -1,9 +1,9 @@
 (message
   (message_name) @name
   (#set! "kind" "Class")
-) @type
+) @symbol
 
 (enum
   (enum_name) @name
   (#set! "kind" "Enum")
-) @type
+) @symbol

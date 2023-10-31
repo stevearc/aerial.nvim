@@ -1,12 +1,12 @@
 (function_definition
   name: (name) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (expression_statement
   (assignment_expression
     left: (variable_name) @name
-    right: (anonymous_function_creation_expression) @type
+    right: (anonymous_function_creation_expression) @symbol
   )
   (#set! "kind" "Function")
   ) @start
@@ -14,19 +14,19 @@
 (class_declaration
   name: (name) @name
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol
 
 (method_declaration
   name: (name) @name
   (#set! "kind" "Method")
-  ) @type
+  ) @symbol
 
 (interface_declaration
   name: (name) @name
   (#set! "kind" "Interface")
-  ) @type
+  ) @symbol
 
 (trait_declaration
   name: (name) @name
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol

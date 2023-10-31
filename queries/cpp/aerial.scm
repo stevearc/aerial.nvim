@@ -2,12 +2,12 @@
   name: (type_identifier) @name
   body: (field_declaration_list)
   (#set! "kind" "Struct")
-) @type
+) @symbol
 
 (declaration
   (struct_specifier
     body: (field_declaration_list)
-    ) @type
+    ) @symbol
   declarator: (identifier) @name
   (#set! "kind" "Struct")
   )
@@ -15,14 +15,14 @@
 (function_declarator
   declarator: (_) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (enum_specifier
   name: (type_identifier) @name
   (#set! "kind" "Enum")
-  ) @type
+  ) @symbol
 
 (class_specifier
   name: (type_identifier) @name
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol

@@ -2,4 +2,4 @@
   (function_declaration
     name: [(identifier) (scoped_identifier)] @name)
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol

@@ -1,14 +1,14 @@
 (function_statement
   name: [(identifier)] @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (var_declaration
   (var_declarators
     (var
       name: (identifier) @name))
   (expressions
-    (anon_function) @type)
+    (anon_function) @symbol)
   (#set! "kind" "Function")
   ) @start
 
@@ -19,11 +19,11 @@
           (identifier)
           (identifier) @name)))
     (expressions
-      (anon_function) @type)
+      (anon_function) @symbol)
   (#set! "kind" "Function")
     ) @start
 
 (function_statement
     name: (function_name) @name
   (#set! "kind" "Function")
-    ) @type
+    ) @symbol

@@ -1,12 +1,12 @@
 (class
   name: [(constant) (scope_resolution)] @name
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol
 
 (method
   name: (_) @name
   (#set! "kind" "Method")
-  ) @type
+  ) @symbol
 
 (call
   (identifier) @scope_switch
@@ -17,7 +17,7 @@
       name: (_) @name
       (#set! "kind" "Method")
       (#set! "scope" "private")
-      ) @type
+      ) @symbol
     )
   )
 
@@ -34,7 +34,7 @@
     name: (_) @name
     (#set! "kind" "Method")
     (#set! "scope" "private")
-    ) @type
+    ) @symbol
   )
 
 (singleton_method
@@ -42,17 +42,17 @@
   (["." "::"] @separator)?
   name: [(operator) (identifier)] @name
   (#set! "kind" "Method")
-  ) @type
+  ) @symbol
 
 (singleton_class
   value: (_) @name
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol
 
 (module
   name: [(constant) (scope_resolution)] @name
   (#set! "kind" "Module")
-  ) @type
+  ) @symbol
 
 ; For Rspec, Rake, and Shoulda
 (call
@@ -70,4 +70,4 @@
      (call) @name
     ])?
   (#set! "kind" "Method")
-) @type @selection
+) @symbol @selection

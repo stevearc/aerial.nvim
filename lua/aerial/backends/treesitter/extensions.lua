@@ -6,7 +6,12 @@ local M = {}
 ---@param path string
 ---@return nil|TSNode
 local function node_from_match(match, path)
-  return ((match or {})[path] or {}).node
+  local ret = ((match or {})[path] or {}).node
+  if path == "symbol" and not ret then
+    -- Backwards compatibility for old @type capture
+    ret = ((match or {}).type or {}).node
+  end
+  return ret
 end
 
 local get_node_text = vim.treesitter.get_node_text
@@ -164,7 +169,7 @@ M.help = {
     -- We need to get _all_ word nodes
     local pieces = {}
     local node = match.name.node
-    if vim.startswith(match.type.node:type(), "h") then
+    if vim.startswith(node_from_match(match, "symbol"):type(), "h") then
       while node and node:type() == "word" do
         local row, col = node:start()
         table.insert(pieces, 1, get_node_text(node, bufnr))
@@ -303,7 +308,7 @@ M.cpp = {
     if item.kind ~= "Function" then
       return
     end
-    local parent = node_from_match(match, "type")
+    local parent = node_from_match(match, "symbol")
     local stop_types = { "function_definition", "declaration", "field_declaration" }
     while parent and not vim.tbl_contains(stop_types, parent:type()) do
       parent = parent:parent()
@@ -349,7 +354,7 @@ M.typescript = {
 
 M.latex = {
   postprocess = function(bufnr, item, match)
-    local type_node = assert(node_from_match(match, "type"))
+    local type_node = assert(node_from_match(match, "symbol"))
     local base_type = type_node:type()
     if base_type == "title_declaration" then
       item.name = "Title: " .. item.name

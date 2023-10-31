@@ -2,15 +2,15 @@
   (word)+ @name @start
   (tag)
   (#set! "kind" "Interface")
-) @type
+) @symbol
 
 (h2
   (word)+ @name @start
   (tag)
   (#set! "kind" "Interface")
-) @type
+) @symbol
 
 (tag
   text: (word) @name
   (#set! "kind" "Interface")
-) @type
+) @symbol

@@ -6,9 +6,9 @@ local util = require("aerial.backends.util")
 local M = {}
 
 -- Custom capture groups:
--- type: Used to determine the SymbolKind (via language_kind_map)
+-- symbol: Used to determine to unique node that represents the symbol
 -- name (optional): The text of this node will be used in the display
--- start (optional): The location of the start of this symbol (default @type)
+-- start (optional): The location of the start of this symbol (default @symbol)
 -- end (optional): The location of the end of this symbol (default @start)
 
 M.is_supported = function(bufnr)
@@ -81,15 +81,15 @@ M.fetch_symbols_sync = function(bufnr)
 
     local name_match = match.name or {}
     local selection_match = match.selection or {}
-    local type_node = (match.type or {}).node
+    local symbol_node = (match.symbol or match.type or {}).node
     -- The location capture groups are optional. We default to the
-    -- location of the @type capture
-    local start_node = (match.start or {}).node or type_node
+    -- location of the @symbol capture
+    local start_node = (match.start or {}).node or symbol_node
     local end_node = (match["end"] or {}).node or start_node
-    local parent_item, parent_node, level = ext.get_parent(stack, match, type_node)
+    local parent_item, parent_node, level = ext.get_parent(stack, match, symbol_node)
     -- Sometimes our queries will match the same node twice.
-    -- Detect that (type_node == parent_node), and skip dupes.
-    if not type_node or type_node == parent_node then
+    -- Detect that (symbol_node == parent_node), and skip dupes.
+    if not symbol_node or symbol_node == parent_node then
       goto continue
     end
     local kind = match.kind
@@ -152,7 +152,7 @@ M.fetch_symbols_sync = function(bufnr)
     else
       table.insert(items, item)
     end
-    table.insert(stack, { node = type_node, item = item })
+    table.insert(stack, { node = symbol_node, item = item })
 
     ::continue::
   end

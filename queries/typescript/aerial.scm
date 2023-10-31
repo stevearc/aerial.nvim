@@ -1,48 +1,48 @@
 (function_signature
   name: (identifier) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (function_declaration
   name: (identifier) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (generator_function_declaration
   name: (identifier) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (interface_declaration
   name: (type_identifier) @name
   (#set! "kind" "Interface")
-  ) @type
+  ) @symbol
 
 (class_declaration
   name: (type_identifier) @name
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol
 
 (method_definition
   name: (property_identifier) @name
   (#set! "kind" "Method")
-  ) @type
+  ) @symbol
 
 (public_field_definition
   name: (property_identifier) @name
   value: (arrow_function)
   (#set! "kind" "Method")
-  ) @type
+  ) @symbol
 
 (type_alias_declaration
   name: (type_identifier) @name
   (#set! "kind" "Variable")
-  ) @type
+  ) @symbol
 
 (lexical_declaration
   (variable_declarator
     name: (identifier) @name
-    value: (_) @var_type) @type
+    value: (_) @var_type) @symbol
   (#set! "kind" "Variable")
   ) @start
 
@@ -53,7 +53,7 @@
     (string
       (string_fragment) @name @string))?
   (#set! "kind" "Function")
-  ) @type @selection
+  ) @symbol @selection
 
 ; test.skip("this test")
 (call_expression
@@ -65,7 +65,7 @@
     (string
       (string_fragment) @name @string))?
   (#set! "kind" "Function")
-  ) @type @selection
+  ) @symbol @selection
 
 ; describe.each([])("Test suite")
 (call_expression
@@ -79,4 +79,4 @@
     (string
       (string_fragment) @name @string))?
   (#set! "kind" "Function")
-  ) @type @selection
+  ) @symbol @selection

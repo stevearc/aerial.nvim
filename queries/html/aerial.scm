@@ -1,6 +1,6 @@
 ((doctype) @name
   (#set! "kind" "Module")
-) @type
+) @symbol
 
 (_
   [
@@ -8,8 +8,8 @@
     (self_closing_tag (tag_name) @name)
   ]
   (#set! "kind" "Struct")
-) @type
+) @symbol
 
 (attribute (attribute_name) @name
  (#set! "kind" "Field")
-) @type
+) @symbol

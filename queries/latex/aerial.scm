@@ -1,32 +1,32 @@
 (section
   text: [(curly_group (text) @name) (_)] @name
   (#set! "kind" "Method")
-) @type
+) @symbol
 (subsection
   text: [(curly_group (text) @name) (_)] @name
   (#set! "kind" "Method")
-) @type
+) @symbol
 (subsubsection
   text: [(curly_group (text) @name) (_)] @name
   (#set! "kind" "Method")
-) @type
+) @symbol
 (generic_environment
   begin: (begin
     name: [(curly_group_text text: (text) @name) (_)] @name
 )
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol
 
 (new_command_definition
   declaration: [(curly_group_command_name command: (command_name) @name) (_)] @name
   (#set! "kind" "Operator")
-) @type
+) @symbol
 
 (title_declaration
   text: [(curly_group (text) @name) (_)] @name
   (#set! "kind" "Field")
-) @type
+) @symbol
 (author_declaration
   authors: [(curly_group_author_list (author) @name) (_)] @name
   (#set! "kind" "Field")
-) @type
+) @symbol

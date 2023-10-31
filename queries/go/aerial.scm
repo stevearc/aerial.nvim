@@ -1,19 +1,19 @@
 (function_declaration
   name: (identifier) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (type_declaration
   (type_spec
     name: (type_identifier) @name
-    type: (struct_type) @type)
+    type: (struct_type) @symbol)
   (#set! "kind" "Struct")
   ) @start
 
 (type_declaration
   (type_spec
     name: (type_identifier) @name
-    type: (interface_type) @type)
+    type: (interface_type) @symbol)
   (#set! "kind" "Interface")
   ) @start
 
@@ -21,4 +21,4 @@
   receiver: (_) @receiver
   name: (field_identifier) @name
   (#set! "kind" "Method")
-  ) @type
+  ) @symbol

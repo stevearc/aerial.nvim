@@ -1,42 +1,42 @@
 (mod_item
   name: (identifier) @name
   (#set! "kind" "Module")
-  ) @type
+  ) @symbol
 
 (enum_item
   name: (type_identifier) @name
   (#set! "kind" "Enum")
-  ) @type
+  ) @symbol
 
 (struct_item
   name: (type_identifier) @name
   (#set! "kind" "Struct")
-  ) @type
+  ) @symbol
 
 (function_item
   name: (identifier) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (function_signature_item
   name: (identifier) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (trait_item
   name: (type_identifier) @name
   (#set! "kind" "Interface")
-  ) @type
+  ) @symbol
 
 (impl_item
   trait: (type_identifier)? @trait
   type: (type_identifier) @rust_type
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol
 
 (impl_item
   trait: (type_identifier)? @trait
   type: (generic_type
     type: (type_identifier) @rust_type)
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol

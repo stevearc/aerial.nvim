@@ -1,7 +1,7 @@
 (disassembly_section_label
   (identifier) @name
-  (#set! "kind" "Interface")) @type
+  (#set! "kind" "Interface")) @symbol
 
 (disassembly_section
   (identifier) @name
-  (#set! "kind" "Function")) @type
+  (#set! "kind" "Function")) @symbol

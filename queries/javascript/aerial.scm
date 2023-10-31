@@ -1,34 +1,34 @@
 (class_declaration
   name: (identifier) @name
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol
 
 (function_declaration
   name: (identifier) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (generator_function_declaration
   name: (identifier) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (method_definition
   name: (property_identifier) @name
   (#set! "kind" "Method")
-  ) @type
+  ) @symbol
 
 (field_definition
   property: (property_identifier) @name
   value: (arrow_function)
   (#set! "kind" "Method")
-  ) @type
+  ) @symbol
 
 ; const fn = () => {}
 (lexical_declaration
   (variable_declarator
     name: (identifier) @name
-    value: [(arrow_function) (function) (generator_function)] @type
+    value: [(arrow_function) (function) (generator_function)] @symbol
   )
   (#set! "kind" "Function")
   ) @start
@@ -40,7 +40,7 @@
     (string
       (string_fragment) @name @string))?
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 ; test.skip("this test")
 (call_expression
@@ -52,7 +52,7 @@
     (string
       (string_fragment) @name @string))?
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 ; describe.each([])("Test suite")
 (call_expression
@@ -66,4 +66,4 @@
     (string
       (string_fragment) @name @string))?
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol

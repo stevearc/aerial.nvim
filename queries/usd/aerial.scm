@@ -2,36 +2,36 @@
   (string) @name
   (#offset! @name 0 1 0 -1)
   (#set! "kind" "Class")
-) @type
+) @symbol
 
 (attribute_assignment
   [(identifier) (qualified_identifier)] @name
   (#set! "kind" "Property")
-) @type
+) @symbol
 
 (attribute_declaration
   [(identifier) (qualified_identifier)] @name
   (#set! "kind" "Property")
-) @type
+) @symbol
 
 (relationship_assignment
   [(identifier) (qualified_identifier)] @name
   (#set! "kind" "Property")
-) @type
+) @symbol
 
 (relationship_declaration
   [(identifier) (qualified_identifier)] @name
   (#set! "kind" "Property")
-) @type
+) @symbol
 
 (variant_set_definition
   (string) @name
   (#offset! @name 0 1 0 -1)
   (#set! "kind" "Enum")
-) @type
+) @symbol
 
 (variant
   (string) @name
   (#offset! @name 0 1 0 -1)
   (#set! "kind" "EnumMember")
-) @type
+) @symbol

@@ -1,41 +1,41 @@
 (interface_declaration
   name: (identifier) @name
   (#set! "kind" "Interface")
-  ) @type
+  ) @symbol
 
 (class_declaration
   name: (identifier) @name
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol
 
 (struct_declaration
   name: (identifier) @name
   (#set! "kind" "Struct")
-  ) @type
+  ) @symbol
 
 (method_declaration
   name: (identifier) @name
   (#set! "kind" "Method")
-  ) @type
+  ) @symbol
 
 (enum_declaration
   name: (identifier) @name
   (#set! "kind" "Enum")
-  ) @type
+  ) @symbol
 
 (constructor_declaration
   name: (identifier) @name
   (#set! "kind" "Constructor")
-  ) @type
+  ) @symbol
 
 (property_declaration
   name: (identifier) @name
   (#set! "kind" "Property")
-  ) @type
+  ) @symbol
 
 (field_declaration
    (variable_declaration
     (variable_declarator
        (identifier) @name))
   (#set! "kind" "Field")
-   ) @type
+   ) @symbol

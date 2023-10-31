@@ -1,49 +1,49 @@
 (module_definition
   name: (identifier) @name
   (#set! "kind" "Module")
-  ) @type
+  ) @symbol
 
 (function_definition
   name: (identifier) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (function_definition
   name: (field_expression
           value: (_)
           (identifier)) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (short_function_definition
   name: (identifier) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (short_function_definition
   name: (field_expression
           value: (_)
           (identifier)) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol
 
 (abstract_definition
   name: (identifier) @name
   (#set! "kind" "Interface")
-  ) @type
+  ) @symbol
 
 (struct_definition
   name: (identifier) @name
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol
 
 (const_statement
   (assignment
     . (identifier) @name)
   (#set! "kind" "Constant")
-  ) @type
+  ) @symbol
 
 (macro_definition
   name: (identifier) @name
   (#set! "kind" "Function")
-  ) @type
+  ) @symbol

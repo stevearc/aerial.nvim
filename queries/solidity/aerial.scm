@@ -1,68 +1,68 @@
 (contract_declaration
   name: (identifier) @name
   (#set! "kind" "Class")
-  ) @type
+  ) @symbol
 
 (contract_declaration (_
   (function_definition
     name: (identifier) @name
     (#set! "kind" "Method")
-    ) @type))
+    ) @symbol))
 
 (contract_declaration (_
   (modifier_definition
     name: (identifier) @name
     (#set! "kind" "Method")
-    ) @type))
+    ) @symbol))
 
 (library_declaration (_
   (function_definition
     name: (identifier) @name
     (#set! "kind" "Function")
-    ) @type))
+    ) @symbol))
 
 (interface_declaration
   name: (identifier) @name
   (#set! "kind" "Interface")
-  ) @type
+  ) @symbol
 
 (interface_declaration (_
   (function_definition
     name: (identifier) @name
     (#set! "kind" "Function")
-    ) @type))
+    ) @symbol))
 
 (source_file
   (function_definition
     name: (identifier) @name
     (#set! "kind" "Function")
-    ) @type)
+    ) @symbol)
 
 (library_declaration
   name: (identifier) @name
   (#set! "kind" "Module")
-  ) @type
+  ) @symbol
 
 (enum_declaration
   name: (identifier) @name
   (#set! "kind" "Enum")
-  ) @type
+  ) @symbol
 
 (event_definition
   name: (identifier) @name
   (#set! "kind" "Event")
-  ) @type
+  ) @symbol
 
 (struct_declaration
   name: (identifier) @name
   (#set! "kind" "Struct")
-  ) @type
+  ) @symbol
 
 (constructor_definition
   ("constructor") @name
   (#set! "kind" "Constructor")
-  ) @type
+  ) @symbol
 
 (state_variable_declaration
-  name: (identifier) @name @type
+  name: (identifier) @name @symbol
   (#set! "kind" "Field"))
