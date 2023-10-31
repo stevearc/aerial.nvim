@@ -3,11 +3,13 @@ vim.cmd([[set runtimepath+=.]])
 vim.o.swapfile = false
 vim.bo.swapfile = false
 vim.filetype.add({
+  -- Neovim doesn't have built-in filetype detection for these filetypes
   extension = {
-    norg = "norg", -- Neovim doesn't have built-in norg filetype detection
-    usd = "usd", -- Neovim doesn't have built-in USD filetype detection
-    usda = "usd", -- Neovim doesn't have built-in USD filetype detection
-    smk = "snakemake", -- Neovim doesn't have built-in Snakemake filetype detection
+    norg = "norg",
+    objdump = "objdump",
+    usd = "usd",
+    usda = "usd",
+    smk = "snakemake",
   },
 })
 

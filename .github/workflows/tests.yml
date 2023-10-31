@@ -72,6 +72,13 @@ jobs:
         run: |
           bash ./run_tests.sh
 
+      - name: Check for changes
+        run: |
+          git add tests
+          git diff --quiet --staged || echo "Changes to snapshot file detected. Run 'make update_snapshots' and commit the changes"
+          git diff --stat --staged
+          git diff --quiet --staged
+
   update_docs:
     name: Update docs
     runs-on: ubuntu-22.04
