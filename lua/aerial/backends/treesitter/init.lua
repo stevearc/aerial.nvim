@@ -47,7 +47,6 @@ M.fetch_symbols_sync = function(bufnr)
     )
     return
   end
-  local use_selection_range = config.treesitter.experimental_selection_range
   -- This will track a loose hierarchy of recent node+items.
   -- It is used to determine node parents for the tree structure.
   local stack = {}
@@ -125,10 +124,8 @@ M.fetch_symbols_sync = function(bufnr)
       level = level,
       parent = parent_item,
       scope = match.scope,
+      selection_range = selection_range,
     }
-    if use_selection_range then
-      item.selection_range = selection_range
-    end
     for k, v in pairs(range) do
       item[k] = v
     end

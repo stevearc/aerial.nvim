@@ -1,4 +1,3 @@
-local config = require("aerial.config")
 local helpers = require("aerial.backends.treesitter.helpers")
 local M = {}
 
@@ -294,7 +293,7 @@ local function c_postprocess(bufnr, item, match)
       end
     end
     item.name = get_node_text(root, bufnr) or "<parse error>"
-    if config.treesitter.experimental_selection_range and not item.selection_range then
+    if not item.selection_range then
       item.selection_range = helpers.range_from_nodes(root, root)
     end
   end

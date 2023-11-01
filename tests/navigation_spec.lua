@@ -53,7 +53,7 @@ a.describe("navigation", function()
       vim.api.nvim_win_set_cursor(0, { 1, 0 })
       aerial.select({ index = 2 })
       local cursor = vim.api.nvim_win_get_cursor(0)
-      assert.are.same({ 3, 0 }, cursor)
+      assert.are.same({ 3, 1 }, cursor)
     end)
 
     a.it("in aerial window jumps to location", function()
@@ -63,7 +63,7 @@ a.describe("navigation", function()
       assert.equals("aerial", vim.bo.filetype)
       aerial.select({ index = 2 })
       local cursor = vim.api.nvim_win_get_cursor(0)
-      assert.are.same({ 3, 0 }, cursor)
+      assert.are.same({ 3, 1 }, cursor)
     end)
 
     a.it("in aerial window uses cursor position as index", function()
@@ -75,7 +75,7 @@ a.describe("navigation", function()
       vim.api.nvim_win_set_cursor(0, { 3, 0 })
       aerial.select()
       local cursor = vim.api.nvim_win_get_cursor(0)
-      assert.are.same({ 5, 0 }, cursor)
+      assert.are.same({ 5, 1 }, cursor)
     end)
 
     a.it("doesn't have to jump", function()
@@ -92,7 +92,7 @@ a.describe("navigation", function()
       assert.equals("aerial", vim.bo.filetype)
       -- The source window cursor should be updated
       local cursor = vim.api.nvim_win_get_cursor(winid)
-      assert.are.same({ 5, 0 }, cursor)
+      assert.are.same({ 5, 1 }, cursor)
     end)
 
     a.it("can open a new split when jumping", function()
@@ -111,55 +111,57 @@ a.describe("navigation", function()
       -- Source window cursor should be the same
       assert.are.same({ 1, 0 }, vim.api.nvim_win_get_cursor(winid))
       -- Split window cursor should be updated
-      assert.are.same({ 5, 0 }, vim.api.nvim_win_get_cursor(0))
+      assert.are.same({ 5, 1 }, vim.api.nvim_win_get_cursor(0))
     end)
   end)
 
   a.describe("movement", function()
     a.it("can go to next symbol", function()
       create_md_buf(markdown_nested_content)
-      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      vim.api.nvim_win_set_cursor(0, { 1, 2 })
+      window.update_position() -- Not sure why the CursorMoved autocmd doesn't fire
       aerial.next()
-      assert.are.same({ 3, 0 }, vim.api.nvim_win_get_cursor(0))
+      assert.are.same({ 3, 2 }, vim.api.nvim_win_get_cursor(0))
     end)
 
     a.it("can go to next N symbol", function()
       create_md_buf(markdown_nested_content)
-      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      vim.api.nvim_win_set_cursor(0, { 1, 2 })
+      window.update_position() -- Not sure why the CursorMoved autocmd doesn't fire
       aerial.next(2)
-      assert.are.same({ 5, 0 }, vim.api.nvim_win_get_cursor(0))
+      assert.are.same({ 5, 2 }, vim.api.nvim_win_get_cursor(0))
     end)
 
     a.it("can go to prev symbol", function()
       create_md_buf(markdown_nested_content)
-      vim.api.nvim_win_set_cursor(0, { 3, 0 })
-      window.update_position(0, 0) -- Not sure why the CursorMoved autocmd doesn't fire
+      vim.api.nvim_win_set_cursor(0, { 3, 2 })
+      window.update_position() -- Not sure why the CursorMoved autocmd doesn't fire
       aerial.prev()
-      assert.are.same({ 1, 0 }, vim.api.nvim_win_get_cursor(0))
+      assert.are.same({ 1, 1 }, vim.api.nvim_win_get_cursor(0))
     end)
 
     a.it("can go to prev N symbol", function()
       create_md_buf(markdown_nested_content)
-      vim.api.nvim_win_set_cursor(0, { 5, 0 })
-      window.update_position(0, 0) -- Not sure why the CursorMoved autocmd doesn't fire
+      vim.api.nvim_win_set_cursor(0, { 5, 2 })
+      window.update_position() -- Not sure why the CursorMoved autocmd doesn't fire
       aerial.prev(2)
-      assert.are.same({ 1, 0 }, vim.api.nvim_win_get_cursor(0))
+      assert.are.same({ 1, 1 }, vim.api.nvim_win_get_cursor(0))
     end)
 
     a.it("can go up and backwards in the tree", function()
       create_md_buf(markdown_nested_content)
-      vim.api.nvim_win_set_cursor(0, { 5, 0 })
-      window.update_position(0, 0) -- Not sure why the CursorMoved autocmd doesn't fire
+      vim.api.nvim_win_set_cursor(0, { 5, 2 })
+      window.update_position() -- Not sure why the CursorMoved autocmd doesn't fire
       aerial.prev_up()
-      assert.are.same({ 1, 0 }, vim.api.nvim_win_get_cursor(0))
+      assert.are.same({ 1, 1 }, vim.api.nvim_win_get_cursor(0))
     end)
 
     a.it("can go up and forwards in the tree", function()
       create_md_buf(markdown_nested_content)
-      vim.api.nvim_win_set_cursor(0, { 3, 0 })
-      window.update_position(0, 0) -- Not sure why the CursorMoved autocmd doesn't fire
+      vim.api.nvim_win_set_cursor(0, { 3, 2 })
+      window.update_position() -- Not sure why the CursorMoved autocmd doesn't fire
       aerial.next_up()
-      assert.are.same({ 7, 0 }, vim.api.nvim_win_get_cursor(0))
+      assert.are.same({ 7, 1 }, vim.api.nvim_win_get_cursor(0))
     end)
   end)
 end)
