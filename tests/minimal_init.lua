@@ -20,9 +20,39 @@ for lang, _ in vim.fs.dir("queries") do
     table.insert(langs, lang)
   end
 end
-require("nvim-treesitter.configs").setup({
-  ensure_installed = langs,
-  sync_install = true,
-})
--- this needs to be run a second time to make tests behave
-require("nvim-treesitter").setup()
+local master_nvim_ts, configs = pcall(require, "nvim-treesitter.configs")
+if master_nvim_ts then
+  configs.setup({
+    ensure_installed = langs,
+    sync_install = true,
+  })
+  -- this needs to be run a second time to make tests behave
+  require("nvim-treesitter").setup()
+
+  vim.api.nvim_create_user_command("RunTests", function(opts)
+    local path = opts.fargs[1] or "tests"
+    require("plenary.test_harness").test_directory(
+      path,
+      { minimal_init = "./tests/minimal_init.lua" }
+    )
+  end, { nargs = "?" })
+else
+  vim.api.nvim_create_user_command("RunTests", function(opts)
+    local path = opts.fargs[1] or "tests"
+    require("nvim-treesitter.install").install("all", { skip = { installed = true } }, function()
+      vim.schedule(function()
+        require("plenary.test_harness").test_directory(
+          path,
+          -- nvim-treesitter `main` sets up some useful filetype mappings
+          -- as a plugin, which doesn't get executed by plenary buster
+          -- when running with `minimal_init`
+          --
+          -- While this can be circumvented by setting all the associations
+          -- in the init, for some reason they don't get picked up by the
+          -- time a spec gets executed, leading to false negatives
+          { init = "./tests/minimal_init.lua" }
+        )
+      end)
+    end)
+  end, { nargs = "?" })
+end
