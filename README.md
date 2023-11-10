@@ -15,6 +15,8 @@ A code outline window for skimming and quick navigation
   - [Lualine](#lualine)
 - [Highlight](#highlight)
 - [API](#api)
+- [TreeSitter queries](#treesitter-queries)
+  - [Language extensions](#language-extensions)
 - [FAQ](#faq)
 
 <!-- /TOC -->
@@ -723,6 +725,24 @@ hi AerialGuide2 guifg=Blue
 - [was_closed(default)](doc/api.md#was_closeddefault)
 
 <!-- /API -->
+
+## TreeSitter queries
+
+When writing queries, the following captures and metadata are used by Aerial:
+
+- `@symbol` - **required** capture for the logical region being captured
+- `kind` - **required** metadata, a string value matching one of `vim.lsp.protocol.SymbolKind`
+- `@name` - capture to extract a name from its text
+- `@start` - a start of the match, influences matching of cursor position to aerial tree, defaults to `@symbol`
+- `@end` - an end of the match, influences matching of cursor position to aerial tree, defaults to `@start`
+- `@selection` - position to jump to when using Aerial for navigation, falls back to `@name` and `@symbol`
+- `@scope` - a node naming a scope for the match, its text is used to generate a custom "Comment" linked highlight for the entry, with exception of "public"
+
+    A `@scope` node with text "developers" will result in its entry in the tree having an "AerialDevelopers" highlight applied to it.
+
+- `scope` - a metadata value serving the same role as `@scope` capture, overriding aforementioned capture
+
+Note: a capture's text can be set or modified with `#set!` and `#gsub!` respectively.
 
 ## FAQ
 

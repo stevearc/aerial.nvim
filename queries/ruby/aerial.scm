@@ -3,37 +3,30 @@
   (#set! "kind" "Class")
   ) @symbol
 
-(method
-  name: (_) @name
-  (#set! "kind" "Method")
-  ) @symbol
-
 (call
-  (identifier) @scope_switch
-  (#any-of? @scope_switch "private" "protected")
-
+  (
+   (identifier) @scope
+   (#any-of? @scope "private" "protected" "public")
+   )?
+  .
   (argument_list
     (method
       name: (_) @name
       (#set! "kind" "Method")
-      (#set! "scope" "private")
       ) @symbol
     )
   )
 
 (body_statement
-  (identifier) @scope @later_scope
-  (#any-of? @scope "private" "protected")
-  .
   [
    (_)
-   ((identifier) @later_scope (#not-eq? @later_scope "public"))
+   ((identifier) @scope
+                 (#any-of? @scope "private" "protected" "public"))
    ]*
   .
   (method
     name: (_) @name
     (#set! "kind" "Method")
-    (#set! "scope" "private")
     ) @symbol
   )
 

@@ -78,6 +78,8 @@ M.elixir = {
     module_attribute = "Field",
     spec = "TypeParameter",
   },
+  ---@note Additionally processes the following captures:
+  ---      `@protocol` - extends the name to "@name > @protocol"
   postprocess = function(bufnr, item, match)
     local identifier = node_from_match(match, "identifier")
     if identifier then
@@ -131,6 +133,8 @@ M.markdown = {
 }
 
 M.go = {
+  ---@note Additionally processes the following captures:
+  ---      `@receiver` - extends the name to "@receiver @name"
   postprocess = function(bufnr, item, match)
     local receiver = node_from_match(match, "receiver")
     if receiver then
@@ -218,6 +222,8 @@ M.rust = {
 }
 
 M.ruby = {
+  ---@note Additionally processes the following captures:
+  ---      `@method`, `@receiver`, `@separator` - extends the name to "@method @reciever[@separator]@name", with @separator defaulting to "."
   postprocess = function(bufnr, item, match)
     -- Reciever modification comes first, as we intend for it to generate a ruby-like `reciever.name`
     local receiver = node_from_match(match, "receiver")
@@ -255,6 +261,8 @@ M.lua = {
 }
 
 M.javascript = {
+  ---@note Additionally processes the following captures:
+  ---      `@method`, `@string`, and `@modifier` - replaces name with "@method[.@modifier] @string"
   postprocess = function(bufnr, item, match)
     local method = node_from_match(match, "method")
     local modifier = node_from_match(match, "modifier")
@@ -327,6 +335,8 @@ M.rst = {
 }
 
 M.typescript = {
+  ---@note Additionally processes the following captures:
+  ---      `@method`, `@string`, and `@modifier` - replaces name with "@method[.@modifier] @string"
   postprocess = function(bufnr, item, match)
     local value_node = node_from_match(match, "var_type")
     if value_node then
