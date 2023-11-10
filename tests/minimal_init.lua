@@ -37,9 +37,22 @@ if master_nvim_ts then
     )
   end, { nargs = "?" })
 else
+  -- Use compiler that includes c++14 features by default
+  -- If `cc` doesn't implement those, override it for tests run with
+  -- `CC=gcc-13 ./run_tests.sh`
+  local parser_config = require("nvim-treesitter.parsers").configs
+  parser_config.norg = {
+    install_info = {
+      url = "https://github.com/nvim-neorg/tree-sitter-norg",
+      files = { "src/parser.c", "src/scanner.cc" },
+      branch = "main",
+    },
+    tier = 3,
+  }
+
   vim.api.nvim_create_user_command("RunTests", function(opts)
     local path = opts.fargs[1] or "tests"
-    require("nvim-treesitter.install").install("all", { skip = { installed = true } }, function()
+    require("nvim-treesitter.install").install(langs, { skip = { installed = true } }, function()
       vim.schedule(function()
         require("plenary.test_harness").test_directory(
           path,
