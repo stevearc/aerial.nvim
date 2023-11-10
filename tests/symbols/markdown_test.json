@@ -10,7 +10,7 @@
         "lnum": 3,
         "name": "Title 2",
         "selection_range": {
-          "col": 2,
+          "col": 3,
           "end_col": 10,
           "end_lnum": 3,
           "lnum": 3
@@ -25,7 +25,7 @@
     "lnum": 1,
     "name": "Title 1",
     "selection_range": {
-      "col": 1,
+      "col": 2,
       "end_col": 9,
       "end_lnum": 1,
       "lnum": 1
@@ -44,7 +44,7 @@
             "lnum": 13,
             "name": "Title 5",
             "selection_range": {
-              "col": 4,
+              "col": 5,
               "end_col": 12,
               "end_lnum": 13,
               "lnum": 13
@@ -59,7 +59,7 @@
         "lnum": 7,
         "name": "Title 4",
         "selection_range": {
-          "col": 3,
+          "col": 4,
           "end_col": 11,
           "end_lnum": 7,
           "lnum": 7
@@ -74,7 +74,7 @@
     "lnum": 5,
     "name": "Title 3",
     "selection_range": {
-      "col": 1,
+      "col": 2,
       "end_col": 9,
       "end_lnum": 5,
       "lnum": 5

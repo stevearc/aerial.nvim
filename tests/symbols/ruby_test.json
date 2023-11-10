@@ -389,189 +389,189 @@
   {
     "children": [
       {
-        "kind": "Method",
-        "name": "inline_private",
-        "level": 1,
-        "scope": "private",
-        "lnum": 51,
         "col": 10,
-        "end_lnum": 52,
         "end_col": 5,
+        "end_lnum": 52,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 51,
+        "name": "inline_private",
+        "scope": "private",
         "selection_range": {
-          "lnum": 51,
           "col": 14,
+          "end_col": 28,
           "end_lnum": 51,
-          "end_col": 28
+          "lnum": 51
         }
       },
       {
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 55,
         "kind": "Method",
-        "name": "public_1",
         "level": 1,
         "lnum": 54,
-        "col": 2,
-        "end_lnum": 55,
-        "end_col": 5,
+        "name": "public_1",
         "selection_range": {
-          "lnum": 54,
           "col": 6,
+          "end_col": 14,
           "end_lnum": 54,
-          "end_col": 14
+          "lnum": 54
         }
       },
       {
-        "kind": "Method",
-        "name": "private_1",
-        "level": 1,
-        "scope": "private",
-        "lnum": 58,
         "col": 2,
+        "end_col": 5,
         "end_lnum": 59,
-        "end_col": 5,
-        "selection_range": {
-          "lnum": 58,
-          "col": 6,
-          "end_lnum": 58,
-          "end_col": 15
-        }
-      },
-      {
         "kind": "Method",
-        "name": "protected_1",
         "level": 1,
+        "lnum": 58,
+        "name": "private_1",
         "scope": "private",
-        "lnum": 64,
-        "col": 2,
-        "end_lnum": 65,
-        "end_col": 5,
         "selection_range": {
-          "lnum": 64,
           "col": 6,
-          "end_lnum": 64,
-          "end_col": 17
+          "end_col": 15,
+          "end_lnum": 58,
+          "lnum": 58
         }
       },
       {
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 65,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 64,
+        "name": "protected_1",
+        "scope": "private",
+        "selection_range": {
+          "col": 6,
+          "end_col": 17,
+          "end_lnum": 64,
+          "lnum": 64
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 70,
         "kind": "Class",
-        "name": "DoNotBreakScope",
         "level": 1,
         "lnum": 69,
-        "col": 2,
-        "end_lnum": 70,
-        "end_col": 5,
+        "name": "DoNotBreakScope",
         "selection_range": {
-          "lnum": 69,
           "col": 8,
+          "end_col": 23,
           "end_lnum": 69,
-          "end_col": 23
+          "lnum": 69
         }
       },
       {
-        "kind": "Method",
-        "name": "protected_2",
-        "level": 1,
-        "scope": "private",
-        "lnum": 73,
         "col": 2,
-        "end_lnum": 74,
         "end_col": 5,
+        "end_lnum": 74,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 73,
+        "name": "protected_2",
+        "scope": "private",
         "selection_range": {
-          "lnum": 73,
           "col": 6,
+          "end_col": 17,
           "end_lnum": 73,
-          "end_col": 17
+          "lnum": 73
         }
       },
       {
+        "col": 9,
+        "end_col": 5,
+        "end_lnum": 77,
         "kind": "Method",
-        "name": "inline_public",
         "level": 1,
         "lnum": 76,
-        "col": 9,
-        "end_lnum": 77,
-        "end_col": 5,
+        "name": "inline_public",
         "selection_range": {
-          "lnum": 76,
           "col": 13,
+          "end_col": 26,
           "end_lnum": 76,
-          "end_col": 26
+          "lnum": 76
         }
       },
       {
-        "kind": "Method",
-        "name": "protected_3",
-        "level": 1,
-        "scope": "private",
-        "lnum": 79,
         "col": 2,
-        "end_lnum": 80,
         "end_col": 5,
+        "end_lnum": 80,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 79,
+        "name": "protected_3",
+        "scope": "private",
         "selection_range": {
-          "lnum": 79,
           "col": 6,
+          "end_col": 17,
           "end_lnum": 79,
-          "end_col": 17
+          "lnum": 79
         }
       },
       {
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 84,
         "kind": "Method",
-        "name": "public_2",
         "level": 1,
         "lnum": 83,
-        "col": 2,
-        "end_lnum": 84,
-        "end_col": 5,
+        "name": "public_2",
         "selection_range": {
-          "lnum": 83,
           "col": 6,
+          "end_col": 14,
           "end_lnum": 83,
-          "end_col": 14
+          "lnum": 83
         }
       },
       {
+        "col": 2,
+        "end_col": 5,
+        "end_lnum": 87,
         "kind": "Method",
-        "name": "public_setter=",
         "level": 1,
         "lnum": 86,
-        "col": 2,
-        "end_lnum": 87,
-        "end_col": 5,
+        "name": "public_setter=",
         "selection_range": {
-          "lnum": 86,
           "col": 6,
+          "end_col": 20,
           "end_lnum": 86,
-          "end_col": 20
+          "lnum": 86
         }
       },
       {
-        "kind": "Method",
-        "name": "private_setter=",
-        "level": 1,
-        "scope": "private",
-        "lnum": 90,
         "col": 2,
-        "end_lnum": 91,
         "end_col": 5,
+        "end_lnum": 91,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 90,
+        "name": "private_setter=",
+        "scope": "private",
         "selection_range": {
-          "lnum": 90,
           "col": 6,
+          "end_col": 21,
           "end_lnum": 90,
-          "end_col": 21
+          "lnum": 90
         }
       }
     ],
+    "col": 0,
+    "end_col": 3,
+    "end_lnum": 92,
     "kind": "Class",
-    "name": "Privateers",
     "level": 0,
     "lnum": 50,
-    "col": 0,
-    "end_lnum": 92,
-    "end_col": 3,
+    "name": "Privateers",
     "selection_range": {
-      "lnum": 50,
       "col": 6,
+      "end_col": 16,
       "end_lnum": 50,
-      "end_col": 16
+      "lnum": 50
     }
   }
 ]
