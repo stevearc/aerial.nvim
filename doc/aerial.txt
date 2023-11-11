@@ -629,6 +629,10 @@ nav_toggle()                                                   *aerial.nav_toggl
     Toggle the nav windows open/closed
 
 
+treesitter_clear_query_cache()               *aerial.treesitter_clear_query_cache*
+    Clear aerial's tree-sitter query cache
+
+
 sync_folds({bufnr})                                            *aerial.sync_folds*
     Sync code folding with the current tree state.
 

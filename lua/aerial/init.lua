@@ -459,6 +459,9 @@ M.nav_close = lazy("nav_view", "close")
 ---Toggle the nav windows open/closed
 M.nav_toggle = lazy("nav_view", "toggle")
 
+---Clear aerial's tree-sitter query cache
+M.treesitter_clear_query_cache = lazy("backends.treesitter.helpers", "clear_query_cache")
+
 ---Sync code folding with the current tree state.
 ---@param bufnr? integer
 ---@note

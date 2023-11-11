@@ -718,6 +718,7 @@ hi AerialGuide2 guifg=Blue
 - [nav_open()](doc/api.md#nav_open)
 - [nav_close()](doc/api.md#nav_close)
 - [nav_toggle()](doc/api.md#nav_toggle)
+- [treesitter_clear_query_cache()](doc/api.md#treesitter_clear_query_cache)
 - [sync_folds(bufnr)](doc/api.md#sync_foldsbufnr)
 - [info()](doc/api.md#info)
 - [num_symbols(bufnr)](doc/api.md#num_symbolsbufnr)

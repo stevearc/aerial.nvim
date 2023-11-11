@@ -1,4 +1,10 @@
 local M = {}
+local query_cache = {}
+
+--@note Clear query cache, forcing reload
+M.clear_query_cache = function()
+  query_cache = {}
+end
 
 ---@param start_node TSNode
 ---@param end_node TSNode
@@ -39,16 +45,27 @@ end
 if vim.treesitter.query.get == nil then
   ---@param lang string
   ---@return Query|nil
-  M.get_query = function(lang)
+  M.load_query = function(lang)
     ---@diagnostic disable-next-line: deprecated
     return vim.treesitter.query.get_query(lang, "aerial")
   end
 else
   ---@param lang string
   ---@return Query|nil
-  M.get_query = function(lang)
+  M.load_query = function(lang)
     return vim.treesitter.query.get(lang, "aerial")
   end
+end
+
+---@param lang string
+---@return Query|nil
+---@note caches queries to avoid filesystem hits on neovim 0.9+
+M.get_query = function(lang)
+  if not query_cache[lang] then
+    query_cache[lang] = { query = M.load_query(lang) }
+  end
+
+  return query_cache[lang].query
 end
 
 ---@param lang string
