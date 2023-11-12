@@ -32,6 +32,7 @@
 - [nav_open()](#nav_open)
 - [nav_close()](#nav_close)
 - [nav_toggle()](#nav_toggle)
+- [treesitter_clear_query_cache()](#treesitter_clear_query_cache)
 - [sync_folds(bufnr)](#sync_foldsbufnr)
 - [info()](#info)
 - [num_symbols(bufnr)](#num_symbolsbufnr)
@@ -324,6 +325,12 @@ Close the nav windows
 
 `nav_toggle()` \
 Toggle the nav windows open/closed
+
+
+## treesitter_clear_query_cache()
+
+`treesitter_clear_query_cache()` \
+Clear aerial's tree-sitter query cache
 
 
 ## sync_folds(bufnr)
