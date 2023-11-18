@@ -62,7 +62,10 @@ if vim.fn.has("nvim-0.9") == 1 then
 else
   get_hl_by_name = function(name)
     ---@diagnostic disable-next-line undefined-field
-    return vim.api.nvim_get_hl_by_name(name, true)
+    local result = vim.api.nvim_get_hl_by_name(name, true)
+    result.fg = result.foreground
+    result.bg = result.background
+    return result
   end
 end
 
@@ -71,10 +74,8 @@ M.create_highlight_groups = function()
   local normal_defn = get_hl_by_name("Normal")
   -- The default text highlight
   vim.api.nvim_set_hl(0, "AerialNormal", {
-    fg = normal_defn.foreground,
-    bg = normal_defn.background,
+    fg = normal_defn.fg,
     ctermfg = normal_defn.ctermfg,
-    ctermbg = normal_defn.ctermbg,
     blend = normal_defn.blend,
     default = true,
   })
@@ -83,7 +84,7 @@ M.create_highlight_groups = function()
   local normal_float_defn = get_hl_by_name("NormalFloat")
   -- Don't set the background for the float so that it blends nicely with the cursorline
   vim.api.nvim_set_hl(0, "AerialNormalFloat", {
-    fg = normal_float_defn.foreground,
+    fg = normal_float_defn.fg,
     ctermfg = normal_float_defn.ctermfg,
     blend = normal_float_defn.blend,
     default = true,
@@ -101,10 +102,8 @@ M.create_highlight_groups = function()
   local comment_defn = get_hl_by_name("Comment")
   -- The guides when show_guide = true
   vim.api.nvim_set_hl(0, "AerialGuide", {
-    fg = comment_defn.foreground,
-    bg = comment_defn.background,
+    fg = comment_defn.fg,
     ctermfg = comment_defn.ctermfg,
-    ctermbg = comment_defn.ctermbg,
     blend = comment_defn.blend,
     default = true,
   })
