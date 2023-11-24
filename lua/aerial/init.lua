@@ -318,7 +318,12 @@ M.refetch_symbols = function(bufnr)
   do_setup()
   local backends = require("aerial.backends")
   if not backends.attach(bufnr, true) then
-    backends.get(bufnr).fetch_symbols(bufnr)
+    local backend = backends.get(bufnr)
+    if backend then
+      backend.fetch_symbols(bufnr)
+    else
+      error("No aerial backend for buffer")
+    end
   end
 end
 
