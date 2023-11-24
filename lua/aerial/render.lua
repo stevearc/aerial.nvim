@@ -194,8 +194,9 @@ M.highlight_line = function(buf, ns, hl_group, row, col, end_col)
   vim.api.nvim_buf_set_extmark(buf, ns, row, col, {
     end_col = end_col ~= -1 and end_col or nil,
     end_row = end_col == -1 and (row + 1) or nil,
-    hl_eol = true,
+    hl_eol = end_col == -1,
     hl_group = hl_group or "AerialLine",
+    priority = 4097,
     strict = false,
   })
 end
