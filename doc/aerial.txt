@@ -12,7 +12,7 @@ CONTENTS                                                         *aerial-content
 OPTIONS                                                           *aerial-options*
 
 >lua
-    require("aerial").setup({
+    vim.g.aerial_nvim_config = {
       -- Priority list of preferred backends for aerial.
       -- This can be a filetype map (see :help aerial-filetype-map)
       backends = { "treesitter", "lsp", "markdown", "man" },
@@ -360,7 +360,7 @@ OPTIONS                                                           *aerial-option
         -- How long to wait (in ms) after a buffer change before updating
         update_delay = 300,
       },
-    })
+    }
 <
 
 --------------------------------------------------------------------------------
@@ -410,14 +410,11 @@ AerialNavClose                                                   *:AerialNavClos
 API                                                                   *aerial-api*
 
 setup({opts})                                                       *aerial.setup*
-    Initialize aerial
+    Reload global or apply provided configuration
 
     Parameters:
-      {opts} `nil|table`
-
-sync_load()                                                     *aerial.sync_load*
-    Synchronously complete setup (if lazy-loaded)
-
+      {opts} `nil|table` empty for defaults, nothing for global config, custom
+             for custom
 
 is_open({opts}): boolean                                          *aerial.is_open*
     Returns true if aerial is open for the current window or buffer (returns

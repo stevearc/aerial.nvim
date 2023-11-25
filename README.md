@@ -27,7 +27,7 @@ https://user-images.githubusercontent.com/506791/122652728-18688500-d0f5-11eb-80
 - Neovim 0.8+ (for older versions, use the [nvim-0.5 branch](https://github.com/stevearc/aerial.nvim/tree/nvim-0.5))
 - One or more of the following:
   - A working LSP setup (see [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig))
-  - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) with languages installed
+  - Tree-sitter parsers. E.g. installed with [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 
 ## Installation
 
@@ -57,9 +57,6 @@ aerial supports all the usual plugin managers
 require("packer").startup(function()
   use({
     "stevearc/aerial.nvim",
-    config = function()
-      require("aerial").setup()
-    end,
   })
 end)
 ```
@@ -116,18 +113,19 @@ git clone --depth=1 https://github.com/stevearc/aerial.nvim.git \
 
 ## Setup
 
-Somewhere in your init.lua you will need to call `aerial.setup()`. See below for
+Aerial works with defaults out of the box. You can override the defaults by providing
+a partial config override table in a `vim.g.aerial_nvim_config`. See below for
 [a full list of options](#options).
 
 ```lua
-require("aerial").setup({
+vim.g.aerial_nvim_config = {
   -- optionally use on_attach to set keymaps when aerial has attached to a buffer
   on_attach = function(bufnr)
     -- Jump forwards/backwards with '{' and '}'
     vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
     vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
   end,
-})
+}
 -- You probably also want to set a keymap to toggle aerial
 vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
 ```
@@ -201,8 +199,8 @@ it](https://github.com/stevearc/aerial.nvim/issues/new?assignees=stevearc&labels
 ## Options
 
 ```lua
--- Call the setup function to change the default behavior
-require("aerial").setup({
+-- Provide a configuration, for example in `.config/nvim/plugin/aerial_config.lua`
+vim.g.aerial_nvim_config = {
   -- Priority list of preferred backends for aerial.
   -- This can be a filetype map (see :help aerial-filetype-map)
   backends = { "treesitter", "lsp", "markdown", "man" },
@@ -550,7 +548,7 @@ require("aerial").setup({
     -- How long to wait (in ms) after a buffer change before updating
     update_delay = 300,
   },
-})
+}
 ```
 
 All possible SymbolKind values can be found [in the LSP
@@ -689,7 +687,6 @@ hi AerialGuide2 guifg=Blue
 <!-- API -->
 
 - [setup(opts)](doc/api.md#setupopts)
-- [sync_load()](doc/api.md#sync_load)
 - [is_open(opts)](doc/api.md#is_openopts)
 - [close()](doc/api.md#close)
 - [close_all()](doc/api.md#close_all)

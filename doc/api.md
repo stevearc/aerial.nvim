@@ -3,7 +3,6 @@
 <!-- TOC -->
 
 - [setup(opts)](#setupopts)
-- [sync_load()](#sync_load)
 - [is_open(opts)](#is_openopts)
 - [close()](#close)
 - [close_all()](#close_all)
@@ -45,17 +44,11 @@
 ## setup(opts)
 
 `setup(opts)` \
-Initialize aerial
+Reload global or apply provided configuration
 
-| Param | Type         | Desc |
-| ----- | ------------ | ---- |
-| opts  | `nil\|table` |      |
-
-## sync_load()
-
-`sync_load()` \
-Synchronously complete setup (if lazy-loaded)
-
+| Param | Type         | Desc                                                             |
+| ----- | ------------ | ---------------------------------------------------------------- |
+| opts  | `nil\|table` | empty for defaults, nothing for global config, custom for custom |
 
 ## is_open(opts)
 

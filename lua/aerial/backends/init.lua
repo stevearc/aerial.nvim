@@ -131,7 +131,6 @@ local function attach(bufnr, backend, name)
     if config.on_attach then
       config.on_attach(bufnr)
     end
-    require("aerial").process_pending_fn_calls()
   end
   return true
 end

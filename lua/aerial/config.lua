@@ -537,7 +537,7 @@ M.setup = function(opts)
       "aerial.config.open_automatic should be a boolean or function. See :help aerial-open-automatic.",
       vim.log.levels.WARN
     )
-    newconf.open_automatic = function(bufnr)
+    newconf.open_automatic = function()
       return false
     end
   end
@@ -618,5 +618,7 @@ M.get_icon = function(bufnr, kind, collapsed)
   end
   return icon or " "
 end
+
+M.setup(vim.g.aerial_nvim_config)
 
 return M

@@ -15,7 +15,6 @@ local ext_config = {
 
 local function aerial_picker(opts)
   opts = opts or {}
-  require("aerial").sync_load()
   local backends = require("aerial.backends")
   local config = require("aerial.config")
   local data = require("aerial.data")

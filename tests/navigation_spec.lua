@@ -41,7 +41,6 @@ a.describe("navigation", function()
         buftypes = false,
       },
     })
-    aerial.sync_load()
   end)
   after_each(function()
     test_util.reset_editor()

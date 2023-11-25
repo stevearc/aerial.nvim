@@ -31,7 +31,6 @@ M.save_win = function(winid)
 end
 
 M.load_win = function(winid, config)
-  require("aerial").sync_load()
   local window = require("aerial.window")
   local source_nr = vim.api.nvim_win_get_number(winid) + config.rel_nr
   local source_win = vim.api.nvim_tabpage_list_wins(0)[source_nr]

@@ -1,6 +1,8 @@
 import os
 import os.path
 import re
+import subprocess
+import json
 from functools import lru_cache
 from typing import List
 
@@ -14,7 +16,6 @@ from nvim_doc_tools import (
     generate_md_toc,
     indent,
     parse_functions,
-    read_nvim_json,
     read_section,
     render_md_api,
     render_vimdoc_api,
@@ -44,12 +45,12 @@ def update_config_options():
     opt_lines = read_section(config_file, r"^\s*local default_options =", r"^}$")
     replace_section(
         README,
-        r"^\-\- Call the setup function",
-        r"^}\)$",
-        ['require("aerial").setup({\n'] + opt_lines,
+        r"^\-\- Provide a configuration, for example in `.config/nvim/plugin/aerial_config.lua`",
+        r"^}$",
+        ['vim.g.aerial_nvim_config = {\n'] + opt_lines,
     )
     replace_section(
-        VIMDOC, r'^\s*require\("aerial"\)\.setup', r"^\s*}\)$", indent(opt_lines, 4)
+        VIMDOC, r'^\s*vim.g.aerial_nvim_config = {', r"^\s*}$", indent(opt_lines, 4)
     )
 
 
@@ -98,7 +99,15 @@ def update_readme_toc():
 
 @lru_cache
 def get_commands() -> List[Command]:
-    return commands_from_json(read_nvim_json('require("aerial").get_all_commands()'))
+    cmd = f"nvim --headless -u /dev/null -c 'set runtimepath+=.' --cmd 'let g:aerial_echo_commands_on_load = v:true' +qall"
+    print(cmd)
+    code, txt = subprocess.getstatusoutput(cmd)
+    if code != 0:
+        raise Exception(f"Error exporting data from nvim: {txt}")
+    try:
+        return commands_from_json(json.loads(txt))
+    except json.JSONDecodeError as e:
+        raise Exception(f"Json decode error: {txt}") from e
 
 
 def update_md_commands():
@@ -116,9 +125,9 @@ def get_options_vimdoc() -> "VimdocSection":
     section = VimdocSection("options", "aerial-options")
     config_file = os.path.join(ROOT, "lua", "aerial", "config.lua")
     opt_lines = read_section(config_file, r"^local default_options =", r"^}$")
-    lines = ["\n", ">lua\n", '    require("aerial").setup({\n']
+    lines = ["\n", ">lua\n", '    vim.g.aerial_nvim_config = {\n']
     lines.extend(indent(opt_lines, 4))
-    lines.extend(["    })\n", "<\n"])
+    lines.extend(["    }\n", "<\n"])
     section.body = lines
     return section
 
