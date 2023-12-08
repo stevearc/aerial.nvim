@@ -28,5 +28,20 @@
       "end_lnum": 4,
       "lnum": 4
     }
+  },
+  {
+    "col": 0,
+    "end_col": 11,
+    "end_lnum": 8,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 7,
+    "name": "s:drawer.delete_line",
+    "selection_range": {
+      "col": 10,
+      "end_col": 30,
+      "end_lnum": 7,
+      "lnum": 7
+    }
   }
 ]
