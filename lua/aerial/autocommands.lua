@@ -95,7 +95,15 @@ M.on_enter_buffer = util.throttle(function()
       (not source_win and config.attach_mode ~= "global")
       or vim.tbl_count(vim.api.nvim_tabpage_list_wins(0)) == 1
     then
-      vim.cmd("quit")
+      -- If aerial is the last window open, we must have closed the other windows. If the others
+      -- were closed via "quit" or similar, we should quit neovim.
+      local last_cmd = vim.fn.histget("cmd", -1)
+      local cmd1 = last_cmd:sub(1, 1)
+      local cmd2 = last_cmd:sub(1, 2)
+      local cmd3 = last_cmd:sub(1, 3)
+      if cmd2 == "wq" or cmd1 == "q" or cmd1 == "x" or cmd3 == "exi" then
+        vim.cmd.quit()
+      end
     end
     return
   end
