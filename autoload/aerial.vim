@@ -6,7 +6,7 @@ function! aerial#fzf() abort
 	call fzf#run(fzf#wrap({
 				\ 'source': l:labels,
 				\ 'sink': funcref('aerial#goto_symbol'),
-				\ 'options': ['--prompt="Document symbols: "', '--layout=reverse-list'],
+				\ 'options': ['--prompt=Document symbols: ', '--layout=reverse-list'],
 				\ }))
 endfunction
 
