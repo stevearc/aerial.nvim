@@ -124,7 +124,13 @@ M.markdown = {
   end,
   postprocess = function(bufnr, item, match)
     -- Strip leading whitespace
-    item.name = string.gsub(item.name, "^%s*", "")
+    local prefix = item.name:match("^%s*")
+    if prefix ~= "" then
+      item.name = item.name:sub(prefix:len() + 1)
+      if item.selection_range then
+        item.selection_range.col = item.selection_range.col + prefix:len()
+      end
+    end
     return true
   end,
   postprocess_symbols = function(bufnr, items)
