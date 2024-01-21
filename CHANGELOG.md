@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.4.0](https://github.com/stevearc/aerial.nvim/compare/v1.3.0...v1.4.0) (2024-01-21)
+
+
+### Features
+
+* cache aerial tree-sitter queries ([#325](https://github.com/stevearc/aerial.nvim/issues/325)) ([51bdd35](https://github.com/stevearc/aerial.nvim/commit/51bdd35f4f984293d4200e52aeff44f12febc6f2))
+* **lualine:** added `sep_icon` option ([#303](https://github.com/stevearc/aerial.nvim/issues/303)) ([9ef83d9](https://github.com/stevearc/aerial.nvim/commit/9ef83d9a7a4ac471d14e608da50b8d91459cae10))
+* set scope from node captures and add basic query documentation ([#318](https://github.com/stevearc/aerial.nvim/issues/318)) ([2d169d3](https://github.com/stevearc/aerial.nvim/commit/2d169d349721a94387b9feca5c787296448a623d))
+* ship the experimental treesitter selection range ([#279](https://github.com/stevearc/aerial.nvim/issues/279)) ([8e4090b](https://github.com/stevearc/aerial.nvim/commit/8e4090bf9412e24b05823c771cb3956c2ba72981))
+* **telescope:** only reverse results when `sorting_strategy = "descending"` ([#307](https://github.com/stevearc/aerial.nvim/issues/307)) ([b811243](https://github.com/stevearc/aerial.nvim/commit/b811243fdc7f624e63ccb6269332aa874afae1e6))
+* **treesitter:** ruby queries can set the scope of methods ([#317](https://github.com/stevearc/aerial.nvim/issues/317)) ([3a3baf0](https://github.com/stevearc/aerial.nvim/commit/3a3baf0930444c78d19964fdb401bd3a6a23270f))
+* **treesitter:** support for objdump files ([#320](https://github.com/stevearc/aerial.nvim/issues/320)) ([eb301a4](https://github.com/stevearc/aerial.nvim/commit/eb301a4763ba1bb6be4038e9167dc14581bfdc8a))
+* **treesitter:** support for snakemake ([#316](https://github.com/stevearc/aerial.nvim/issues/316)) ([c306ffc](https://github.com/stevearc/aerial.nvim/commit/c306ffcf343c737730c119bdf0d7447e7d85e8d2))
+
+
+### Bug Fixes
+
+* AerialLine highlight has highest priority ([#329](https://github.com/stevearc/aerial.nvim/issues/329)) ([712802e](https://github.com/stevearc/aerial.nvim/commit/712802e73107883a445b36f4197376eb60691b85))
+* autoclose floating aerial win on leave ([483d2c8](https://github.com/stevearc/aerial.nvim/commit/483d2c860aed1b857c48d6943e6d2b261653ebfb))
+* better error message for refetch_symbols ([#328](https://github.com/stevearc/aerial.nvim/issues/328)) ([8876456](https://github.com/stevearc/aerial.nvim/commit/88764566f96bf900a64b3dcd6d178cfb69b1c8ce))
+* **cpp:** add support for declared functions ([#314](https://github.com/stevearc/aerial.nvim/issues/314)) ([340d019](https://github.com/stevearc/aerial.nvim/commit/340d0197d7d30191e31c625c3b2e20912a8e301a))
+* default highlights in Neovim 0.9 ([d82a994](https://github.com/stevearc/aerial.nvim/commit/d82a994d66a9c6c700f240498304bd6d68fb33f0))
+* delay when using `q` to close ([#311](https://github.com/stevearc/aerial.nvim/issues/311)) ([5f6de33](https://github.com/stevearc/aerial.nvim/commit/5f6de33780ea2f55ad54719eb6bd68ac1026535c))
+* don't clear stored data when buffer is unlisted ([edfdcf1](https://github.com/stevearc/aerial.nvim/commit/edfdcf1d45525b063fe4f39ee67e6d51f3dffa11))
+* don't jump to top of buffer when autojump = true ([#309](https://github.com/stevearc/aerial.nvim/issues/309)) ([6573d6e](https://github.com/stevearc/aerial.nvim/commit/6573d6ec2166512549f4af7add7b9337fa4a768e))
+* Neovim closes on bdelete ([#333](https://github.com/stevearc/aerial.nvim/issues/333)) ([e2e3bc2](https://github.com/stevearc/aerial.nvim/commit/e2e3bc2df4490690ea005395eecdc8eeb30c4def))
+* race condition when stopping loading timer ([#331](https://github.com/stevearc/aerial.nvim/issues/331)) ([cf69a43](https://github.com/stevearc/aerial.nvim/commit/cf69a43c086da6db5d93fb4d1a42cf9b278f6a12))
+* remove extra double quotes for fzf prompt ([#339](https://github.com/stevearc/aerial.nvim/issues/339)) ([ce9f397](https://github.com/stevearc/aerial.nvim/commit/ce9f397d046b6b2bb2aa3ee89fced937c09e4799))
+* **vim treesitter:** support functions with field expression names ([#332](https://github.com/stevearc/aerial.nvim/issues/332)) ([ef08437](https://github.com/stevearc/aerial.nvim/commit/ef08437108247d8805ae388f2699537eac2fd810))
+
 ## [1.3.0](https://github.com/stevearc/aerial.nvim/compare/v1.2.0...v1.3.0) (2023-10-12)
 
 
