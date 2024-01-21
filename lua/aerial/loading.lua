@@ -20,6 +20,9 @@ M.set_loading = function(aer_bufnr, is_loading)
         0,
         80,
         vim.schedule_wrap(function()
+          if not timers[aer_bufnr] then
+            return
+          end
           local lines = { M.spinner_frames[i + 1] .. " Loading" }
           util.render_centered_text(aer_bufnr, lines)
           i = (i + 1) % #M.spinner_frames
