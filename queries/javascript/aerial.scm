@@ -28,7 +28,7 @@
 (lexical_declaration
   (variable_declarator
     name: (identifier) @name
-    value: [(arrow_function) (function) (generator_function)] @symbol
+    value: [(arrow_function) (function_expression) (generator_function)] @symbol
   )
   (#set! "kind" "Function")
   ) @start
