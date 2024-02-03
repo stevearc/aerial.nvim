@@ -128,6 +128,7 @@ local function aerial_picker(opts)
       default_selection_index = default_selection_index,
       sorter = conf.generic_sorter(opts),
       previewer = conf.qflist_previewer(opts),
+      push_cursor_on_edit = true,
     })
     :find()
 end
