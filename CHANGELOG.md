@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/stevearc/aerial.nvim/compare/v1.4.0...v1.5.0) (2024-02-03)
+
+
+### Features
+
+* **telescope:** Save position into jumplist before 'edit' action ([#340](https://github.com/stevearc/aerial.nvim/issues/340)) ([9523ebc](https://github.com/stevearc/aerial.nvim/commit/9523ebc7f0805a4d69a76ef35960a7788a4127af))
+
+
+### Bug Fixes
+
+* **javascript:** treesitter queries changed upstream ([d21482d](https://github.com/stevearc/aerial.nvim/commit/d21482d3be3228dde594aba31106db428292742c))
+
 ## [1.4.0](https://github.com/stevearc/aerial.nvim/compare/v1.3.0...v1.4.0) (2024-01-21)
 
 
