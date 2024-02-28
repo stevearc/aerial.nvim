@@ -1,7 +1,7 @@
 local default_options = {
   -- Priority list of preferred backends for aerial.
   -- This can be a filetype map (see :help aerial-filetype-map)
-  backends = { "treesitter", "lsp", "markdown", "man" },
+  backends = { "treesitter", "lsp", "markdown", "asciidoc", "man" },
 
   layout = {
     -- These control the width of the aerial window.
