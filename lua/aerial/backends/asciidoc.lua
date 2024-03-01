@@ -14,7 +14,6 @@ end
 
 M.fetch_symbols_sync = function(bufnr)
   bufnr = bufnr or 0
-  local extensions = require("aerial.backends.treesitter.extensions")
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
   local items = {}
   local stack = {}
@@ -58,8 +57,6 @@ M.fetch_symbols_sync = function(bufnr)
       inside_code_block = not inside_code_block
     end
   end
-  -- This sets the proper end_lnum and end_col
-  extensions.asciidoc.postprocess_symbols(bufnr, items)
   backends.set_symbols(bufnr, items, { backend_name = "asciidoc", lang = "asciidoc" })
 end
 
