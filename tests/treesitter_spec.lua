@@ -35,6 +35,12 @@ describe("treesitter", function()
       util.test_file_symbols("treesitter", filepath, symbols_file)
     end)
 
+    if filename == "asciidoc_test.adoc" then
+      it("<asciidoc backend> " .. filename, function()
+        util.test_file_symbols("asciidoc", filepath, "./tests/symbols/asciidoc_backend.json")
+      end)
+    end
+
     if filename == "markdown_test.md" then
       it("<markdown backend> " .. filename, function()
         util.test_file_symbols("markdown", filepath, "./tests/symbols/markdown_backend.json")
