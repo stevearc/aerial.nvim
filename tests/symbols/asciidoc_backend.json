@@ -1,58 +1,58 @@
 [
   {
-    "name": "Title 1",
-    "lnum": 1,
-    "level": 0,
-    "kind": "Interface",
-    "end_lnum": 0,
-    "col": 0,
     "children": [
       {
-        "next_sibling": {
-          "name": "title2",
-          "lnum": 11,
-          "level": 1,
-          "kind": "Interface",
-          "end_lnum": 0,
-          "col": 0
-        },
-        "name": "Title 2",
-        "lnum": 3,
-        "level": 1,
-        "kind": "Interface",
-        "end_lnum": 0,
-        "col": 0,
         "children": [
           {
-            "name": "Title 3",
-            "lnum": 5,
-            "level": 2,
-            "kind": "Interface",
-            "end_lnum": 0,
-            "col": 0,
             "children": [
               {
-                "name": "Title 4",
-                "lnum": 7,
-                "level": 3,
-                "kind": "Interface",
-                "end_lnum": 0,
-                "col": 0,
                 "children": [
                   {
-                    "name": "Title 5",
-                    "lnum": 9,
-                    "level": 4,
-                    "kind": "Interface",
+                    "col": 0,
                     "end_lnum": 0,
-                    "col": 0
+                    "kind": "Interface",
+                    "level": 4,
+                    "lnum": 9,
+                    "name": "Title 5"
                   }
-                ]
+                ],
+                "col": 0,
+                "end_lnum": 0,
+                "kind": "Interface",
+                "level": 3,
+                "lnum": 7,
+                "name": "Title 4"
               }
-            ]
+            ],
+            "col": 0,
+            "end_lnum": 0,
+            "kind": "Interface",
+            "level": 2,
+            "lnum": 5,
+            "name": "Title 3"
           }
-        ]
+        ],
+        "col": 0,
+        "end_lnum": 0,
+        "kind": "Interface",
+        "level": 1,
+        "lnum": 3,
+        "name": "Title 2"
+      },
+      {
+        "col": 0,
+        "end_lnum": 0,
+        "kind": "Interface",
+        "level": 1,
+        "lnum": 11,
+        "name": "title2"
       }
-    ]
+    ],
+    "col": 0,
+    "end_lnum": 0,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 1,
+    "name": "Title 1"
   }
 ]
