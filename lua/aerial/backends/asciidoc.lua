@@ -17,6 +17,7 @@ M.fetch_symbols_sync = function(bufnr)
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, true)
   local items = {}
   local stack = {}
+  local block_kind = ""
   local inside_code_block = false
   for lnum, line in ipairs(lines) do
     local idx, len = string.find(line, "^=+ ")
@@ -53,8 +54,19 @@ M.fetch_symbols_sync = function(bufnr)
         table.remove(stack, #stack)
       end
       table.insert(stack, item)
-    elseif string.find(line, "```") == 1 then
-      inside_code_block = not inside_code_block
+    elseif
+      line == "----"
+      or line == "****"
+      or line == "...."
+      or line == "===="
+      or line == "|==="
+    then
+      if not inside_code_block then
+        block_kind = line
+        inside_code_block = true
+      elseif block_kind == line then
+        inside_code_block = false
+      end
     end
   end
   backends.set_symbols(bufnr, items, { backend_name = "asciidoc", lang = "asciidoc" })
