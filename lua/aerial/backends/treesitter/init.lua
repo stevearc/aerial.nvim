@@ -19,6 +19,9 @@ M.is_supported = function(bufnr)
   if not helpers.has_parser(lang) then
     return false, string.format("No treesitter parser for %s", lang)
   end
+  if vim.fn.has("nvim-0.9") == 0 and lang == "groovy" then
+    return false, "groovy requires neovim 0.9+"
+  end
   if helpers.get_query(lang) == nil then
     return false, string.format("No queries defined for '%s'", lang)
   end

@@ -61,6 +61,10 @@ M.test_file_symbols = function(backend_name, filename, symbols_file)
   })
   vim.cmd(string.format("edit %s", filename))
   local backend = backends.get(0)
+  -- TODO need a better way. don't intend to support groovy for neovim-0.8
+  if not backend and vim.bo.filetype == "groovy" then
+    return
+  end
   if not backend then
     local msg = string.format(
       "Could not find aerial backend for %s with filetype '%s'. If this is not correct, you may need a special filetype rule in tests/minimal_init.lua.",
