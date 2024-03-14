@@ -518,9 +518,8 @@ require("aerial").setup({
   },
 
   lsp = {
-    -- Fetch document symbols when LSP diagnostics update.
-    -- If false, will update on buffer changes.
-    diagnostics_trigger_update = true,
+    -- If true, fetch document symbols when LSP diagnostics update.
+    diagnostics_trigger_update = false,
 
     -- Set to false to not update the symbols when there are LSP errors
     update_when_errors = true,
