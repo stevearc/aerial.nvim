@@ -146,6 +146,9 @@ local default_options = {
     -- Ignore unlisted buffers. See :help buflisted
     unlisted_buffers = false,
 
+    -- Ignore diff windows (setting to false will allow aerial in diff windows)
+    diff_windows = true,
+
     -- List of filetypes to ignore.
     filetypes = {},
 

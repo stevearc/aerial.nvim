@@ -275,10 +275,10 @@ M.is_ignored_win = function(winid)
   if ignore_buf then
     return ignore_buf, message
   end
-  if vim.wo[winid].diff then
+  local ignore = config.ignore
+  if ignore.diff_windows and vim.wo[winid].diff then
     return true, "Viewing a diff"
   end
-  local ignore = config.ignore
   if ignore.wintypes then
     local wintype = vim.fn.win_gettype(winid)
     if ignore.wintypes == "special" and wintype ~= "" then
