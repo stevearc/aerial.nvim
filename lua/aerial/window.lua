@@ -538,6 +538,9 @@ M.center_symbol_in_view = function(buffer)
     return
   end
   local bufdata = data.get_or_create(bufnr)
+  if not bufdata.last_win then
+    return
+  end
   if vim.api.nvim_buf_is_valid(aer_bufnr) and vim.api.nvim_win_is_valid(bufdata.last_win) then
     local last_position = bufdata.positions[bufdata.last_win]
     if last_position then
