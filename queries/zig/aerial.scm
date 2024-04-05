@@ -1,8 +1,3 @@
-(FnProto
-  function: (IDENTIFIER) @name
-  (#set! "kind" "Function")
-  ) @symbol
-
 (Decl
     (VarDecl
       variable_type_function: (IDENTIFIER) @name
@@ -10,7 +5,12 @@
       (_
         (_
           (ContainerDecl
-            (ContainerDeclType "struct")
-            )))) @symbol
+            (ContainerDeclType "struct") @symbol
+            ))))
     )
+
+(FnProto
+  function: (IDENTIFIER) @name
+  (#set! "kind" "Function")
+  ) @symbol
 
