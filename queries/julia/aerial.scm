@@ -18,19 +18,35 @@
   (#set! "kind" "Function")
   ) @symbol
 
-; TODO: Unsure how to translate this
-; (short_function_definition
-;   name: (identifier) @name
-;   (#set! "kind" "Function")
-;   ) @symbol
-;
-; TODO: Unsure how to translate this
-; (short_function_definition
-;   name: (field_expression
-;           value: (_)
-;           (identifier)) @name
-;   (#set! "kind" "Function")
-;   ) @symbol
+(assignment
+  (where_expression
+    (call_expression
+      .
+      (identifier) @name))
+  (#set! "kind" "Function")
+  ) @symbol
+
+(assignment
+  (where_expression
+    (call_expression
+      ((field_expression) @name)))
+  (#set! "kind" "Function")
+  ) @symbol
+
+(assignment
+  .
+  (call_expression
+    .
+    (identifier) @name)
+  (#set! "kind" "Function")
+  ) @symbol
+
+(assignment
+  .
+  (call_expression
+    ((field_expression) @name))
+  (#set! "kind" "Function")
+  ) @symbol
 
 (abstract_definition
   name: (identifier) @name
