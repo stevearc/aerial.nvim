@@ -4,28 +4,35 @@
   ) @symbol
 
 (function_definition
-  name: (identifier) @name
+  (signature
+    (call_expression
+      .
+      (identifier) @name))
   (#set! "kind" "Function")
   ) @symbol
 
 (function_definition
-  name: (field_expression
-          value: (_)
-          (identifier)) @name
+  (signature
+    (call_expression
+      ( field_expression
+        value: (_)
+        (identifier) @name)))
   (#set! "kind" "Function")
   ) @symbol
 
-(short_function_definition
-  name: (identifier) @name
-  (#set! "kind" "Function")
-  ) @symbol
-
-(short_function_definition
-  name: (field_expression
-          value: (_)
-          (identifier)) @name
-  (#set! "kind" "Function")
-  ) @symbol
+; TODO: Unsure how to translate this
+; (short_function_definition
+;   name: (identifier) @name
+;   (#set! "kind" "Function")
+;   ) @symbol
+;
+; TODO: Unsure how to translate this
+; (short_function_definition
+;   name: (field_expression
+;           value: (_)
+;           (identifier)) @name
+;   (#set! "kind" "Function")
+;   ) @symbol
 
 (abstract_definition
   name: (identifier) @name
@@ -44,6 +51,9 @@
   ) @symbol
 
 (macro_definition
-  name: (identifier) @name
+  (signature
+    (call_expression
+      .
+      (identifier) @name))
   (#set! "kind" "Function")
   ) @symbol
