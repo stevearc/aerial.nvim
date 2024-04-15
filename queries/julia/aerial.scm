@@ -14,9 +14,7 @@
 (function_definition
   (signature
     (call_expression
-      ( field_expression
-        value: (_)
-        (identifier) @name)))
+      ((field_expression) @name)))
   (#set! "kind" "Function")
   ) @symbol
 
