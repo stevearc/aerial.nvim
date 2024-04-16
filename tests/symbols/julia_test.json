@@ -23,10 +23,10 @@
         "kind": "Function",
         "level": 1,
         "lnum": 5,
-        "name": "func",
+        "name": "func()",
         "selection_range": {
           "col": 9,
-          "end_col": 13,
+          "end_col": 15,
           "end_lnum": 5,
           "lnum": 5
         }
@@ -38,10 +38,10 @@
         "kind": "Function",
         "level": 1,
         "lnum": 8,
-        "name": "myfunc",
+        "name": "myfunc()",
         "selection_range": {
           "col": 0,
-          "end_col": 6,
+          "end_col": 8,
           "end_lnum": 8,
           "lnum": 8
         }
@@ -70,10 +70,10 @@
             "kind": "Function",
             "level": 2,
             "lnum": 13,
-            "name": "MyStruct",
+            "name": "MyStruct()",
             "selection_range": {
               "col": 4,
-              "end_col": 12,
+              "end_col": 14,
               "end_lnum": 13,
               "lnum": 13
             }
@@ -85,10 +85,10 @@
             "kind": "Function",
             "level": 2,
             "lnum": 14,
-            "name": "method",
+            "name": "method()",
             "selection_range": {
               "col": 4,
-              "end_col": 10,
+              "end_col": 12,
               "end_lnum": 14,
               "lnum": 14
             }
@@ -115,10 +115,10 @@
         "kind": "Function",
         "level": 1,
         "lnum": 17,
-        "name": "mac",
+        "name": "mac(expr)",
         "selection_range": {
           "col": 6,
-          "end_col": 9,
+          "end_col": 15,
           "end_lnum": 17,
           "lnum": 17
         }
@@ -132,10 +132,10 @@
             "kind": "Function",
             "level": 2,
             "lnum": 21,
-            "name": "mod.myfunc",
+            "name": "mod.myfunc()",
             "selection_range": {
               "col": 4,
-              "end_col": 14,
+              "end_col": 16,
               "end_lnum": 21,
               "lnum": 21
             }
@@ -147,10 +147,10 @@
             "kind": "Function",
             "level": 2,
             "lnum": 22,
-            "name": "mod.myfuncb",
+            "name": "mod.myfuncb()",
             "selection_range": {
               "col": 13,
-              "end_col": 24,
+              "end_col": 26,
               "end_lnum": 22,
               "lnum": 22
             }

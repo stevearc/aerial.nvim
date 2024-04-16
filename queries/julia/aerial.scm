@@ -4,26 +4,21 @@
   ) @symbol
 
 (function_definition
-  name: (identifier) @name
+  (signature
+    ((call_expression) @name))
   (#set! "kind" "Function")
   ) @symbol
 
-(function_definition
-  name: (field_expression
-          value: (_)
-          (identifier)) @name
+(assignment
+  .
+  (where_expression
+    ((call_expression) @name))
   (#set! "kind" "Function")
   ) @symbol
 
-(short_function_definition
-  name: (identifier) @name
-  (#set! "kind" "Function")
-  ) @symbol
-
-(short_function_definition
-  name: (field_expression
-          value: (_)
-          (identifier)) @name
+(assignment
+  .
+  ((call_expression) @name)
   (#set! "kind" "Function")
   ) @symbol
 
@@ -44,6 +39,7 @@
   ) @symbol
 
 (macro_definition
-  name: (identifier) @name
+  (signature
+    ((call_expression) @name))
   (#set! "kind" "Function")
   ) @symbol
