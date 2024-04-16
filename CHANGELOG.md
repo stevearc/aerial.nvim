@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.6.0](https://github.com/stevearc/aerial.nvim/compare/v1.5.0...v1.6.0) (2024-04-16)
+
+
+### Features
+
+* **backend:** add asciidoc ([#348](https://github.com/stevearc/aerial.nvim/issues/348)) ([c45d567](https://github.com/stevearc/aerial.nvim/commit/c45d5672c870ee8ee6b6feb74d27940a5ddf6748))
+* option to enable earial in diff windows ([#355](https://github.com/stevearc/aerial.nvim/issues/355)) ([bdc94c5](https://github.com/stevearc/aerial.nvim/commit/bdc94c53871bf16a4043ab563aa87d4677ab4907)), closes [#354](https://github.com/stevearc/aerial.nvim/issues/354)
+* **treesitter:** groovy support ([#351](https://github.com/stevearc/aerial.nvim/issues/351)) ([c8a40b1](https://github.com/stevearc/aerial.nvim/commit/c8a40b12668b0861c9c519f13a8a5f29a1f1ef28))
+* **zig:** basic treesitter support for zig. ([#359](https://github.com/stevearc/aerial.nvim/issues/359)) ([5961a1a](https://github.com/stevearc/aerial.nvim/commit/5961a1afc0384845934073d3c7d46ea328d98d89))
+
+
+### Bug Fixes
+
+* can open aerial in ignored windows ([#352](https://github.com/stevearc/aerial.nvim/issues/352)) ([51a0794](https://github.com/stevearc/aerial.nvim/commit/51a07949abf169b4cad30e14c165ac1ec0ce4e6f))
+* check if bufdata.last_win != nil ([#356](https://github.com/stevearc/aerial.nvim/issues/356)) ([24ebaca](https://github.com/stevearc/aerial.nvim/commit/24ebacab5821107c50f628e8e7774f105c08fe9b))
+* **julia:** treesitter queries changed upstream ([#362](https://github.com/stevearc/aerial.nvim/issues/362)) ([2f1b897](https://github.com/stevearc/aerial.nvim/commit/2f1b8979d29c30955dbc5a8e4880071df6da1327))
+* set lsp.diagnostics_trigger_update=false by default ([993142d](https://github.com/stevearc/aerial.nvim/commit/993142d49274092c64a2d475aa726df3c323949d))
+
 ## [1.5.0](https://github.com/stevearc/aerial.nvim/compare/v1.4.0...v1.5.0) (2024-02-03)
 
 
