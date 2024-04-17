@@ -166,7 +166,7 @@ function M:get_status_dense()
     local symbol = symbols[#symbols]
     local hl_group = self:get_hl_group(symbol, true)
     local icon = self:color_text(symbol.icon, hl_group)
-    status = string.format("%s %s", icon, status)
+    status = string.format("%s%s%s", icon, self.options.sep_icon, status)
   end
   return status
 end
