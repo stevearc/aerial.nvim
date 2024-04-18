@@ -80,3 +80,18 @@
       (string_fragment) @name @string))?
   (#set! "kind" "Function")
   ) @symbol @selection
+
+; JSX elements
+(_
+  [
+    (jsx_opening_element (identifier) @name)
+  ]
+  (#set! "kind" "Struct")
+) @symbol
+
+
+; Self closing JSX elements
+(jsx_self_closing_element
+  name: (identifier) @name
+  (#set! "kind" "Struct")
+  ) @symbol

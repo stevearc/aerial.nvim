@@ -34,3 +34,11 @@ describe("UnitTest", () => {
 
 function* g() {}
 const g_1 = function* () {};
+
+return <div>
+  <SomeComponent className='some-class'/>
+  <ul>
+    <li>First List Element</li>
+    <li>Second List Element</li>
+  </ul>
+</div>
