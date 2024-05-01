@@ -323,7 +323,7 @@ end
 ---@param focus? boolean
 ---@param direction? "left"|"right"|"float"
 M.open = function(focus, direction)
-  if util.is_aerial_buffer(0) then
+  if util.is_aerial_buffer(0) or util.is_ignored_win() then
     return
   end
   local bufnr, aer_bufnr = util.get_buffers()
