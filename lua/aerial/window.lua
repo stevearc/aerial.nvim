@@ -230,15 +230,6 @@ M.open_aerial_in_win = function(src_bufnr, src_winid, aer_winid)
   end
 end
 
----@param bufnr? integer
----@return integer|nil
-local function get_aerial_win_for_buf(bufnr)
-  local aer_bufnr = util.get_aerial_buffer(bufnr)
-  if aer_bufnr then
-    return util.buf_first_win_in_tabpage(aer_bufnr)
-  end
-end
-
 ---@param opts? {bufnr?: integer, winid?: integer}
 ---@return boolean
 M.is_open = function(opts)
@@ -248,7 +239,11 @@ M.is_open = function(opts)
   if opts.winid then
     return util.get_aerial_win(opts.winid) ~= nil
   else
-    return get_aerial_win_for_buf(opts.bufnr) ~= nil
+    local aer_bufnr = util.get_aerial_buffer(opts.bufnr)
+    if aer_bufnr then
+      return util.buf_first_win_in_tabpage(aer_bufnr) ~= nil
+    end
+    return false
   end
 end
 

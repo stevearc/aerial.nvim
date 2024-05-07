@@ -115,7 +115,16 @@ end
 ---@param winid? integer
 ---@return integer?
 M.get_aerial_win = function(winid)
-  return M.get_winid_from_var(winid or 0, "aerial_win")
+  local aerial_win = M.get_winid_from_var(winid or 0, "aerial_win")
+  if not aerial_win and config.attach_mode == "global" then
+    for _, tab_win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+      if M.is_aerial_win(tab_win) then
+        aerial_win = tab_win
+        break
+      end
+    end
+  end
+  return aerial_win
 end
 
 ---@param winid? integer
