@@ -417,6 +417,7 @@ local nerd_icons = {
   Collapsed     = " ",
 }
 
+---@diagnostic disable-next-line: deprecated
 local islist = vim.islist or vim.tbl_islist
 local M = {}
 

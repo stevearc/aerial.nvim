@@ -30,7 +30,7 @@ else
   ---@param bufnr nil|integer
   M.get_buf_lang = function(bufnr)
     bufnr = bufnr or vim.api.nvim_get_current_buf()
-    local ft = vim.api.nvim_buf_get_option(bufnr, "ft")
+    local ft = vim.bo[bufnr].filetype
 
     local result = vim.treesitter.language.get_lang(ft)
     if result then
@@ -44,21 +44,21 @@ end
 
 if vim.treesitter.query.get == nil then
   ---@param lang string
-  ---@return Query|nil
+  ---@return vim.treesitter.Query|nil
   M.load_query = function(lang)
     ---@diagnostic disable-next-line: deprecated
     return vim.treesitter.query.get_query(lang, "aerial")
   end
 else
   ---@param lang string
-  ---@return Query|nil
+  ---@return vim.treesitter.Query|nil
   M.load_query = function(lang)
     return vim.treesitter.query.get(lang, "aerial")
   end
 end
 
 ---@param lang string
----@return Query|nil
+---@return vim.treesitter.Query|nil
 ---@note caches queries to avoid filesystem hits on neovim 0.9+
 M.get_query = function(lang)
   if not query_cache[lang] then
@@ -77,7 +77,7 @@ M.has_parser = function(lang)
 end
 
 ---@param bufnr integer
----@return LanguageTree|nil
+---@return vim.treesitter.LanguageTree|nil
 M.get_parser = function(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   ---@note nvim 0.9.1 and later don't really care for lang here, as vim itself becomes an authority on that

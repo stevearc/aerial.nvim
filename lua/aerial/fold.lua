@@ -52,7 +52,7 @@ M.add_fold_mappings = function(bufnr)
       zX = { aerial.sync_folds, "[aerial] sync folds" },
     }
     for lhs, v in pairs(maps) do
-      local callback, desc = unpack(v)
+      local callback, desc = v[1], v[2]
       if not config.link_tree_to_folds then
         local orig_cb = callback
         callback = function()

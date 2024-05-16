@@ -15,7 +15,20 @@ end
 M.get_client = function(bufnr, exclude_id)
   local ret
   local last_priority = -1
-  for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
+
+  local clients
+  if vim.lsp.get_clients then
+    clients = vim.lsp.get_clients({
+      bufnr = bufnr,
+    })
+  else
+    ---@diagnostic disable-next-line: deprecated
+    clients = vim.lsp.get_active_clients({
+      bufnr = bufnr,
+    })
+  end
+
+  for _, client in ipairs(clients) do
     local priority = config.lsp.priority[client.name] or 10
     if
       client.id ~= exclude_id

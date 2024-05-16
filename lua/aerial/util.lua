@@ -371,9 +371,9 @@ M.render_centered_text = function(bufnr, text)
     line = string.rep(" ", (width - vim.api.nvim_strwidth(line)) / 2) .. line
     table.insert(lines, line)
   end
-  vim.api.nvim_buf_set_option(bufnr, "modifiable", true)
+  vim.bo[bufnr].modifiable = true
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
-  vim.api.nvim_buf_set_option(bufnr, "modifiable", false)
+  vim.bo[bufnr].modifiable = false
 end
 
 M.pack = function(...)

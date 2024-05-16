@@ -171,7 +171,10 @@ M.symbol_callback = function(_err, result, context, _config)
     return
   end
 
-  local client = vim.lsp.get_client_by_id(context.client_id)
+  local client = vim.lsp.get_client_by_id(client_id)
+  if not client then
+    return
+  end
   -- Debounce this callback to avoid unnecessary re-rendering
   if results[bufnr] == nil then
     vim.defer_fn(function()
@@ -189,6 +192,9 @@ end
 M.on_publish_diagnostics = function(_err, result, ctx, _config)
   local client_id = ctx.client_id
   local client = vim.lsp.get_client_by_id(client_id)
+  if not client then
+    return
+  end
   local uri = result.uri
   local bufnr = vim.uri_to_bufnr(uri)
   if
