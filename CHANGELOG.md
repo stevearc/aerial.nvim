@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.7.0](https://github.com/stevearc/aerial.nvim/compare/v1.6.0...v1.7.0) (2024-05-16)
+
+
+### Features
+
+* **tsx:** treesitter support for JSX symbols ([#365](https://github.com/stevearc/aerial.nvim/issues/365)) ([7045e7c](https://github.com/stevearc/aerial.nvim/commit/7045e7cb0017d222122a1f6e5795e69754d8b9db))
+
+
+### Bug Fixes
+
+* attach_mode="global" never allows multiple windows to open ([#369](https://github.com/stevearc/aerial.nvim/issues/369)) ([228fad1](https://github.com/stevearc/aerial.nvim/commit/228fad11393322537d9662c0347f75549a3d6c0a))
+* **lualine:** use `sep_icon` in dense mode as well ([#360](https://github.com/stevearc/aerial.nvim/issues/360)) ([218eae4](https://github.com/stevearc/aerial.nvim/commit/218eae4cb7099898b379aa0788c6e3b6a463a23d))
+* refactor deprecated methods in neovim 0.10 ([daeee77](https://github.com/stevearc/aerial.nvim/commit/daeee77f3902d170bf7e036bf2a537b14a7ca6e7))
+
 ## [1.6.0](https://github.com/stevearc/aerial.nvim/compare/v1.5.0...v1.6.0) (2024-04-16)
 
 
