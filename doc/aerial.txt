@@ -452,10 +452,11 @@ open({opts})                                                         *aerial.ope
     Open the aerial window for the current buffer.
 
     Parameters:
-      {opts} `nil|table`
-          {focus}     `boolean` If true, jump to aerial window if it is opened
-                      (default true)
-          {direction} `"left"|"right"|"float"` Direction to open aerial window
+      {opts} `nil|aerial.openOpts`
+          {focus}     `nil|boolean` If true, jump to aerial window if it is
+                      opened (default true)
+          {direction} `nil|"left"|"right"|"float"` Direction to open aerial
+                      window
 
 open_in_win({target_win}, {source_win})                       *aerial.open_in_win*
     Open aerial in an existing window
@@ -479,10 +480,11 @@ toggle({opts})                                                     *aerial.toggl
     Open or close the aerial window for the current buffer.
 
     Parameters:
-      {opts} `nil|table`
-          {focus}     `boolean` If true, jump to aerial window if it is opened
-                      (default true)
-          {direction} `"left"|"right"|"float"` Direction to open aerial window
+      {opts} `nil|aerial.openOpts`
+          {focus}     `nil|boolean` If true, jump to aerial window if it is
+                      opened (default true)
+          {direction} `nil|"left"|"right"|"float"` Direction to open aerial
+                      window
 
 refetch_symbols({bufnr})                                  *aerial.refetch_symbols*
     Refresh the symbols for a buffer
@@ -498,7 +500,7 @@ select({opts})                                                     *aerial.selec
     Jump to a specific symbol.
 
     Parameters:
-      {opts} `nil|table`
+      {opts} `nil|aerial.selectOpts`
           {index} `nil|integer` The symbol to jump to. If nil, will jump to the
                   symbol under the cursor (in the aerial buffer)
           {split} `nil|string` Jump to the symbol in a new split. Can be "v" for

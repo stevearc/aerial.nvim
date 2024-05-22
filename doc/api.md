@@ -91,11 +91,11 @@ Close all visible aerial windows except for the one currently focused or for the
 `open(opts)` \
 Open the aerial window for the current buffer.
 
-| Param | Type         | Desc                       |                                                               |
-| ----- | ------------ | -------------------------- | ------------------------------------------------------------- |
-| opts  | `nil\|table` |                            |                                                               |
-|       | focus        | `boolean`                  | If true, jump to aerial window if it is opened (default true) |
-|       | direction    | `"left"\|"right"\|"float"` | Direction to open aerial window                               |
+| Param | Type                   | Desc                            |                                                               |
+| ----- | ---------------------- | ------------------------------- | ------------------------------------------------------------- |
+| opts  | `nil\|aerial.openOpts` |                                 |                                                               |
+|       | focus                  | `nil\|boolean`                  | If true, jump to aerial window if it is opened (default true) |
+|       | direction              | `nil\|"left"\|"right"\|"float"` | Direction to open aerial window                               |
 
 ## open_in_win(target_win, source_win)
 
@@ -129,11 +129,11 @@ Jump to the aerial window for the current buffer, if it is open
 `toggle(opts)` \
 Open or close the aerial window for the current buffer.
 
-| Param | Type         | Desc                       |                                                               |
-| ----- | ------------ | -------------------------- | ------------------------------------------------------------- |
-| opts  | `nil\|table` |                            |                                                               |
-|       | focus        | `boolean`                  | If true, jump to aerial window if it is opened (default true) |
-|       | direction    | `"left"\|"right"\|"float"` | Direction to open aerial window                               |
+| Param | Type                   | Desc                            |                                                               |
+| ----- | ---------------------- | ------------------------------- | ------------------------------------------------------------- |
+| opts  | `nil\|aerial.openOpts` |                                 |                                                               |
+|       | focus                  | `nil\|boolean`                  | If true, jump to aerial window if it is opened (default true) |
+|       | direction              | `nil\|"left"\|"right"\|"float"` | Direction to open aerial window                               |
 
 ## refetch_symbols(bufnr)
 
@@ -155,12 +155,12 @@ call this if you change something in the config (e.g. by setting vim.b.aerial_ba
 `select(opts)` \
 Jump to a specific symbol.
 
-| Param | Type         | Desc           |                                                                                                                                                  |
-| ----- | ------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| opts  | `nil\|table` |                |                                                                                                                                                  |
-|       | index        | `nil\|integer` | The symbol to jump to. If nil, will jump to the symbol under the cursor (in the aerial buffer)                                                   |
-|       | split        | `nil\|string`  | Jump to the symbol in a new split. Can be "v" for vertical or "h" for horizontal. Can also be a raw command to execute (e.g. "belowright split") |
-|       | jump         | `nil\|boolean` | If false and in the aerial window, do not leave the aerial window. (Default true)                                                                |
+| Param | Type                     | Desc           |                                                                                                                                                  |
+| ----- | ------------------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| opts  | `nil\|aerial.selectOpts` |                |                                                                                                                                                  |
+|       | index                    | `nil\|integer` | The symbol to jump to. If nil, will jump to the symbol under the cursor (in the aerial buffer)                                                   |
+|       | split                    | `nil\|string`  | Jump to the symbol in a new split. Can be "v" for vertical or "h" for horizontal. Can also be a raw command to execute (e.g. "belowright split") |
+|       | jump                     | `nil\|boolean` | If false and in the aerial window, do not leave the aerial window. (Default true)                                                                |
 
 ## next(step)
 

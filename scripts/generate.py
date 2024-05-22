@@ -13,11 +13,11 @@ from nvim_doc_tools import (
     format_vimdoc_commands,
     generate_md_toc,
     indent,
-    parse_functions,
+    parse_directory,
     read_nvim_json,
     read_section,
-    render_md_api,
-    render_vimdoc_api,
+    render_md_api2,
+    render_vimdoc_api2,
     replace_section,
 )
 
@@ -61,8 +61,9 @@ def add_md_link_path(path: str, lines: List[str]) -> List[str]:
 
 
 def update_md_api():
-    funcs = parse_functions(os.path.join(ROOT, "lua", "aerial", "init.lua"))
-    lines = ["\n"] + render_md_api(funcs, 2) + ["\n"]
+    types = parse_directory(os.path.join(ROOT, "lua"))
+    funcs = types.files["aerial/init.lua"].functions
+    lines = ["\n"] + render_md_api2(funcs, types, 2) + ["\n"]
     api_doc = os.path.join(DOC, "api.md")
     replace_section(
         api_doc,
@@ -138,12 +139,15 @@ def get_notes_vimdoc() -> "VimdocSection":
 
 def generate_vimdoc():
     doc = Vimdoc("aerial.txt", "aerial")
-    funcs = parse_functions(os.path.join(ROOT, "lua", "aerial", "init.lua"))
+    types = parse_directory(os.path.join(ROOT, "lua"))
+    funcs = types.files["aerial/init.lua"].functions
     doc.sections.extend(
         [
             get_options_vimdoc(),
             get_commands_vimdoc(),
-            VimdocSection("API", "aerial-api", render_vimdoc_api("aerial", funcs)),
+            VimdocSection(
+                "API", "aerial-api", render_vimdoc_api2("aerial", funcs, types)
+            ),
             get_notes_vimdoc(),
         ]
     )

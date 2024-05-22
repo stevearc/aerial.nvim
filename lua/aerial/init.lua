@@ -261,10 +261,12 @@ M.close_all = lazy("window", "close_all")
 ---Close all visible aerial windows except for the one currently focused or for the currently focused window.
 M.close_all_but_current = lazy("window", "close_all_but_current")
 
+---@class (exact) aerial.openOpts
+---@field focus? boolean If true, jump to aerial window if it is opened (default true)
+---@field direction? "left"|"right"|"float" Direction to open aerial window
+
 ---Open the aerial window for the current buffer.
----@param opts? table
----    focus boolean If true, jump to aerial window if it is opened (default true)
----    direction "left"|"right"|"float" Direction to open aerial window
+---@param opts? aerial.openOpts
 M.open = function(opts)
   do_setup()
   was_closed = false
@@ -293,9 +295,7 @@ M.open_all = lazy("window", "open_all")
 M.focus = lazy("window", "focus")
 
 ---Open or close the aerial window for the current buffer.
----@param opts? table
----    focus boolean If true, jump to aerial window if it is opened (default true)
----    direction "left"|"right"|"float" Direction to open aerial window
+---@param opts? aerial.openOpts
 M.toggle = function(opts)
   do_setup()
   opts = vim.tbl_extend("keep", opts or {}, {
@@ -327,11 +327,13 @@ M.refetch_symbols = function(bufnr)
   end
 end
 
+---@class (exact) aerial.selectOpts
+---@field index? integer The symbol to jump to. If nil, will jump to the symbol under the cursor (in the aerial buffer)
+---@field split? string Jump to the symbol in a new split. Can be "v" for vertical or "h" for horizontal. Can also be a raw command to execute (e.g. "belowright split")
+---@field jump? boolean If false and in the aerial window, do not leave the aerial window. (Default true)
+
 ---Jump to a specific symbol.
----@param opts? table
----    index? integer The symbol to jump to. If nil, will jump to the symbol under the cursor (in the aerial buffer)
----    split? string Jump to the symbol in a new split. Can be "v" for vertical or "h" for horizontal. Can also be a raw command to execute (e.g. "belowright split")
----    jump? boolean If false and in the aerial window, do not leave the aerial window. (Default true)
+---@param opts? aerial.selectOpts
 M.select = lazy("navigation", "select", true)
 
 ---Jump forwards in the symbol list.
