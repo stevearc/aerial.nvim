@@ -8,9 +8,9 @@ local util = require("aerial.util")
 local M = {}
 
 M.clear_buffer = function(bufnr)
-  vim.api.nvim_buf_set_option(bufnr, "modifiable", true)
+  vim.bo[bufnr].modifiable = true
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, {})
-  vim.api.nvim_buf_set_option(bufnr, "modifiable", false)
+  vim.bo[bufnr].modifiable = false
 end
 
 -- Resize all windows displaying this aerial buffer
@@ -177,9 +177,9 @@ M.update_aerial_buffer = function(buf)
   resize_all_wins(aer_bufnr, max_len, #lines)
 
   -- Insert lines into buffer
-  vim.api.nvim_buf_set_option(aer_bufnr, "modifiable", true)
+  vim.bo[aer_bufnr].modifiable = true
   vim.api.nvim_buf_set_lines(aer_bufnr, 0, -1, false, lines)
-  vim.api.nvim_buf_set_option(aer_bufnr, "modifiable", false)
+  vim.bo[aer_bufnr].modifiable = false
 
   local ns = vim.api.nvim_create_namespace("aerial")
   vim.api.nvim_buf_clear_namespace(aer_bufnr, ns, 0, -1)
