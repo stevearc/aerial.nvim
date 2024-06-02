@@ -1,4 +1,3 @@
 (section
   (title) @name
-  (#set! "kind" "Interface")
-  ) @symbol
+  (#set! "kind" "Interface")) @symbol

@@ -1,4 +1,3 @@
 (function_definition
   name: (word) @name
-  (#set! "kind" "Function")
-  ) @symbol
+  (#set! "kind" "Function")) @symbol

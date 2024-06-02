@@ -2,5 +2,4 @@
   key: (string
     (string_content) @name)
   value: (object) @symbol
-  (#set! "kind" "Class")
-  ) @start
+  (#set! "kind" "Class")) @start

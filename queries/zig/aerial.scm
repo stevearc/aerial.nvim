@@ -1,32 +1,27 @@
 (Decl
-    (VarDecl
-      variable_type_function: (IDENTIFIER) @name
-      (#set! "kind" "Struct")
+  (VarDecl
+    variable_type_function: (IDENTIFIER) @name
+    (#set! "kind" "Struct")
+    (_
       (_
-        (_
-          (ContainerDecl
-            (ContainerDeclType "struct") @symbol
-            ))))
-    )
+        (ContainerDecl
+          (ContainerDeclType
+            "struct") @symbol)))))
 
 (Decl
-    (VarDecl
-      variable_type_function: (IDENTIFIER) @name
-      (#set! "kind" "Struct")
+  (VarDecl
+    variable_type_function: (IDENTIFIER) @name
+    (#set! "kind" "Struct")
+    (_
       (_
-        (_
-          (ContainerDecl
-            (ContainerDeclType "union") @symbol
-            ))))
-    )
+        (ContainerDecl
+          (ContainerDeclType
+            "union") @symbol)))))
 
 (FnProto
   function: (IDENTIFIER) @name
-  (#set! "kind" "Function")
-  ) @symbol
-
+  (#set! "kind" "Function")) @symbol
 
 (TestDecl
   (STRINGLITERALSINGLE) @name
-  (#set! "kind" "Function")
-  ) @symbol
+  (#set! "kind" "Function")) @symbol

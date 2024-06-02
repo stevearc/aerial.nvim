@@ -1,66 +1,76 @@
 (class
-  name: [(constant) (scope_resolution)] @name
-  (#set! "kind" "Class")
-  ) @symbol
+  name: [
+    (constant)
+    (scope_resolution)
+  ] @name
+  (#set! "kind" "Class")) @symbol
 
 (call
-  (
-   (identifier) @scope
-   (#any-of? @scope "private" "protected" "public")
-   )?
+  ((identifier) @scope
+    (#any-of? @scope "private" "protected" "public"))?
   .
   (argument_list
     (method
       name: (_) @name
-      (#set! "kind" "Method")
-      ) @symbol
-    )
-  )
+      (#set! "kind" "Method")) @symbol))
 
 (body_statement
   [
-   (_)
-   ((identifier) @scope
-                 (#any-of? @scope "private" "protected" "public"))
-   ]*
+    (_)
+    ((identifier) @scope
+      (#any-of? @scope "private" "protected" "public"))
+  ]*
   .
   (method
     name: (_) @name
-    (#set! "kind" "Method")
-    ) @symbol
-  )
+    (#set! "kind" "Method")) @symbol)
 
 (singleton_method
-  object: [(constant) (self) (identifier)] @receiver
-  (["." "::"] @separator)?
-  name: [(operator) (identifier)] @name
-  (#set! "kind" "Method")
-  ) @symbol
+  object: [
+    (constant)
+    (self)
+    (identifier)
+  ] @receiver
+  ([
+    "."
+    "::"
+  ] @separator)?
+  name: [
+    (operator)
+    (identifier)
+  ] @name
+  (#set! "kind" "Method")) @symbol
 
 (singleton_class
   value: (_) @name
-  (#set! "kind" "Class")
-  ) @symbol
+  (#set! "kind" "Class")) @symbol
 
 (module
-  name: [(constant) (scope_resolution)] @name
-  (#set! "kind" "Module")
-  ) @symbol
+  name: [
+    (constant)
+    (scope_resolution)
+  ] @name
+  (#set! "kind" "Module")) @symbol
 
 ; For Rspec, Rake, and Shoulda
 (call
   method: (identifier) @method @name
   (#any-of? @method
-   "describe" "it" "before" "after" ; Rspec
-   "namespace" "task" "multitask" "file" ; Rake
-   "setup" "teardown" "should" "should_not" "should_eventually" "context") ; Shoulda
+    "describe" "it" "before" "after" ; Rspec
+     "namespace" "task" "multitask" "file" ; Rake
+     "setup" "teardown" "should" "should_not" "should_eventually" "context")
+  ; Shoulda
   arguments: (argument_list
-    [(string
-      (string_content) @name)
-     (simple_symbol) @name
-     (pair
-        key: [(string (string_content) @name) (hash_key_symbol) @name])
-     (call) @name
+    [
+      (string
+        (string_content) @name)
+      (simple_symbol) @name
+      (pair
+        key: [
+          (string
+            (string_content) @name)
+          (hash_key_symbol) @name
+        ])
+      (call) @name
     ])?
-  (#set! "kind" "Method")
-) @symbol @selection
+  (#set! "kind" "Method")) @symbol @selection

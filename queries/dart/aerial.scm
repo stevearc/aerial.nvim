@@ -1,37 +1,30 @@
 (class_definition
   name: (identifier) @name
-  (#set! "kind" "Class")
-  ) @symbol
+  (#set! "kind" "Class")) @symbol
 
 (constructor_signature
   name: (identifier) @name
-  (#set! "kind" "Constructor")
-  ) @symbol
+  (#set! "kind" "Constructor")) @symbol
 
-(
-  (method_signature
-    [(function_signature
+((method_signature
+  [
+    (function_signature
       name: (identifier) @name)
-     (getter_signature
+    (getter_signature
       name: (identifier) @name)
-     (setter_signature
+    (setter_signature
       name: (identifier) @name)
-    ]
-  ) @symbol
+  ]) @symbol
   .
   (function_body) @end
-  (#set! "kind" "Method")
-)
+  (#set! "kind" "Method"))
 
-(
-  (function_signature
-    name: (identifier) @name) @symbol
+((function_signature
+  name: (identifier) @name) @symbol
   .
   (function_body) @end
-  (#set! "kind" "Function")
-)
+  (#set! "kind" "Function"))
 
 (enum_declaration
   name: (identifier) @name
-  (#set! "kind" "Enum")
-  ) @symbol
+  (#set! "kind" "Enum")) @symbol

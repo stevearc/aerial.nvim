@@ -1,4 +1,3 @@
 (rule
   (targets) @name
-  (#set! "kind" "Interface")
-  ) @symbol
+  (#set! "kind" "Interface")) @symbol

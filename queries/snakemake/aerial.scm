@@ -1,19 +1,15 @@
 (function_definition
   name: (identifier) @name
-  (#set! "kind" "Function")
-  ) @symbol
+  (#set! "kind" "Function")) @symbol
 
 (class_definition
   name: (identifier) @name
-  (#set! "kind" "Class")
-  ) @symbol
+  (#set! "kind" "Class")) @symbol
 
 (assignment
   left: (_) @name
-  (#set! "kind" "Variable")
-  ) @symbol
+  (#set! "kind" "Variable")) @symbol
 
 (rule_definition
   name: (identifier) @name
-  (#set! "kind" "Class")
-) @symbol
+  (#set! "kind" "Class")) @symbol
