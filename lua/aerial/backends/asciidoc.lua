@@ -6,7 +6,12 @@ local util = require("aerial.util")
 local M = {}
 
 M.is_supported = function(bufnr)
-  if not vim.tbl_contains(util.get_filetypes(bufnr), "asciidoc") then
+  if
+    not (
+      vim.tbl_contains(util.get_filetypes(bufnr), "asciidoc")
+      or vim.tbl_contains(util.get_filetypes(bufnr), "loongdoc")
+    )
+  then
     return false, "Filetype is not asciidoc"
   end
   return true, nil
