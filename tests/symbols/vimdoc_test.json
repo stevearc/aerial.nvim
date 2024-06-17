@@ -15,35 +15,33 @@
     }
   },
   {
-    "children": [
-      {
-        "col": 68,
-        "end_col": 82,
-        "end_lnum": 5,
-        "kind": "Interface",
-        "level": 1,
-        "lnum": 5,
-        "name": ":SomeCommand",
-        "selection_range": {
-          "col": 69,
-          "end_col": 81,
-          "end_lnum": 5,
-          "lnum": 5
-        }
-      }
-    ],
-    "col": 0,
-    "end_col": 10,
+    "col": 70,
+    "end_col": 82,
     "end_lnum": 3,
     "kind": "Interface",
     "level": 0,
     "lnum": 3,
-    "name": "TEST INTRO",
+    "name": "test-intro",
     "selection_range": {
-      "col": 0,
-      "end_col": 10,
+      "col": 71,
+      "end_col": 81,
       "end_lnum": 3,
       "lnum": 3
+    }
+  },
+  {
+    "col": 68,
+    "end_col": 82,
+    "end_lnum": 5,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 5,
+    "name": ":SomeCommand",
+    "selection_range": {
+      "col": 69,
+      "end_col": 81,
+      "end_lnum": 5,
+      "lnum": 5
     }
   }
 ]
