@@ -27,7 +27,9 @@ https://user-images.githubusercontent.com/506791/122652728-18688500-d0f5-11eb-80
 - Neovim 0.8+ (for older versions, use the [nvim-0.5 branch](https://github.com/stevearc/aerial.nvim/tree/nvim-0.5))
 - One or more of the following:
   - A working LSP setup (see [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig))
-  - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) with languages installed
+  - Tree-sitter parsers[^1]
+
+[^1]: With Neovim < 0.9, you need [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter).
 
 ## Installation
 
