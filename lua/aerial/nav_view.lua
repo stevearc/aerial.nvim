@@ -184,7 +184,7 @@ local function get_all_siblings(symbol)
 end
 
 ---@param panel aerial.NavPanel
-local function render_symbols(panel)
+local function render_symbols(panel,parent)
   local bufnr = panel.bufnr
   local lines = {}
   local highlights = {}
@@ -195,7 +195,12 @@ local function render_symbols(panel)
     table.insert(lines, text)
     local text_cols = vim.api.nvim_strwidth(text)
     table.insert(highlights, { "Aerial" .. item.kind .. "Icon", i - 1, 0, kind:len() })
-    table.insert(highlights, { "Aerial" .. item.kind, i - 1, kind:len(), -1 })
+    if item == parent then
+        table.insert(highlights, {"AerialNavParent", i - 1, kind:len(), -1})
+    else
+        table.insert(highlights,
+                     {"Aerial" .. item.kind, i - 1, kind:len(), -1})
+    end
     max_len = math.max(max_len, text_cols)
   end
 
@@ -235,7 +240,7 @@ function AerialNav:focus_symbol(symbol)
   self.left.symbols = get_all_siblings(symbol.parent)
   self.right.symbols = symbol.children or {}
 
-  render_symbols(self.left)
+  render_symbols(self.left,symbol.parent)
   render_symbols(self.main)
   if config.nav.preview and vim.tbl_isempty(self.right.symbols) then
     self:preview_symbol(self.right)

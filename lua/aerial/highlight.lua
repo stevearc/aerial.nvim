@@ -93,6 +93,7 @@ M.create_highlight_groups = function()
   -- The line that shows where your cursor(s) are
   link("AerialLine", "QuickFixLine")
   link("AerialLineNC", "AerialLine")
+  link("AerialNavParent", "AerialLine")
 
   -- Highlight groups for private and protected functions/fields/etc
   link("AerialPrivate", "Comment")
@@ -142,7 +143,6 @@ M.create_highlight_groups = function()
   link("AerialStringIcon", "Identifier")
   link("AerialStructIcon", "Type")
   link("AerialTypeParameterIcon", "Identifier")
-  link("AerialVariableIcon", "Identifier")
 end
 
 return M
