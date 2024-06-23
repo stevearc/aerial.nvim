@@ -237,7 +237,8 @@ end
 function AerialNav:focus_symbol(symbol)
   local siblings, lnum = get_all_siblings(symbol)
   self.main.symbols = siblings
-  self.left.symbols = get_all_siblings(symbol.parent)
+  local parentlnum
+  self.left.symbols,parentlnum = get_all_siblings(symbol.parent)
   self.right.symbols = symbol.children or {}
 
   render_symbols(self.left,symbol.parent)
@@ -249,6 +250,9 @@ function AerialNav:focus_symbol(symbol)
     render_symbols(self.right)
   end
 
+  if vim.api.nvim_win_is_valid(self.left.winid) then
+    vim.api.nvim_win_set_cursor(self.left.winid, { parentlnum, 0 })
+  end
   if vim.api.nvim_win_is_valid(self.main.winid) then
     vim.api.nvim_win_set_cursor(self.main.winid, { lnum, 0 })
   end
