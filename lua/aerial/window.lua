@@ -250,12 +250,6 @@ M.maybe_open_automatic = function(bufnr)
 end
 
 M.open = function(focus, direction, opts)
-  if vim.fn.has("nvim-0.8") == 0 then
-    vim.notify_once(
-      "aerial is deprecated for Neovim <0.8. Please use the nvim-0.5 branch or upgrade Neovim",
-      vim.log.levels.WARN
-    )
-  end
   opts = vim.tbl_extend("keep", opts or {}, {
     winid = nil,
   })
