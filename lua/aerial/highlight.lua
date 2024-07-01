@@ -143,6 +143,7 @@ M.create_highlight_groups = function()
   link("AerialStringIcon", "Identifier")
   link("AerialStructIcon", "Type")
   link("AerialTypeParameterIcon", "Identifier")
+  link("AerialVariableIcon", "Identifier")
 end
 
 return M
