@@ -184,7 +184,7 @@ local function get_all_siblings(symbol)
 end
 
 ---@param panel aerial.NavPanel
-local function render_symbols(panel, parent)
+local function render_symbols(panel)
   local bufnr = panel.bufnr
   local lines = {}
   local highlights = {}
@@ -195,11 +195,7 @@ local function render_symbols(panel, parent)
     table.insert(lines, text)
     local text_cols = vim.api.nvim_strwidth(text)
     table.insert(highlights, { "Aerial" .. item.kind .. "Icon", i - 1, 0, kind:len() })
-    if item == parent then
-      table.insert(highlights, { "AerialNavParent", i - 1, kind:len(), -1 })
-    else
-      table.insert(highlights, { "Aerial" .. item.kind, i - 1, kind:len(), -1 })
-    end
+    table.insert(highlights, { "Aerial" .. item.kind, i - 1, kind:len(), -1 })
     max_len = math.max(max_len, text_cols)
   end
 
@@ -236,11 +232,19 @@ end
 function AerialNav:focus_symbol(symbol)
   local siblings, lnum = get_all_siblings(symbol)
   self.main.symbols = siblings
-  local parentlnum
-  self.left.symbols, parentlnum = get_all_siblings(symbol.parent)
+  local parent_lnum
+  self.left.symbols, parent_lnum = get_all_siblings(symbol.parent)
   self.right.symbols = symbol.children or {}
 
-  render_symbols(self.left, symbol.parent)
+  render_symbols(self.left)
+  -- Highlight the parent line
+  if vim.fn.has("nvim-0.10") == 1 then
+    local ns = vim.api.nvim_create_namespace("aerial")
+    vim.api.nvim_buf_set_extmark(self.left.bufnr, ns, parent_lnum - 1, 0, {
+      line_hl_group = "AerialLineNC",
+    })
+  end
+
   render_symbols(self.main)
   if config.nav.preview and vim.tbl_isempty(self.right.symbols) then
     self:preview_symbol(self.right)
@@ -250,7 +254,7 @@ function AerialNav:focus_symbol(symbol)
   end
 
   if vim.api.nvim_win_is_valid(self.left.winid) then
-    vim.api.nvim_win_set_cursor(self.left.winid, { parentlnum, 0 })
+    vim.api.nvim_win_set_cursor(self.left.winid, { parent_lnum, 0 })
   end
   if vim.api.nvim_win_is_valid(self.main.winid) then
     vim.api.nvim_win_set_cursor(self.main.winid, { lnum, 0 })
