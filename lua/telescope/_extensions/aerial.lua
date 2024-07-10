@@ -5,6 +5,7 @@ local pickers = require("telescope.pickers")
 local telescope = require("telescope")
 
 local ext_config = {
+  only_lines = false,
   show_lines = true,
   show_nesting = {
     ["_"] = false,
@@ -57,8 +58,51 @@ local function aerial_picker(opts)
       items = layout,
     })
 
+  local function collect_buf_highlights()
+    local ts_parsers = require("nvim-treesitter.parsers")
+    local ts_query = require("nvim-treesitter.query")
+
+    local lang = vim.bo[bufnr].filetype
+    local parser = ts_parsers.get_parser(bufnr, lang)
+    local tree = parser:trees()[1] -- get already parsed cached tree
+    local root = tree:root()
+
+    local highlights = {}
+    local query = ts_query.get_query(lang, 'highlights')
+    if query then
+      for _, captures, _ in query:iter_matches(root, bufnr, 0, -1) do
+        for id, node in pairs(captures) do
+          table.insert(highlights, { capture = query.captures[id], range = { node:range() } })
+        end
+      end
+    end
+    return highlights
+  end
+  local buf_highlights = collect_buf_highlights()
+
+  local function highlights_for_row(row, offset)
+    offset = offset or 0
+    local highlights = {}
+    for _, value in ipairs(buf_highlights) do
+      local start_row, start_col, end_row, end_col = unpack(value.range)
+
+      if start_row == row then
+        local type = value.capture:gsub("%..*", "") -- strip subtypes after dot
+        table.insert(highlights, { { start_col + offset, end_col + offset }, type })
+      end
+    end
+    return highlights
+  end
+
   local function make_display(entry)
     local item = entry.value
+    local row = item.lnum - 1
+
+    if opts.only_lines or ext_config.only_lines then
+      local text = vim.api.nvim_buf_get_lines(bufnr, row, row + 1, false)[1] or ""
+      return text, highlights_for_row(row)
+    end
+
     local icon = config.get_icon(bufnr, item.kind)
     local icon_hl = highlight.get_highlight(item, true, false) or "NONE"
     local name_hl = highlight.get_highlight(item, false, false) or "NONE"
@@ -66,12 +110,21 @@ local function aerial_picker(opts)
       { icon, icon_hl },
       { entry.name, name_hl },
     }
-    if ext_config.show_lines then
-      local text = vim.api.nvim_buf_get_lines(bufnr, item.lnum - 1, item.lnum, false)[1] or ""
-      text = vim.trim(text)
-      table.insert(columns, text)
+
+    local highlights = {}
+    if opts.show_lines or ext_config.show_lines then
+      local text = vim.api.nvim_buf_get_lines(bufnr, row, row + 1, false)[1] or ""
+      table.insert(columns, vim.trim(text))
+
+      local leading_spaces = text:match("^%s*")
+      local offset = layout[1].width + layout[2].width - #leading_spaces + 5
+      if #entry.name > layout[2].width then
+        offset = offset + 2
+      end
+      highlights = highlights_for_row(row, offset)
     end
-    return displayer(columns)
+
+    return displayer(columns), highlights
   end
 
   local function make_entry(item)
@@ -114,7 +167,8 @@ local function aerial_picker(opts)
   end
 
   -- Reverse the symbols so they have the same top-to-bottom order as in the file
-  if conf.sorting_strategy == "descending" then
+  local sorting_strategy = opts.sorting_strategy or conf.sorting_strategy
+  if sorting_strategy == "descending" then
     util.tbl_reverse(results)
     default_selection_index = #results - (default_selection_index - 1)
   end
