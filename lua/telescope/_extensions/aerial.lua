@@ -62,12 +62,11 @@ local function aerial_picker(opts)
     local ts_parsers = require("nvim-treesitter.parsers")
     local ts_query = require("nvim-treesitter.query")
 
-    local lang = vim.bo[bufnr].filetype
-    local parser = ts_parsers.get_parser(bufnr, lang)
+    local parser = ts_parsers.get_parser(bufnr)
     if not parser then return {} end
 
-    local tree = parser:trees()[1] -- get already parsed cached tree
-    local root = tree:root()
+    local lang = parser:lang()
+    local root = parser:trees()[1]:root() -- get root of already parsed cached tree
 
     local highlights = {}
     local query = ts_query.get_query(lang, 'highlights')
