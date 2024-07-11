@@ -64,6 +64,8 @@ local function aerial_picker(opts)
 
     local lang = vim.bo[bufnr].filetype
     local parser = ts_parsers.get_parser(bufnr, lang)
+    if not parser then return {} end
+
     local tree = parser:trees()[1] -- get already parsed cached tree
     local root = tree:root()
 
