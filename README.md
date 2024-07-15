@@ -24,12 +24,10 @@ https://user-images.githubusercontent.com/506791/122652728-18688500-d0f5-11eb-80
 
 ## Requirements
 
-- Neovim 0.8+ (for older versions, use the [nvim-0.5 branch](https://github.com/stevearc/aerial.nvim/tree/nvim-0.5))
+- Neovim 0.9+ (for older versions, use a [nvim-0.x branch](https://github.com/stevearc/conform.nvim/branches))
 - One or more of the following:
   - A working LSP setup (see [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig))
-  - Tree-sitter parsers[^1]
-
-[^1]: With Neovim < 0.9, you need [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter).
+  - Tree-sitter parsers
 
 ## Installation
 
@@ -749,7 +747,7 @@ When writing queries, the following captures and metadata are used by Aerial:
 - `@selection` - position to jump to when using Aerial for navigation, falls back to `@name` and `@symbol`
 - `@scope` - a node naming a scope for the match, its text is used to generate a custom "Comment" linked highlight for the entry, with exception of "public"
 
-    A `@scope` node with text "developers" will result in its entry in the tree having an "AerialDevelopers" highlight applied to it.
+  A `@scope` node with text "developers" will result in its entry in the tree having an "AerialDevelopers" highlight applied to it.
 
 - `scope` - a metadata value serving the same role as `@scope` capture, overriding aforementioned capture
 

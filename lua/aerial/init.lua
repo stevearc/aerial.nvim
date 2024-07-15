@@ -207,9 +207,9 @@ end
 ---Initialize aerial
 ---@param opts? table
 M.setup = function(opts)
-  if vim.fn.has("nvim-0.8") == 0 then
+  if vim.fn.has("nvim-0.9") == 0 then
     vim.notify_once(
-      "aerial is deprecated for Neovim <0.8. Please use the nvim-0.5 branch or upgrade Neovim",
+      "aerial is deprecated for Neovim <0.9. Please use a nvim-0.x branch or upgrade Neovim",
       vim.log.levels.ERROR
     )
     return
