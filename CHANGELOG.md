@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/stevearc/aerial.nvim/compare/v1.8.0...v2.0.0) (2024-07-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop support for Neovim 0.8 ([#387](https://github.com/stevearc/aerial.nvim/issues/387))
+
+### Code Refactoring
+
+* drop support for Neovim 0.8 ([#387](https://github.com/stevearc/aerial.nvim/issues/387)) ([b309d0d](https://github.com/stevearc/aerial.nvim/commit/b309d0df6b59923a2155f5a8b7ef99777b3311c9))
+
 ## [1.8.0](https://github.com/stevearc/aerial.nvim/compare/v1.7.0...v1.8.0) (2024-07-01)
 
 
