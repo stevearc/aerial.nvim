@@ -59,21 +59,22 @@ local function aerial_picker(opts)
     })
 
   local function collect_buf_highlights()
-    local ts_parsers = require("nvim-treesitter.parsers")
-    local ts_query = require("nvim-treesitter.query")
-
-    local parser = ts_parsers.get_parser(bufnr)
-    if not parser then return {} end
+    local parser = vim.treesitter.get_parser(bufnr)
+    if not parser then
+      return {}
+    end
 
     local lang = parser:lang()
     local root = parser:trees()[1]:root() -- get root of already parsed cached tree
 
     local highlights = {}
-    local query = ts_query.get_query(lang, 'highlights')
+    local query = vim.treesitter.query.get(lang, "highlights")
     if query then
       for _, captures, _ in query:iter_matches(root, bufnr, 0, -1) do
         for id, node in pairs(captures) do
-          table.insert(highlights, { capture = query.captures[id], range = { node:range() } })
+          local start_row, start_col, _, end_col = node:range()
+          highlights[start_row] = highlights[start_row] or {}
+          table.insert(highlights[start_row], { start_col, end_col, query.captures[id] })
         end
       end
     end
@@ -83,14 +84,12 @@ local function aerial_picker(opts)
 
   local function highlights_for_row(row, offset)
     offset = offset or 0
+    local row_highlights = buf_highlights[row] or {}
     local highlights = {}
-    for _, value in ipairs(buf_highlights) do
-      local start_row, start_col, end_row, end_col = unpack(value.range)
-
-      if start_row == row then
-        local type = value.capture:gsub("%..*", "") -- strip subtypes after dot
-        table.insert(highlights, { { start_col + offset, end_col + offset }, type })
-      end
+    for _, value in ipairs(row_highlights) do
+      local start_col, end_col, hl_type = unpack(value)
+      hl_type = hl_type:match("^[^.]+") -- strip subtypes after dot
+      table.insert(highlights, { { start_col + offset, end_col + offset }, hl_type })
     end
     return highlights
   end
@@ -118,7 +117,7 @@ local function aerial_picker(opts)
       table.insert(columns, vim.trim(text))
 
       local leading_spaces = text:match("^%s*")
-      local offset = layout[1].width + layout[2].width - #leading_spaces + 5
+      local offset = layout[1].width + layout[2].width - #leading_spaces + #icon
       if #entry.name > layout[2].width then
         offset = offset + 2
       end
