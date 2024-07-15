@@ -342,7 +342,7 @@ require("aerial").setup({
   -- icon when the tree is collapsed at that symbol, or "Collapsed" to specify a
   -- default collapsed icon. The default icon set is determined by the
   -- "nerd_font" option below.
-  -- If you have lspkind-nvim installed, it will be the default icon set.
+  -- If you have mini.icons or lspkind-nvim installed, it will be the default icon set.
   -- This can be a filetype map (see :help aerial-filetype-map)
   icons = {},
 
@@ -395,7 +395,7 @@ require("aerial").setup({
   link_tree_to_folds = true,
 
   -- Set default symbol icons to use patched font icons (see https://www.nerdfonts.com/)
-  -- "auto" will set it to true if nvim-web-devicons or lspkind-nvim is installed.
+  -- "auto" will set it to true if nvim-web-devicons, lspkind-nvim, or mini.icons is installed.
   nerd_font = "auto",
 
   -- Call this function when aerial attaches to a buffer.

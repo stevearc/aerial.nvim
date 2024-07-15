@@ -504,7 +504,9 @@ M.setup = function(opts)
   if newconf.nerd_font == "auto" then
     local has_devicons = pcall(require, "nvim-web-devicons")
     local has_lspkind = pcall(require, "lspkind")
-    newconf.nerd_font = has_devicons or has_lspkind
+    pcall(require, "mini.icons")
+    local has_miniicons = vim.tbl_get(_G, "MiniIcons", "config", "style") == "glyph"
+    newconf.nerd_font = has_devicons or has_lspkind or has_miniicons
   end
 
   -- Add lookup to close_automatic_events
@@ -512,10 +514,10 @@ M.setup = function(opts)
     newconf.close_automatic_events[v] = i
   end
 
-  -- Undocumented use_lspkind option for tests. End users can simply provide
+  -- Undocumented use_icon_provider option for tests. End users can simply provide
   -- their own icons
-  if newconf.use_lspkind == nil then
-    newconf.use_lspkind = true
+  if newconf.use_icon_provider == nil then
+    newconf.use_icon_provider = true
   end
 
   newconf.default_icons = newconf.nerd_font and nerd_icons or plain_icons
@@ -580,6 +582,31 @@ local function get_icon(kind, filetypes)
   return M.icons[kind]
 end
 
+local function get_icon_provider()
+  if not M.use_icon_provider then -- skip if icon provider not used
+    return false
+  end
+  -- prefer mini.icons
+  local _, mini_icons = pcall(require, "mini.icons")
+  ---@diagnostic disable-next-line: undefined-field
+  if _G.MiniIcons then -- `_G.MiniIcons` is a better check to see if the module is setup
+    return function(kind)
+      return mini_icons.get("lsp", kind)
+    end
+  end
+
+  -- fallback to `lspkind`
+  local has_lspkind, lspkind = pcall(require, "lspkind")
+  if has_lspkind then
+    return function(kind)
+      return lspkind.symbolic(kind, { mode = "symbolic " })
+    end
+  end
+
+  return false -- no icon provider
+end
+
+local icon_provider
 M.get_icon = function(bufnr, kind, collapsed)
   if collapsed then
     kind = kind .. "Collapsed"
@@ -598,9 +625,11 @@ M.get_icon = function(bufnr, kind, collapsed)
     end
   end
 
-  local has_lspkind, lspkind = pcall(require, "lspkind")
-  if has_lspkind and M.use_lspkind and not collapsed then
-    icon = lspkind.symbolic(kind, { with_text = false })
+  if icon_provider == nil then
+    icon_provider = get_icon_provider()
+  end
+  if icon_provider and not collapsed then
+    icon = icon_provider(kind)
     if icon and icon ~= "" then
       return icon
     end
