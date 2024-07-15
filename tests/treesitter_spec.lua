@@ -24,10 +24,6 @@ end
 
 describe("treesitter", function()
   for _, filename in ipairs(list_files("tests/treesitter")) do
-    if filename == "usd_test.usd" and vim.fn.has("nvim-0.9.0") == 0 then
-      -- These queries rely on #offset! which only works in neovim 0.9.0+
-      goto continue
-    end
     local filepath = "./tests/treesitter/" .. filename
     local basename = vim.fn.fnamemodify(filename, ":r")
     local symbols_file = "./tests/symbols/" .. basename .. ".json"
@@ -40,8 +36,6 @@ describe("treesitter", function()
         util.test_file_symbols("markdown", filepath, "./tests/symbols/markdown_backend.json")
       end)
     end
-
-    ::continue::
   end
 
   util.test_file_symbols("man", "./tests/man_test.txt", "./tests/symbols/man.json")
