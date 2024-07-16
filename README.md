@@ -613,6 +613,8 @@ require("telescope").setup({
         json = true, -- You can set the option for specific filetypes
         yaml = true,
       },
+      -- Available modes: symbols, lines, both
+      show_columns = "both",
     },
   },
 })
