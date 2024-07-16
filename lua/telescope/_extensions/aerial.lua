@@ -5,8 +5,8 @@ local pickers = require("telescope.pickers")
 local telescope = require("telescope")
 
 local ext_config = {
-  only_lines = false,
-  show_lines = true,
+  -- show_lines = true, -- deprecated in favor of show_columns
+  show_columns = "both", -- { "symbols", "lines", "both" }
   show_nesting = {
     ["_"] = false,
     json = true,
@@ -27,6 +27,19 @@ local function aerial_picker(opts)
   local filename = vim.api.nvim_buf_get_name(0)
   local filetype = vim.bo[bufnr].filetype
   local show_nesting = ext_config.show_nesting[filetype]
+
+  local show_columns = opts.show_columns or conf.show_columns
+  local show_lines = opts.show_lines or conf.show_lines -- show_lines is deprecated
+  if show_columns == nil then
+    if show_lines == true then
+      show_columns = "both"
+    elseif show_lines == false then
+      show_columns = "symbols"
+    else
+      show_columns = ext_config.show_columns
+    end
+  end
+
   if show_nesting == nil then
     show_nesting = ext_config.show_nesting["_"]
   end
@@ -40,7 +53,7 @@ local function aerial_picker(opts)
   end
 
   local layout
-  if ext_config.show_lines then
+  if show_columns == "both" then
     layout = {
       { width = 4 },
       { width = 30 },
@@ -80,7 +93,11 @@ local function aerial_picker(opts)
     end
     return highlights
   end
-  local buf_highlights = collect_buf_highlights()
+
+  local buf_highlights = {}
+  if show_columns == "lines" or show_columns == "both" then
+    buf_highlights = collect_buf_highlights() -- collect buffer highlights only if needed
+  end
 
   local function highlights_for_row(row, offset)
     offset = offset or 0
@@ -98,7 +115,7 @@ local function aerial_picker(opts)
     local item = entry.value
     local row = item.lnum - 1
 
-    if opts.only_lines or ext_config.only_lines then
+    if show_columns == "lines" then
       local text = vim.api.nvim_buf_get_lines(bufnr, row, row + 1, false)[1] or ""
       return text, highlights_for_row(row)
     end
@@ -112,14 +129,14 @@ local function aerial_picker(opts)
     }
 
     local highlights = {}
-    if opts.show_lines or ext_config.show_lines then
+    if show_columns == "both" then
       local text = vim.api.nvim_buf_get_lines(bufnr, row, row + 1, false)[1] or ""
       table.insert(columns, vim.trim(text))
 
       local leading_spaces = text:match("^%s*")
       local offset = layout[1].width + layout[2].width - #leading_spaces + #icon
       if #entry.name > layout[2].width then
-        offset = offset + 2
+        offset = offset + 2 -- '...' symbol
       end
       highlights = highlights_for_row(row, offset)
     end
