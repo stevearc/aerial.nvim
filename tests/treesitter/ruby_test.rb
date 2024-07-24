@@ -3,7 +3,13 @@ module Mod
     def meth_1() end
   end
 
-  def meth_2() end
+  call_some_function
+
+  def self.meth_2
+  end
+
+  def meth_3
+  end
 
   def name=(value) end
 

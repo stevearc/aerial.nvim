@@ -25,6 +25,12 @@
     name: (_) @name
     (#set! "kind" "Method")) @symbol)
 
+; handle methods not caught by the above query that includes the scope
+(body_statement
+  (method
+    name: (_) @name
+    (#set! "kind" "Method")) @symbol)
+
 (singleton_method
   object: [
     (constant)
