@@ -595,12 +595,6 @@ option).
 
 You can activate the picker with `:Telescope aerial` or `:lua require("telescope").extensions.aerial.aerial()`
 
-If you want the command to autocomplete, you can load the extension first:
-
-```lua
-require("telescope").load_extension("aerial")
-```
-
 The extension can be customized with the following options:
 
 ```lua
@@ -621,6 +615,12 @@ require("telescope").setup({
     },
   },
 })
+```
+
+If you want the command to autocomplete, you can load the extension first (this line must come after the setup section from above):
+
+```lua
+require("telescope").load_extension("aerial")
 ```
 
 ### fzf
