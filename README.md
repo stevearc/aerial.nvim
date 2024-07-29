@@ -613,6 +613,9 @@ require("telescope").setup({
         json = true, -- You can set the option for specific filetypes
         yaml = true,
       },
+      -- Symbol for nesting, set to false for <root>.<parent>.<symbol>
+      -- Otherwise, can be a string like "├─"
+      nesting_symbol = false,
       -- Available modes: symbols, lines, both
       show_columns = "both",
     },
