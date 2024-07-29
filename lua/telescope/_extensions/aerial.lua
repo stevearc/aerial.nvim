@@ -47,7 +47,7 @@ local function aerial_picker(opts)
   local nesting_symbol_length = 0
   if nesting_symbol then
     -- need to handle multibyte characters
-    _, nesting_symbol_length = string.gsub(nesting_symbol, "[^\128-\193]", "")
+    nesting_symbol_length = vim.fn.strwidth(nesting_symbol)
   end
 
   local backend = backends.get()
