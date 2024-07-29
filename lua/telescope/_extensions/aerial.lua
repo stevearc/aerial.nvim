@@ -27,7 +27,9 @@ local function aerial_picker(opts)
   local bufnr = vim.api.nvim_get_current_buf()
   local filename = vim.api.nvim_buf_get_name(0)
   local filetype = vim.bo[bufnr].filetype
-  local show_nesting = ext_config.show_nesting[filetype] or ext_config.show_nesting["_"]
+  local show_nesting = (
+    ext_config.show_nesting[filetype] or ext_config.show_nesting["_"]
+  )
   local nesting_symbol = ext_config.nesting_symbol
 
   local show_columns = opts.show_columns or conf.show_columns
