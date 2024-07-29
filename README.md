@@ -610,6 +610,10 @@ require("telescope").setup({
       -- Symbol for nesting, set to false for <root>.<parent>.<symbol>
       -- Otherwise, can be a string like "├─"
       nesting_symbol = false,
+      -- If `nesting_symbol` uses non utf-8 characters, highlighting may break
+      -- set this value to an integer representing the number of characters instead
+      -- Setting to -1 means calculate automatically
+      nesting_symbol_length = -1,
       -- Available modes: symbols, lines, both
       show_columns = "both",
     },

@@ -13,6 +13,7 @@ local ext_config = {
     yaml = true,
   },
   nesting_symbol = false, -- false or string
+  nesting_symbol_length = -1, -- -1 for calculate from `nesting_symbol`
 }
 
 local function aerial_picker(opts)
@@ -44,10 +45,9 @@ local function aerial_picker(opts)
     ext_config.show_nesting[filetype] or ext_config.show_nesting["_"]
   )
   local nesting_symbol = ext_config.nesting_symbol
-  local nesting_symbol_length = 0
-  if nesting_symbol then
-    -- need to handle multibyte characters
-    nesting_symbol_length = vim.fn.strwidth(nesting_symbol)
+  local nesting_symbol_length = ext_config.nesting_symbol_length
+  if nesting_symbol_length == -1 then
+    nesting_symbol_length = #nesting_symbol
   end
 
   local backend = backends.get()
