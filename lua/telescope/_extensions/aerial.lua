@@ -27,10 +27,6 @@ local function aerial_picker(opts)
   local bufnr = vim.api.nvim_get_current_buf()
   local filename = vim.api.nvim_buf_get_name(0)
   local filetype = vim.bo[bufnr].filetype
-  local show_nesting = (
-    ext_config.show_nesting[filetype] or ext_config.show_nesting["_"]
-  )
-  local nesting_symbol = ext_config.nesting_symbol
 
   local show_columns = opts.show_columns or conf.show_columns
   local show_lines = opts.show_lines or conf.show_lines -- show_lines is deprecated
@@ -42,6 +38,16 @@ local function aerial_picker(opts)
     else
       show_columns = ext_config.show_columns
     end
+  end
+
+  local show_nesting = (
+    ext_config.show_nesting[filetype] or ext_config.show_nesting["_"]
+  )
+  local nesting_symbol = ext_config.nesting_symbol
+  local nesting_symbol_length = 0
+  if nesting_symbol then
+    -- need to handle multibyte characters
+    _, nesting_symbol_length = string.gsub(nesting_symbol, "[^\128-\193]", "")
   end
 
   local backend = backends.get()
@@ -112,6 +118,7 @@ local function aerial_picker(opts)
   end
 
   local function make_display(entry)
+    local depth = entry.depth
     local item = entry.value
     local row = item.lnum - 1
 
@@ -134,7 +141,13 @@ local function aerial_picker(opts)
       table.insert(columns, vim.trim(text))
 
       local leading_spaces = text:match("^%s*")
-      local offset = layout[1].width + layout[2].width - #leading_spaces + #icon
+      local offset = (
+          layout[1].width
+          + layout[2].width
+          - #leading_spaces
+          + #icon
+          + depth * nesting_symbol_length
+      )
       if #entry.name > layout[2].width then
         offset = offset + 2 -- '...' symbol
       end
@@ -146,12 +159,14 @@ local function aerial_picker(opts)
 
   local function make_entry(item)
     local name = item.name
+    local depth = 0
     if opts.get_entry_text ~= nil then
       name = opts.get_entry_text(item)
     else
       if show_nesting then
         local cur = item.parent
         while cur do
+          depth = depth + 1
           if nesting_symbol then
             name = string.format("%s%s", nesting_symbol, name)
           else
@@ -167,6 +182,7 @@ local function aerial_picker(opts)
       value = item,
       display = make_display,
       name = name,
+      depth = depth,
       ordinal = name .. " " .. string.lower(item.kind),
       lnum = lnum,
       col = col + 1,
