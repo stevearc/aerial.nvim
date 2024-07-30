@@ -13,7 +13,6 @@ local ext_config = {
     yaml = true,
   },
   nesting_symbol = false, -- false or string
-  nesting_symbol_length = -1, -- -1 for calculate from `nesting_symbol`
 }
 
 local function aerial_picker(opts)
@@ -45,10 +44,6 @@ local function aerial_picker(opts)
     ext_config.show_nesting[filetype] or ext_config.show_nesting["_"]
   )
   local nesting_symbol = ext_config.nesting_symbol
-  local nesting_symbol_length = ext_config.nesting_symbol_length
-  if nesting_symbol_length == -1 then
-    nesting_symbol_length = #nesting_symbol
-  end
 
   local backend = backends.get()
   if not backend then
@@ -118,7 +113,6 @@ local function aerial_picker(opts)
   end
 
   local function make_display(entry)
-    local depth = entry.depth
     local item = entry.value
     local row = item.lnum - 1
 
@@ -146,7 +140,6 @@ local function aerial_picker(opts)
           + layout[2].width
           - #leading_spaces
           + #icon
-          + depth * nesting_symbol_length
       )
       if #entry.name > layout[2].width then
         offset = offset + 2 -- '...' symbol
@@ -159,14 +152,12 @@ local function aerial_picker(opts)
 
   local function make_entry(item)
     local name = item.name
-    local depth = 0
     if opts.get_entry_text ~= nil then
       name = opts.get_entry_text(item)
     else
       if show_nesting then
         local cur = item.parent
         while cur do
-          depth = depth + 1
           if nesting_symbol then
             name = string.format("%s%s", nesting_symbol, name)
           else
@@ -182,7 +173,6 @@ local function aerial_picker(opts)
       value = item,
       display = make_display,
       name = name,
-      depth = depth,
       ordinal = name .. " " .. string.lower(item.kind),
       lnum = lnum,
       col = col + 1,
