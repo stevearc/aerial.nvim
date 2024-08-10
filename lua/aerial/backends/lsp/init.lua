@@ -39,10 +39,6 @@ M.fetch_symbols = function(bufnr)
   local params = { textDocument = vim.lsp.util.make_text_document_params(bufnr) }
   local client = lsp_util.get_client(bufnr)
   if not client then
-    vim.notify(
-      string.format("No LSP client found that supports symbols in buffer %d", bufnr),
-      vim.log.levels.WARN
-    )
     return
   end
   local request_success =
