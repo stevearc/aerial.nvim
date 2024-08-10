@@ -95,6 +95,9 @@ local function attach(bufnr, backend, name)
   if not backend or not name or name == existing_backend_name then
     return false
   end
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
   set_backend(bufnr, name)
   backend.attach(bufnr)
   if existing_backend_name then
