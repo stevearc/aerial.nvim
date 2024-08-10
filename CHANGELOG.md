@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.1.0](https://github.com/stevearc/aerial.nvim/compare/v2.0.0...v2.1.0) (2024-08-10)
+
+
+### Features
+
+* add support for `mini.icons` ([#383](https://github.com/stevearc/aerial.nvim/issues/383)) ([3d910b2](https://github.com/stevearc/aerial.nvim/commit/3d910b2ba0b8536bb708467690b6685f1783cb19))
+* Adds syntax highlighting in the telescope picker ([#386](https://github.com/stevearc/aerial.nvim/issues/386)) ([4e77964](https://github.com/stevearc/aerial.nvim/commit/4e77964569ef47a70f9bb76c668dcfea2d089d5a))
+
+
+### Bug Fixes
+
+* **ruby:** missing methods in treesitter backend ([#382](https://github.com/stevearc/aerial.nvim/issues/382)) ([e75a3df](https://github.com/stevearc/aerial.nvim/commit/e75a3df2c20b3a98c786f5e61587d74a7a6b61d6))
+* warning when closing buffers with the LSP backend in place ([#397](https://github.com/stevearc/aerial.nvim/issues/397)) ([b092d63](https://github.com/stevearc/aerial.nvim/commit/b092d6373d563dc28187a0a340e3daaefc14fc62))
+
 ## [2.0.0](https://github.com/stevearc/aerial.nvim/compare/v1.8.0...v2.0.0) (2024-07-15)
 
 
