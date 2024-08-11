@@ -1,0 +1,167 @@
+[
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 9,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 5,
+    "name": "owner",
+    "selection_range": {
+      "col": 1,
+      "end_col": 6,
+      "end_lnum": 5,
+      "lnum": 5
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 15,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 9,
+    "name": "database",
+    "selection_range": {
+      "col": 1,
+      "end_col": 9,
+      "end_lnum": 9,
+      "lnum": 9
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 17,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 15,
+    "name": "servers",
+    "selection_range": {
+      "col": 1,
+      "end_col": 8,
+      "end_lnum": 15,
+      "lnum": 15
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 21,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 17,
+    "name": "servers.alpha",
+    "selection_range": {
+      "col": 1,
+      "end_col": 14,
+      "end_lnum": 17,
+      "lnum": 17
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 26,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 21,
+    "name": "servers.beta",
+    "selection_range": {
+      "col": 1,
+      "end_col": 13,
+      "end_lnum": 21,
+      "lnum": 21
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 29,
+    "kind": "Enum",
+    "level": 0,
+    "lnum": 26,
+    "name": "fruits",
+    "selection_range": {
+      "col": 2,
+      "end_col": 8,
+      "end_lnum": 26,
+      "lnum": 26
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 33,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 29,
+    "name": "fruits.physical",
+    "selection_range": {
+      "col": 1,
+      "end_col": 16,
+      "end_lnum": 29,
+      "lnum": 29
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 36,
+    "kind": "Enum",
+    "level": 0,
+    "lnum": 33,
+    "name": "fruits.varieties",
+    "selection_range": {
+      "col": 2,
+      "end_col": 18,
+      "end_lnum": 33,
+      "lnum": 33
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 40,
+    "kind": "Enum",
+    "level": 0,
+    "lnum": 36,
+    "name": "fruits.varieties",
+    "selection_range": {
+      "col": 2,
+      "end_col": 18,
+      "end_lnum": 36,
+      "lnum": 36
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 43,
+    "kind": "Enum",
+    "level": 0,
+    "lnum": 40,
+    "name": "fruits",
+    "selection_range": {
+      "col": 2,
+      "end_col": 8,
+      "end_lnum": 40,
+      "lnum": 40
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 45,
+    "kind": "Enum",
+    "level": 0,
+    "lnum": 43,
+    "name": "fruits.varieties",
+    "selection_range": {
+      "col": 2,
+      "end_col": 18,
+      "end_lnum": 43,
+      "lnum": 43
+    }
+  }
+]
