@@ -136,12 +136,7 @@ local function aerial_picker(opts)
       table.insert(columns, vim.trim(text))
 
       local leading_spaces = text:match("^%s*")
-      local offset = (
-          layout[1].width
-          + layout[2].width
-          - #leading_spaces
-          + #icon
-      )
+      local offset = (layout[1].width + layout[2].width - #leading_spaces + #icon)
       if #entry.name > layout[2].width then
         offset = offset + 2 -- '...' symbol
       end
