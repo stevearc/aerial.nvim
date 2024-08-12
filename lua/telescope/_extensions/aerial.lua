@@ -46,6 +46,7 @@ local function aerial_picker(opts)
   end
   local nesting_symbol = ext_config.nesting_symbol
   local backend = backends.get()
+
   if not backend then
     backends.log_support_err()
     return
