@@ -601,15 +601,14 @@ The extension can be customized with the following options:
 require("telescope").setup({
   extensions = {
     aerial = {
-      -- Display symbols as <root>.<parent>.<symbol>
-      show_nesting = {
-        ["_"] = false, -- This key will be the default
-        json = true, -- You can set the option for specific filetypes
-        yaml = true,
-      },
-      -- Symbol for nesting, set to false for <root>.<parent>.<symbol>
-      -- Otherwise, can be a string like " >"
-      nesting_symbol = false,
+      -- How to format the symbols
+      format_symbol = function(symbol_path, filetype)
+        if filetype == "json" or filetype == "yaml" then
+          return table.concat(symbol_path, ".")
+        else
+          return symbol_path[#symbol_path]
+        end
+      end,
       -- Available modes: symbols, lines, both
       show_columns = "both",
     },
