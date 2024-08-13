@@ -143,7 +143,7 @@ local function aerial_picker(opts)
   end
 
   local function make_entry(item)
-    local name = item.name
+    local name
     if opts.get_entry_text ~= nil then
       name = opts.get_entry_text(item)
     else
