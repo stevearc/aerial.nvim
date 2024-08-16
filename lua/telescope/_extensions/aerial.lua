@@ -7,11 +7,13 @@ local telescope = require("telescope")
 local ext_config = {
   -- show_lines = true, -- deprecated in favor of show_columns
   show_columns = "both", -- { "symbols", "lines", "both" }
-  show_nesting = {
-    ["_"] = false,
-    json = true,
-    yaml = true,
-  },
+  format_symbol = function(symbol_path, filetype)
+    if filetype == "json" or filetype == "yaml" then
+      return table.concat(symbol_path, ".")
+    else
+      return symbol_path[#symbol_path]
+    end
+  end,
 }
 
 local function aerial_picker(opts)
@@ -26,7 +28,6 @@ local function aerial_picker(opts)
   local bufnr = vim.api.nvim_get_current_buf()
   local filename = vim.api.nvim_buf_get_name(0)
   local filetype = vim.bo[bufnr].filetype
-  local show_nesting = ext_config.show_nesting[filetype]
 
   local show_columns = opts.show_columns or conf.show_columns
   local show_lines = opts.show_lines or conf.show_lines -- show_lines is deprecated
@@ -40,9 +41,6 @@ local function aerial_picker(opts)
     end
   end
 
-  if show_nesting == nil then
-    show_nesting = ext_config.show_nesting["_"]
-  end
   local backend = backends.get()
 
   if not backend then
@@ -145,17 +143,17 @@ local function aerial_picker(opts)
   end
 
   local function make_entry(item)
-    local name = item.name
+    local name
     if opts.get_entry_text ~= nil then
       name = opts.get_entry_text(item)
     else
-      if show_nesting then
-        local cur = item.parent
-        while cur do
-          name = string.format("%s.%s", cur.name, name)
-          cur = cur.parent
-        end
+      local symbol_path = {}
+      local cur = item
+      while cur do
+        table.insert(symbol_path, 1, cur.name)
+        cur = cur.parent
       end
+      name = ext_config.format_symbol(symbol_path, filetype)
     end
     local lnum = item.selection_range and item.selection_range.lnum or item.lnum
     local col = item.selection_range and item.selection_range.col or item.col
@@ -207,10 +205,29 @@ end
 return telescope.register_extension({
   setup = function(user_config)
     ext_config = vim.tbl_extend("force", ext_config, user_config or {})
-    if type(ext_config.show_nesting) ~= "table" then
-      ext_config.show_nesting = {
-        ["_"] = ext_config.show_nesting,
-      }
+
+    -- Backwards compatibility shim
+    if user_config.show_nesting and not user_config.format_symbol then
+      if type(ext_config.show_nesting) ~= "table" then
+        ext_config.show_nesting = {
+          ["_"] = ext_config.show_nesting,
+        }
+      end
+      ext_config.show_nesting = vim.tbl_deep_extend("keep", ext_config.show_nesting, {
+        json = true,
+        yaml = true,
+      })
+      user_config.format_symbol = function(symbol_path, filetype)
+        local show_nesting = ext_config.show_nesting[filetype]
+        if show_nesting == nil then
+          show_nesting = ext_config.show_nesting["_"]
+        end
+        if show_nesting then
+          return table.concat(symbol_path, ".")
+        else
+          return symbol_path[#symbol_path]
+        end
+      end
     end
   end,
   exports = {
