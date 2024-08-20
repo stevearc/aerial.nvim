@@ -5,7 +5,7 @@
 (expression_statement
   (assignment_expression
     left: (variable_name) @name
-    right: (anonymous_function_creation_expression) @symbol)
+    right: (anonymous_function) @symbol)
   (#set! "kind" "Function")) @start
 
 (class_declaration
