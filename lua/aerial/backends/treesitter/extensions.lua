@@ -340,6 +340,18 @@ M.rst = {
   end,
 }
 
+M.starlark = {
+  postprocess = function(bufnr, item, match)
+    if item.kind == "Function" then
+      local rule_kind = node_from_match(match, "rule_kind")
+      local rule_name = assert(node_from_match(match, "rule_name"))
+      local name_text = get_node_text(rule_name, bufnr) or "<parse error>"
+      local kind_text = get_node_text(rule_kind, bufnr) or "<parse error>"
+      item.name = string.format("%s > %s", name_text, kind_text)
+    end
+  end,
+}
+
 M.typescript = {
   ---@note Additionally processes the following captures:
   ---      `@method`, `@string`, and `@modifier` - replaces name with "@method[.@modifier] @string"
