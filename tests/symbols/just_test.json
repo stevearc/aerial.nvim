@@ -1,0 +1,47 @@
+[
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 4,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 1,
+    "name": "build",
+    "selection_range": {
+      "col": 0,
+      "end_col": 5,
+      "end_lnum": 1,
+      "lnum": 1
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 7,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 4,
+    "name": "test",
+    "selection_range": {
+      "col": 0,
+      "end_col": 4,
+      "end_lnum": 4,
+      "lnum": 4
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 9,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 7,
+    "name": "sloc",
+    "selection_range": {
+      "col": 0,
+      "end_col": 4,
+      "end_lnum": 7,
+      "lnum": 7
+    }
+  }
+]

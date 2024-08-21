@@ -5,6 +5,7 @@ vim.bo.swapfile = false
 vim.filetype.add({
   -- Neovim doesn't have built-in filetype detection for these filetypes
   extension = {
+    just = "just",
     norg = "norg",
     objdump = "objdump",
     usd = "usd",

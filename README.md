@@ -151,6 +151,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - javascript
 - json
 - julia
+- just
 - latex
 - lua
 - make
