@@ -1,0 +1,11 @@
+[
+  {
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 6,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 3,
+    "name": "hello > go_binary"
+  }
+]
