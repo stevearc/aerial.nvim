@@ -14,3 +14,7 @@ message MessageB {
   string foo = 1;
   int32 bar = 2;
 }
+
+service Greeter {
+  rpc ello (MessageA) returns (MessageB) {}
+}

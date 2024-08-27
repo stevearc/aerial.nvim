@@ -45,5 +45,37 @@
       "end_lnum": 13,
       "lnum": 13
     }
+  },
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 43,
+        "end_lnum": 19,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 19,
+        "name": "ello",
+        "selection_range": {
+          "col": 6,
+          "end_col": 10,
+          "end_lnum": 19,
+          "lnum": 19
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 20,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 18,
+    "name": "Greeter",
+    "selection_range": {
+      "col": 8,
+      "end_col": 15,
+      "end_lnum": 18,
+      "lnum": 18
+    }
   }
 ]
