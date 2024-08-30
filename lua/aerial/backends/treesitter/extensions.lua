@@ -395,6 +395,15 @@ M.latex = {
 -- This may not always be the case.
 M.tsx = M.typescript
 
+M.zig = {
+  postprocess = function(bufnr, item, match)
+    local node = assert(node_from_match(match, "symbol"))
+    if node:type() == "test_declaration" then
+      item.name = "test " .. item.name
+    end
+  end,
+}
+
 for _, lang in pairs(M) do
   setmetatable(lang, { __index = default_methods })
 end

@@ -11,3 +11,7 @@ const MyTaggedUnion = union(enum) { choice1, choice2 };
 test "my test" {
     myFunc();
 }
+
+test ident_test {
+    myFunc();
+}

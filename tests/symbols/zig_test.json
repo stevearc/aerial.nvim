@@ -1,8 +1,8 @@
 [
   {
     "col": 0,
-    "end_col": 16,
-    "end_lnum": 1,
+    "end_col": 1,
+    "end_lnum": 3,
     "kind": "Function",
     "level": 0,
     "lnum": 1,
@@ -15,9 +15,9 @@
     }
   },
   {
-    "col": 17,
-    "end_col": 23,
-    "end_lnum": 5,
+    "col": 0,
+    "end_col": 2,
+    "end_lnum": 7,
     "kind": "Struct",
     "level": 0,
     "lnum": 5,
@@ -30,8 +30,8 @@
     }
   },
   {
-    "col": 22,
-    "end_col": 33,
+    "col": 0,
+    "end_col": 55,
     "end_lnum": 9,
     "kind": "Struct",
     "level": 0,
@@ -51,12 +51,27 @@
     "kind": "Function",
     "level": 0,
     "lnum": 11,
-    "name": "\"my test\"",
+    "name": "test my test",
     "selection_range": {
-      "col": 5,
-      "end_col": 14,
+      "col": 6,
+      "end_col": 13,
       "end_lnum": 11,
       "lnum": 11
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 17,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 15,
+    "name": "test ident_test",
+    "selection_range": {
+      "col": 5,
+      "end_col": 15,
+      "end_lnum": 15,
+      "lnum": 15
     }
   }
 ]
