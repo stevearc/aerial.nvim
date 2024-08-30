@@ -9,11 +9,10 @@ local util = require("aerial.util")
 ---@field col integer
 ---@field end_col integer
 
----@class aerial.Symbol : aerial.Range
----@field kind string
----@field name string
+---@class aerial.Symbol : aerial.SymbolBase
 ---@field level integer
----@field scope nil|aerial.Scope
+---@field end_lnum integer
+---@field end_col integer
 ---@field parent? aerial.Symbol
 ---@field selection_range? aerial.Range
 ---@field children? aerial.Symbol[]
@@ -108,6 +107,8 @@ function BufData:set_fold_level(level)
   return level
 end
 
+---@param item aerial.Symbol
+---@return nil|aerial.Symbol
 function BufData:_next_non_collapsed(item)
   while item do
     if item.next_sibling then
@@ -117,14 +118,19 @@ function BufData:_next_non_collapsed(item)
   end
 end
 
+---@param opts? {skip_hidden?: boolean}
 function BufData:iter(opts)
   opts = vim.tbl_extend("keep", opts or {}, {
     skip_hidden = true,
   })
   local j = 0
+  ---@return nil|integer
+  ---@return nil|aerial.Symbol
+  ---@return nil|integer
   return function(_, i, a, b)
     i = i + 1
     j = j + 1
+    ---@type nil|aerial.Symbol
     local item = self.flat_items[i]
     if opts.skip_hidden and item and self:is_collapsed(item.parent) then
       item = self:_next_non_collapsed(item.parent)

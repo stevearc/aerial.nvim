@@ -36,7 +36,14 @@ local symbol_kinds = {
   "Variable",
 }
 
----@param symbol aerial.Symbol
+---@class aerial.SymbolBase
+---@field kind string
+---@field name string
+---@field lnum integer
+---@field col integer
+---@field scope? aerial.Scope
+
+---@param symbol aerial.SymbolBase
 ---@param is_icon boolean
 ---@param is_collapsed boolean
 ---@return nil|string

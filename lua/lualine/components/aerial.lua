@@ -111,7 +111,7 @@ function M:init(options)
   end
 end
 
----@param symbol aerial.Symbol
+---@param symbol aerial.SymbolView
 ---@param is_icon boolean
 ---@return string|nil
 function M:get_hl_group(symbol, is_icon)

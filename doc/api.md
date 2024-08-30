@@ -200,7 +200,7 @@ Jump to a symbol higher in the tree, moving backwards
 
 ## get_location(exact)
 
-`get_location(exact): table[]` \
+`get_location(exact): aerial.SymbolView[]` \
 Get a list representing the symbol path to the current location.
 
 | Param | Type           | Desc                                                                                                             |
@@ -210,10 +210,6 @@ Get a list representing the symbol path to the current location.
 **Note:**
 <pre>
 Returns empty list if none found or in an invalid buffer.
-Items have the following keys:
-    name   The name of the symbol
-    kind   The SymbolKind of the symbol
-    icon   The icon that represents the symbol
 </pre>
 
 ## tree_close_all(bufnr)

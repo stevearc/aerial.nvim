@@ -126,13 +126,14 @@ M.fetch_symbols_sync = function(bufnr)
       kind = kind,
       name = name,
       level = level,
+      lnum = range.lnum,
+      end_lnum = range.end_lnum,
+      col = range.col,
+      end_col = range.end_col,
       parent = parent_item,
       selection_range = selection_range,
       scope = scope,
     }
-    for k, v in pairs(range) do
-      item[k] = v
-    end
     if ext.postprocess(bufnr, item, match) == false or not include_kind[item.kind] then
       goto continue
     end

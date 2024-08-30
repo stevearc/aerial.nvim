@@ -427,6 +427,7 @@ M.get_symbol_position = function(bufdata, lnum, col, include_hidden)
 
   local symbol
   for _, item in bufdata:iter({ skip_hidden = not include_hidden }) do
+    ---@diagnostic disable-next-line: param-type-mismatch
     local cmp, inside = compare(item, lnum, col)
     if inside then
       exact_symbol = item

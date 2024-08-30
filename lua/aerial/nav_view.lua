@@ -37,6 +37,9 @@ local function create_buf()
   return bufnr
 end
 
+---@param bufnr integer
+---@param winid integer
+---@return aerial.Nav
 function AerialNav.new(bufnr, winid)
   local left_buf = create_buf()
   local width = math.floor((layout.get_editor_width() - 6) / 3)
@@ -79,7 +82,7 @@ function AerialNav.new(bufnr, winid)
       { scope = "local", win = floatwin }
     )
   end
-  local nav = setmetatable({
+  local self = {
     winid = winid,
     bufnr = bufnr,
     left = {
@@ -104,10 +107,11 @@ function AerialNav.new(bufnr, winid)
       symbols = {},
     },
     autocmds = {},
-  }, {
+  }
+  setmetatable(self, {
     __index = AerialNav,
   })
-  keymap_util.set_keymaps("", "aerial.nav_actions", config.nav.keymaps, main_buf, nav)
+  keymap_util.set_keymaps("", "aerial.nav_actions", config.nav.keymaps, main_buf, self)
   vim.api.nvim_create_autocmd("WinLeave", {
     desc = "Close Aerial nav window on leave",
     nested = true,
@@ -131,26 +135,26 @@ function AerialNav.new(bufnr, winid)
       desc = "Update symbols on cursor move",
       buffer = main_buf,
       callback = function()
-        local symbol = nav:get_current_symbol()
+        local symbol = self:get_current_symbol()
         if symbol then
           if config.nav.autojump then
             navigation.select_symbol(symbol, winid, bufnr, { jump = false })
           end
-          nav:focus_symbol(symbol)
+          self:focus_symbol(symbol)
         end
       end,
     })
   end)
   table.insert(
-    nav.autocmds,
+    self.autocmds,
     vim.api.nvim_create_autocmd("VimResized", {
       desc = "Update aerial nav view",
       callback = function()
-        nav:relayout()
+        self:relayout()
       end,
     })
   )
-  return nav
+  return self
 end
 
 ---@return nil|aerial.Symbol

@@ -358,15 +358,14 @@ M.prev_up = function(count)
   nav_up(-1, count)
 end
 
+---@class aerial.SymbolView : aerial.SymbolBase
+---@field icon string
+
 ---Get a list representing the symbol path to the current location.
 ---@param exact? boolean If true, only return symbols if we are exactly inside the hierarchy. When false, will return the closest symbol.
----@return table[]
+---@return aerial.SymbolView[]
 ---@note
 --- Returns empty list if none found or in an invalid buffer.
---- Items have the following keys:
----     name   The name of the symbol
----     kind   The SymbolKind of the symbol
----     icon   The icon that represents the symbol
 M.get_location = function(exact)
   do_setup()
   local config = require("aerial.config")
@@ -400,6 +399,7 @@ M.get_location = function(exact)
       name = item.name,
       lnum = item.selection_range and item.selection_range.lnum or item.lnum,
       col = item.selection_range and item.selection_range.col or item.col,
+      scope = item.scope,
     })
     item = item.parent
   end
