@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.2.0](https://github.com/stevearc/aerial.nvim/compare/v2.1.0...v2.2.0) (2024-08-30)
+
+
+### Features
+
+* **just:** treesitter support for Just ([#401](https://github.com/stevearc/aerial.nvim/issues/401)) ([bb95e7f](https://github.com/stevearc/aerial.nvim/commit/bb95e7fed7e3d3dc0714722ef6ef57ea1b708a6a))
+* **proto:** add treesitter query for grpc in proto filetype ([#404](https://github.com/stevearc/aerial.nvim/issues/404)) ([92f93f4](https://github.com/stevearc/aerial.nvim/commit/92f93f4e155b2135fc47ed2daf8b63f40726b545))
+* **starlark:** treesitter support for Starlark ([#402](https://github.com/stevearc/aerial.nvim/issues/402)) ([e585934](https://github.com/stevearc/aerial.nvim/commit/e585934fef8d253dbc5655cff3deb3444e064e6c))
+* **telescope:** can provide custom function to format symbols ([#395](https://github.com/stevearc/aerial.nvim/issues/395)) ([eeebf32](https://github.com/stevearc/aerial.nvim/commit/eeebf32fcb365c860248fee785ae5923831bf2ad))
+* **toml:** treesitter support for TOML tables ([#396](https://github.com/stevearc/aerial.nvim/issues/396)) ([263beeb](https://github.com/stevearc/aerial.nvim/commit/263beeb92961c15882b7853805f0ae2024f2e903))
+
+
+### Bug Fixes
+
+* **php:** update treesitter query ([#400](https://github.com/stevearc/aerial.nvim/issues/400)) ([8d2a6c2](https://github.com/stevearc/aerial.nvim/commit/8d2a6c2ffad271b10c91f2c6f6ecef1f9625a9b9))
+* **zig:** update queries for new zig treesitter parser ([491e2fc](https://github.com/stevearc/aerial.nvim/commit/491e2fc5640a34dc7f2f6b490670543d17fbc220))
+
 ## [2.1.0](https://github.com/stevearc/aerial.nvim/compare/v2.0.0...v2.1.0) (2024-08-10)
 
 
