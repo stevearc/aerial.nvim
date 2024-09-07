@@ -35,7 +35,6 @@ M.fetch_symbols_sync = function(bufnr)
   end
   local lang = parser:lang()
   local syntax_tree = parser:parse()[1]
-  local syntax_tree_node = syntax_tree:root()
   local query = helpers.get_query(lang)
   if not query or not syntax_tree then
     backends.set_symbols(
@@ -50,13 +49,7 @@ M.fetch_symbols_sync = function(bufnr)
   local stack = {}
   local ext = extensions[lang]
   for _, matches, metadata in
-    query:iter_matches(
-      syntax_tree_node,
-      bufnr,
-      syntax_tree_node:start(),
-      syntax_tree_node:end_(),
-      { all = false }
-    )
+    query:iter_matches(syntax_tree:root(), bufnr, nil, nil, { all = false })
   do
     ---@note mimic nvim-treesitter's query.iter_group_results return values:
     --       {
