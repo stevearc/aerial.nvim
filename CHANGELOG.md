@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.0](https://github.com/stevearc/aerial.nvim/compare/v2.2.0...v2.3.0) (2024-09-10)
+
+
+### Features
+
+* **treesitter:** add XML support ([#405](https://github.com/stevearc/aerial.nvim/issues/405)) ([0a2cf2b](https://github.com/stevearc/aerial.nvim/commit/0a2cf2b120121c50a7c28f021fb2c36f6ba1c533))
+
+
+### Bug Fixes
+
+* **treesitter:** explicitly set all to false in iter_matches ([#407](https://github.com/stevearc/aerial.nvim/issues/407)) ([3c04b04](https://github.com/stevearc/aerial.nvim/commit/3c04b040a81b800125d7f68f5579892d6bce854d))
+
 ## [2.2.0](https://github.com/stevearc/aerial.nvim/compare/v2.1.0...v2.2.0) (2024-08-30)
 
 
