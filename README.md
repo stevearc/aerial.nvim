@@ -176,6 +176,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - usd
 - vim
 - vimdoc
+- xml
 - yaml
 - zig
 
