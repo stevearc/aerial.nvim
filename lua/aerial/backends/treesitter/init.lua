@@ -48,8 +48,9 @@ M.fetch_symbols_sync = function(bufnr)
   -- It is used to determine node parents for the tree structure.
   local stack = {}
   local ext = extensions[lang]
-  ---@diagnostic disable-next-line: missing-parameter
-  for _, matches, metadata in query:iter_matches(syntax_tree:root(), bufnr) do
+  for _, matches, metadata in
+    query:iter_matches(syntax_tree:root(), bufnr, nil, nil, { all = false })
+  do
     ---@note mimic nvim-treesitter's query.iter_group_results return values:
     --       {
     --         kind = "Method",
