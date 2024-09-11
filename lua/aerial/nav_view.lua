@@ -256,7 +256,10 @@ function AerialNav:focus_symbol(symbol)
   if vim.api.nvim_win_is_valid(self.left.winid) then
     vim.api.nvim_win_set_cursor(self.left.winid, { parent_lnum, 0 })
   end
-  if vim.api.nvim_win_is_valid(self.main.winid) then
+  if
+    vim.api.nvim_win_is_valid(self.main.winid)
+    and vim.api.nvim_win_get_cursor(self.main.winid)[1] ~= lnum
+  then
     vim.api.nvim_win_set_cursor(self.main.winid, { lnum, 0 })
   end
   self:relayout()
