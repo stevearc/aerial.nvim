@@ -4,6 +4,9 @@ local finders = require("telescope.finders")
 local pickers = require("telescope.pickers")
 local telescope = require("telescope")
 
+local COL1_WIDTH = 4
+local COL2_WIDTH = 30
+
 local ext_config = {
   -- show_lines = true, -- deprecated in favor of show_columns
   show_columns = "both", -- { "symbols", "lines", "both" }
@@ -53,13 +56,13 @@ local function aerial_picker(opts)
   local layout
   if show_columns == "both" then
     layout = {
-      { width = 4 },
-      { width = 30 },
+      { width = COL1_WIDTH },
+      { width = COL2_WIDTH },
       { remaining = true },
     }
   else
     layout = {
-      { width = 4 },
+      { width = COL1_WIDTH },
       { remaining = true },
     }
   end
@@ -97,10 +100,16 @@ local function aerial_picker(opts)
     buf_highlights = collect_buf_highlights() -- collect buffer highlights only if needed
   end
 
-  local function highlights_for_row(row, offset)
+  local function highlights_for_row(row, offset, icon_hl, name_hl)
     offset = offset or 0
     local row_highlights = buf_highlights[row] or {}
     local highlights = {}
+    if icon_hl ~= nil then
+      highlights = {
+        { { 0, COL1_WIDTH }, icon_hl },
+        { { COL1_WIDTH + 1, COL1_WIDTH + COL2_WIDTH + 3 }, name_hl },
+      }
+    end
     for _, value in ipairs(row_highlights) do
       local start_col, end_col, hl_type = unpack(value)
       hl_type = hl_type:match("^[^.]+") -- strip subtypes after dot
@@ -136,7 +145,7 @@ local function aerial_picker(opts)
       if #entry.name > layout[2].width then
         offset = offset + 2 -- '...' symbol
       end
-      highlights = highlights_for_row(row, offset)
+      highlights = highlights_for_row(row, offset, icon_hl, name_hl)
     end
 
     return displayer(columns), highlights
