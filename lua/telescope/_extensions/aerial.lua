@@ -70,8 +70,8 @@ local function aerial_picker(opts)
     })
 
   local function collect_buf_highlights()
-    local parser = vim.treesitter.get_parser(bufnr)
-    if not parser then
+    local ok, parser = pcall(vim.treesitter.get_parser, bufnr)
+    if not ok or not parser then
       return {}
     end
 
