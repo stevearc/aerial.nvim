@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/stevearc/aerial.nvim/compare/v2.3.0...v2.3.1) (2024-09-17)
+
+
+### Bug Fixes
+
+* nav view doesn't force cursor to col 0 ([#403](https://github.com/stevearc/aerial.nvim/issues/403)) ([f6f74a0](https://github.com/stevearc/aerial.nvim/commit/f6f74a04ba72f87c91a0f533d37e03c24518879a))
+
 ## [2.3.0](https://github.com/stevearc/aerial.nvim/compare/v2.2.0...v2.3.0) (2024-09-10)
 
 
