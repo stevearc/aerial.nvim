@@ -100,16 +100,10 @@ local function aerial_picker(opts)
     buf_highlights = collect_buf_highlights() -- collect buffer highlights only if needed
   end
 
-  local function highlights_for_row(row, offset, icon_hl, name_hl)
+  local function highlights_for_row(row, offset)
     offset = offset or 0
     local row_highlights = buf_highlights[row] or {}
     local highlights = {}
-    if icon_hl ~= nil then
-      highlights = {
-        { { 0, COL1_WIDTH }, icon_hl },
-        { { COL1_WIDTH + 1, COL1_WIDTH + COL2_WIDTH + 3 }, name_hl },
-      }
-    end
     for _, value in ipairs(row_highlights) do
       local start_col, end_col, hl_type = unpack(value)
       hl_type = hl_type:match("^[^.]+") -- strip subtypes after dot
@@ -145,7 +139,13 @@ local function aerial_picker(opts)
       if #entry.name > layout[2].width then
         offset = offset + 2 -- '...' symbol
       end
-      highlights = highlights_for_row(row, offset, icon_hl, name_hl)
+      local col1_len = COL1_WIDTH + icon:len() - vim.api.nvim_strwidth(icon)
+      local col2_len = COL2_WIDTH + entry.name:len() - vim.api.nvim_strwidth(entry.name)
+      highlights = {
+        { { 0, col1_len }, icon_hl },
+        { { col1_len + 1, col1_len + 1 + col2_len + 1 }, name_hl },
+      }
+      vim.list_extend(highlights, highlights_for_row(row, offset))
     end
 
     return displayer(columns), highlights
