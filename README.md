@@ -605,6 +605,10 @@ The extension can be customized with the following options:
 require("telescope").setup({
   extensions = {
     aerial = {
+      -- Set the width of the first two columns (the second
+      -- is relevant only when show_columns is set to 'both')
+      col1_width = 4,
+      col2_width = 30,
       -- How to format the symbols
       format_symbol = function(symbol_path, filetype)
         if filetype == "json" or filetype == "yaml" then

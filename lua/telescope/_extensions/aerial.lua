@@ -5,6 +5,8 @@ local pickers = require("telescope.pickers")
 local telescope = require("telescope")
 
 local ext_config = {
+  col1_width = 4,
+  col2_width = 30,
   -- show_lines = true, -- deprecated in favor of show_columns
   show_columns = "both", -- { "symbols", "lines", "both" }
   format_symbol = function(symbol_path, filetype)
@@ -53,13 +55,13 @@ local function aerial_picker(opts)
   local layout
   if show_columns == "both" then
     layout = {
-      { width = 4 },
-      { width = 30 },
+      { width = ext_config.col1_width },
+      { width = ext_config.col2_width },
       { remaining = true },
     }
   else
     layout = {
-      { width = 4 },
+      { width = ext_config.col1_width },
       { remaining = true },
     }
   end
@@ -136,7 +138,13 @@ local function aerial_picker(opts)
       if #entry.name > layout[2].width then
         offset = offset + 2 -- '...' symbol
       end
-      highlights = highlights_for_row(row, offset)
+      local col1_len = ext_config.col1_width + icon:len() - vim.api.nvim_strwidth(icon)
+      local col2_len = ext_config.col2_width + entry.name:len() - vim.api.nvim_strwidth(entry.name)
+      highlights = {
+        { { 0, col1_len }, icon_hl },
+        { { col1_len + 1, col1_len + 1 + col2_len + 1 }, name_hl },
+      }
+      vim.list_extend(highlights, highlights_for_row(row, offset))
     end
 
     return displayer(columns), highlights
