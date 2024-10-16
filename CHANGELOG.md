@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.3.1](https://github.com/stevearc/aerial.nvim/compare/v2.3.0...v2.3.1) (2024-10-16)
+
+
+### Bug Fixes
+
+* nav view doesn't force cursor to col 0 ([#403](https://github.com/stevearc/aerial.nvim/issues/403)) ([f6f74a0](https://github.com/stevearc/aerial.nvim/commit/f6f74a04ba72f87c91a0f533d37e03c24518879a))
+* telescope extension can customize col widths ([8be4124](https://github.com/stevearc/aerial.nvim/commit/8be41243cd3644eaeeb574c5e80be36fbc022508))
+* **telescope:** guard against missing treesitter parser in preview ([603156d](https://github.com/stevearc/aerial.nvim/commit/603156d4fd58963a05f221e76b1a25bc79ed55b0))
+
 ## [2.3.0](https://github.com/stevearc/aerial.nvim/compare/v2.2.0...v2.3.0) (2024-09-10)
 
 
