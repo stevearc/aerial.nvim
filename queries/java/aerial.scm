@@ -3,7 +3,7 @@
   (#set! "kind" "Interface")) @symbol
 
 (method_declaration
-  name: (identifier) @name
+  name: (identifier) @name @start
   (#set! "kind" "Method")) @symbol
 
 (constructor_declaration
