@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.2](https://github.com/stevearc/aerial.nvim/compare/v2.3.1...v2.3.2) (2024-10-16)
+
+
+### Bug Fixes
+
+* **java:** don't start methods at annotations ([#417](https://github.com/stevearc/aerial.nvim/issues/417)) ([60a7846](https://github.com/stevearc/aerial.nvim/commit/60a784614acb1d7695bd9ae0fee8ada1bf7b0c28))
+
 ## [2.3.1](https://github.com/stevearc/aerial.nvim/compare/v2.3.0...v2.3.1) (2024-10-16)
 
 
