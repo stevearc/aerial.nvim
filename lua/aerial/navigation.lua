@@ -237,6 +237,12 @@ M.select_symbol = function(item, winid, bufnr, opts)
     winid = vim.api.nvim_get_current_win()
     util.go_win_no_au(my_winid)
   end
+  vim.api.nvim_win_call(winid, function()
+    local cur_buf = vim.api.nvim_win_get_buf(winid)
+    if cur_buf == bufnr then
+      vim.cmd("normal! m'")
+    end
+  end)
   vim.api.nvim_win_set_buf(winid, bufnr)
   local lnum = item.selection_range and item.selection_range.lnum or item.lnum
   local col = item.selection_range and item.selection_range.col or item.col
