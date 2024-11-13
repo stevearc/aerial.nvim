@@ -62,11 +62,11 @@ Synchronously complete setup (if lazy-loaded)
 `is_open(opts): boolean` \
 Returns true if aerial is open for the current window or buffer (returns false inside an aerial buffer)
 
-| Param | Type         | Desc           |     |
-| ----- | ------------ | -------------- | --- |
-| opts  | `nil\|table` |                |     |
-|       | bufnr        | `nil\|integer` |     |
-|       | winid        | `nil\|integer` |     |
+| Param  | Type           | Desc |
+| ------ | -------------- | ---- |
+| opts   | `nil\|table`   |      |
+| >bufnr | `nil\|integer` |      |
+| >winid | `nil\|integer` |      |
 
 ## close()
 
@@ -91,11 +91,11 @@ Close all visible aerial windows except for the one currently focused or for the
 `open(opts)` \
 Open the aerial window for the current buffer.
 
-| Param | Type                   | Desc                            |                                                               |
-| ----- | ---------------------- | ------------------------------- | ------------------------------------------------------------- |
-| opts  | `nil\|aerial.openOpts` |                                 |                                                               |
-|       | focus                  | `nil\|boolean`                  | If true, jump to aerial window if it is opened (default true) |
-|       | direction              | `nil\|"left"\|"right"\|"float"` | Direction to open aerial window                               |
+| Param      | Type                            | Desc                                                          |
+| ---------- | ------------------------------- | ------------------------------------------------------------- |
+| opts       | `nil\|aerial.openOpts`          |                                                               |
+| >focus     | `nil\|boolean`                  | If true, jump to aerial window if it is opened (default true) |
+| >direction | `nil\|"left"\|"right"\|"float"` | Direction to open aerial window                               |
 
 ## open_in_win(target_win, source_win)
 
@@ -129,11 +129,11 @@ Jump to the aerial window for the current buffer, if it is open
 `toggle(opts)` \
 Open or close the aerial window for the current buffer.
 
-| Param | Type                   | Desc                            |                                                               |
-| ----- | ---------------------- | ------------------------------- | ------------------------------------------------------------- |
-| opts  | `nil\|aerial.openOpts` |                                 |                                                               |
-|       | focus                  | `nil\|boolean`                  | If true, jump to aerial window if it is opened (default true) |
-|       | direction              | `nil\|"left"\|"right"\|"float"` | Direction to open aerial window                               |
+| Param      | Type                            | Desc                                                          |
+| ---------- | ------------------------------- | ------------------------------------------------------------- |
+| opts       | `nil\|aerial.openOpts`          |                                                               |
+| >focus     | `nil\|boolean`                  | If true, jump to aerial window if it is opened (default true) |
+| >direction | `nil\|"left"\|"right"\|"float"` | Direction to open aerial window                               |
 
 ## refetch_symbols(bufnr)
 
@@ -155,12 +155,12 @@ call this if you change something in the config (e.g. by setting vim.b.aerial_ba
 `select(opts)` \
 Jump to a specific symbol.
 
-| Param | Type                     | Desc           |                                                                                                                                                  |
-| ----- | ------------------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| opts  | `nil\|aerial.selectOpts` |                |                                                                                                                                                  |
-|       | index                    | `nil\|integer` | The symbol to jump to. If nil, will jump to the symbol under the cursor (in the aerial buffer)                                                   |
-|       | split                    | `nil\|string`  | Jump to the symbol in a new split. Can be "v" for vertical or "h" for horizontal. Can also be a raw command to execute (e.g. "belowright split") |
-|       | jump                     | `nil\|boolean` | If false and in the aerial window, do not leave the aerial window. (Default true)                                                                |
+| Param  | Type                     | Desc                                                                                                                                             |
+| ------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| opts   | `nil\|aerial.selectOpts` |                                                                                                                                                  |
+| >index | `nil\|integer`           | The symbol to jump to. If nil, will jump to the symbol under the cursor (in the aerial buffer)                                                   |
+| >split | `nil\|string`            | Jump to the symbol in a new split. Can be "v" for vertical or "h" for horizontal. Can also be a raw command to execute (e.g. "belowright split") |
+| >jump  | `nil\|boolean`           | If false and in the aerial window, do not leave the aerial window. (Default true)                                                                |
 
 ## next(step)
 
@@ -265,39 +265,39 @@ Decrease the fold level of the symbol tree
 `tree_open(opts)` \
 Open the tree at the selected location
 
-| Param | Type         | Desc           |                                                                                                     |
-| ----- | ------------ | -------------- | --------------------------------------------------------------------------------------------------- |
-| opts  | `nil\|table` |                |                                                                                                     |
-|       | index        | `nil\|integer` | The index of the symbol to perform the action on. Defaults to cursor location.                      |
-|       | fold         | `nil\|boolean` | If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)            |
-|       | recurse      | `nil\|boolean` | If true, perform the action recursively on all children (default false)                             |
-|       | bubble       | `nil\|boolean` | If true and current symbol has no children, perform the action on the nearest parent (default true) |
+| Param    | Type           | Desc                                                                                                |
+| -------- | -------------- | --------------------------------------------------------------------------------------------------- |
+| opts     | `nil\|table`   |                                                                                                     |
+| >index   | `nil\|integer` | The index of the symbol to perform the action on. Defaults to cursor location.                      |
+| >fold    | `nil\|boolean` | If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)            |
+| >recurse | `nil\|boolean` | If true, perform the action recursively on all children (default false)                             |
+| >bubble  | `nil\|boolean` | If true and current symbol has no children, perform the action on the nearest parent (default true) |
 
 ## tree_close(opts)
 
 `tree_close(opts)` \
 Collapse the tree at the selected location
 
-| Param | Type         | Desc           |                                                                                                     |
-| ----- | ------------ | -------------- | --------------------------------------------------------------------------------------------------- |
-| opts  | `nil\|table` |                |                                                                                                     |
-|       | index        | `nil\|integer` | The index of the symbol to perform the action on. Defaults to cursor location.                      |
-|       | fold         | `nil\|boolean` | If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)            |
-|       | recurse      | `nil\|boolean` | If true, perform the action recursively on all children (default false)                             |
-|       | bubble       | `nil\|boolean` | If true and current symbol has no children, perform the action on the nearest parent (default true) |
+| Param    | Type           | Desc                                                                                                |
+| -------- | -------------- | --------------------------------------------------------------------------------------------------- |
+| opts     | `nil\|table`   |                                                                                                     |
+| >index   | `nil\|integer` | The index of the symbol to perform the action on. Defaults to cursor location.                      |
+| >fold    | `nil\|boolean` | If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)            |
+| >recurse | `nil\|boolean` | If true, perform the action recursively on all children (default false)                             |
+| >bubble  | `nil\|boolean` | If true and current symbol has no children, perform the action on the nearest parent (default true) |
 
 ## tree_toggle(opts)
 
 `tree_toggle(opts)` \
 Toggle the collapsed state at the selected location
 
-| Param | Type         | Desc           |                                                                                                     |
-| ----- | ------------ | -------------- | --------------------------------------------------------------------------------------------------- |
-| opts  | `nil\|table` |                |                                                                                                     |
-|       | index        | `nil\|integer` | The index of the symbol to perform the action on. Defaults to cursor location.                      |
-|       | fold         | `nil\|boolean` | If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)            |
-|       | recurse      | `nil\|boolean` | If true, perform the action recursively on all children (default false)                             |
-|       | bubble       | `nil\|boolean` | If true and current symbol has no children, perform the action on the nearest parent (default true) |
+| Param    | Type           | Desc                                                                                                |
+| -------- | -------------- | --------------------------------------------------------------------------------------------------- |
+| opts     | `nil\|table`   |                                                                                                     |
+| >index   | `nil\|integer` | The index of the symbol to perform the action on. Defaults to cursor location.                      |
+| >fold    | `nil\|boolean` | If false, do not modify folds regardless of 'link_tree_to_folds' setting. (default true)            |
+| >recurse | `nil\|boolean` | If true, perform the action recursively on all children (default false)                             |
+| >bubble  | `nil\|boolean` | If true and current symbol has no children, perform the action on the nearest parent (default true) |
 
 ## nav_is_open()
 
