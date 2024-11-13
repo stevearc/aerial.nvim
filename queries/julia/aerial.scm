@@ -19,12 +19,18 @@
   (#set! "kind" "Function")) @symbol
 
 (abstract_definition
-  name: (identifier) @name
-  (#set! "kind" "Interface")) @symbol
+  (type_head
+    (identifier) @name
+    (#set! "kind" "Interface"))) @symbol
 
 (struct_definition
-  name: (identifier) @name
-  (#set! "kind" "Class")) @symbol
+  (type_head
+    [
+      (_
+        (identifier) @name)
+      (identifier) @name
+    ]
+    (#set! "kind" "Class"))) @symbol
 
 (const_statement
   (assignment
