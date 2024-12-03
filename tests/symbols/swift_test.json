@@ -1,0 +1,757 @@
+[
+  {
+    "children": [
+      {
+        "col": 4,
+        "end_col": 31,
+        "end_lnum": 4,
+        "kind": "Property",
+        "level": 1,
+        "lnum": 4,
+        "name": "someVar",
+        "selection_range": {
+          "col": 8,
+          "end_col": 15,
+          "end_lnum": 4,
+          "lnum": 4
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 45,
+        "end_lnum": 6,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 6,
+        "name": "somess",
+        "selection_range": {
+          "col": 9,
+          "end_col": 15,
+          "end_lnum": 6,
+          "lnum": 6
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 7,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 3,
+    "name": "SomeProtocol",
+    "selection_range": {
+      "col": 9,
+      "end_col": 21,
+      "end_lnum": 3,
+      "lnum": 3
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 68,
+    "end_lnum": 8,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 8,
+    "name": "SomeProtocol",
+    "selection_range": {
+      "col": 9,
+      "end_col": 21,
+      "end_lnum": 8,
+      "lnum": 8
+    }
+  },
+  {
+    "children": [
+      {
+        "col": 4,
+        "end_col": 51,
+        "end_lnum": 11,
+        "kind": "Property",
+        "level": 1,
+        "lnum": 11,
+        "name": "textures",
+        "selection_range": {
+          "col": 15,
+          "end_col": 23,
+          "end_lnum": 11,
+          "lnum": 11
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 15,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 13,
+        "name": "enumMethod",
+        "selection_range": {
+          "col": 9,
+          "end_col": 19,
+          "end_lnum": 13,
+          "lnum": 13
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 20,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 17,
+        "name": "computedProperty",
+        "selection_range": {
+          "col": 8,
+          "end_col": 24,
+          "end_lnum": 17,
+          "lnum": 17
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 21,
+    "kind": "Enum",
+    "level": 0,
+    "lnum": 10,
+    "name": "SomeEnum",
+    "selection_range": {
+      "col": 5,
+      "end_col": 13,
+      "end_lnum": 10,
+      "lnum": 10
+    }
+  },
+  {
+    "children": [
+      {
+        "col": 4,
+        "end_col": 19,
+        "end_lnum": 24,
+        "kind": "Property",
+        "level": 1,
+        "lnum": 24,
+        "name": "somesss",
+        "selection_range": {
+          "col": 8,
+          "end_col": 15,
+          "end_lnum": 24,
+          "lnum": 24
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 21,
+        "end_lnum": 25,
+        "kind": "Property",
+        "level": 1,
+        "lnum": 25,
+        "name": "another",
+        "selection_range": {
+          "col": 8,
+          "end_col": 15,
+          "end_lnum": 25,
+          "lnum": 25
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 23,
+        "end_lnum": 26,
+        "kind": "Property",
+        "level": 1,
+        "lnum": 26,
+        "name": "sieee",
+        "selection_range": {
+          "col": 8,
+          "end_col": 13,
+          "end_lnum": 26,
+          "lnum": 26
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 30,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 27,
+        "name": "computedProperty",
+        "selection_range": {
+          "col": 8,
+          "end_col": 24,
+          "end_lnum": 27,
+          "lnum": 27
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 39,
+        "end_lnum": 31,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 31,
+        "name": "some",
+        "selection_range": {
+          "col": 9,
+          "end_col": 13,
+          "end_lnum": 31,
+          "lnum": 31
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 34,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 32,
+        "name": "some",
+        "selection_range": {
+          "col": 16,
+          "end_col": 20,
+          "end_lnum": 32,
+          "lnum": 32
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 55,
+        "end_lnum": 36,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 36,
+        "name": "somess",
+        "selection_range": {
+          "col": 16,
+          "end_col": 22,
+          "end_lnum": 36,
+          "lnum": 36
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 54,
+        "end_lnum": 37,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 37,
+        "name": "somess",
+        "selection_range": {
+          "col": 16,
+          "end_col": 22,
+          "end_lnum": 37,
+          "lnum": 37
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 39,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 38,
+        "name": "some",
+        "selection_range": {
+          "col": 9,
+          "end_col": 13,
+          "end_lnum": 38,
+          "lnum": 38
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 42,
+        "end_lnum": 40,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 40,
+        "name": "anotherFucn",
+        "selection_range": {
+          "col": 9,
+          "end_col": 20,
+          "end_lnum": 40,
+          "lnum": 40
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 42,
+        "end_lnum": 41,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 41,
+        "name": "anotherFucn",
+        "selection_range": {
+          "col": 9,
+          "end_col": 20,
+          "end_lnum": 41,
+          "lnum": 41
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 38,
+        "end_lnum": 42,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 42,
+        "name": "anotherFucxn",
+        "selection_range": {
+          "col": 9,
+          "end_col": 21,
+          "end_lnum": 42,
+          "lnum": 42
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 40,
+        "end_lnum": 43,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 43,
+        "name": "anotherFucn",
+        "selection_range": {
+          "col": 9,
+          "end_col": 20,
+          "end_lnum": 43,
+          "lnum": 43
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 37,
+        "end_lnum": 44,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 44,
+        "name": "anotherFucn",
+        "selection_range": {
+          "col": 9,
+          "end_col": 20,
+          "end_lnum": 44,
+          "lnum": 44
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 43,
+        "end_lnum": 45,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 45,
+        "name": "anotherFucn",
+        "selection_range": {
+          "col": 9,
+          "end_col": 20,
+          "end_lnum": 45,
+          "lnum": 45
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 44,
+        "end_lnum": 46,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 46,
+        "name": "anotherFucn",
+        "selection_range": {
+          "col": 9,
+          "end_col": 20,
+          "end_lnum": 46,
+          "lnum": 46
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 50,
+        "end_lnum": 47,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 47,
+        "name": "anotherFucn",
+        "selection_range": {
+          "col": 9,
+          "end_col": 20,
+          "end_lnum": 47,
+          "lnum": 47
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 48,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 23,
+    "name": "SomeClass",
+    "selection_range": {
+      "col": 13,
+      "end_col": 22,
+      "end_lnum": 23,
+      "lnum": 23
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 26,
+    "end_lnum": 50,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 50,
+    "name": "someExternalFunc",
+    "selection_range": {
+      "col": 5,
+      "end_col": 21,
+      "end_lnum": 50,
+      "lnum": 50
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 47,
+    "end_lnum": 52,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 52,
+    "name": "SomeProtocol",
+    "selection_range": {
+      "col": 10,
+      "end_col": 22,
+      "end_lnum": 52,
+      "lnum": 52
+    }
+  },
+  {
+    "children": [
+      {
+        "col": 4,
+        "end_col": 20,
+        "end_lnum": 55,
+        "kind": "Property",
+        "level": 1,
+        "lnum": 55,
+        "name": "goodVar",
+        "selection_range": {
+          "col": 8,
+          "end_col": 15,
+          "end_lnum": 55,
+          "lnum": 55
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 23,
+        "end_lnum": 56,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 56,
+        "name": "somssssse",
+        "selection_range": {
+          "col": 9,
+          "end_col": 18,
+          "end_lnum": 56,
+          "lnum": 56
+        }
+      },
+      {
+        "children": [
+          {
+            "col": 8,
+            "end_col": 26,
+            "end_lnum": 58,
+            "kind": "Variable",
+            "level": 2,
+            "lnum": 58,
+            "name": "wrongVar",
+            "selection_range": {
+              "col": 12,
+              "end_col": 20,
+              "end_lnum": 58,
+              "lnum": 58
+            }
+          }
+        ],
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 59,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 57,
+        "name": "some",
+        "selection_range": {
+          "col": 9,
+          "end_col": 13,
+          "end_lnum": 57,
+          "lnum": 57
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 32,
+        "end_lnum": 61,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 61,
+        "name": "llll",
+        "selection_range": {
+          "col": 9,
+          "end_col": 13,
+          "end_lnum": 61,
+          "lnum": 61
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 27,
+        "end_lnum": 62,
+        "kind": "Constructor",
+        "level": 1,
+        "lnum": 62,
+        "name": "init",
+        "selection_range": {
+          "col": 4,
+          "end_col": 8,
+          "end_lnum": 62,
+          "lnum": 62
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 13,
+        "end_lnum": 63,
+        "kind": "Constructor",
+        "level": 1,
+        "lnum": 63,
+        "name": "deinit",
+        "selection_range": {
+          "col": 4,
+          "end_col": 10,
+          "end_lnum": 63,
+          "lnum": 63
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 64,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 54,
+    "name": "SomeActor",
+    "selection_range": {
+      "col": 6,
+      "end_col": 15,
+      "end_lnum": 54,
+      "lnum": 54
+    }
+  },
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "col": 8,
+            "end_col": 9,
+            "end_lnum": 70,
+            "kind": "Constructor",
+            "level": 2,
+            "lnum": 68,
+            "name": "init",
+            "selection_range": {
+              "col": 8,
+              "end_col": 12,
+              "end_lnum": 68,
+              "lnum": 68
+            }
+          }
+        ],
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 71,
+        "kind": "Struct",
+        "level": 1,
+        "lnum": 67,
+        "name": "SomeAnother",
+        "selection_range": {
+          "col": 11,
+          "end_col": 22,
+          "end_lnum": 67,
+          "lnum": 67
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 74,
+        "kind": "Constructor",
+        "level": 1,
+        "lnum": 72,
+        "name": "init",
+        "selection_range": {
+          "col": 4,
+          "end_col": 8,
+          "end_lnum": 72,
+          "lnum": 72
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 75,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 66,
+    "name": "SomeClass",
+    "selection_range": {
+      "col": 6,
+      "end_col": 15,
+      "end_lnum": 66,
+      "lnum": 66
+    }
+  },
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "col": 8,
+            "end_col": 23,
+            "end_lnum": 79,
+            "kind": "Property",
+            "level": 2,
+            "lnum": 79,
+            "name": "ppppp",
+            "selection_range": {
+              "col": 12,
+              "end_col": 17,
+              "end_lnum": 79,
+              "lnum": 79
+            }
+          }
+        ],
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 80,
+        "kind": "Struct",
+        "level": 1,
+        "lnum": 78,
+        "name": "SomeBBBB",
+        "selection_range": {
+          "col": 11,
+          "end_col": 19,
+          "end_lnum": 78,
+          "lnum": 78
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 83,
+        "kind": "Enum",
+        "level": 1,
+        "lnum": 81,
+        "name": "Some",
+        "selection_range": {
+          "col": 9,
+          "end_col": 13,
+          "end_lnum": 81,
+          "lnum": 81
+        }
+      },
+      {
+        "col": 4,
+        "end_col": 21,
+        "end_lnum": 84,
+        "kind": "Property",
+        "level": 1,
+        "lnum": 84,
+        "name": "xxxx",
+        "selection_range": {
+          "col": 8,
+          "end_col": 12,
+          "end_lnum": 84,
+          "lnum": 84
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 85,
+    "kind": "Struct",
+    "level": 0,
+    "lnum": 77,
+    "name": "SomeAAA",
+    "selection_range": {
+      "col": 7,
+      "end_col": 14,
+      "end_lnum": 77,
+      "lnum": 77
+    }
+  },
+  {
+    "children": [
+      {
+        "col": 4,
+        "end_col": 35,
+        "end_lnum": 88,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 88,
+        "name": "someVariable",
+        "selection_range": {
+          "col": 8,
+          "end_col": 20,
+          "end_lnum": 88,
+          "lnum": 88
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 89,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 87,
+    "name": "SomeAAA.SomeBBBB",
+    "selection_range": {
+      "col": 10,
+      "end_col": 26,
+      "end_lnum": 87,
+      "lnum": 87
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 38,
+    "end_lnum": 91,
+    "kind": "Variable",
+    "level": 0,
+    "lnum": 91,
+    "name": "toplevelVariable",
+    "selection_range": {
+      "col": 4,
+      "end_col": 20,
+      "end_lnum": 91,
+      "lnum": 91
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 95,
+    "kind": "Function",
+    "level": 0,
+    "lnum": 93,
+    "name": "globalComputedProperty",
+    "selection_range": {
+      "col": 4,
+      "end_col": 26,
+      "end_lnum": 93,
+      "lnum": 93
+    }
+  }
+]
