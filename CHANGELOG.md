@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.4.0](https://github.com/stevearc/aerial.nvim/compare/v2.3.1...v2.4.0) (2024-12-03)
+
+
+### Features
+
+* add to jumplist before jumping ([#424](https://github.com/stevearc/aerial.nvim/issues/424)) ([247df21](https://github.com/stevearc/aerial.nvim/commit/247df216704cbe3cfa68e2ae5515c3485e281364))
+* treesitter support for swift ([#428](https://github.com/stevearc/aerial.nvim/issues/428)) ([fd7fbe3](https://github.com/stevearc/aerial.nvim/commit/fd7fbe36772d7a955815c90ff9b58523bfdb410d))
+
+
+### Bug Fixes
+
+* **java:** don't start methods at annotations ([#417](https://github.com/stevearc/aerial.nvim/issues/417)) ([60a7846](https://github.com/stevearc/aerial.nvim/commit/60a784614acb1d7695bd9ae0fee8ada1bf7b0c28))
+* **julia:** update treesitter queries ([1ff1ab3](https://github.com/stevearc/aerial.nvim/commit/1ff1ab3891a823d967074cf949fe01770753e54a))
+
 ## [2.3.1](https://github.com/stevearc/aerial.nvim/compare/v2.3.0...v2.3.1) (2024-10-16)
 
 
