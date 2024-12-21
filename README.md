@@ -142,6 +142,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - c_sharp
 - cpp
 - dart
+- djot
 - elixir
 - go
 - groovy

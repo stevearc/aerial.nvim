@@ -11,6 +11,7 @@ vim.filetype.add({
     usd = "usd",
     usda = "usd",
     smk = "snakemake",
+    dj = "djot",
   },
 })
 
