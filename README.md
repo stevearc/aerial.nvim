@@ -159,6 +159,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - make
 - markdown
 - norg
+- nu
 - objdump
 - org
 - php
