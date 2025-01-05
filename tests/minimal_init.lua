@@ -12,6 +12,7 @@ vim.filetype.add({
     usda = "usd",
     smk = "snakemake",
     dj = "djot",
+    nu = "nu",
   },
 })
 
@@ -24,6 +25,7 @@ for lang, _ in vim.fs.dir("queries") do
 end
 local master_nvim_ts, configs = pcall(require, "nvim-treesitter.configs")
 if master_nvim_ts then
+  ---@diagnostic disable-next-line: missing-fields
   configs.setup({
     ensure_installed = langs,
     sync_install = true,
