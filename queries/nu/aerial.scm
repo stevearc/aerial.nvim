@@ -19,5 +19,5 @@
 ; Constant
 (stmt_const
   (identifier) @name
-  (#set! "kind" "Interface")
+  (#set! "kind" "Constant")
 ) @symbol
