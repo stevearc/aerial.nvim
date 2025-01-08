@@ -39,6 +39,7 @@
         "level": 1,
         "lnum": 7,
         "name": "myMethod",
+		"scope": "public",
         "selection_range": {
           "col": 20,
           "end_col": 28,
@@ -71,6 +72,7 @@
         "level": 1,
         "lnum": 10,
         "name": "doSomething",
+		"scope": "public",
         "selection_range": {
           "col": 20,
           "end_col": 31,
@@ -103,6 +105,7 @@
         "level": 1,
         "lnum": 14,
         "name": "myTraitMethod",
+		"scope": "public",
         "selection_range": {
           "col": 20,
           "end_col": 33,
