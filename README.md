@@ -144,6 +144,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - dart
 - djot
 - elixir
+- fish
 - go
 - groovy
 - help
@@ -158,6 +159,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - make
 - markdown
 - norg
+- nu
 - objdump
 - org
 - php

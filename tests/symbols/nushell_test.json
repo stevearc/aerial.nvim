@@ -1,0 +1,141 @@
+[
+  {
+    "children": [
+      {
+        "col": 2,
+        "end_col": 32,
+        "end_lnum": 2,
+        "kind": "Constant",
+        "level": 1,
+        "lnum": 2,
+        "name": "MY_CONSTANT",
+        "selection_range": {
+          "col": 15,
+          "end_col": 26,
+          "end_lnum": 2,
+          "lnum": 2
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 24,
+        "end_lnum": 4,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 4,
+        "name": "PRIVATE_DEF",
+        "selection_range": {
+          "col": 6,
+          "end_col": 17,
+          "end_lnum": 4,
+          "lnum": 4
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 30,
+        "end_lnum": 5,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 5,
+        "name": "PUBLIC_DEF",
+        "selection_range": {
+          "col": 13,
+          "end_col": 23,
+          "end_lnum": 5,
+          "lnum": 5
+        }
+      },
+      {
+        "col": 2,
+        "end_col": 37,
+        "end_lnum": 6,
+        "kind": "Function",
+        "level": 1,
+        "lnum": 6,
+        "name": "DEF WITH SPACES",
+        "selection_range": {
+          "col": 13,
+          "end_col": 30,
+          "end_lnum": 6,
+          "lnum": 6
+        }
+      },
+      {
+        "children": [
+          {
+            "col": 4,
+            "end_col": 39,
+            "end_lnum": 9,
+            "kind": "Constant",
+            "level": 2,
+            "lnum": 9,
+            "name": "MY_SUB_CONSTANT",
+            "selection_range": {
+              "col": 17,
+              "end_col": 32,
+              "end_lnum": 9,
+              "lnum": 9
+            }
+          },
+          {
+            "col": 4,
+            "end_col": 30,
+            "end_lnum": 10,
+            "kind": "Function",
+            "level": 2,
+            "lnum": 10,
+            "name": "SUB_PRIVATE_DEF",
+            "selection_range": {
+              "col": 8,
+              "end_col": 23,
+              "end_lnum": 10,
+              "lnum": 10
+            }
+          },
+          {
+            "col": 4,
+            "end_col": 36,
+            "end_lnum": 11,
+            "kind": "Function",
+            "level": 2,
+            "lnum": 11,
+            "name": "SUB_PUBLIC_DEF",
+            "selection_range": {
+              "col": 15,
+              "end_col": 29,
+              "end_lnum": 11,
+              "lnum": 11
+            }
+          }
+        ],
+        "col": 2,
+        "end_col": 3,
+        "end_lnum": 12,
+        "kind": "Module",
+        "level": 1,
+        "lnum": 8,
+        "name": "MY_SUB_MODULE",
+        "selection_range": {
+          "col": 9,
+          "end_col": 22,
+          "end_lnum": 8,
+          "lnum": 8
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 13,
+    "kind": "Module",
+    "level": 0,
+    "lnum": 1,
+    "name": "MY_MODULE",
+    "selection_range": {
+      "col": 7,
+      "end_col": 16,
+      "end_lnum": 1,
+      "lnum": 1
+    }
+  }
+]
