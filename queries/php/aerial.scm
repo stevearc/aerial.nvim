@@ -13,6 +13,7 @@
   (#set! "kind" "Class")) @symbol
 
 (method_declaration
+  ((visibility_modifier) @scope)?
   name: (name) @name
   (#set! "kind" "Method")) @symbol
 
