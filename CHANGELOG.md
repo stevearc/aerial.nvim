@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.5.0](https://github.com/stevearc/aerial.nvim/compare/v2.4.0...v2.5.0) (2025-01-09)
+
+
+### Features
+
+* add treesitter support for nushell ([#438](https://github.com/stevearc/aerial.nvim/issues/438)) ([4c0c3bd](https://github.com/stevearc/aerial.nvim/commit/4c0c3bd8d8e539a8513bffa60ca171874251736f))
+* **fish:** add treesitter query ([#437](https://github.com/stevearc/aerial.nvim/issues/437)) ([d767bd8](https://github.com/stevearc/aerial.nvim/commit/d767bd8a92869c337c5a71707ce8287234e47b75))
+* **php:** treesitter backend extracts function scope ([#436](https://github.com/stevearc/aerial.nvim/issues/436)) ([4c959cf](https://github.com/stevearc/aerial.nvim/commit/4c959cf65c5420d54b24b61a77b681dcfca0bc57))
+
 ## [2.4.0](https://github.com/stevearc/aerial.nvim/compare/v2.3.1...v2.4.0) (2024-12-21)
 
 
