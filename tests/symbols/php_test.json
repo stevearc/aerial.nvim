@@ -39,7 +39,7 @@
         "level": 1,
         "lnum": 7,
         "name": "myMethod",
-		"scope": "public",
+        "scope": "public",
         "selection_range": {
           "col": 20,
           "end_col": 28,
@@ -55,7 +55,7 @@
         "level": 1,
         "lnum": 8,
         "name": "myPrivateMethod",
-		"scope": "private",
+        "scope": "private",
         "selection_range": {
           "col": 21,
           "end_col": 36,
@@ -71,7 +71,7 @@
         "level": 1,
         "lnum": 9,
         "name": "myProtectedMethod",
-		"scope": "protected",
+        "scope": "protected",
         "selection_range": {
           "col": 23,
           "end_col": 40,
@@ -104,7 +104,7 @@
         "level": 1,
         "lnum": 12,
         "name": "doSomething",
-		"scope": "public",
+        "scope": "public",
         "selection_range": {
           "col": 20,
           "end_col": 31,
@@ -137,7 +137,7 @@
         "level": 1,
         "lnum": 16,
         "name": "myTraitMethod",
-		"scope": "public",
+        "scope": "public",
         "selection_range": {
           "col": 20,
           "end_col": 33,

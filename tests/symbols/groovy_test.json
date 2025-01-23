@@ -92,10 +92,27 @@
     }
   },
   {
-    "col": 0,
-    "end_col": 12,
-    "end_lnum": 28,
-    "kind": "Constant",
+    "children": [
+      {
+        "col": 4,
+        "end_col": 5,
+        "end_lnum": 31,
+        "kind": "Module",
+        "level": 1,
+        "lnum": 29,
+        "name": "doLast",
+        "selection_range": {
+          "col": 4,
+          "end_col": 10,
+          "end_lnum": 29,
+          "lnum": 29
+        }
+      }
+    ],
+    "col": 5,
+    "end_col": 1,
+    "end_lnum": 32,
+    "kind": "Module",
     "level": 0,
     "lnum": 28,
     "name": "welcome",
@@ -104,21 +121,6 @@
       "end_col": 12,
       "end_lnum": 28,
       "lnum": 28
-    }
-  },
-  {
-    "col": 4,
-    "end_col": 5,
-    "end_lnum": 31,
-    "kind": "Module",
-    "level": 0,
-    "lnum": 29,
-    "name": "doLast",
-    "selection_range": {
-      "col": 4,
-      "end_col": 10,
-      "end_lnum": 29,
-      "lnum": 29
     }
   }
 ]
