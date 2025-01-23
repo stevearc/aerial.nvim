@@ -6,30 +6,24 @@ local util = require("aerial.backends.util")
 
 local M = {}
 
-local function replace_handler(name, callback, preserve_callback)
+local function hook_handler(name, callback)
   local old_callback = vim.lsp.handlers[name]
   local new_callback
   new_callback = function(...)
     callback(...)
-    if preserve_callback then
-      old_callback(...)
-    end
+    old_callback(...)
   end
   vim.lsp.handlers[name] = new_callback
 end
 
 local has_hook = false
-local function hook_handlers(preserve_symbol_callback)
+local function hook_handlers()
   if has_hook then
     return
   end
   has_hook = true
-  replace_handler(
-    "textDocument/documentSymbol",
-    callbacks.symbol_callback,
-    preserve_symbol_callback
-  )
-  replace_handler("textDocument/publishDiagnostics", callbacks.on_publish_diagnostics, true)
+  hook_handler("textDocument/documentSymbol", callbacks.symbol_callback)
+  hook_handler("textDocument/publishDiagnostics", callbacks.on_publish_diagnostics)
 end
 
 M.fetch_symbols = function(bufnr)
@@ -114,7 +108,7 @@ M.on_attach = function(client, bufnr, opts)
   end
   opts = opts or {}
   if lsp_util.client_supports_symbols(client) then
-    hook_handlers(opts.preserve_callback)
+    hook_handlers()
     -- This is called from the LspAttach autocmd
     -- The client isn't fully attached until just after that autocmd completes, so we need to
     -- schedule the attach
