@@ -99,14 +99,12 @@ M.is_supported = function(bufnr)
   return true, nil
 end
 
-M.on_attach = function(client, bufnr, opts)
-  if type(bufnr) == "table" then
-    opts = bufnr
-    bufnr = 0
-  elseif not bufnr then
-    bufnr = 0
+---@param client vim.lsp.Client
+---@param bufnr? integer
+M.on_attach = function(client, bufnr)
+  if not bufnr then
+    bufnr = vim.api.nvim_get_current_buf()
   end
-  opts = opts or {}
   if lsp_util.client_supports_symbols(client) then
     hook_handlers()
     -- This is called from the LspAttach autocmd
