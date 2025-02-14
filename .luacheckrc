@@ -16,4 +16,5 @@ read_globals = {
   "vim",
   "a",
   "assert",
+  "Snacks",
 }
