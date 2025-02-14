@@ -16,7 +16,7 @@ update_snapshots:
 
 # Run all linters
 lint: scripts/nvim-typecheck-action fastlint
-	./scripts/nvim-typecheck-action/typecheck.sh --workdir scripts/nvim-typecheck-action lua
+	./scripts/nvim-typecheck-action/typecheck.sh --lib https://github.com/folke/snacks.nvim --workdir scripts/nvim-typecheck-action lua
 
 # Run all the fast linters
 fastlint: scripts/nvim_doc_tools

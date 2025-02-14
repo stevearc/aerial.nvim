@@ -358,6 +358,13 @@ M.prev_up = function(count)
   nav_up(-1, count)
 end
 
+---Open a document symbol picker using snacks.nvim
+---@param opts? snacks.picker.Config
+M.snacks_picker = function(opts)
+  M.sync_load()
+  require("aerial.snacks").pick_symbol(opts)
+end
+
 ---@class aerial.SymbolView : aerial.SymbolBase
 ---@field icon string
 

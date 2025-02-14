@@ -533,6 +533,12 @@ prev_up({count})                                                  *aerial.prev_u
     Parameters:
       {count} `nil|integer` How many levels to jump up (default 1)
 
+snacks_picker({opts})                                       *aerial.snacks_picker*
+    Open a document symbol picker using snacks.nvim
+
+    Parameters:
+      {opts} `nil|snacks.picker.Config`
+
 get_location({exact}): aerial.SymbolView[]                   *aerial.get_location*
     Get a list representing the symbol path to the current location.
 

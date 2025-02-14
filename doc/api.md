@@ -19,6 +19,7 @@
 - [prev(step)](#prevstep)
 - [next_up(count)](#next_upcount)
 - [prev_up(count)](#prev_upcount)
+- [snacks_picker(opts)](#snacks_pickeropts)
 - [get_location(exact)](#get_locationexact)
 - [tree_close_all(bufnr)](#tree_close_allbufnr)
 - [tree_open_all(bufnr)](#tree_open_allbufnr)
@@ -197,6 +198,15 @@ Jump to a symbol higher in the tree, moving backwards
 | Param | Type           | Desc                                   |
 | ----- | -------------- | -------------------------------------- |
 | count | `nil\|integer` | How many levels to jump up (default 1) |
+
+## snacks_picker(opts)
+
+`snacks_picker(opts)` \
+Open a document symbol picker using snacks.nvim
+
+| Param | Type                        | Desc |
+| ----- | --------------------------- | ---- |
+| opts  | `nil\|snacks.picker.Config` |      |
 
 ## get_location(exact)
 

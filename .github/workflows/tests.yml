@@ -33,6 +33,7 @@ jobs:
       - uses: stevearc/nvim-typecheck-action@v2
         with:
           path: lua
+          libraries: https://github.com/folke/snacks.nvim
 
   stylua:
     name: StyLua
