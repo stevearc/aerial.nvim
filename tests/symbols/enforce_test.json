@@ -1,0 +1,156 @@
+[
+  {
+    "children": [
+      {
+        "col": 1,
+        "end_col": 4,
+        "end_lnum": 2,
+        "kind": "EnumMember",
+        "level": 1,
+        "lnum": 2,
+        "name": "FOO",
+        "selection_range": {
+          "col": 1,
+          "end_col": 4,
+          "end_lnum": 2,
+          "lnum": 2
+        }
+      },
+      {
+        "col": 1,
+        "end_col": 9,
+        "end_lnum": 3,
+        "kind": "EnumMember",
+        "level": 1,
+        "lnum": 3,
+        "name": "BAR",
+        "selection_range": {
+          "col": 1,
+          "end_col": 4,
+          "end_lnum": 3,
+          "lnum": 3
+        }
+      },
+      {
+        "col": 1,
+        "end_col": 4,
+        "end_lnum": 4,
+        "kind": "EnumMember",
+        "level": 1,
+        "lnum": 4,
+        "name": "BAZ",
+        "selection_range": {
+          "col": 1,
+          "end_col": 4,
+          "end_lnum": 4,
+          "lnum": 4
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 5,
+    "kind": "Enum",
+    "level": 0,
+    "lnum": 1,
+    "name": "Foo",
+    "selection_range": {
+      "col": 5,
+      "end_col": 8,
+      "end_lnum": 1,
+      "lnum": 1
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 16,
+    "end_lnum": 6,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 6,
+    "name": "Bar",
+    "selection_range": {
+      "col": 12,
+      "end_col": 15,
+      "end_lnum": 6,
+      "lnum": 6
+    }
+  },
+  {
+    "children": [
+      {
+        "col": 1,
+        "end_col": 11,
+        "end_lnum": 8,
+        "kind": "Field",
+        "level": 1,
+        "lnum": 8,
+        "name": "m_foo",
+        "selection_range": {
+          "col": 5,
+          "end_col": 10,
+          "end_lnum": 8,
+          "lnum": 8
+        }
+      },
+      {
+        "col": 1,
+        "end_col": 15,
+        "end_lnum": 9,
+        "kind": "Constructor",
+        "level": 1,
+        "lnum": 9,
+        "name": "Foo",
+        "selection_range": {
+          "col": 6,
+          "end_col": 9,
+          "end_lnum": 9,
+          "lnum": 9
+        }
+      },
+      {
+        "col": 1,
+        "end_col": 15,
+        "end_lnum": 10,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 10,
+        "name": "foo",
+        "selection_range": {
+          "col": 6,
+          "end_col": 9,
+          "end_lnum": 10,
+          "lnum": 10
+        }
+      },
+      {
+        "col": 1,
+        "end_col": 12,
+        "end_lnum": 11,
+        "kind": "Method",
+        "level": 1,
+        "lnum": 11,
+        "name": "bar",
+        "selection_range": {
+          "col": 6,
+          "end_col": 9,
+          "end_lnum": 11,
+          "lnum": 11
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 12,
+    "kind": "Class",
+    "level": 0,
+    "lnum": 7,
+    "name": "Foo",
+    "selection_range": {
+      "col": 6,
+      "end_col": 9,
+      "end_lnum": 7,
+      "lnum": 7
+    }
+  }
+]
