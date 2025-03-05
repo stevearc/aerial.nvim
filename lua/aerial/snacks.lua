@@ -55,7 +55,7 @@ M.pick_symbol = function(opts)
 
       local ret = {} ---@type snacks.picker.Highlight[]
       vim.list_extend(ret, Snacks.picker.format.tree(item, picker))
-      table.insert(ret, { icon, icon_hl })
+      table.insert(ret, { icon .. " ", icon_hl })
       Snacks.picker.highlight.format(item, item.text, ret)
 
       return ret
