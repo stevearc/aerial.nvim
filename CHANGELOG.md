@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.6.0](https://github.com/stevearc/aerial.nvim/compare/v2.5.0...v2.6.0) (2025-03-06)
+
+
+### Features
+
+* add treesitter support for R ([#450](https://github.com/stevearc/aerial.nvim/issues/450)) ([fdf9e2e](https://github.com/stevearc/aerial.nvim/commit/fdf9e2e0b9d5e5a0b7861d76ef7cb0a28d345f9b))
+* remove org support since nvim-treesitter dropped support ([a39c9a7](https://github.com/stevearc/aerial.nvim/commit/a39c9a7c49da0e04f35c749cbccdf838fd3ea58a))
+
+
+### Bug Fixes
+
+* add extra padding to icon in snacks picker ([#447](https://github.com/stevearc/aerial.nvim/issues/447)) ([8c63f41](https://github.com/stevearc/aerial.nvim/commit/8c63f41c13d250faeb3c848b61b06adedac737e5))
+
 ## [2.5.0](https://github.com/stevearc/aerial.nvim/compare/v2.4.0...v2.5.0) (2025-02-14)
 
 
