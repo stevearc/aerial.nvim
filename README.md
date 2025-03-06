@@ -166,6 +166,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - php
 - proto
 - python
+- r
 - rst
 - ruby
 - rust
