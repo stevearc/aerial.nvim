@@ -109,7 +109,7 @@ end
 
 ---@param item aerial.Symbol
 ---@return nil|aerial.Symbol
-function BufData:_next_non_collapsed(item)
+local function _next_non_collapsed(item)
   while item do
     if item.next_sibling then
       return item.next_sibling
@@ -133,7 +133,7 @@ function BufData:iter(opts)
     ---@type nil|aerial.Symbol
     local item = self.flat_items[i]
     if opts.skip_hidden and item and self:is_collapsed(item.parent) then
-      item = self:_next_non_collapsed(item.parent)
+      item = _next_non_collapsed(item.parent)
     end
     if item then
       return item.idx, item, j

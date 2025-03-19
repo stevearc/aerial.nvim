@@ -23,7 +23,10 @@ M.fetch_symbols_sync = function(bufnr)
     local idx, len = string.find(line, "^#+ ")
     if idx == 1 and not inside_code_block then
       local level = len - 2
-      local parent = stack[math.min(level, #stack)]
+      while #stack > 0 and stack[#stack].level >= level do
+        table.remove(stack, #stack)
+      end
+      local parent = stack[#stack]
       local item = {
         kind = "Interface",
         name = string.sub(line, len + 1),
@@ -48,9 +51,6 @@ M.fetch_symbols_sync = function(bufnr)
         then
           table.insert(items, item)
         end
-      end
-      while #stack > level and #stack > 0 do
-        table.remove(stack, #stack)
       end
       table.insert(stack, item)
     elseif string.find(line, "```") == 1 then
