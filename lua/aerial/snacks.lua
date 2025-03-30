@@ -60,6 +60,11 @@ M.pick_symbol = function(opts)
 
       return ret
     end,
+    on_show = function(picker)
+      local closest_or_exact_symbol = bufdata.positions[bufdata.last_win].exact_symbol or bufdata.positions[bufdata.last_win].closest_symbol
+      local currentIdx = closest_or_exact_symbol.idx
+      picker.list.cursor = currentIdx
+    end,
   }))
 end
 
