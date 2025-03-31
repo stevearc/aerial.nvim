@@ -23,8 +23,10 @@ M.pick_symbol = function(opts)
     return
   end
 
+  local default_selection_index = 1
   local bufdata = data.get_or_create(bufnr)
   ---@type snacks.picker.finder.Item[]
+  local position = bufdata.positions[bufdata.last_win]
   local items = {}
   for i, item in bufdata:iter({ skip_hidden = false }) do
     local snack_item = {
@@ -37,6 +39,9 @@ M.pick_symbol = function(opts)
     }
     if item.parent then
       snack_item.parent = items[item.parent.idx]
+    end
+    if item == position.closest_symbol then
+      default_selection_index = ( #items + 1 )
     end
     table.insert(items, snack_item)
   end
@@ -61,9 +66,7 @@ M.pick_symbol = function(opts)
       return ret
     end,
     on_show = function(picker)
-      local closest_or_exact_symbol = bufdata.positions[bufdata.last_win].exact_symbol or bufdata.positions[bufdata.last_win].closest_symbol
-      local currentIdx = closest_or_exact_symbol.idx
-      picker.list.cursor = currentIdx
+      picker.list.cursor = default_selection_index
     end,
   }))
 end
