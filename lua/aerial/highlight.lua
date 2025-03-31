@@ -62,7 +62,7 @@ M.get_highlight = function(symbol, is_icon, is_collapsed)
 end
 
 ---@param name string
----@return vim.api.keyset.hl_info
+---@return vim.api.keyset.get_hl_info
 local function get_hl_by_name(name)
   return vim.api.nvim_get_hl(0, { name = name, link = false })
 end

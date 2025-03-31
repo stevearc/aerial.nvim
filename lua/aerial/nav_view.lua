@@ -199,14 +199,14 @@ local function render_symbols(panel)
     table.insert(lines, text)
     local text_cols = vim.api.nvim_strwidth(text)
     table.insert(highlights, { "Aerial" .. item.kind .. "Icon", i - 1, 0, kind:len() })
-    table.insert(highlights, { "Aerial" .. item.kind, i - 1, kind:len(), -1 })
+    table.insert(highlights, { "Aerial" .. item.kind, i - 1, kind:len(), text:len() })
     max_len = math.max(max_len, text_cols)
   end
 
   -- If there are no symbols in this section, add some indicator of that
   if #lines == 0 then
     table.insert(lines, "<none>")
-    table.insert(highlights, { "Comment", 0, 0, -1 })
+    table.insert(highlights, { "Comment", 0, 0, 6 })
   end
 
   vim.bo[bufnr].modifiable = true
@@ -217,7 +217,11 @@ local function render_symbols(panel)
   local ns = vim.api.nvim_create_namespace("aerial")
   vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
   for _, hl in ipairs(highlights) do
-    vim.api.nvim_buf_add_highlight(bufnr, ns, unpack(hl))
+    local hl_group, line, col, end_col = unpack(hl)
+    vim.api.nvim_buf_set_extmark(bufnr, ns, line, col, {
+      end_col = end_col,
+      hl_group = hl_group,
+    })
   end
   panel.width = max_len
   panel.height = #lines

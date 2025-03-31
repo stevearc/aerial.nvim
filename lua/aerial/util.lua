@@ -180,9 +180,14 @@ M.flash_highlight = function(bufnr, lnum, durationMs, hl_group)
   if durationMs == true or durationMs == 1 then
     durationMs = 300
   end
-  local ns = vim.api.nvim_buf_add_highlight(bufnr, 0, hl_group, lnum - 1, 0, -1)
+  local ns = vim.api.nvim_create_namespace("AerialFlashHighlight")
+  local line = vim.api.nvim_buf_get_lines(bufnr, lnum - 1, lnum, true)[1]
+  local ext_id = vim.api.nvim_buf_set_extmark(bufnr, ns, lnum - 1, 0, {
+    end_col = #line,
+    hl_group = hl_group,
+  })
   local remove_highlight = function()
-    pcall(vim.api.nvim_buf_clear_namespace, bufnr, ns, 0, -1)
+    vim.api.nvim_buf_del_extmark(bufnr, ns, ext_id)
   end
   vim.defer_fn(remove_highlight, durationMs)
 end

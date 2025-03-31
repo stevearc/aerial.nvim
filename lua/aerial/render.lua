@@ -166,7 +166,7 @@ M.update_aerial_buffer = function(buf)
         group = name_hl,
         row = row,
         col_start = string_len[spacing] + string_len[kind],
-        col_end = -1,
+        col_end = text:len(),
       })
     end
     max_len = math.max(max_len, text_cols)
@@ -184,7 +184,10 @@ M.update_aerial_buffer = function(buf)
   local ns = vim.api.nvim_create_namespace("aerial")
   vim.api.nvim_buf_clear_namespace(aer_bufnr, ns, 0, -1)
   for _, hl in ipairs(highlights) do
-    vim.api.nvim_buf_add_highlight(aer_bufnr, ns, hl.group, hl.row - 1, hl.col_start, hl.col_end)
+    vim.api.nvim_buf_set_extmark(aer_bufnr, ns, hl.row - 1, hl.col_start, {
+      end_col = hl.col_end,
+      hl_group = hl.group,
+    })
   end
   M.update_highlights(bufnr)
   vim.b[aer_bufnr].rendered = true

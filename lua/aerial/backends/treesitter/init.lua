@@ -91,14 +91,18 @@ M.fetch_symbols_sync = function(bufnr)
     end
     local kind = match.kind
     if not kind then
-      vim.api.nvim_err_writeln(
-        string.format("Missing 'kind' metadata in query file for language %s", lang)
+      vim.api.nvim_echo(
+        { { string.format("Missing 'kind' metadata in query file for language %s", lang) } },
+        true,
+        { err = true }
       )
       break
     elseif not vim.lsp.protocol.SymbolKind[kind] then
-      vim.api.nvim_err_writeln(
-        string.format("Invalid 'kind' metadata '%s' in query file for language %s", kind, lang)
-      )
+      vim.api.nvim_echo({
+        {
+          string.format("Invalid 'kind' metadata '%s' in query file for language %s", kind, lang),
+        },
+      }, true, { err = true })
       break
     end
     local range = helpers.range_from_nodes(start_node, end_node)
