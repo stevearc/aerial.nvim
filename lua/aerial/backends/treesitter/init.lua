@@ -79,6 +79,9 @@ M.fetch_symbols_sync = function(bufnr)
     local name_match = match.name or {}
     local selection_match = match.selection or {}
     local symbol_node = (match.symbol or match.type or {}).node
+    if not symbol_node then
+      goto continue
+    end
     -- The location capture groups are optional. We default to the
     -- location of the @symbol capture
     local start_node = (match.start or {}).node or symbol_node
@@ -86,7 +89,7 @@ M.fetch_symbols_sync = function(bufnr)
     local parent_item, parent_node, level = ext.get_parent(stack, match, symbol_node)
     -- Sometimes our queries will match the same node twice.
     -- Detect that (symbol_node == parent_node), and skip dupes.
-    if not symbol_node or symbol_node == parent_node then
+    if symbol_node == parent_node then
       goto continue
     end
     local kind = match.kind

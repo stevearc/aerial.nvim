@@ -27,11 +27,13 @@ describe("treesitter", function()
     local filepath = "./tests/treesitter/" .. filename
     local basename = vim.fn.fnamemodify(filename, ":r")
     local symbols_file = "./tests/symbols/" .. basename .. ".json"
-    it(filename, function()
-      util.test_file_symbols("treesitter", filepath, symbols_file)
-    end)
+    if not vim.env.TS_TEST or vim.env.TS_TEST == basename then
+      it(filename, function()
+        util.test_file_symbols("treesitter", filepath, symbols_file)
+      end)
+    end
 
-    if filename == "markdown_test.md" then
+    if filename == "markdown_test.md" and not vim.env.TS_TEST then
       it("<markdown backend> " .. filename, function()
         util.test_file_symbols("markdown", filepath, "./tests/symbols/markdown_backend.json")
       end)

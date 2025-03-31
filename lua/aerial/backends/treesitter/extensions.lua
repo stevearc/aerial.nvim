@@ -18,7 +18,7 @@ local default_methods = {
   get_parent = function(stack, match, node)
     for i = #stack, 1, -1 do
       local last_node = stack[i].node
-      if vim.treesitter.is_ancestor(last_node, node) then
+      if last_node == node or vim.treesitter.is_ancestor(last_node, node) then
         return stack[i].item, last_node, i
       else
         table.remove(stack, i)
