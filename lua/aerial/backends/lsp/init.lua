@@ -35,8 +35,13 @@ M.fetch_symbols = function(bufnr)
   if not client then
     return
   end
+  local request = vim.fn.has("nvim-0.11") == 1 and function(c, ...)
+    return c:request(...)
+  end or function(c, ...)
+    c.request(...)
+  end
   local request_success =
-    client.request("textDocument/documentSymbol", params, callbacks.symbol_callback, bufnr)
+    request(client, "textDocument/documentSymbol", params, callbacks.symbol_callback, bufnr)
   if not request_success then
     vim.notify("Error requesting document symbols", vim.log.levels.WARN)
   end
@@ -59,7 +64,13 @@ M.fetch_symbols_sync = function(bufnr, opts)
     return
   end
   local response
-  local request_success = client.request(
+  local request = vim.fn.has("nvim-0.11") == 1 and function(c, ...)
+    return c:request(...)
+  end or function(c, ...)
+    c.request(...)
+  end
+  local request_success = request(
+    client,
     "textDocument/documentSymbol",
     params,
     function(err, result)
