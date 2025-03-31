@@ -11,7 +11,7 @@ on:
 jobs:
   luacheck:
     name: Luacheck
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -27,7 +27,7 @@ jobs:
 
   typecheck:
     name: typecheck
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: stevearc/nvim-typecheck-action@v2
@@ -37,7 +37,7 @@ jobs:
 
   stylua:
     name: StyLua
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Stylua
@@ -52,11 +52,11 @@ jobs:
       matrix:
         include:
           - nvim_tag: v0.9.4
-          - nvim_tag: v0.10.0
           - nvim_tag: v0.10.4
+          - nvim_tag: v0.11.0
 
     name: Run tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       NVIM_TAG: ${{ matrix.nvim_tag }}
     steps:
@@ -83,7 +83,7 @@ jobs:
 
   update_docs:
     name: Update docs
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -120,7 +120,7 @@ jobs:
       - run_tests
       - typecheck
       - update_docs
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
