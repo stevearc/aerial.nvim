@@ -11,6 +11,9 @@ local M = {}
 -- start (optional): The location of the start of this symbol (default @symbol)
 -- end (optional): The location of the end of this symbol (default @start)
 
+---@param bufnr? integer
+---@return boolean
+---@return string? msg
 M.is_supported = function(bufnr)
   local lang = helpers.get_buf_lang(bufnr)
   if not helpers.has_parser(lang) then
@@ -22,28 +25,23 @@ M.is_supported = function(bufnr)
   return true, nil
 end
 
-M.fetch_symbols_sync = function(bufnr)
-  bufnr = bufnr or 0
-  local extensions = require("aerial.backends.treesitter.extensions")
-  local get_node_text = vim.treesitter.get_node_text
-  local include_kind = config.get_filter_kind_map(bufnr)
-  local parser = helpers.get_parser(bufnr)
-  local items = {}
-  if not parser then
-    backends.set_symbols(bufnr, items, { backend_name = "treesitter", lang = "unknown" })
-    return
-  end
-  local lang = parser:lang()
-  local syntax_tree = parser:parse()[1]
-  local query = helpers.get_query(lang)
-  if not query or not syntax_tree then
+---@param bufnr integer
+---@param lang string
+---@param query vim.treesitter.Query
+---@param syntax_tree? TSTree
+local function set_symbols_from_treesitter(bufnr, lang, query, syntax_tree)
+  if not syntax_tree then
     backends.set_symbols(
       bufnr,
-      items,
+      {},
       { backend_name = "treesitter", lang = lang, syntax_tree = syntax_tree }
     )
     return
   end
+  local extensions = require("aerial.backends.treesitter.extensions")
+  local get_node_text = vim.treesitter.get_node_text
+  local include_kind = config.get_filter_kind_map(bufnr)
+  local items = {}
   -- This will track a loose hierarchy of recent node+items.
   -- It is used to determine node parents for the tree structure.
   local stack = {}
@@ -173,12 +171,71 @@ M.fetch_symbols_sync = function(bufnr)
   )
 end
 
-M.fetch_symbols = M.fetch_symbols_sync
+---@param bufnr integer
+---@return nil|vim.treesitter.LanguageTree parser
+---@return nil|vim.treesitter.Query query
+local function get_lang_and_query(bufnr)
+  local parser = helpers.get_parser(bufnr)
+  if not parser then
+    backends.set_symbols(bufnr, {}, { backend_name = "treesitter", lang = "unknown" })
+    return
+  end
+  local lang = parser:lang()
+  local query = helpers.get_query(lang)
+  if not query then
+    backends.set_symbols(bufnr, {}, { backend_name = "treesitter", lang = lang })
+    return
+  end
+  return parser, query
+end
 
+---@param bufnr? integer
+M.fetch_symbols_sync = function(bufnr)
+  bufnr = bufnr or 0
+  local parser, query = get_lang_and_query(bufnr)
+  if not parser or not query then
+    return
+  end
+  local lang = parser:lang()
+  local syntax_tree = parser:parse()[1]
+  set_symbols_from_treesitter(bufnr, lang, query, syntax_tree)
+end
+
+---@param bufnr? integer
+M.fetch_symbols = function(bufnr)
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+  local parser, query = get_lang_and_query(bufnr)
+  if not parser or not query then
+    return
+  end
+  local lang = parser:lang()
+  local syntax_trees = parser:parse(nil, function(err, syntax_trees)
+    if err then
+      vim.api.nvim_echo(
+        { { string.format("Error parsing buffer: %s", err) } },
+        true,
+        { err = true }
+      )
+      backends.set_symbols(bufnr, {}, { backend_name = "treesitter", lang = lang })
+      return
+    else
+      assert(syntax_trees)
+      set_symbols_from_treesitter(bufnr, lang, query, syntax_trees[1])
+    end
+  end)
+  if syntax_trees then
+    set_symbols_from_treesitter(bufnr, lang, query, syntax_trees[1])
+  end
+end
+
+---@param bufnr integer
 M.attach = function(bufnr)
   util.add_change_watcher(bufnr, "treesitter")
 end
 
+---@param bufnr integer
 M.detach = function(bufnr)
   util.remove_change_watcher(bufnr, "treesitter")
 end
