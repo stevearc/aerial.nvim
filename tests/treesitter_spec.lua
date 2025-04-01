@@ -23,7 +23,17 @@ local function list_files(dir)
 end
 
 describe("treesitter", function()
+  local skip_tests = {}
+  if vim.fn.has("nvim-0.11") == 0 then
+    -- ABI version mismatch
+    table.insert(skip_tests, "enforce_test.c")
+  end
+
   for _, filename in ipairs(list_files("tests/treesitter")) do
+    if vim.tbl_contains(skip_tests, filename) then
+      print("Skipping test", filename)
+      goto continue
+    end
     local filepath = "./tests/treesitter/" .. filename
     local basename = vim.fn.fnamemodify(filename, ":r")
     local symbols_file = "./tests/symbols/" .. basename .. ".json"
@@ -38,6 +48,7 @@ describe("treesitter", function()
         util.test_file_symbols("markdown", filepath, "./tests/symbols/markdown_backend.json")
       end)
     end
+    ::continue::
   end
 
   util.test_file_symbols("man", "./tests/man_test.txt", "./tests/symbols/man.json")
