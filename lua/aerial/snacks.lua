@@ -26,6 +26,8 @@ M.pick_symbol = function(opts)
   local bufdata = data.get_or_create(bufnr)
   ---@type snacks.picker.finder.Item[]
   local items = {}
+  ---@type table<snacks.picker.finder.Item, snacks.picker.finder.Item>
+  local last = {}
   for i, item in bufdata:iter({ skip_hidden = false }) do
     local snack_item = {
       idx = i,
@@ -36,7 +38,13 @@ M.pick_symbol = function(opts)
       end_pos = { item.end_lnum, item.end_col },
     }
     if item.parent then
-      snack_item.parent = items[item.parent.idx]
+      local parent = items[item.parent.idx]
+      snack_item.parent = parent
+      if last[parent] then
+        last[parent].last = nil
+      end
+      last[parent] = snack_item
+      snack_item.last = true
     end
     table.insert(items, snack_item)
   end
