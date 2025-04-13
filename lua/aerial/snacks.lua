@@ -24,9 +24,10 @@ M.pick_symbol = function(opts)
   end
 
   local default_selection_index = 1
+  ---@type aerial.BufData
   local bufdata = data.get_or_create(bufnr)
-  ---@type snacks.picker.finder.Item[]
   local position = bufdata.positions[bufdata.last_win]
+  ---@type snacks.picker.finder.Item[]
   local items = {}
   for i, item in bufdata:iter({ skip_hidden = false }) do
     local snack_item = {
@@ -41,7 +42,7 @@ M.pick_symbol = function(opts)
       snack_item.parent = items[item.parent.idx]
     end
     if item == position.closest_symbol then
-      default_selection_index = ( #items + 1 )
+      default_selection_index = (#items + 1)
     end
     table.insert(items, snack_item)
   end
