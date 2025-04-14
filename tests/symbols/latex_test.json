@@ -51,69 +51,133 @@
           {
             "children": [
               {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "col": 0,
+                        "end_col": 24,
+                        "end_lnum": 24,
+                        "kind": "Method",
+                        "level": 5,
+                        "lnum": 22,
+                        "name": "A subsubsection",
+                        "selection_range": {
+                          "col": 15,
+                          "end_col": 30,
+                          "end_lnum": 22,
+                          "lnum": 22
+                        }
+                      }
+                    ],
+                    "col": 0,
+                    "end_col": 24,
+                    "end_lnum": 24,
+                    "kind": "Method",
+                    "level": 4,
+                    "lnum": 18,
+                    "name": "A subsection",
+                    "selection_range": {
+                      "col": 12,
+                      "end_col": 24,
+                      "end_lnum": 18,
+                      "lnum": 18
+                    }
+                  }
+                ],
                 "col": 0,
                 "end_col": 24,
-                "end_lnum": 20,
+                "end_lnum": 24,
                 "kind": "Method",
                 "level": 3,
-                "lnum": 18,
-                "name": "A subsubsection",
+                "lnum": 14,
+                "name": "First section",
                 "selection_range": {
-                  "col": 15,
-                  "end_col": 30,
-                  "end_lnum": 18,
-                  "lnum": 18
+                  "col": 9,
+                  "end_col": 22,
+                  "end_lnum": 14,
+                  "lnum": 14
+                }
+              },
+              {
+                "col": 0,
+                "end_col": 36,
+                "end_lnum": 26,
+                "kind": "Method",
+                "level": 3,
+                "lnum": 26,
+                "name": "This is another subsection",
+                "selection_range": {
+                  "col": 9,
+                  "end_col": 35,
+                  "end_lnum": 26,
+                  "lnum": 26
                 }
               }
             ],
             "col": 0,
-            "end_col": 24,
-            "end_lnum": 20,
+            "end_col": 36,
+            "end_lnum": 26,
             "kind": "Method",
             "level": 2,
-            "lnum": 14,
-            "name": "A subsection",
+            "lnum": 12,
+            "name": "First chapter",
             "selection_range": {
-              "col": 12,
-              "end_col": 24,
-              "end_lnum": 14,
-              "lnum": 14
+              "col": 9,
+              "end_col": 22,
+              "end_lnum": 12,
+              "lnum": 12
+            }
+          },
+          {
+            "col": 0,
+            "end_col": 33,
+            "end_lnum": 28,
+            "kind": "Method",
+            "level": 2,
+            "lnum": 28,
+            "name": "This is another chapter",
+            "selection_range": {
+              "col": 9,
+              "end_col": 32,
+              "end_lnum": 28,
+              "lnum": 28
             }
           }
         ],
         "col": 0,
-        "end_col": 24,
-        "end_lnum": 20,
+        "end_col": 33,
+        "end_lnum": 28,
         "kind": "Method",
         "level": 1,
         "lnum": 10,
-        "name": "First section",
+        "name": "First part",
         "selection_range": {
-          "col": 9,
-          "end_col": 22,
+          "col": 6,
+          "end_col": 16,
           "end_lnum": 10,
           "lnum": 10
         }
       },
       {
         "col": 0,
-        "end_col": 36,
-        "end_lnum": 22,
+        "end_col": 27,
+        "end_lnum": 30,
         "kind": "Method",
         "level": 1,
-        "lnum": 22,
-        "name": "This is another subsection",
+        "lnum": 30,
+        "name": "This is another part",
         "selection_range": {
-          "col": 9,
-          "end_col": 35,
-          "end_lnum": 22,
-          "lnum": 22
+          "col": 6,
+          "end_col": 26,
+          "end_lnum": 30,
+          "lnum": 30
         }
       }
     ],
     "col": 0,
     "end_col": 14,
-    "end_lnum": 24,
+    "end_lnum": 32,
     "kind": "Class",
     "level": 0,
     "lnum": 8,
