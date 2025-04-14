@@ -1,3 +1,19 @@
+(part
+  text: [
+    (curly_group
+      (text) @name)
+    (_)
+  ] @name
+  (#set! "kind" "Method")) @symbol
+
+(chapter
+  text: [
+    (curly_group
+      (text) @name)
+    (_)
+  ] @name
+  (#set! "kind" "Method")) @symbol
+
 (section
   text: [
     (curly_group
