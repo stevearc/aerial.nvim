@@ -233,7 +233,7 @@ M.select_symbol = function(item, winid, bufnr, opts)
     end
     local my_winid = vim.api.nvim_get_current_win()
     util.go_win_no_au(winid)
-    vim.cmd(split)
+    vim.cmd(string.format("noau %s", split))
     winid = vim.api.nvim_get_current_win()
     util.go_win_no_au(my_winid)
   end
