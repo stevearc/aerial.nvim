@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.6.0](https://github.com/stevearc/aerial.nvim/compare/v2.5.0...v2.6.0) (2025-04-20)
+
+
+### Features
+
+* add treesitter support for R ([#450](https://github.com/stevearc/aerial.nvim/issues/450)) ([fdf9e2e](https://github.com/stevearc/aerial.nvim/commit/fdf9e2e0b9d5e5a0b7861d76ef7cb0a28d345f9b))
+* remove org support since nvim-treesitter dropped support ([a39c9a7](https://github.com/stevearc/aerial.nvim/commit/a39c9a7c49da0e04f35c749cbccdf838fd3ea58a))
+* use async treesitter parsing in nvim 0.11 ([e749260](https://github.com/stevearc/aerial.nvim/commit/e749260729085f7c9250f073f1a71ba5650b4380))
+
+
+### Bug Fixes
+
+* add extra padding to icon in snacks picker ([#447](https://github.com/stevearc/aerial.nvim/issues/447)) ([8c63f41](https://github.com/stevearc/aerial.nvim/commit/8c63f41c13d250faeb3c848b61b06adedac737e5))
+* **latex:** support \chapter and \part as symbols ([#461](https://github.com/stevearc/aerial.nvim/issues/461)) ([2e00d1d](https://github.com/stevearc/aerial.nvim/commit/2e00d1d4248f08dddfceacb8d2996e51e13e00f6))
+* prevent Aerial float window from closing on split ([#462](https://github.com/stevearc/aerial.nvim/issues/462)) ([a2af699](https://github.com/stevearc/aerial.nvim/commit/a2af699b346c2baabe2ef976f253ba6c842584d8))
+* symbol hierarchy for markdown backend ([#454](https://github.com/stevearc/aerial.nvim/issues/454)) ([9ebc135](https://github.com/stevearc/aerial.nvim/commit/9ebc13583cff447f5493a63e99dfca526b3c3088))
+* vim.treesitter.is_ancestor no longer returns true for identical nodes ([1d3cf8b](https://github.com/stevearc/aerial.nvim/commit/1d3cf8bd8c321b70a9f61e7872c2fca8890fd151))
+
 ## [2.5.0](https://github.com/stevearc/aerial.nvim/compare/v2.4.0...v2.5.0) (2025-02-14)
 
 
