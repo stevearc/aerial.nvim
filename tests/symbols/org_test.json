@@ -1,0 +1,83 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "col": 0,
+            "end_col": 0,
+            "end_lnum": 7,
+            "kind": "Interface",
+            "level": 2,
+            "lnum": 5,
+            "name": "Level3",
+            "selection_range": {
+              "col": 4,
+              "end_col": 10,
+              "end_lnum": 5,
+              "lnum": 5
+            }
+          }
+        ],
+        "col": 0,
+        "end_col": 0,
+        "end_lnum": 7,
+        "kind": "Interface",
+        "level": 1,
+        "lnum": 3,
+        "name": "Level2",
+        "selection_range": {
+          "col": 3,
+          "end_col": 9,
+          "end_lnum": 3,
+          "lnum": 3
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 7,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 1,
+    "name": "Level1",
+    "selection_range": {
+      "col": 2,
+      "end_col": 8,
+      "end_lnum": 1,
+      "lnum": 1
+    }
+  },
+  {
+    "children": [
+      {
+        "col": 0,
+        "end_col": 0,
+        "end_lnum": 14,
+        "kind": "Interface",
+        "level": 1,
+        "lnum": 11,
+        "name": "Level2_2",
+        "selection_range": {
+          "col": 3,
+          "end_col": 11,
+          "end_lnum": 11,
+          "lnum": 11
+        }
+      }
+    ],
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 14,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 7,
+    "name": "Level1_2",
+    "selection_range": {
+      "col": 2,
+      "end_col": 10,
+      "end_lnum": 7,
+      "lnum": 7
+    }
+  }
+]
