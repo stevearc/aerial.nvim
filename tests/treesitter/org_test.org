@@ -1,6 +1,6 @@
 * Level1
 
-** Level2
+** Level2 [[id:b2c99868-6014-4e81-a484-a4a7f7e62128][link]]
 
 *** Level3
 
@@ -11,3 +11,5 @@
 ** Level2_2
 
    paragraph2
+
+* Level1_3 [[id:b2c99868-6014-4e81-a484-a4a7f7e62128][link1]] [[id:b2c99868-6014-4e81-a484-a4a7f7e62128][link2]]

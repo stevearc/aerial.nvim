@@ -25,10 +25,10 @@
         "kind": "Interface",
         "level": 1,
         "lnum": 3,
-        "name": "Level2",
+        "name": "Level2 link",
         "selection_range": {
           "col": 3,
-          "end_col": 9,
+          "end_col": 59,
           "end_lnum": 3,
           "lnum": 3
         }
@@ -53,7 +53,7 @@
       {
         "col": 0,
         "end_col": 0,
-        "end_lnum": 14,
+        "end_lnum": 15,
         "kind": "Interface",
         "level": 1,
         "lnum": 11,
@@ -68,7 +68,7 @@
     ],
     "col": 0,
     "end_col": 0,
-    "end_lnum": 14,
+    "end_lnum": 15,
     "kind": "Interface",
     "level": 0,
     "lnum": 7,
@@ -79,5 +79,21 @@
       "end_lnum": 7,
       "lnum": 7
     }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 16,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 15,
+    "name": "Level1_3 link1 link2",
+    "selection_range": {
+      "col": 2,
+      "end_col": 112,
+      "end_lnum": 15,
+      "lnum": 15 
+    }
   }
+
 ]
