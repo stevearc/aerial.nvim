@@ -24,67 +24,113 @@ M.set_keymaps = function(mode, action_module, keymaps, bufnr, ...)
           _rhs(vim.F.unpack_len(args))
         end
       end
-      vim.keymap.set(mode, k, rhs, vim.tbl_extend("keep", { buffer = bufnr, nowait = true }, opts))
+      vim.keymap.set(mode, k, rhs, { buffer = bufnr, nowait = true, desc = opts.desc })
     end
   end
 end
 
 M.show_help = function(action_module, keymaps)
-  local rhs_to_lhs = {}
-  local lhs_to_all_lhs = {}
-  for k, rhs in pairs(keymaps) do
-    if rhs then
-      if rhs_to_lhs[rhs] then
-        local first_lhs = rhs_to_lhs[rhs]
-        table.insert(lhs_to_all_lhs[first_lhs], k)
-      else
-        rhs_to_lhs[rhs] = k
-        lhs_to_all_lhs[k] = { k }
-      end
+  local actions_by_category = {}
+  for key, action_name in pairs(keymaps) do
+    if not action_name then
+      goto continue
+    end
+
+    -- Resolve a name to an action
+    local _, opts = resolve(action_module, action_name)
+
+    -- Create entry for category if it doesn't exist
+    local category = opts.category or "misc"
+    if not actions_by_category[category] then
+      actions_by_category[category] = {}
+    end
+
+    -- Add action to category
+    if not actions_by_category[category][action_name] then
+      local action_info = {
+        category = category,
+        desc = opts.desc or "",
+        keys = {},
+      }
+
+      actions_by_category[category][action_name] = action_info
+    end
+
+    -- Map the key to the action
+    table.insert(actions_by_category[category][action_name].keys, key)
+
+    ::continue::
+  end
+
+  -- In case of multiple actions with the same key, we sort them alphabetically
+  -- We sort in reverse order, as this makes all the `z` keymaps align nicely
+  for _, actions in pairs(actions_by_category) do
+    for _, action_info in pairs(actions) do
+      table.sort(action_info.keys, function(a, b)
+        return a > b
+      end)
     end
   end
 
-  local col_left = {}
-  local col_desc = {}
-  local max_lhs = 1
-  for k, rhs in pairs(keymaps) do
-    local all_lhs = lhs_to_all_lhs[k]
-    if all_lhs then
-      local _, opts = resolve(action_module, rhs)
-      local keystr = table.concat(all_lhs, "/")
-      max_lhs = math.max(max_lhs, vim.api.nvim_strwidth(keystr))
-      table.insert(col_left, { str = keystr, all_lhs = all_lhs })
-      table.insert(col_desc, opts.desc or "")
+  -- Calculate max width of key combinations
+  local max_key_width = 1
+  for _, actions in pairs(actions_by_category) do
+    for _, action_info in pairs(actions) do
+      local keystr = table.concat(action_info.keys, "/")
+      max_key_width = math.max(max_key_width, vim.api.nvim_strwidth(keystr))
     end
   end
 
+  -- Create display lines
   local lines = {}
   local highlights = {}
-  local max_line = 1
-  for i = 1, #col_left do
-    local left = col_left[i]
-    local desc = col_desc[i]
-    local line = string.format(" %s   %s", util.rpad(left.str, max_lhs), desc)
-    max_line = math.max(max_line, vim.api.nvim_strwidth(line))
-    table.insert(lines, line)
-    local start = 1
-    for _, key in ipairs(left.all_lhs) do
-      local keywidth = vim.api.nvim_strwidth(key)
-      table.insert(highlights, { "Special", #lines, start, start + keywidth })
-      start = start + keywidth + 1
+  local max_line_width = 1
+
+  for category, actions in pairs(actions_by_category) do
+    if next(actions) == nil then
+      goto continue
     end
+
+    if #lines > 0 then
+      table.insert(lines, "")
+    end
+
+    local header = " " .. category:upper()
+    table.insert(lines, header)
+    table.insert(highlights, { "Title", #lines, 1, #header + 1 })
+
+    for action_name, action_info in pairs(actions) do
+      local keystr = table.concat(action_info.keys, "/")
+      local line = string.format("   %s   %s", util.rpad(keystr, max_key_width), action_info.desc)
+      max_line_width = math.max(max_line_width, vim.api.nvim_strwidth(line))
+      table.insert(lines, line)
+
+      local start = 3
+      for _, key in ipairs(action_info.keys) do
+        local keywidth = vim.api.nvim_strwidth(key)
+        table.insert(highlights, { "Special", #lines, start, start + keywidth })
+        start = start + keywidth + 1
+      end
+    end
+
+    ::continue::
   end
 
   local bufnr = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, lines)
+
   local ns = vim.api.nvim_create_namespace("AerialKeymap")
   for _, hl in ipairs(highlights) do
     local hl_group, lnum, start_col, end_col = unpack(hl)
-    vim.api.nvim_buf_set_extmark(bufnr, ns, lnum - 1, start_col, {
-      end_col = end_col,
-      hl_group = hl_group,
-    })
+    local line_text = lines[lnum]
+    if line_text and start_col < #line_text and end_col <= #line_text then
+      vim.api.nvim_buf_set_extmark(bufnr, ns, lnum - 1, start_col, {
+        end_col = end_col,
+        hl_group = hl_group,
+      })
+    end
   end
+
   vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = bufnr, nowait = true })
   vim.keymap.set("n", "<c-c>", "<cmd>close<CR>", { buffer = bufnr })
   vim.bo[bufnr].modifiable = false
@@ -95,18 +141,20 @@ M.show_help = function(action_module, keymaps)
   local winid = vim.api.nvim_open_win(bufnr, true, {
     relative = "editor",
     row = math.max(0, (editor_height - #lines) / 2),
-    col = math.max(0, (editor_width - max_line - 1) / 2),
-    width = math.min(editor_width, max_line + 1),
+    col = math.max(0, (editor_width - max_line_width - 1) / 2),
+    width = math.min(editor_width, max_line_width + 1),
     height = math.min(editor_height, #lines),
     zindex = 150,
     style = "minimal",
     border = "rounded",
   })
+
   local function close()
     if vim.api.nvim_win_is_valid(winid) then
       vim.api.nvim_win_close(winid, true)
     end
   end
+
   vim.api.nvim_create_autocmd("BufLeave", {
     callback = close,
     once = true,
