@@ -23,7 +23,10 @@ M.pick_symbol = function(opts)
     return
   end
 
+  local default_selection_index = 1
+  ---@type aerial.BufData
   local bufdata = data.get_or_create(bufnr)
+  local position = bufdata.positions[bufdata.last_win]
   ---@type snacks.picker.finder.Item[]
   local items = {}
   ---@type table<snacks.picker.finder.Item, snacks.picker.finder.Item>
@@ -46,6 +49,9 @@ M.pick_symbol = function(opts)
       last[parent] = snack_item
       snack_item.last = true
     end
+    if item == position.closest_symbol then
+      default_selection_index = (#items + 1)
+    end
     table.insert(items, snack_item)
   end
 
@@ -67,6 +73,9 @@ M.pick_symbol = function(opts)
       Snacks.picker.highlight.format(item, item.text, ret)
 
       return ret
+    end,
+    on_show = function(picker)
+      picker.list.cursor = default_selection_index
     end,
   }))
 end
