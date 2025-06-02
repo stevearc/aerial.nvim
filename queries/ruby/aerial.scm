@@ -58,14 +58,13 @@
   ] @name
   (#set! "kind" "Module")) @symbol
 
-; For Rspec, Rake, and Shoulda
+; For Rspec and Rake
 (call
   method: (identifier) @method @name
   (#any-of? @method
     "describe" "it" "before" "after" ; Rspec
-     "namespace" "task" "multitask" "file" ; Rake
-     "setup" "teardown" "should" "should_not" "should_eventually" "context")
-  ; Shoulda
+     "namespace" "task" "multitask" "file"; Rake
+    )
   arguments: (argument_list
     [
       (string
@@ -79,4 +78,32 @@
         ])
       (call) @name
     ])?
+  block: (_)
+  (#set! "kind" "Method")) @symbol @selection
+
+; Rake and Shoulda
+(call
+  method: (identifier) @method @name
+  (#any-of? @method "setup" "teardown"; Shoulda
+    )
+  (#set! "kind" "Method")) @symbol @selection
+
+(call
+  method: (identifier) @method @name
+  (#any-of? @method "task" ; Rake
+     "should" "should_not" "should_eventually" "context"; Shoulda
+    )
+  arguments: (argument_list
+    [
+      (string
+        (string_content) @name)
+      (simple_symbol) @name
+      (pair
+        key: [
+          (string
+            (string_content) @name)
+          (hash_key_symbol) @name
+        ])
+      (call) @name
+    ]?)
   (#set! "kind" "Method")) @symbol @selection

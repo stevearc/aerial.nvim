@@ -24,6 +24,7 @@ describe 'UnitTest' do
   after do
   end
   it 'should describe the test' do
+    variable_access.with.before.should.not.be.a.symbol
   end
 end
 

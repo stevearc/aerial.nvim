@@ -9,13 +9,13 @@ local function summarize(received, expected)
   local function summary(symbol)
     return string.format("%s %s", symbol.kind, symbol.name)
   end
-  for _, symbol in ipairs(received) do
+  for _, symbol in ipairs(received or {}) do
     local s = summary(symbol)
     max_len = math.max(max_len, string.len(s))
     table.insert(lines, s)
   end
   lines[1] = lines[1] .. string.rep(" ", max_len - string.len(lines[1]) + 4) .. "EXPECTED"
-  for i, symbol in ipairs(expected) do
+  for i, symbol in ipairs(expected or {}) do
     local j = i + 1
     if lines[j] then
       local padding = string.rep(" ", max_len - string.len(lines[j]))
@@ -95,10 +95,11 @@ M.assert_tree_equals = function(received, expected, path)
     type(expected),
     type(received),
     string.format(
-      "Symbol list mismatch at %s: %s ~= %s",
+      "Symbol list mismatch at %s: %s ~= %s\n%s",
       table.concat(path, "/"),
       type(received),
-      type(expected)
+      type(expected),
+      summarize(received, expected)
     )
   )
   if type(received) ~= "table" then
