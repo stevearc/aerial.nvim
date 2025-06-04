@@ -128,26 +128,23 @@ local function aerial_picker(opts)
       { entry.name, name_hl },
     }
 
-    local highlights = {}
-    if show_columns == "both" then
-      local text = vim.api.nvim_buf_get_lines(bufnr, row, row + 1, false)[1] or ""
-      table.insert(columns, vim.trim(text))
-
-      local leading_spaces = text:match("^%s*")
-      local offset = layout[1].width + layout[2].width - #leading_spaces + #icon
-      if #entry.name > layout[2].width then
-        offset = offset + 2 -- '...' symbol
-      end
-      local col1_len = ext_config.col1_width + icon:len() - vim.api.nvim_strwidth(icon)
-      local col2_len = ext_config.col2_width + entry.name:len() - vim.api.nvim_strwidth(entry.name)
-      highlights = {
-        { { 0, col1_len }, icon_hl },
-        { { col1_len + 1, col1_len + 1 + col2_len + 1 }, name_hl },
-      }
-      vim.list_extend(highlights, highlights_for_row(row, offset))
+    if show_columns == "symbols" then
+      return displayer(columns)
     end
 
-    return displayer(columns), highlights
+    -- default: show_columns == "both"
+    local text = vim.api.nvim_buf_get_lines(bufnr, row, row + 1, false)[1] or ""
+    local trimmed_text = vim.trim(text)
+    table.insert(columns, trimmed_text)
+
+    local display_columns, highlights = displayer(columns)
+
+    local text_start = display_columns:find(trimmed_text, 1, true) or 1
+    local leading_spaces = text:match("^%s*") or ""
+    local offset = text_start - 1 - #leading_spaces
+    vim.list_extend(highlights, highlights_for_row(row, offset))
+
+    return display_columns, highlights
   end
 
   local function make_entry(item)
