@@ -1,5 +1,28 @@
 # Changelog
 
+## [2.6.0](https://github.com/stevearc/aerial.nvim/compare/v2.5.0...v2.6.0) (2025-06-04)
+
+
+### Features
+
+* add treesitter support for R ([#450](https://github.com/stevearc/aerial.nvim/issues/450)) ([fdf9e2e](https://github.com/stevearc/aerial.nvim/commit/fdf9e2e0b9d5e5a0b7861d76ef7cb0a28d345f9b))
+* remove org support since nvim-treesitter dropped support ([a39c9a7](https://github.com/stevearc/aerial.nvim/commit/a39c9a7c49da0e04f35c749cbccdf838fd3ea58a))
+* use async treesitter parsing in nvim 0.11 ([e749260](https://github.com/stevearc/aerial.nvim/commit/e749260729085f7c9250f073f1a71ba5650b4380))
+
+
+### Bug Fixes
+
+* add extra padding to icon in snacks picker ([#447](https://github.com/stevearc/aerial.nvim/issues/447)) ([8c63f41](https://github.com/stevearc/aerial.nvim/commit/8c63f41c13d250faeb3c848b61b06adedac737e5))
+* correctly set `last` property in `snack.picker` integration ([#460](https://github.com/stevearc/aerial.nvim/issues/460)) ([0eb8722](https://github.com/stevearc/aerial.nvim/commit/0eb8722143fb02ab4a6ff2141a604dd9023b9ddd))
+* eliminate deprecated warnings on nightly ([#457](https://github.com/stevearc/aerial.nvim/issues/457)) ([95825c9](https://github.com/stevearc/aerial.nvim/commit/95825c9c07e64ecdba657b20c12bc11ece7b38cb))
+* **latex:** support \chapter and \part as symbols ([#461](https://github.com/stevearc/aerial.nvim/issues/461)) ([2e00d1d](https://github.com/stevearc/aerial.nvim/commit/2e00d1d4248f08dddfceacb8d2996e51e13e00f6))
+* prevent Aerial float window from closing on split ([#462](https://github.com/stevearc/aerial.nvim/issues/462)) ([a2af699](https://github.com/stevearc/aerial.nvim/commit/a2af699b346c2baabe2ef976f253ba6c842584d8))
+* **ruby:** don't detect stray method calls as Rspec or Shoulda blocks ([8933275](https://github.com/stevearc/aerial.nvim/commit/89332755bf2bd94e408fad59e89028c4205dd040))
+* select snacks picker element based on cursor position ([#458](https://github.com/stevearc/aerial.nvim/issues/458)) ([8c89f27](https://github.com/stevearc/aerial.nvim/commit/8c89f27b5792e7691578cf05368a110702e4a1e9))
+* symbol hierarchy for markdown backend ([#454](https://github.com/stevearc/aerial.nvim/issues/454)) ([9ebc135](https://github.com/stevearc/aerial.nvim/commit/9ebc13583cff447f5493a63e99dfca526b3c3088))
+* **telescope:** correct highlight offset computation ([#465](https://github.com/stevearc/aerial.nvim/issues/465)) ([5c0df16](https://github.com/stevearc/aerial.nvim/commit/5c0df1679bf7c814c924dc6646cc5291daca8363))
+* vim.treesitter.is_ancestor no longer returns true for identical nodes ([1d3cf8b](https://github.com/stevearc/aerial.nvim/commit/1d3cf8bd8c321b70a9f61e7872c2fca8890fd151))
+
 ## [2.5.0](https://github.com/stevearc/aerial.nvim/compare/v2.4.0...v2.5.0) (2025-02-14)
 
 
