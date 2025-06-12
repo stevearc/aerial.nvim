@@ -539,6 +539,12 @@ snacks_picker({opts})                                       *aerial.snacks_picke
     Parameters:
       {opts} `nil|snacks.picker.Config`
 
+fzf_lua_picker({opts})                                     *aerial.fzf_lua_picker*
+    Open a document symbol picker using fzf-lua
+
+    Parameters:
+      {opts} `nil|table`
+
 get_location({exact}): aerial.SymbolView[]                   *aerial.get_location*
     Get a list representing the symbol path to the current location.
 
