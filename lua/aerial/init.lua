@@ -365,6 +365,13 @@ M.snacks_picker = function(opts)
   require("aerial.snacks").pick_symbol(opts)
 end
 
+---Open a document symbol picker using fzf-lua
+---@param opts? table
+M.fzf_lua_picker = function(opts)
+  M.sync_load()
+  require("aerial.fzf-lua").pick_symbol(opts)
+end
+
 ---@class aerial.SymbolView : aerial.SymbolBase
 ---@field icon string
 

@@ -12,6 +12,7 @@ A code outline window for skimming and quick navigation
 - [Third-party integrations](#third-party-integrations)
   - [Snacks](#snacks)
   - [Telescope](#telescope)
+  - [fzf-lua](#fzf-lua)
   - [fzf](#fzf)
   - [Lualine](#lualine)
 - [Highlight](#highlight)
@@ -653,6 +654,23 @@ If you want the command to autocomplete, you can load the extension first (this 
 
 ```lua
 require("telescope").load_extension("aerial")
+```
+
+### fzf-lua
+
+If you have [fzf-lua](https://github.com/ibhagwan/fzf-lua/) installed, you can use the picker to find and jump to symbols.
+It supports multi-select and uses the default actions from the `files` picker (e.g. `<C-s>` to open a symbol in a split).
+
+```lua
+require("aerial").fzf_lua_picker()
+```
+
+You can pass in an options table that will get sent to `require('fzf-lua').fzf_exec` directly. Use this to customize the display.
+
+```lua
+require("aerial").fzf_lua_picker({
+  profile = 'ivy',
+})
 ```
 
 ### fzf
