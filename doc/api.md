@@ -20,6 +20,7 @@
 - [next_up(count)](#next_upcount)
 - [prev_up(count)](#prev_upcount)
 - [snacks_picker(opts)](#snacks_pickeropts)
+- [fzf_lua_picker(opts)](#fzf_lua_pickeropts)
 - [get_location(exact)](#get_locationexact)
 - [tree_close_all(bufnr)](#tree_close_allbufnr)
 - [tree_open_all(bufnr)](#tree_open_allbufnr)
@@ -207,6 +208,15 @@ Open a document symbol picker using snacks.nvim
 | Param | Type                        | Desc |
 | ----- | --------------------------- | ---- |
 | opts  | `nil\|snacks.picker.Config` |      |
+
+## fzf_lua_picker(opts)
+
+`fzf_lua_picker(opts)` \
+Open a document symbol picker using fzf-lua
+
+| Param | Type                        | Desc |
+| ----- | --------------------------- | ---- |
+| opts  | `nil\|table`                |      |
 
 ## get_location(exact)
 
