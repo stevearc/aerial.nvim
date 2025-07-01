@@ -149,6 +149,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - fish
 - go
 - groovy
+- haskell
 - help
 - html
 - java
