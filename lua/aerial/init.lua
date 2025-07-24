@@ -163,9 +163,9 @@ local function create_autocmds()
     desc = "Aerial update windows and attach backends",
     pattern = "*",
     group = group,
-    callback = function()
+    callback = function(args)
       do_setup()
-      require("aerial.autocommands").on_enter_buffer()
+      require("aerial.autocommands").on_enter_buffer(args.buf)
     end,
   })
   vim.api.nvim_create_autocmd("LspAttach", {
