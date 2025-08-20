@@ -142,6 +142,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - c
 - c_sharp
 - cpp
+- css
 - dart
 - djot
 - elixir
@@ -151,6 +152,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - groovy
 - help
 - html
+- ini
 - java
 - javascript
 - json
@@ -176,12 +178,14 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - starlark
 - swift
 - teal
+- terraform
 - toml
 - tsx
 - typescript
 - usd
 - vim
 - vimdoc
+- vue
 - xml
 - yaml
 - zig
