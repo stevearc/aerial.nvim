@@ -214,9 +214,9 @@ Open a document symbol picker using snacks.nvim
 `fzf_lua_picker(opts)` \
 Open a document symbol picker using fzf-lua
 
-| Param | Type                        | Desc |
-| ----- | --------------------------- | ---- |
-| opts  | `nil\|table`                |      |
+| Param | Type         | Desc |
+| ----- | ------------ | ---- |
+| opts  | `nil\|table` |      |
 
 ## get_location(exact)
 

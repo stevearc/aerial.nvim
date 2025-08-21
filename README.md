@@ -774,6 +774,7 @@ hi AerialGuide2 guifg=Blue
 - [next_up(count)](doc/api.md#next_upcount)
 - [prev_up(count)](doc/api.md#prev_upcount)
 - [snacks_picker(opts)](doc/api.md#snacks_pickeropts)
+- [fzf_lua_picker(opts)](doc/api.md#fzf_lua_pickeropts)
 - [get_location(exact)](doc/api.md#get_locationexact)
 - [tree_close_all(bufnr)](doc/api.md#tree_close_allbufnr)
 - [tree_open_all(bufnr)](doc/api.md#tree_open_allbufnr)
