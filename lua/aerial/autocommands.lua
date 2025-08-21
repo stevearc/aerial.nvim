@@ -77,7 +77,7 @@ local function update_aerial_windows()
   end
 end
 
-M.on_enter_buffer = util.throttle(function()
+M.on_enter_buffer = util.throttle(function(bufnr)
   local backends = require("aerial.backends")
   local config = require("aerial.config")
   local fold = require("aerial.fold")
@@ -85,7 +85,7 @@ M.on_enter_buffer = util.throttle(function()
   if util.is_ignored_win() then
     return
   end
-  backends.attach()
+  backends.attach(bufnr, true)
 
   local mybuf = vim.api.nvim_get_current_buf()
 
