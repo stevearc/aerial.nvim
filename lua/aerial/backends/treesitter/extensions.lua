@@ -227,6 +227,18 @@ M.rust = {
   end,
 }
 
+M.haskell = {
+  postprocess = function(bufnr, item, match)
+    if item.kind == "Class" then
+      local class_node = node_from_match(match, "class")
+      local type = assert(node_from_match(match, "haskell_type"))
+      local name = get_node_text(type, bufnr) or "<parse error>"
+      local class = get_node_text(class_node, bufnr) or "<parse error>"
+      item.name = string.format("%s %s", class, name)
+    end
+  end,
+}
+
 M.ruby = {
   ---@note Additionally processes the following captures:
   ---      `@method`, `@receiver`, `@separator` - extends the name to "@method @reciever[@separator]@name", with @separator defaulting to "."
