@@ -17,7 +17,7 @@
   {
     "col": 0,
     "end_col": 0,
-    "end_lnum": 6,
+    "end_lnum": 7,
     "kind": "Interface",
     "level": 0,
     "lnum": 4,
@@ -27,6 +27,36 @@
       "end_col": 6,
       "end_lnum": 4,
       "lnum": 4
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 9,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 8,
+    "name": "target1",
+    "selection_range": {
+      "col": 0,
+      "end_col": 7,
+      "end_lnum": 8,
+      "lnum": 8
+    }
+  },
+  {
+    "col": 0,
+    "end_col": 0,
+    "end_lnum": 9,
+    "kind": "Interface",
+    "level": 0,
+    "lnum": 8,
+    "name": "$(target2)",
+    "selection_range": {
+      "col": 8,
+      "end_col": 18,
+      "end_lnum": 8,
+      "lnum": 8
     }
   }
 ]
