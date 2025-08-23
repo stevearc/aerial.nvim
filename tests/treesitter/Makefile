@@ -3,3 +3,6 @@ all: foo bar
 
 out.so:
 	touch out.so
+
+.PHONY: target1
+target1 $(target2): all
