@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.6.1](https://github.com/stevearc/aerial.nvim/compare/v2.6.0...v2.6.1) (2025-08-25)
+
+
+### Bug Fixes
+
+* **c:** remove buggy query pattern ([#481](https://github.com/stevearc/aerial.nvim/issues/481)) ([62a5a31](https://github.com/stevearc/aerial.nvim/commit/62a5a3149b66444a245c052e431c30568ae173e3)), closes [#413](https://github.com/stevearc/aerial.nvim/issues/413)
+* **make:** improve treesitter symbols query ([#479](https://github.com/stevearc/aerial.nvim/issues/479)) ([b7baffb](https://github.com/stevearc/aerial.nvim/commit/b7baffb30af580f342adf6b82aa341942002dbf3))
+* missing `return` in `request` call for Neovim &lt;0.11 ([#482](https://github.com/stevearc/aerial.nvim/issues/482)) ([ad1b4fc](https://github.com/stevearc/aerial.nvim/commit/ad1b4fc4ac6da9cf4bad2534fd66e0e4cfd09787))
+
 ## [2.6.0](https://github.com/stevearc/aerial.nvim/compare/v2.5.0...v2.6.0) (2025-08-21)
 
 
