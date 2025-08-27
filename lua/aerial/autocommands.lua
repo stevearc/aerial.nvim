@@ -142,7 +142,7 @@ M.attach_autocommands = function(bufnr)
       window.update_position(0, 0)
     end,
   })
-  vim.api.nvim_create_autocmd("BufUnload", {
+  vim.api.nvim_create_autocmd("BufWipeout", {
     desc = "Aerial clean up stored data",
     buffer = bufnr,
     group = group,
