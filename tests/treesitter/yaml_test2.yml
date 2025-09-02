@@ -1,0 +1,18 @@
+name: Run tests
+
+jobs:
+  luacheck:
+    name: Luacheck
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare
+        run: |
+          sudo apt-get update
+          sudo add-apt-repository universe
+          sudo apt install luarocks -y
+          sudo luarocks install luacheck
+
+      - name: Run Luacheck
+        run: luacheck lua tests
