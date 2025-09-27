@@ -146,11 +146,13 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - css
 - dart
 - djot
+- editorconfig
 - elixir
 - enforce
 - fish
 - go
 - groovy
+- hcl
 - help
 - html
 - ini
@@ -176,6 +178,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - scala
 - snakemake
 - solidity
+- ssh_config
 - starlark
 - swift
 - teal

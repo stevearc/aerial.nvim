@@ -1,0 +1,15 @@
+AddKeysToAgent yes
+
+Host dev0
+  UserKnownHostsFile ~/.ssh/known_vm_hosts
+  Hostname localhost
+  Port 10022
+
+Host *.foobar.com
+  User ec2-user
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host logerrit gerrit.libreoffice.org
+  Port 29418
+  Hostname gerrit.libreoffice.org
