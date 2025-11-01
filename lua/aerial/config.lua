@@ -599,7 +599,7 @@ local function get_icon_provider()
   local has_lspkind, lspkind = pcall(require, "lspkind")
   if has_lspkind then
     return function(kind)
-      return lspkind.symbolic(kind, { mode = "symbolic " })
+      return lspkind.symbol_map[kind]
     end
   end
 
