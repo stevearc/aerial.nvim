@@ -63,3 +63,13 @@
     (string
       (string_fragment) @name @string))?
   (#set! "kind" "Function")) @symbol
+
+; PageElementWriter.prototype.alignCanvas = function (node) {
+(assignment_expression
+  left: (member_expression
+    object: (member_expression
+      property: (property_identifier) @target
+      (#any-of? @target "prototype"))
+    property: (property_identifier) @name)
+  right: (function_expression)
+  (#set! "kind" "Method")) @symbol

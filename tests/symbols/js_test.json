@@ -289,5 +289,20 @@
       "end_lnum": 26,
       "lnum": 26
     }
+  },
+  {
+    "col": 0,
+    "end_col": 1,
+    "end_lnum": 30,
+    "kind": "Method",
+    "level": 0,
+    "lnum": 28,
+    "name": "alignCanvas",
+    "selection_range": {
+      "col": 28,
+      "end_col": 39,
+      "end_lnum": 28,
+      "lnum": 28
+    }
   }
 ]
