@@ -24,3 +24,7 @@ const fn_3 = function () {};
 
 function* g() {}
 const g_1 = function* () {};
+
+PageElementWriter.prototype.alignCanvas = function (node) {
+  this.writer.alignCanvas(node);
+};
