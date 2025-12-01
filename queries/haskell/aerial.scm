@@ -16,7 +16,7 @@
   name: (name) @name
   (#set! "kind" "Struct")) @start @symbol
 
-(type_synomym
+(type_synonym
   name: (name) @name
   (#set! "kind" "Struct")) @start @symbol
 
