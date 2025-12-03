@@ -51,6 +51,7 @@ function AerialNav.new(bufnr, winid)
     height = 20,
     border = config.nav.border,
     style = "minimal",
+    hide = true,
   })
   local main_buf = create_buf()
   local main_win = vim.api.nvim_open_win(main_buf, true, {
@@ -64,6 +65,7 @@ function AerialNav.new(bufnr, winid)
     border = config.nav.border == "rounded" and "single" or config.nav.border,
     style = "minimal",
     zindex = 51,
+    hide = true,
   })
   local right_buf = create_buf()
   local right_win = vim.api.nvim_open_win(right_buf, false, {
@@ -74,6 +76,7 @@ function AerialNav.new(bufnr, winid)
     height = 20,
     border = config.nav.border,
     style = "minimal",
+    hide = true,
   })
   for _, floatwin in ipairs({ left_win, main_win, right_win }) do
     vim.api.nvim_set_option_value(
@@ -323,6 +326,12 @@ function AerialNav:relayout()
     if k ~= "cursorline" then
       vim.api.nvim_set_option_value(k, v, { scope = "local", win = self.left.winid })
       vim.api.nvim_set_option_value(k, v, { scope = "local", win = self.right.winid })
+    end
+  end
+  -- Show windows after positioning (prevents flash on initial open)
+  for _, win in ipairs({ self.left.winid, self.main.winid, self.right.winid }) do
+    if vim.api.nvim_win_is_valid(win) then
+      vim.api.nvim_win_set_config(win, { hide = false })
     end
   end
 end
