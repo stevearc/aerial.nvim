@@ -2,11 +2,13 @@ local backends = require("aerial.backends")
 local config = require("aerial.config")
 local data = require("aerial.data")
 local highlight = require("aerial.highlight")
+local navigation = require("aerial.navigation")
 local M = {}
 ---@module 'snacks.picker'
 
 ---@param opts? snacks.picker.Config
 M.pick_symbol = function(opts)
+  local winid = vim.api.nvim_get_current_win()
   local bufnr = vim.api.nvim_get_current_buf()
   local filename = vim.api.nvim_buf_get_name(bufnr)
   local backend = backends.get()
@@ -49,7 +51,7 @@ M.pick_symbol = function(opts)
       last[parent] = snack_item
       snack_item.last = true
     end
-    if item == position.closest_symbol then
+    if position and item == position.closest_symbol then
       default_selection_index = (#items + 1)
     end
     table.insert(items, snack_item)
@@ -60,6 +62,12 @@ M.pick_symbol = function(opts)
     items = items,
     sort = {
       fields = { "idx" },
+    },
+    actions = {
+      confirm = function(picker, item)
+        picker:close()
+        navigation.select_symbol(item.item, winid, bufnr, { jump = true })
+      end,
     },
     format = function(item, picker)
       ---@type aerial.Symbol
