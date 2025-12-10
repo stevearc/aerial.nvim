@@ -3,6 +3,7 @@ local config = require("aerial.config")
 local data = require("aerial.data")
 local highlight = require("aerial.highlight")
 local navigation = require("aerial.navigation")
+
 local M = {}
 ---@module 'snacks.picker'
 
