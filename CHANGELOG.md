@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/stevearc/aerial.nvim/compare/v2.7.0...v3.0.0) (2025-12-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* set minimum nvim version to 0.11
+
+### cleanup
+
+* set minimum nvim version to 0.11 ([3a25e92](https://github.com/stevearc/aerial.nvim/commit/3a25e92a4bb9e63f32603186558ec10ba1f05255))
+
 ## [2.7.0](https://github.com/stevearc/aerial.nvim/compare/v2.6.1...v2.7.0) (2025-11-25)
 
 
