@@ -24,10 +24,6 @@ end
 
 describe("treesitter", function()
   local skip_tests = {}
-  if vim.fn.has("nvim-0.11") == 0 then
-    -- ABI version mismatch
-    table.insert(skip_tests, "enforce_test.c")
-  end
 
   for _, filename in ipairs(list_files("tests/treesitter")) do
     if vim.tbl_contains(skip_tests, filename) then

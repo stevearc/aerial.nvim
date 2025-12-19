@@ -246,12 +246,10 @@ function AerialNav:focus_symbol(symbol)
 
   render_symbols(self.left)
   -- Highlight the parent line
-  if vim.fn.has("nvim-0.10") == 1 then
-    local ns = vim.api.nvim_create_namespace("aerial")
-    vim.api.nvim_buf_set_extmark(self.left.bufnr, ns, parent_lnum - 1, 0, {
-      line_hl_group = "AerialLineNC",
-    })
-  end
+  local ns = vim.api.nvim_create_namespace("aerial")
+  vim.api.nvim_buf_set_extmark(self.left.bufnr, ns, parent_lnum - 1, 0, {
+    line_hl_group = "AerialLineNC",
+  })
 
   render_symbols(self.main)
   if config.nav.preview and vim.tbl_isempty(self.right.symbols) then
