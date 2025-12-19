@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - stevearc-ci
   pull_request:
     branches:
       - master
@@ -59,14 +60,13 @@ jobs:
       NVIM_TAG: ${{ matrix.nvim_tag }}
     steps:
       - uses: actions/checkout@v4
+      - uses: tree-sitter/setup-action@v2
+        with:
+          install-lib: false
 
       - name: Install Neovim and dependencies
         run: |
           bash ./.github/workflows/install_nvim.sh
-
-      - name: Install tree-sitter CLI
-        run: |
-          npm install -g tree-sitter-cli
 
       - name: Run tests
         run: |

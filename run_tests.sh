@@ -1,24 +1,24 @@
 #!/bin/bash
 set -e
 
-NVIM_TREESITTER_BRANCH='master'
+NVIM_TREESITTER_BRANCH='main'
 
 for arg in "$@"; do
   shift
   case "$arg" in
-    '--update')
-      export UPDATE_SYMBOLS=1
-      if ! command -v jq >/dev/null; then
-        echo "jq is required for --update. Please install jq"
-        exit 1
-      fi
-      ;;
-    '--test-main')
-      NVIM_TREESITTER_BRANCH='main'
-      ;;
-    *)
-      set -- "$@" "$arg"
-      ;;
+  '--update')
+    export UPDATE_SYMBOLS=1
+    if ! command -v jq >/dev/null; then
+      echo "jq is required for --update. Please install jq"
+      exit 1
+    fi
+    ;;
+  '--test-master')
+    NVIM_TREESITTER_BRANCH='master'
+    ;;
+  *)
+    set -- "$@" "$arg"
+    ;;
   esac
 done
 
