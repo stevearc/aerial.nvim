@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.7.0](https://github.com/stevearc/aerial.nvim/compare/v2.6.1...v2.7.0) (2025-11-25)
+
+
+### Features
+
+* support javascript prototype-attached fns ([#495](https://github.com/stevearc/aerial.nvim/issues/495)) ([8bb8697](https://github.com/stevearc/aerial.nvim/commit/8bb8697d180681746da41bef5c8691d04443af36))
+* treesitter queries for editorconfig, hcl, ssh_config ([#484](https://github.com/stevearc/aerial.nvim/issues/484)) ([99a5fb8](https://github.com/stevearc/aerial.nvim/commit/99a5fb8f0694c1565c673bcfe14198ff69b0c835))
+* **yaml:** treesitter name array elements symbol based upon "name" key ([#485](https://github.com/stevearc/aerial.nvim/issues/485)) ([5e687b5](https://github.com/stevearc/aerial.nvim/commit/5e687b5a14004fa2dd9eccbee042b96869fe1557))
+
+
+### Bug Fixes
+
+* wait until buffer wipeout to clean up data ([#476](https://github.com/stevearc/aerial.nvim/issues/476)) ([c7cbbad](https://github.com/stevearc/aerial.nvim/commit/c7cbbad40c2065fccfd1f1863bb2c08180c0533d))
+
 ## [2.6.1](https://github.com/stevearc/aerial.nvim/compare/v2.6.0...v2.6.1) (2025-08-25)
 
 
