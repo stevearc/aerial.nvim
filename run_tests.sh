@@ -35,9 +35,14 @@ fi
 if [ ! -e "$PLUGINS/nvim-treesitter" ]; then
   git clone --depth=1 --no-single-branch https://github.com/nvim-treesitter/nvim-treesitter.git "$PLUGINS/nvim-treesitter"
 fi
+if [ ! -e "$PLUGINS/orgmode" ]; then
+  # Provides the `org` treesitter grammar
+  git clone --depth=1 --no-single-branch https://github.com/nvim-orgmode/orgmode "$PLUGINS/orgmode"
+fi
 
 (cd "$PLUGINS/plenary.nvim" && git pull)
 (cd "$PLUGINS/nvim-treesitter" && git checkout ${NVIM_TREESITTER_BRANCH} && git pull)
+(cd "$PLUGINS/orgmode" && git pull)
 
 export XDG_CONFIG_HOME=".testenv/config"
 export XDG_DATA_HOME=".testenv/data"
