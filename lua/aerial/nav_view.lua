@@ -379,6 +379,7 @@ M.open = function()
       _active_nav:focus_symbol(pos.closest_symbol)
     end
   end
+  _active_nav:relayout()
 end
 
 M.toggle = function()
