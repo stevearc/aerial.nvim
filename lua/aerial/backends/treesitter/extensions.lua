@@ -316,8 +316,8 @@ end
 M.c = {
   postprocess = c_postprocess,
 }
-M.cpp = {
-  postprocess = function(bufnr, item, match)
+
+local function cpp_postprocess(bufnr, item, match)
     if item.kind ~= "Function" then
       return
     end
@@ -331,7 +331,14 @@ M.cpp = {
         item[k] = v
       end
     end
-  end,
+end
+
+M.cpp = {
+  postprocess = cpp_postprocess,
+}
+
+M.cuda = {
+  postprocess = cpp_postprocess,
 }
 
 M.rst = {

@@ -144,6 +144,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - c_sharp
 - cpp
 - css
+- cuda
 - dart
 - djot
 - editorconfig
