@@ -5,7 +5,7 @@ describe("asciidoc", function()
     util.test_file_symbols(
       "asciidoc",
       "./tests/static/asciidoc_test.adoc",
-      "./tests/symbols/asciidoc_backend.json"
+      "./tests/symbols/asciidoc_backend.snapshot"
     )
   end)
 end)

@@ -1,0 +1,8 @@
+Constant enableProguardInReleaseBuilds|4:0-4:41 (4:4-4:33)
+Module plugins|6:0-8:1 (6:0-6:7)
+Constant magicNumber|10:0-10:27 (10:4-10:15)
+Module android|12:0-20:1 (12:0-12:7)
+  Module compileOptions|16:4-19:5 (16:4-16:18)
+Module dependencies|22:0-26:1 (22:0-22:12)
+Module welcome|28:5-32:1 (28:5-28:12)
+  Module doLast|29:4-31:5 (29:4-29:10)

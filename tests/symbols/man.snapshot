@@ -1,0 +1,7 @@
+Interface NAME|3:0-5:0
+Interface SYNOPSIS|6:0-9:0
+Interface DESCRIPTION|10:0-29:0
+  Interface -4      Forces nc to use IPv4 addresses only.|24:5-24:50
+  Interface -6      Forces nc to use IPv6 addresses only.|26:5-26:50
+  Interface -A      Set SO_RECV_ANYIF on socket.|28:5-28:41
+Interface CLIENT/SERVER MODEL|30:0-42:11

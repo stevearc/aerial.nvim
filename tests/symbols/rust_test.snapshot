@@ -1,0 +1,11 @@
+Module mod_1|1:0-22:1 (1:4-1:9)
+  Enum Enum_1|2:4-2:18 (2:9-2:15)
+  Function Fn_1|4:4-4:16 (4:7-4:11)
+  Struct MyStruct|6:4-6:22 (6:11-6:19)
+  Interface MyTrait|8:4-10:5 (8:10-8:17)
+    Function TraitFn|9:8-9:21 (9:11-9:18)
+  Class MyStruct|12:4-14:5
+    Function StructFn|13:8-13:24 (13:11-13:19)
+  Class MyStruct > Display|16:4-20:5
+    Function fmt|17:8-19:9 (17:11-17:14)
+  Class MyStruct > GenericTrait|21:4-21:43

@@ -1,0 +1,4 @@
+Interface dev0|3:5-3:9 (3:5-3:9)
+Interface *.foobar.com|8:5-8:17 (8:5-8:17)
+Interface logerrit|13:5-13:13 (13:5-13:13)
+Interface gerrit.libreoffice.org|13:14-13:36 (13:14-13:36)

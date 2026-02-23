@@ -1,0 +1,5 @@
+Function myFunc|1:0-3:1 (1:3-1:9)
+Struct MyStruct|5:0-7:2 (5:6-5:14)
+Struct MyTaggedUnion|9:0-9:55 (9:6-9:19)
+Function test my test|11:0-13:1 (11:6-11:13)
+Function test ident_test|15:0-17:1 (15:5-15:15)

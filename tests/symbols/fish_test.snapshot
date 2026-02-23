@@ -1,0 +1,5 @@
+Function foo|3:0-8:3 (3:9-3:12)
+  Function bar|4:4-7:7 (4:13-4:16)
+    Function baz|5:8-6:11 (5:17-5:20)
+Function foo1|10:0-11:3 (10:9-10:13)
+Function foo2|13:0-14:3 (13:9-13:13)
