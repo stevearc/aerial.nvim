@@ -316,22 +316,29 @@ end
 M.c = {
   postprocess = c_postprocess,
 }
+
+local function cpp_postprocess(bufnr, item, match)
+  if item.kind ~= "Function" then
+    return
+  end
+  local parent = node_from_match(match, "symbol")
+  local stop_types = { "function_definition", "declaration", "field_declaration" }
+  while parent and not vim.tbl_contains(stop_types, parent:type()) do
+    parent = parent:parent()
+  end
+  if parent then
+    for k, v in pairs(helpers.range_from_nodes(parent, parent)) do
+      item[k] = v
+    end
+  end
+end
+
 M.cpp = {
-  postprocess = function(bufnr, item, match)
-    if item.kind ~= "Function" then
-      return
-    end
-    local parent = node_from_match(match, "symbol")
-    local stop_types = { "function_definition", "declaration", "field_declaration" }
-    while parent and not vim.tbl_contains(stop_types, parent:type()) do
-      parent = parent:parent()
-    end
-    if parent then
-      for k, v in pairs(helpers.range_from_nodes(parent, parent)) do
-        item[k] = v
-      end
-    end
-  end,
+  postprocess = cpp_postprocess,
+}
+
+M.cuda = {
+  postprocess = cpp_postprocess,
 }
 
 M.rst = {
