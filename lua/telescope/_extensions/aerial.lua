@@ -83,11 +83,13 @@ local function aerial_picker(opts)
     local highlights = {}
     local query = vim.treesitter.query.get(lang, "highlights")
     if query then
-      for _, captures, _ in query:iter_matches(root, bufnr, 0, -1, { all = false }) do
-        for id, node in pairs(captures) do
-          local start_row, start_col, _, end_col = node:range()
-          highlights[start_row] = highlights[start_row] or {}
-          table.insert(highlights[start_row], { start_col, end_col, query.captures[id] })
+      for _, captures, _ in query:iter_matches(root, bufnr, 0, -1) do
+        for id, nodes in pairs(captures) do
+          for _, node in ipairs(nodes) do
+            local start_row, start_col, _, end_col = node:range()
+            highlights[start_row] = highlights[start_row] or {}
+            table.insert(highlights[start_row], { start_col, end_col, query.captures[id] })
+          end
         end
       end
     end
