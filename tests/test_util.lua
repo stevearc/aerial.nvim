@@ -3,52 +3,72 @@ local config = require("aerial.config")
 local data = require("aerial.data")
 local M = {}
 
-local function summarize(received, expected)
-  local lines = { "RECEIVED" }
-  local max_len = 8
-  local function summary(symbol)
-    return string.format("%s %s", symbol.kind, symbol.name)
+---@param symbol aerial.Symbol
+---@return string
+local function serialize_symbol(symbol)
+  local pieces = { string.rep("  ", symbol.level) }
+  if symbol.scope then
+    vim.list_extend(pieces, { symbol.scope, " " })
   end
-  for _, symbol in ipairs(received or {}) do
-    local s = summary(symbol)
-    max_len = math.max(max_len, string.len(s))
-    table.insert(lines, s)
-  end
-  lines[1] = lines[1] .. string.rep(" ", max_len - string.len(lines[1]) + 4) .. "EXPECTED"
-  for i, symbol in ipairs(expected or {}) do
-    local j = i + 1
-    if lines[j] then
-      local padding = string.rep(" ", max_len - string.len(lines[j]))
-      lines[j] = lines[j] .. padding .. " <> " .. summary(symbol)
-    else
-      lines[j] = string.rep(" ", max_len) .. " <> " .. summary(symbol)
+  vim.list_extend(
+    pieces,
+    { symbol.kind, " ", symbol.name, "|", tostring(symbol.lnum), ":", tostring(symbol.col) }
+  )
+  if symbol.end_lnum then
+    vim.list_extend(pieces, { "-", tostring(symbol.end_lnum) })
+    if symbol.end_col then
+      vim.list_extend(pieces, { ":", tostring(symbol.end_col) })
     end
   end
-  return table.concat(lines, "\n")
+  local rng = symbol.selection_range
+  if rng then
+    vim.list_extend(
+      pieces,
+      { " (", rng.lnum, ":", rng.col, "-", rng.end_lnum, ":", rng.end_col, ")" }
+    )
+  end
+
+  return table.concat(pieces, "")
 end
 
-local allowed_fields = {
-  "kind",
-  "name",
-  "level",
-  "lnum",
-  "col",
-  "end_lnum",
-  "end_col",
-  "scope",
-  "selection_range",
-}
-local function sanitize_symbols(symbols)
-  for _, item in ipairs(symbols) do
-    for k, _ in pairs(item) do
-      if k == "children" then
-        sanitize_symbols(item[k])
-      elseif not vim.tbl_contains(allowed_fields, k) then
-        item[k] = nil
-      end
+---@param symbols table
+---@param lines? string[]
+---@return string[]
+local function serialize_symbols(symbols, lines)
+  if not lines then
+    lines = {}
+  end
+  for _, symbol in ipairs(symbols) do
+    table.insert(lines, serialize_symbol(symbol))
+    serialize_symbols(symbol.children or {}, lines)
+  end
+  return lines
+end
+
+---@param expected string
+---@param received string
+local function format_mismatch(expected, received)
+  local expected_lines = vim.split(expected, "\n")
+  local received_lines = vim.split(received, "\n")
+  local max_width = 1
+  for _, line in ipairs(expected_lines) do
+    local width = vim.api.nvim_strwidth(line)
+    if width > max_width then
+      max_width = width
     end
   end
-  return symbols
+
+  local ret = {}
+  for i = 1, math.max(#expected_lines, #received_lines) do
+    local l1 = expected_lines[i] or ""
+    local l2 = received_lines[i] or ""
+    local sep = " < > "
+    if l1 ~= l2 then
+      sep = " </> "
+    end
+    table.insert(ret, l1 .. string.rep(" ", max_width - vim.api.nvim_strwidth(l1)) .. sep .. l2)
+  end
+  return table.concat(ret, "\n")
 end
 
 ---@param backend_name string
@@ -72,69 +92,20 @@ M.test_file_symbols = function(backend_name, filename, symbols_file)
   backend.fetch_symbols_sync()
   local items = data.get_or_create(0).items
   vim.api.nvim_buf_delete(0, { force = true })
+  local serialized = table.concat(serialize_symbols(items), "\n")
   if vim.fn.filereadable(symbols_file) == 0 or vim.env.UPDATE_SYMBOLS then
-    local content = sanitize_symbols(vim.deepcopy(items))
-    local formatted_json = vim.fn.system("jq --sort-keys", vim.json.encode(content))
     local fd = assert(vim.loop.fs_open(symbols_file, "w", 420)) -- 0644
-    vim.loop.fs_write(fd, formatted_json)
+    vim.loop.fs_write(fd, serialized)
     vim.loop.fs_close(fd)
     print("Updated " .. symbols_file)
   else
     local fd = assert(vim.loop.fs_open(symbols_file, "r", 420)) -- 0644
     local stat = assert(vim.loop.fs_fstat(fd))
-    local content = assert(vim.loop.fs_read(fd, stat.size))
+    local snapshot = assert(vim.loop.fs_read(fd, stat.size))
     vim.loop.fs_close(fd)
-    local expected = vim.json.decode(content)
-    M.assert_tree_equals(items, expected)
-  end
-end
-
-M.assert_tree_equals = function(received, expected, path)
-  path = path or {}
-  assert.equals(
-    type(expected),
-    type(received),
-    string.format(
-      "Symbol list mismatch at %s: %s ~= %s\n%s",
-      table.concat(path, "/"),
-      type(received),
-      type(expected),
-      summarize(received, expected)
-    )
-  )
-  if type(received) ~= "table" then
-    return
-  end
-  assert.equals(
-    #expected,
-    #received,
-    string.format(
-      "Number of symbols at '/%s' do not match %d ~= %d\n%s",
-      table.concat(path, "/"),
-      #received,
-      #expected,
-      summarize(received, expected)
-    )
-  )
-  for i, child in ipairs(received) do
-    local exp_child = expected[i]
-    local lines = { "Symbol mismatch: {" }
-    for _, field in ipairs(allowed_fields) do
-      local s_field = string.rep(" ", 17 - string.len(field)) .. field
-      local line = string.format("%s = %s", s_field, vim.inspect(exp_child[field]))
-      if not vim.deep_equal(child[field], exp_child[field]) then
-        line = line .. string.format("  [%s]", vim.inspect(child[field]))
-      end
-      table.insert(lines, line)
+    if serialized ~= snapshot then
+      assert(serialized == snapshot, "Symbols mismatch\n" .. format_mismatch(snapshot, serialized))
     end
-    table.insert(lines, "}")
-    local err_msg = table.concat(lines, "\n")
-    for _, field in ipairs(allowed_fields) do
-      assert.same(exp_child[field], child[field], err_msg)
-    end
-    table.insert(path, exp_child.name)
-    M.assert_tree_equals(child.children, exp_child.children, path)
-    table.remove(path, #path)
   end
 end
 

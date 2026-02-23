@@ -1,0 +1,6 @@
+Interface core|1:0-4:0 (1:1-1:5)
+Interface libinput|5:0-7:0 (5:1-5:9)
+Interface shell|8:0-13:0 (8:1-8:6)
+Interface keyboard|14:0-17:0 (14:1-14:9)
+Interface launcher|18:0-21:0 (18:1-18:9)
+Interface launcher|22:0-25:0 (22:1-22:9)

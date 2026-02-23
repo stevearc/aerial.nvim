@@ -1,0 +1,7 @@
+Function fn_1|1:0-3:3 (1:15-1:19)
+Function fn_2|5:0-7:3 (5:6-5:10)
+Function fn_3|11:0-11:23 (11:2-11:6)
+Function M.launch|13:0-15:3 (13:9-13:17)
+Function M.wrap|17:0-21:3 (17:9-17:15)
+Function Point.new|28:0-33:3 (28:9-28:18)
+Function Point:move|35:0-38:3 (35:9-35:19)
