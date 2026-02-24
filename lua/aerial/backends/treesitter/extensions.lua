@@ -411,6 +411,12 @@ M.zig = {
   end,
 }
 
+M.org = {
+  postprocess = function(bufnr, item, match)
+    item.name = item.name:gsub("%[%[.-]%[(.-)%]%]", "%1")
+  end,
+}
+
 for _, lang in pairs(M) do
   setmetatable(lang, { __index = default_methods })
 end
