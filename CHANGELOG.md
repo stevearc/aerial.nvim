@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.1.0](https://github.com/stevearc/aerial.nvim/compare/v3.0.0...v3.1.0) (2026-02-25)
+
+
+### Features
+
+* **cuda:** add treesitter support ([#508](https://github.com/stevearc/aerial.nvim/issues/508)) ([999579f](https://github.com/stevearc/aerial.nvim/commit/999579f35ecf079a35870cb5d23b6192dce22648))
+* SQL treesitter outline query ([#505](https://github.com/stevearc/aerial.nvim/issues/505)) ([ae96c75](https://github.com/stevearc/aerial.nvim/commit/ae96c752d035bf6535ac133aa127e9f284c44693))
+
+
+### Bug Fixes
+
+* eliminate flash when opening nav view ([#497](https://github.com/stevearc/aerial.nvim/issues/497)) ([da0ceef](https://github.com/stevearc/aerial.nvim/commit/da0ceef62eb58b9bec1975017beb2f28c3b1e72c))
+* Missing end_col value in asciidoc backend causes error ([#510](https://github.com/stevearc/aerial.nvim/issues/510)) ([3b8d9a3](https://github.com/stevearc/aerial.nvim/commit/3b8d9a340b99f8e458ad8b689d69adc346472631))
+* **queries:** update editorconfig for new upstream parser ([#509](https://github.com/stevearc/aerial.nvim/issues/509)) ([5cda469](https://github.com/stevearc/aerial.nvim/commit/5cda4694875088781fef8f95a3790bfb37bcd27c))
+* remove use of deprecated iter_matches({all = false}) ([f93dcee](https://github.com/stevearc/aerial.nvim/commit/f93dceed41e2f926074944fdf94c93c747bb7d19))
+
 ## [3.0.0](https://github.com/stevearc/aerial.nvim/compare/v2.7.0...v3.0.0) (2025-12-19)
 
 
