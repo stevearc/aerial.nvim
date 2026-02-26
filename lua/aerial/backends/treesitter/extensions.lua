@@ -411,6 +411,25 @@ M.zig = {
   end,
 }
 
+M.fennel = {
+  postprocess = function(bufnr, item, match)
+    local node = node_from_match(match, "symbol")
+    local full_form = get_node_text(node, bufnr)
+
+    if item.kind == "Function" then
+      local name = string.match(full_form, "[λ fn lambda macro] (%S+) %[")
+      item.name = name ~= nil and name or "<Anonymous>"
+    elseif item.kind == "Class" or item.kind == "Struct" then
+      local kind = (item.kind == "Class") and "local" or "var"
+      local query = kind .. " (%S+)"
+      local name = string.match(full_form, query) or "<parse error>"
+      item.name = name
+    else
+      item.name = "<parse error>"
+    end
+  end,
+}
+
 for _, lang in pairs(M) do
   setmetatable(lang, { __index = default_methods })
 end
