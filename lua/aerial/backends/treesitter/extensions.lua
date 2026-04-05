@@ -110,7 +110,10 @@ M.elixir = {
 
 M.markdown = {
   get_parent = function(stack, match, node)
-    local level_node = assert(node_from_match(match, "level"))
+    local level_node = node_from_match(match, "level")
+    if not level_node or not level_node.type then
+      return nil, nil, 0
+    end
     -- Parse the level out of e.g. atx_h1_marker
     local level = tonumber(string.match(level_node:type(), "%d")) - 1
     for i = #stack, 1, -1 do

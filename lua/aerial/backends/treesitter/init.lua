@@ -65,6 +65,10 @@ local function set_symbols_from_treesitter(bufnr, lang, query, syntax_tree)
     for id, nodes in pairs(matches) do
       -- preserve the old iter_matches({all = false}) behavior
       local node = nodes[#nodes]
+      -- Skip invalid nodes that lack expected TSNode methods
+      if type(node) ~= "userdata" then
+        goto next_capture
+      end
       -- iter_group_results prefers `#set!` metadata, keeping the behaviour
       match = vim.tbl_extend("keep", match, {
         [query.captures[id]] = {
@@ -72,12 +76,13 @@ local function set_symbols_from_treesitter(bufnr, lang, query, syntax_tree)
           node = node,
         },
       })
+      ::next_capture::
     end
 
     local name_match = match.name or {}
     local selection_match = match.selection or {}
     local symbol_node = (match.symbol or match.type or {}).node
-    if not symbol_node then
+    if not symbol_node or type(symbol_node) ~= "userdata" then
       goto continue
     end
     -- The location capture groups are optional. We default to the
