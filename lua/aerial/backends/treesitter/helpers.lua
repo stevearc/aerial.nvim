@@ -10,6 +10,12 @@ end
 ---@param end_node TSNode
 ---@return aerial.Range
 M.range_from_nodes = function(start_node, end_node)
+  if not start_node or type(start_node) ~= "userdata" then
+    return { lnum = 1, end_lnum = 1, col = 0, end_col = 0 }
+  end
+  if not end_node or type(end_node) ~= "userdata" then
+    end_node = start_node
+  end
   local row, col = start_node:start()
   local end_row, end_col = end_node:end_()
   return {
