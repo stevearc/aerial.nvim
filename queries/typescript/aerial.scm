@@ -29,7 +29,7 @@
 
 (type_alias_declaration
   name: (type_identifier) @name
-  (#set! "kind" "Variable")) @symbol
+  (#set! "kind" "Interface")) @symbol
 
 (lexical_declaration
   (variable_declarator
