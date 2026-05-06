@@ -180,7 +180,7 @@ M.help = {
     local node = match.name.node
     if vim.startswith(node_from_match(match, "symbol"):type(), "h") then
       while node and node:type() == "word" do
-        local row, col = node:start()
+        local row, col = node:range()
         table.insert(pieces, 1, get_node_text(node, bufnr))
         node = node:prev_sibling()
         item.lnum = row + 1

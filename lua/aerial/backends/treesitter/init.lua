@@ -64,12 +64,12 @@ local function set_symbols_from_treesitter(bufnr, lang, query, syntax_tree)
     --       }
     --- Matches can overlap. The last match wins.
     local match = vim.tbl_extend("force", {}, metadata)
-    for id, node in pairs(matches) do
+    for id, nodes in pairs(matches) do
       -- iter_group_results prefers `#set!` metadata, keeping the behaviour
       match = vim.tbl_extend("keep", match, {
         [query.captures[id]] = {
           metadata = metadata[id],
-          node = node,
+          node = nodes[1],
         },
       })
     end

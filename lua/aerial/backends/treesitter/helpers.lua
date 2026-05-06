@@ -10,8 +10,8 @@ end
 ---@param end_node TSNode
 ---@return aerial.Range
 M.range_from_nodes = function(start_node, end_node)
-  local row, col = start_node:start()
-  local end_row, end_col = end_node:end_()
+  local row, col = start_node:range()
+  local _, _, end_row, end_col = end_node:range()
   return {
     lnum = row + 1,
     end_lnum = end_row + 1,
