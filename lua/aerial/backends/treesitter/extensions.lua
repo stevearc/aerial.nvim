@@ -138,6 +138,24 @@ M.markdown = {
   end,
 }
 
+M.typst = {
+  get_parent = function(stack, match, node)
+    local level = tonumber(match.level)
+    assert(level, "Missing 'level' metadata in typst query")
+    for i = #stack, 1, -1 do
+      if stack[i].item.level < level or stack[i].node == node then
+        return stack[i].item, stack[i].node, level
+      else
+        table.remove(stack, i)
+      end
+    end
+    return nil, nil, level
+  end,
+  postprocess_symbols = function(bufnr, items)
+    set_end_range(bufnr, items)
+  end,
+}
+
 M.go = {
   ---@note Additionally processes the following captures:
   ---      `@receiver` - extends the name to "@receiver @name"
