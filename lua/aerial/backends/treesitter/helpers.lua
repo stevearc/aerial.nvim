@@ -39,7 +39,25 @@ end
 ---@note caches queries to avoid filesystem hits on neovim 0.9+
 M.get_query = function(lang)
   if not query_cache[lang] then
-    query_cache[lang] = { query = vim.treesitter.query.get(lang, "aerial") }
+    -- pcall: a query file that references node types not present in the
+    -- installed grammar raises here. Without this, aerial crashes every
+    -- time the user opens a file in that language (see #506: SQL aerial.scm
+    -- references `create_policy` which is missing from older
+    -- tree-sitter-sql). Treat parse failure the same as "no query for this
+    -- language" so callers fall back gracefully.
+    local ok, query_or_err = pcall(vim.treesitter.query.get, lang, "aerial")
+    if not ok then
+      vim.notify(
+        ("aerial: failed to load treesitter query for %s, treating as unsupported. %s"):format(
+          lang,
+          tostring(query_or_err)
+        ),
+        vim.log.levels.WARN,
+        { title = "aerial.nvim" }
+      )
+      query_or_err = nil
+    end
+    query_cache[lang] = { query = query_or_err }
   end
 
   return query_cache[lang].query
