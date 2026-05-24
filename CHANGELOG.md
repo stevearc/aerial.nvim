@@ -1,5 +1,28 @@
 # Changelog
 
+## [4.0.0](https://github.com/stevearc/aerial.nvim/compare/v3.1.0...v4.0.0) (2026-05-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop support for nvim <0.12 to match nvim-treesitter
+
+### Features
+
+* **elm:** treesitter support ([#511](https://github.com/stevearc/aerial.nvim/issues/511)) ([43dd88a](https://github.com/stevearc/aerial.nvim/commit/43dd88ad4024b1945906887521057c73d3b0d84e))
+
+
+### Bug Fixes
+
+* skip djot test for now ([3ab0a95](https://github.com/stevearc/aerial.nvim/commit/3ab0a95afc6d3750b01b41baac7c8d71b14082a5))
+* update dart test snapshot ([c4a8639](https://github.com/stevearc/aerial.nvim/commit/c4a863971f3d891d55acb03c818273cefa22e24b))
+* use node:range() instead of deprecated node:start() ([#513](https://github.com/stevearc/aerial.nvim/issues/513)) ([68ef6d0](https://github.com/stevearc/aerial.nvim/commit/68ef6d0da8ba9ee43bb5f432d38c1b2b7ff13917))
+
+
+### Code Refactoring
+
+* drop support for nvim &lt;0.12 to match nvim-treesitter ([dd80db7](https://github.com/stevearc/aerial.nvim/commit/dd80db758bcb1edc84f27456ab79bbfef479fe30))
+
 ## [3.1.0](https://github.com/stevearc/aerial.nvim/compare/v3.0.0...v3.1.0) (2026-02-25)
 
 
