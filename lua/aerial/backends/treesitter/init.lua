@@ -19,8 +19,9 @@ M.is_supported = function(bufnr)
   if not helpers.has_parser(lang) then
     return false, string.format("No treesitter parser for %s", lang)
   end
-  if helpers.get_query(lang) == nil then
-    return false, string.format("No queries defined for '%s'", lang)
+  local query, err = helpers.get_query(lang)
+  if not query then
+    return false, err or string.format("No queries defined for '%s'", lang)
   end
   return true, nil
 end
