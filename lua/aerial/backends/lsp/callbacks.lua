@@ -55,8 +55,8 @@ local function process_symbols(symbols, bufnr, fix_start_col, client_name)
       end
       local include_item = range and include_kind[kind]
 
-      -- Check symbol.name because some LSP servers return a nil name
-      if include_item and symbol.name then
+      -- Check symbol.name because some LSP servers return a nil or non-string name
+      if include_item and type(symbol.name) == "string" then
         local name = symbol.name
         -- Some LSP servers return multiline symbols with newlines
         local nl = string.find(symbol.name, "\n")
