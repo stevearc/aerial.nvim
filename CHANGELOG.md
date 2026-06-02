@@ -1,5 +1,22 @@
 # Changelog
 
+## [4.1.0](https://github.com/stevearc/aerial.nvim/compare/v4.0.0...v4.1.0) (2026-06-02)
+
+
+### Features
+
+* Add puppet lang support ([#521](https://github.com/stevearc/aerial.nvim/issues/521)) ([b77c47c](https://github.com/stevearc/aerial.nvim/commit/b77c47c34e11ef9102a3f6dbd12f6b835b7c3af1))
+* add systemverilog and vhdl ([#523](https://github.com/stevearc/aerial.nvim/issues/523)) ([5f18f54](https://github.com/stevearc/aerial.nvim/commit/5f18f54a078f03bdda88c30339233faabd74f6d4))
+* add typst heading support ([#518](https://github.com/stevearc/aerial.nvim/issues/518)) ([17b4990](https://github.com/stevearc/aerial.nvim/commit/17b49900083fc0877e130b0f496e911fdbf24c32))
+* **cpp:** add support for namespace symbols ([#525](https://github.com/stevearc/aerial.nvim/issues/525)) ([28fe6e8](https://github.com/stevearc/aerial.nvim/commit/28fe6e822ae344544c379d60fcb13c9519a1f08a))
+
+
+### Bug Fixes
+
+* don't crash when an aerial query file fails to parse ([#519](https://github.com/stevearc/aerial.nvim/issues/519)) ([18ffb63](https://github.com/stevearc/aerial.nvim/commit/18ffb631b2cd809e61663a4a2029eed1b5c1b342))
+* **lsp:** handle non-string symbol.name from non-conforming servers ([#524](https://github.com/stevearc/aerial.nvim/issues/524)) ([535ebf0](https://github.com/stevearc/aerial.nvim/commit/535ebf0d985b395fa64e704fecb7e1ba82929116)), closes [#500](https://github.com/stevearc/aerial.nvim/issues/500)
+* treat ts and tsx type_aliases as Interfaces ([#516](https://github.com/stevearc/aerial.nvim/issues/516)) ([edd0522](https://github.com/stevearc/aerial.nvim/commit/edd0522ba9910b93c6c59b8b22f8bd8db0f0f113))
+
 ## [4.0.0](https://github.com/stevearc/aerial.nvim/compare/v3.1.0...v4.0.0) (2026-05-24)
 
 
