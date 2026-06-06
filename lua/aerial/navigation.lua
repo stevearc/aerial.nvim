@@ -57,6 +57,60 @@ end
 
 ---@param direction? integer -1 for backwards or 1 for forwards
 ---@param count? integer
+M.jump_sibling = function(direction, count)
+  direction = direction or 1
+  count = count or 1
+  local winid = get_target_win()
+  if not winid then
+    error("Could not find destination window")
+    return
+  end
+  local pos = _get_current_lnum(winid)
+  if pos == nil then
+    return
+  end
+  local bufnr, _ = util.get_buffers()
+  local bufdata = data.get_or_create(bufnr)
+
+  -- Find current item
+  local item
+  for _, candidate, i in bufdata:iter({ skip_hidden = true }) do
+    if i == pos.lnum then
+      item = candidate
+    end
+  end
+
+  -- If current item is level 0, the operation is equivalent to `up`
+  if item.level == 0 then
+    M.up(direction, count)
+    return
+  end
+
+  local siblings = item.parent.children
+  local item_sibling_pos
+  for i, s in pairs(siblings) do
+    if s.idx == item.idx then
+      item_sibling_pos = i
+    end
+  end
+
+  local n = #siblings
+  item_sibling_pos = ((item_sibling_pos + (direction * count) - 1) % n + n) % n + 1
+  item = siblings[item_sibling_pos]
+
+  local index = bufdata:indexof(item)
+  M.select({
+    index = index,
+    jump = false,
+    winid = winid,
+  })
+  if util.is_aerial_buffer() then
+    vim.api.nvim_win_set_cursor(0, { index, 0 })
+  end
+end
+
+---@param direction? integer -1 for backwards or 1 for forwards
+---@param count? integer
 M.up = function(direction, count)
   direction = direction or -1
   count = count or 1

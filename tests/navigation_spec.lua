@@ -163,5 +163,21 @@ a.describe("navigation", function()
       aerial.next_up()
       assert.are.same({ 7, 2 }, vim.api.nvim_win_get_cursor(0))
     end)
+
+    a.it("can go to the next sibling in the tree", function()
+      create_md_buf(markdown_nested_content)
+      vim.api.nvim_win_set_cursor(0, { 3, 3 })
+      window.update_position() -- Not sure why the CursorMoved autocmd doesn't fire
+      aerial.next_sibling()
+      assert.are.same({ 5, 3 }, vim.api.nvim_win_get_cursor(0))
+    end)
+
+    a.it("can go to the previous sibling in the tree", function()
+      create_md_buf(markdown_nested_content)
+      vim.api.nvim_win_set_cursor(0, { 3, 3 })
+      window.update_position() -- Not sure why the CursorMoved autocmd doesn't fire
+      aerial.prev_sibling()
+      assert.are.same({ 5, 3 }, vim.api.nvim_win_get_cursor(0))
+    end)
   end)
 end)

@@ -344,6 +344,20 @@ M.next = lazy("navigation", "next", true)
 ---@param step? integer Number of symbols to jump by (default 1)
 M.prev = lazy("navigation", "prev", true)
 
+local nav_sibling = lazy("navigation", "jump_sibling", true)
+
+---Jump to a symbol at the same level of the tree, moving forwards
+---@param count? integer Distance of the node to jump to (default 1)
+M.next_sibling = function(count)
+  nav_sibling(1, count)
+end
+
+---Jump to a symbol at the same level of the tree, moving backwards
+---@param count? integer Distance of the node to jump to (default 1)
+M.prev_sibling = function(count)
+  nav_sibling(-1, count)
+end
+
 local nav_up = lazy("navigation", "up", true)
 
 ---Jump to a symbol higher in the tree, moving forwards
