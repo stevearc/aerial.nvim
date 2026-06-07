@@ -25,3 +25,8 @@ Title 7
 Nope
 ----
 ```
+
+> # Quoted heading
+> ## Quoted subheading
+
+# Title 8
