@@ -8,7 +8,8 @@
     (atx_h6_marker)
   ] @level
   heading_content: (_) @name
-  (#set! "kind" "Interface")) @symbol
+  (#set! "kind" "Interface")
+  (#not-has-ancestor? @level block_quote)) @symbol
 
 (setext_heading
   heading_content: (_) @name
@@ -16,4 +17,5 @@
   [
     (setext_h1_underline)
     (setext_h2_underline)
-  ] @level) @symbol
+  ] @level
+  (#not-has-ancestor? @level block_quote)) @symbol
