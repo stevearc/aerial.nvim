@@ -155,6 +155,7 @@ In addition, you will need to have either Treesitter or a working LSP client. Yo
 - go
 - groovy
 - hcl
+- haskell
 - help
 - html
 - ini
