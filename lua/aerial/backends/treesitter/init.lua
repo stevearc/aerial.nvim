@@ -66,6 +66,10 @@ local function set_symbols_from_treesitter(bufnr, lang, query, syntax_tree)
     local match = vim.tbl_extend("force", {}, metadata)
     for id, node in pairs(matches) do
       -- iter_group_results prefers `#set!` metadata, keeping the behaviour
+      -- nvim 0.12+: iter_matches returns a list of nodes per capture
+      if type(node) == "table" then
+        node = node[#node]
+      end
       match = vim.tbl_extend("keep", match, {
         [query.captures[id]] = {
           metadata = metadata[id],
