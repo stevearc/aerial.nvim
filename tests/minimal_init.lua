@@ -16,10 +16,19 @@ vim.filetype.add({
   },
 })
 
+local orgmode_ok, orgmode = pcall(require, "orgmode")
+if orgmode_ok then
+  pcall(orgmode.setup)
+end
+
+local skip_lang_install = {
+  help = true, -- "help" has been renamed to "vimdoc"
+  org = true, -- "org" is provided by a dedicated plugin.
+}
+
 local langs = {}
 for lang, _ in vim.fs.dir("queries") do
-  -- "help" has been renamed to "vimdoc"
-  if lang ~= "help" then
+  if not skip_lang_install[lang] then
     table.insert(langs, lang)
   end
 end

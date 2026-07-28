@@ -1,0 +1,6 @@
+Interface Level1|1:0-7:0 (1:2-1:8)
+  Interface Level2 link|3:0-7:0 (3:3-3:59)
+    Interface Level3|5:0-7:0 (5:4-5:10)
+Interface Level1_2|7:0-15:0 (7:2-7:10)
+  Interface Level2_2|11:0-15:0 (11:3-11:11)
+Interface Level1_3 link1 link2|15:0-16:0 (15:2-15:112)
