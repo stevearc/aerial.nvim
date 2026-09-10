@@ -1,0 +1,13 @@
+package name="aerial.nvim" {
+  dependencies {
+    plugin "nvim-treesitter"
+  }
+
+  "quoted section" {
+    child enabled=true // inline comment
+  }
+}
+
+// single line comment
+server port=8080
+(service)worker replicas=2
