@@ -1,0 +1,7 @@
+Struct package|1:0-10:0 (1:0-1:7)
+  Struct dependencies|2:2-5:0 (2:2-2:14)
+    Struct plugin|3:4-4:0 (3:4-3:10)
+  Struct "quoted section"|6:2-9:0 (6:2-6:18)
+    Struct child|7:4-8:0 (7:4-7:9)
+Struct server|12:0-13:0 (12:0-12:6)
+Struct worker|13:0-14:0 (13:9-13:15)
