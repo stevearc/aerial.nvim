@@ -69,6 +69,14 @@ M.pick_symbol = function(opts)
         picker:close()
         navigation.select_symbol(item.item, winid, bufnr, { jump = true })
       end,
+      edit_split = function(picker, item)
+        picker:close()
+        navigation.select_symbol(item.item, winid, bufnr, { jump = true, split = "horizontal" })
+      end,
+      edit_vsplit = function(picker, item)
+        picker:close()
+        navigation.select_symbol(item.item, winid, bufnr, { jump = true, split = "vertical" })
+      end,
     },
     format = function(item, picker)
       ---@type aerial.Symbol
