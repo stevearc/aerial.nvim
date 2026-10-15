@@ -335,6 +335,10 @@ M.c = {
   postprocess = c_postprocess,
 }
 
+M.glsl = {
+  postprocess = c_postprocess,
+}
+
 local function cpp_postprocess(bufnr, item, match)
   if item.kind ~= "Function" then
     return
