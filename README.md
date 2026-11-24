@@ -649,6 +649,9 @@ require("telescope").setup({
       -- is relevant only when show_columns is set to 'both')
       col1_width = 4,
       col2_width = 30,
+      -- Display symbols using the same indentation as the aerial window.
+      -- With descending sorting, matching symbols retain their parent context.
+      show_hierarchy = true,
       -- How to format the symbols
       format_symbol = function(symbol_path, filetype)
         if filetype == "json" or filetype == "yaml" then

@@ -2,11 +2,13 @@ local conf = require("telescope.config").values
 local entry_display = require("telescope.pickers.entry_display")
 local finders = require("telescope.finders")
 local pickers = require("telescope.pickers")
+local sorters = require("telescope.sorters")
 local telescope = require("telescope")
 
 local ext_config = {
   col1_width = 4,
   col2_width = 30,
+  show_hierarchy = true,
   -- show_lines = true, -- deprecated in favor of show_columns
   show_columns = "both", -- { "symbols", "lines", "both" }
   format_symbol = function(symbol_path, filetype)
@@ -17,6 +19,120 @@ local ext_config = {
     end
   end,
 }
+
+local function get_symbol_path(item)
+  local path = {}
+  while item do
+    table.insert(path, 1, item)
+    item = item.parent
+  end
+  return path
+end
+
+local function get_nesting_prefix(item)
+  return string.rep("  ", item.level)
+end
+
+local function resolve_filetype_flag(value, filetype)
+  if type(value) ~= "table" then
+    return value
+  end
+  if value[filetype] ~= nil then
+    return value[filetype]
+  end
+  return value["_"]
+end
+
+local function get_root(item)
+  while item.parent do
+    item = item.parent
+  end
+  return item
+end
+
+-- Results are reversed for Telescope's default descending layout, so children
+-- are scored before their parents. Delay matching children until their root is
+-- processed, then emit the filtered subtree as a single score group. Telescope
+-- reverses the scored results for display, leaving every context parent directly
+-- above its matching descendants.
+local function with_parent_matches(sorter)
+  return sorters.Sorter:new({
+    init = function(self)
+      self.state.groups = {}
+      if sorter._init then
+        sorter:_init()
+      end
+    end,
+    start = function(self, prompt)
+      if sorter._start then
+        sorter:_start(prompt)
+      end
+      self.state.groups = {}
+    end,
+    finish = function(self, prompt)
+      if sorter._finish then
+        sorter:_finish(prompt)
+      end
+    end,
+    destroy = function()
+      if sorter._destroy then
+        sorter:_destroy()
+      end
+    end,
+    scoring_function = function(self, prompt, ordinal, entry, cb_add)
+      local score = sorter:scoring_function(prompt, ordinal, entry, cb_add)
+      if prompt == "" then
+        return score
+      end
+
+      local item = entry.value
+      local root = get_root(item)
+      local group = self.state.groups[root]
+      if not group then
+        group = { entries = {}, needed = {} }
+        self.state.groups[root] = group
+      end
+
+      if score ~= nil and score >= 0 then
+        group.needed[item] = true
+        if group.score == nil or score < group.score then
+          group.score = score
+        end
+        local parent = item.parent
+        while parent do
+          group.needed[parent] = true
+          parent = parent.parent
+        end
+      end
+
+      if item.parent then
+        if group.needed[item] then
+          table.insert(group.entries, entry)
+        end
+        return -1
+      end
+
+      if group.needed[item] and cb_add then
+        local group_score = group.score - (item.idx * 1e-9)
+        for i, child_entry in ipairs(group.entries) do
+          cb_add(group_score + ((i - 1) * 1e-12), child_entry)
+        end
+        cb_add(group_score + (#group.entries * 1e-12), entry)
+      end
+      self.state.groups[root] = nil
+      if group.needed[item] then
+        return -1
+      else
+        return score
+      end
+    end,
+    highlighter = function(_, ...)
+      if sorter.highlighter then
+        return sorter:highlighter(...)
+      end
+    end,
+  })
+end
 
 local function aerial_picker(opts)
   opts = opts or {}
@@ -31,6 +147,11 @@ local function aerial_picker(opts)
   local filename = vim.api.nvim_buf_get_name(0)
   local filetype = vim.bo[bufnr].filetype
 
+  local show_hierarchy = opts.show_hierarchy
+  if show_hierarchy == nil then
+    show_hierarchy = ext_config.show_hierarchy
+  end
+  show_hierarchy = resolve_filetype_flag(show_hierarchy, filetype)
   local show_columns = opts.show_columns or conf.show_columns
   local show_lines = opts.show_lines or conf.show_lines -- show_lines is deprecated
   if show_columns == nil then
@@ -122,7 +243,8 @@ local function aerial_picker(opts)
       return text, highlights_for_row(row)
     end
 
-    local icon = config.get_icon(bufnr, item.kind)
+    local nesting_prefix = show_hierarchy and get_nesting_prefix(item) or ""
+    local icon = nesting_prefix .. config.get_icon(bufnr, item.kind)
     local icon_hl = highlight.get_highlight(item, true, false) or "NONE"
     local name_hl = highlight.get_highlight(item, false, false) or "NONE"
     local columns = {
@@ -154,12 +276,9 @@ local function aerial_picker(opts)
     if opts.get_entry_text ~= nil then
       name = opts.get_entry_text(item)
     else
-      local symbol_path = {}
-      local cur = item
-      while cur do
-        table.insert(symbol_path, 1, cur.name)
-        cur = cur.parent
-      end
+      local symbol_path = vim.tbl_map(function(symbol)
+        return symbol.name
+      end, get_symbol_path(item))
       name = ext_config.format_symbol(symbol_path, filetype)
     end
     local lnum = item.selection_range and item.selection_range.lnum or item.lnum
@@ -182,7 +301,7 @@ local function aerial_picker(opts)
     local position = bufdata.positions[bufdata.last_win]
     for _, item in bufdata:iter({ skip_hidden = false }) do
       table.insert(results, item)
-      if item == position.closest_symbol then
+      if position and item == position.closest_symbol then
         default_selection_index = #results
       end
     end
@@ -194,6 +313,11 @@ local function aerial_picker(opts)
     util.tbl_reverse(results)
     default_selection_index = #results - (default_selection_index - 1)
   end
+  local sorter = opts.sorter or conf.generic_sorter(opts)
+  if show_hierarchy and sorting_strategy == "descending" then
+    sorter = with_parent_matches(sorter)
+  end
+  opts = vim.tbl_extend("force", {}, opts, { sorter = sorter })
   pickers
     .new(opts, {
       prompt_title = "Document Symbols",
@@ -202,7 +326,7 @@ local function aerial_picker(opts)
         entry_maker = make_entry,
       }),
       default_selection_index = default_selection_index,
-      sorter = conf.generic_sorter(opts),
+      sorter = sorter,
       previewer = conf.qflist_previewer(opts),
       push_cursor_on_edit = true,
     })
@@ -211,23 +335,25 @@ end
 
 return telescope.register_extension({
   setup = function(user_config)
+    user_config = user_config or {}
     ext_config = vim.tbl_extend("force", ext_config, user_config or {})
 
     -- Backwards compatibility shim
     if user_config.show_nesting and not user_config.format_symbol then
-      if type(ext_config.show_nesting) ~= "table" then
-        ext_config.show_nesting = {
-          ["_"] = ext_config.show_nesting,
+      local legacy_show_nesting = user_config.show_nesting
+      if type(legacy_show_nesting) ~= "table" then
+        legacy_show_nesting = {
+          ["_"] = legacy_show_nesting,
         }
       end
-      ext_config.show_nesting = vim.tbl_deep_extend("keep", ext_config.show_nesting, {
+      legacy_show_nesting = vim.tbl_deep_extend("keep", legacy_show_nesting, {
         json = true,
         yaml = true,
       })
-      user_config.format_symbol = function(symbol_path, filetype)
-        local show_nesting = ext_config.show_nesting[filetype]
+      ext_config.format_symbol = function(symbol_path, filetype)
+        local show_nesting = legacy_show_nesting[filetype]
         if show_nesting == nil then
-          show_nesting = ext_config.show_nesting["_"]
+          show_nesting = legacy_show_nesting["_"]
         end
         if show_nesting then
           return table.concat(symbol_path, ".")
