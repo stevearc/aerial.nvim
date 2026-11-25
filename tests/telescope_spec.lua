@@ -41,7 +41,17 @@ describe("telescope extension", function()
       end_col = 13,
       parent = parent,
     }
-    parent.children = { child }
+    local sibling = {
+      name = "another_method",
+      kind = "Method",
+      level = 1,
+      lnum = 3,
+      col = 0,
+      end_lnum = 3,
+      end_col = 14,
+      parent = parent,
+    }
+    parent.children = { child, sibling }
     data.set_symbols(0, { parent })
   end)
 
@@ -59,25 +69,27 @@ describe("telescope extension", function()
     })
 
     local entries = captured_picker.finder.results
-    local parent_entry = entries[2]
-    local child_entry = entries[1]
+    local parent_entry = entries[3]
+    local child_entry = entries[2]
     local parent_display = parent_entry:display({})
     local child_display = child_entry:display({})
     assert.equals(5, parent_display:find("MyStruct", 1, true))
     assert.equals(7, child_display:find("target_method", 1, true))
+    assert.equals("MyStruct", parent_entry.name)
+    assert.equals("target_method", child_entry.name)
+
+    assert.equals("MyStruct struct target_method another_method", parent_entry.ordinal)
 
     local sorter = captured_picker.sorter
     sorter:_init()
     sorter:_start("target_method")
     local added = {}
-    local add = function(score, entry)
-      table.insert(added, { entry = entry, score = score })
+    for _, entry in ipairs(entries) do
+      sorter:score("target_method", entry, function(_, result)
+        table.insert(added, result)
+      end, function() end)
     end
-    sorter:score("target_method", child_entry, add, function() end)
-    sorter:score("target_method", parent_entry, add, function() end)
-    assert.equals(child_entry, added[1].entry)
-    assert.equals(parent_entry, added[2].entry)
-    assert.is_true(added[1].score < added[2].score)
+    assert.same({ child_entry, parent_entry }, added)
   end)
 
   it("supports disabling hierarchy", function()
@@ -90,8 +102,35 @@ describe("telescope extension", function()
     })
 
     local entries = captured_picker.finder.results
-    local child_display = entries[1]:display({})
+    local child_display = entries[2]:display({})
     assert.equals(5, child_display:find("target_method", 1, true))
+    assert.equals("MyStruct struct", entries[3].ordinal)
   end)
 
+  it("preserves a custom sorter", function()
+    local calls = 0
+    local sorter = require("telescope.sorters").Sorter:new({
+      scoring_function = function(_, prompt, ordinal)
+        calls = calls + 1
+        return ordinal:find(prompt, 1, true) and 0 or -1
+      end,
+    })
+    require("telescope").extensions.aerial.aerial({
+      show_columns = "symbols",
+      sorter = sorter,
+    })
+
+    local entries = captured_picker.finder.results
+    local added = {}
+    captured_picker.sorter:_init()
+    captured_picker.sorter:_start("target_method")
+    for _, entry in ipairs(entries) do
+      captured_picker.sorter:score("target_method", entry, function(_, result)
+        table.insert(added, result)
+      end, function() end)
+    end
+    assert.equals(3, calls)
+    assert.equals(entries[2], added[1])
+    assert.equals(entries[3], added[2])
+  end)
 end)
